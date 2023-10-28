@@ -1,7 +1,8 @@
 "use client"
 import React, { useRef, useEffect, useState } from 'react';
 import CanvasToImage from '../components/CanvasToImg';
-import EraseInRadius from '../components/Eraser';
+import eraseInRadius from '../components/Eraser';
+
 const DrawingCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -13,12 +14,20 @@ const DrawingCanvas: React.FC = () => {
     const ctx = canvas.getContext('2d');
 
     const handleMouseDown = (e) => {
-      setIsDrawing(true);
-      const x = e.offsetX;
-      const y = e.offsetY;
-      if (ctx) {
-        ctx.beginPath();
-        ctx.moveTo(x, y);
+      if (e.button === 2) {
+        // Right mouse button is pressed, use EraseInRadius
+        const x = e.offsetX;
+        const y = e.offsetY;
+        eraseInRadius({ canvasRef, position: { x, y }, radius: 10 });
+      } else {
+        // Left mouse button is pressed, start drawing
+        setIsDrawing(true);
+        const x = e.offsetX;
+        const y = e.offsetY;
+        if (ctx) {
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+        }
       }
     };
 
@@ -65,6 +74,7 @@ const DrawingCanvas: React.FC = () => {
         width={400}
         height={300}
         style={{ border: '1px solid #000' }}
+        onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
       />
       <CanvasToImage canvasRef={canvasRef} />
     </div>
