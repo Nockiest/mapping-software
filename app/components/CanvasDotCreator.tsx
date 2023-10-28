@@ -22,15 +22,16 @@
   const drawDot = (image: HTMLImageElement) => {
     canvas.width = image.width;
     canvas.height = image.height;
-
+  
     // Draw the image
     ctx.drawImage(image, 0, 0);
-
+  
+    // Calculate normalized dot size based on canvas dimensions
+    const normalizedDotSize = dotSize * (canvas.width / image.width);
+  
     // Draw a dot at the specified position
     ctx.fillStyle = 'red'; // You can customize the color
-    ctx.beginPath();
-    ctx.arc(positionX, positionY, dotSize, 0, 2 * Math.PI);
-    ctx.fill();
+    ctx.fillRect(positionX - normalizedDotSize / 2, positionY - normalizedDotSize / 2, normalizedDotSize, normalizedDotSize);
   };
 
   loadImage();
