@@ -1,10 +1,10 @@
 "use client"
  
 import React, { useState, useRef } from 'react';
-import Downloader from '../components/Downloader';
 import getExtension from '../utils/ExtensionExtractor';
-
-const ImageEditor: React.FC = () => {
+import createDotOnImage from '../components/CanvasDotCreator';  
+ 
+const ImageEditor = () => {
   const [image, setImage] = useState<File | null>(null);
   const [fileExtension, setFileExtension] = useState<string|null>(null)
   const [addedColors, setAddedColors] = useState<{ x: number; y: number; color: string }[]>([]);
@@ -31,16 +31,18 @@ const ImageEditor: React.FC = () => {
     }
   };
 
-  const handleEdit = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    // Get mouse coordinates
-    
+  const handleEdit = async (e: React.MouseEvent<HTMLCanvasElement>) => {
     const x = e.nativeEvent.offsetX;
     const y = e.nativeEvent.offsetY;
-    console.log("EDITING",x,y)
+
     // Add color at the clicked position
     setAddedColors((prevColors) => [...prevColors, { x, y, color: '#000000' }]);
     // Redraw the canvas with the added color
     drawCanvas();
+
+    // Create a dot on the image using DotMaker
+    const dotCanvas = createDotOnImage(image as File, x, y, 1);
+    console.log(dotCanvas); // This is the base64 representation of the image with the dot
   };
 
   const drawCanvas = () => {
@@ -56,7 +58,7 @@ const ImageEditor: React.FC = () => {
           // Draw added colors
           addedColors.forEach((addedColor) => {
             ctx.fillStyle = addedColor.color;
-            ctx?.fillRect(addedColor.x, addedColor.y, 1, 1);
+            ctx.fillRect(addedColor.x, addedColor.y, 1, 1);
           });
         };
         img.src = URL.createObjectURL(image);
@@ -71,7 +73,6 @@ const ImageEditor: React.FC = () => {
         <div>
           <canvas ref={canvasRef} width={400} height={300} onClick={handleEdit} style={{ border: '1px solid #000' }} />
           <button onClick={drawCanvas}>Redraw Canvas</button>
-          <Downloader file={image}  fileExtension={fileExtension} />
         </div>
       )}
     </div>

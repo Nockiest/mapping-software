@@ -1,10 +1,10 @@
 const getExtension = (file:File) => {
-    if (file) {
+    // if (file) {
       // Extract the file extension
       const extension = file.name.split('.').pop();
       return extension || null;
-    }
-    return null;
+    // }
+    // return null;
   };
   
   export default getExtension;
