@@ -1,31 +1,31 @@
 "use client"
-import React, { useRef, useEffect, useState, createContext, useContext, } from 'react';
+import React, { useRef, useState, createContext, useContext, ReactNode } from 'react';
 import CanvasToImage from '../components/CanvasToImg';
 import DrawingCanvas from './CanvasEditor';
-import CanvasSettings from './CanvasSettings';  
+import CanvasSettings from './CanvasSettings';
 import DebugInfo from '../components/Debugger';
 
- 
- 
 // Create a context for the canvas
 interface CanvasContextType {
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
 }
 
 export const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
+export const BackgroundContext = createContext<CanvasContextType | undefined>(undefined);
 
 // Create a provider to wrap your components with
-// export const CanvasProvider: React.FC = ({ children }) => {
-//   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+export const CanvasProvider: React.FC = ({ children }) => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-//   return (
-//     <CanvasContext.Provider value={{ canvasRef }}>
-//       {children}
-//     </CanvasContext.Provider>
-//   );
-// };
+  return (
+    <CanvasContext.Provider value={{ canvasRef }}>
+      <BackgroundContext.Provider value={{ canvasRef }}>
+        {children}
+      </BackgroundContext.Provider>
+    </CanvasContext.Provider>
+  );
+};
 
-// Create a hook to use the canvas context
 export const useCanvas = () => {
   const context = useContext(CanvasContext);
 
@@ -35,10 +35,20 @@ export const useCanvas = () => {
 
   return context;
 };
-// const CanvasContext = createContext<UserContextType | null>(null);
+
+export const useBackground = () => {
+  const context = useContext(BackgroundContext);
+
+  if (!context) {
+    throw new Error('useBackground must be used within a CanvasProvider');
+  }
+
+  return context;
+};
+
 // Now, your Page component using the CanvasProvider and the useCanvas hook
 const Page: React.FC = () => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRef = useCanvas();
   const [drawingSettings, setDrawingSettings] = useState<{ color: string; radius: number }>({
     color: '#000000',
     radius: 5,
@@ -49,22 +59,22 @@ const Page: React.FC = () => {
   };
 
   return (
-    <CanvasContext.Provider value={canvasRef}>
+    <>
       <DebugInfo data={{ radius: drawingSettings.radius }} />
       <CanvasSettings onSettingsChange={handleSettingsChange} />
       <DrawingCanvas color={drawingSettings.color} radius={drawingSettings.radius} />
-    </CanvasContext.Provider>
+    </>
   );
 };
-export default Page
-// // Wrap your application or the relevant part of it with the CanvasProvider
-// const App: React.FC = () => {
-//   return (
-//     <CanvasProvider>
-//       {/* Your app content */}
-//       <Page />
-//     </CanvasProvider>
-//   );
-// };
 
-// export default App;
+// Wrap your application or the relevant part of it with the CanvasProvider
+const App: React.FC = () => {
+  return (
+    <CanvasProvider>
+      {/* Your app content */}
+      <Page />
+    </CanvasProvider>
+  );
+};
+
+export default App;

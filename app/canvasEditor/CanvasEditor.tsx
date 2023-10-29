@@ -7,6 +7,7 @@ import drawLineWithSquares from "@/app/components/SquaredLineDrawer";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { CanvasContext } from "./page";
 import DrawingLayer from "./layers/drawingLayer";
+import BackgroundImageLayer from "./layers/backgroundImageLayer";
  
 type DrawingCanvasProps = {
   color: string; // CSS color
@@ -21,6 +22,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
   return (
     <div>
       <DrawingLayer color={ color } radius= {radius}   />
+      <BackgroundImageLayer />
       <CanvasToImage  canvasRef={canvasRef}/>
     </div>
   );

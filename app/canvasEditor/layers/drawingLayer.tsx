@@ -63,28 +63,29 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
     const ctx = canvas.getContext("2d");
 
     const handleMouseDown = (e: MouseEvent) => {
-      const x = e.offsetX;
-      const y = e.offsetY;
+        const x = e.offsetX;
+        const y = e.offsetY;
       
-      if (e.button === 2) {
-        // Right mouse button is pressed, use EraseInRadius
-        changeState({ type: "ERASE", position: { x: 10, y: 10 }, radius });
-      } else {
-        // Left mouse button is pressed, start drawing
-        changeState({ type: "DRAW" });
-        if (ctx) {
-          ctx.beginPath();
-          setLastMousePos({ x, y });
+        if (e.button === 2) {
+          // Right mouse button is pressed, use EraseInRadius
+          changeState({ type: "ERASE", position: { x, y }, radius });
+        } else {
+          // Left mouse button is pressed, start drawing
+          changeState({ type: "DRAW" });
+          if (ctx) {
+            ctx.beginPath();
+            setLastMousePos({ x, y });
+          }
         }
-      }
-    };
+      };
 
     const handleMouseMovement = (e: MouseEvent) => {
       const x = e.offsetX;
       const y = e.offsetY;
 
       if (state === ButtonState.Erasing) {
-        eraseInRadius({ canvasRef, position: { x, y }, radius });
+       console.log("ERASING")
+        eraseInRadius({ canvasRef, position: { x, y }, diameter:radius});
       }
 
       if (state === ButtonState.Drawing) {

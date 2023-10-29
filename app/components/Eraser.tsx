@@ -3,17 +3,18 @@ import React, { useEffect, useRef } from 'react';
 type EraseRadiusProps = {
   canvasRef: React.RefObject<HTMLCanvasElement>;
   position: { x: number; y: number };
-  radius: number;
+  diameter: number;
 };
 
-const eraseInRadius  = ({ canvasRef, position, radius }:EraseRadiusProps) => {
+const eraseInRadius  = ({ canvasRef, position, diameter }:EraseRadiusProps) => {
   const canvas = canvasRef.current;
-  radius = radius/2 // NECESARRY OPERATION
-    if (!canvas) return;
+  const radius = Math.ceil(diameter / 2); // NECESARRY OPERATION
+  console.log(radius, diameter)
+  if (!canvas) return;
   
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-  
+     
     // Get the image data from the canvas
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;

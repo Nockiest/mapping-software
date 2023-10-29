@@ -1,9 +1,9 @@
 import React from 'react'
 
-const backgroundImageLayer = () => {
+const BackgroundImageLayer = () => {
   return (
     <div>backgroundImageLayer</div>
   )
 }
 
-export default backgroundImageLayer
+export default BackgroundImageLayer
