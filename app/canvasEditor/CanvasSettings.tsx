@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import CanvasClear from "@/app/components/ClearCanvas";// Adjust the import path based on your project structure
-import { CanvasContext } from "../page";
+import { CanvasContext } from "./page";
 
 type CanvasSettingsProps = {
   onSettingsChange: (color: string, radius: number) => void;

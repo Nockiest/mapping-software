@@ -1,7 +1,7 @@
-"use client";
+ 
 import React, { useState, useRef, useEffect, useReducer, useContext } from "react";
-import eraseInRadius from "../../components/Eraser";
-import CanvasToImage from "../../components/CanvasToImg";
+import eraseInRadius from "@/app/components/Eraser";
+import CanvasToImage from "@/app/components/CanvasToImg";
 import drawLineOnCanvas from "@/app/components/LineDrawer";
 import drawLineWithSquares from "@/app/components/SquaredLineDrawer";
 import { Vector2 } from "@/public/types/GeometryTypes";
@@ -43,7 +43,7 @@ type DrawingCanvasProps = {
 };
 
 
-const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
+const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
   const canvasRef = useContext(CanvasContext)//useRef<HTMLCanvasElement | null>(null);
   const [state, dispatch] = useReducer(reducer, ButtonState.Idle);
   const [lastMousePos, setLastMousePos] = useState<Vector2 | null>(null);
@@ -126,21 +126,19 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
   }, [state, color, radius, lastMousePos]);
 
   return (
-    <div>
+ 
       <canvas
         ref={canvasRef}
         width={700}
         height={500}
         style={{ border: "1px solid #000" }}
         onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
+        className="canvas-rectangle"
       />
-      {/* <button onClick={resetCanvas}>Reset Canvas</button> */}
-      <CanvasToImage  canvasRef={canvasRef}/>
-      {/* Include your CanvasToImage component here if needed */}
-    </div>
+ 
   );
 };
 
  
 
-export default DrawingCanvas;
+export default DrawingLayer;

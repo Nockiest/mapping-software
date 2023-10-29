@@ -1,8 +1,8 @@
 "use client"
 import React, { useRef, useEffect, useState, createContext, useContext, } from 'react';
 import CanvasToImage from '../components/CanvasToImg';
-import DrawingCanvas from './editor/CanvasEditor';
-import CanvasSettings from './editor/CanvasSettings';  
+import DrawingCanvas from './CanvasEditor';
+import CanvasSettings from './CanvasSettings';  
 import DebugInfo from '../components/Debugger';
 
  
