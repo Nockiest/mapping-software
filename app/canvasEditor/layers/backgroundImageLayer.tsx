@@ -3,7 +3,7 @@ import { BackgroundContext } from '../page';
  
  
 
-const BackgroundImageLayer = () => {
+const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }> = ({ onImageLoad }) => {
   const [image, setImage] = useState<File | null>(null);
 
   const loadImage = (file: File) => {
@@ -22,6 +22,7 @@ const BackgroundImageLayer = () => {
       const imageUrl = await loadImage(selectedFile);
       setImage(selectedFile);
       setCanvasBackground(imageUrl);
+      onImageLoad(imageUrl); // Notify the parent component about the loaded image
     }
   };
 
@@ -43,7 +44,7 @@ const BackgroundImageLayer = () => {
             className="canvas-rectangle"
             src={URL.createObjectURL(image)}
             alt="Selected"
-            style={{ pointerEvents: 'none' }}
+            style={{ pointerEvents: 'none', objectFit:"contain" , border:"0px", padding:"0" ,margin:"0" }}
           />
           {/* <button onClick={() => setCanvasBackground(URL.createObjectURL(image))}>Redraw Canvas</button> */}
         </div>
@@ -51,5 +52,4 @@ const BackgroundImageLayer = () => {
     </div>
   );
 };
-
 export default BackgroundImageLayer;
