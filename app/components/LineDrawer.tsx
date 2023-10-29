@@ -4,9 +4,9 @@ interface Point {
   }
   
   type CanvasRenderingContext = CanvasRenderingContext2D | null;
-
+  
   function drawLineOnCanvas(
-    ctx: CanvasRenderingContext,
+    ctx: CanvasRenderingContext2D,
     lineStart: Point,
     lineEnd: Point,
     color: string,
@@ -16,13 +16,24 @@ interface Point {
       throw new Error('Canvas 2D context not supported');
     }
   
-    ctx.beginPath();
-    ctx.moveTo(lineStart.x, lineStart.y);
-    ctx.lineTo(lineEnd.x, lineEnd.y);
-    ctx.lineWidth = radius; // Adjust line width as needed
-    ctx.strokeStyle = color; // Set line color
-    ctx.stroke();
-    ctx.closePath();
+    const distance = Math.sqrt(
+      Math.pow(lineEnd.x - lineStart.x, 2) + Math.pow(lineEnd.y - lineStart.y, 2)
+    );
+  
+    const numberOfDots = Math.floor(distance);
+    const deltaX = (lineEnd.x - lineStart.x) / numberOfDots;
+    const deltaY = (lineEnd.y - lineStart.y) / numberOfDots;
+  
+    ctx.fillStyle = color;
+  
+    for (let i = 0; i < numberOfDots - 1; i++) {
+      const x = lineStart.x + i * deltaX;
+      const y = lineStart.y + i * deltaY;
+  
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, 2 * Math.PI);
+      ctx.fill();
+    }
   }
   
   export default drawLineOnCanvas;

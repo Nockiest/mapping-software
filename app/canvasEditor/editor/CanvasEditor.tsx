@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect, useReducer, useContext } from "reac
 import eraseInRadius from "../../components/Eraser";
 import CanvasToImage from "../../components/CanvasToImg";
 import drawLineOnCanvas from "@/app/components/LineDrawer";
+import drawLineWithSquares from "@/app/components/SquaredLineDrawer";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { CanvasContext } from "../page";
 enum ButtonState {
@@ -64,7 +65,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
     const handleMouseDown = (e: MouseEvent) => {
       const x = e.offsetX;
       const y = e.offsetY;
-
+      
       if (e.button === 2) {
         // Right mouse button is pressed, use EraseInRadius
         changeState({ type: "ERASE", position: { x: 10, y: 10 }, radius });
@@ -72,6 +73,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
         // Left mouse button is pressed, start drawing
         changeState({ type: "DRAW" });
         if (ctx) {
+          ctx.beginPath();
           setLastMousePos({ x, y });
         }
       }
@@ -88,7 +90,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
       if (state === ButtonState.Drawing) {
         // Left mouse button is pressed, draw
         if (ctx && lastMousePos) {
-          drawLineOnCanvas(ctx, lastMousePos, { x, y }, color, radius);
+          drawLineWithSquares(ctx, lastMousePos, { x, y }, color, radius);
         }
       }
       setLastMousePos({ x, y });
