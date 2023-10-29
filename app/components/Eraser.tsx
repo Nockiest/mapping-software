@@ -9,7 +9,6 @@ type EraseRadiusProps = {
 const eraseInRadius  = ({ canvasRef, position, diameter }:EraseRadiusProps) => {
   const canvas = canvasRef.current;
   const radius = Math.ceil(diameter / 2); // NECESARRY OPERATION
-  console.log(radius, diameter)
   if (!canvas) return;
   
     const ctx = canvas.getContext('2d');
