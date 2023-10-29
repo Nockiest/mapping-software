@@ -6,6 +6,7 @@ import drawLineOnCanvas from "@/app/components/LineDrawer";
 import drawLineWithSquares from "@/app/components/SquaredLineDrawer";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { CanvasContext } from "../page";
+import drawImageToBackground from "@/app/components/DrawBackgroundCanvasImg";
 enum ButtonState {
   Idle,
   Drawing,
@@ -47,11 +48,39 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
   const canvasRef = useContext(CanvasContext)//useRef<HTMLCanvasElement | null>(null);
   const [state, dispatch] = useReducer(reducer, ButtonState.Idle);
   const [lastMousePos, setLastMousePos] = useState<Vector2 | null>(null);
-
+  const [backgroundImage, setBackgroundImage] = useState<null|File>(null)
   const changeState = (newState: StateMachineAction) => {
     dispatch(newState);
   };
  
+  
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        setBackgroundImage(img);
+      };
+      img.src = e.target?.result as string;
+    };
+
+    reader.readAsDataURL(selectedFile);
+  };
+
+  useEffect(() => {
+    if (!backgroundImage){
+      return
+    }
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+     
+    drawImageToBackground(ctx, backgroundImage)
+  }, [backgroundImage])
 
   useEffect(() => {
     if (!canvasRef){
@@ -123,7 +152,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
       canvas.removeEventListener("mouseup", handleMouseUp);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [state, color, radius, lastMousePos]);
+  }, [state, color, radius, lastMousePos, backgroundImage]);
 
   return (
     <div>
@@ -134,7 +163,8 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
         style={{ border: "1px solid #000" }}
         onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
       />
-      {/* <button onClick={resetCanvas}>Reset Canvas</button> */}
+       
+      <input type="file" onChange={handleFileChange} />
       <CanvasToImage  canvasRef={canvasRef}/>
       {/* Include your CanvasToImage component here if needed */}
     </div>

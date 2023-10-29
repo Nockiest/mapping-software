@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import CanvasClear from "@/app/components/ClearCanvas";// Adjust the import path based on your project structure
 import { CanvasContext } from "../page";
+import drawImageToBackGround from "@/app/components/DrawBackgroundCanvasImg";
 
 type CanvasSettingsProps = {
   onSettingsChange: (color: string, radius: number) => void;
@@ -21,6 +22,21 @@ const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange  }) =>
 
   const handleApplySettings = () => {
     onSettingsChange(color, radius);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile){
+      return
+    }
+    // const canvas = canvasRef.current;
+    // const ctx = canvas.getContext("2d");
+    // drawImageToBackGround(ctx, selectedFile)
+    // if (selectedFile) {
+    //   setImage(selectedFile);
+    //   loadImage(selectedFile);
+    //   setFileExtension(getExtension(selectedFile))
+    // }
   };
 
   return (
@@ -49,6 +65,7 @@ const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange  }) =>
         Apply Settings
       </button>
       <br />
+      {/* <input type="file" onChange={handleFileChange} /> */}
       <CanvasClear canvasRef={canvasRef} />
     </div>
   );

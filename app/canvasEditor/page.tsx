@@ -25,7 +25,7 @@ export const CanvasContext = createContext<CanvasContextType | undefined>(undefi
 //   );
 // };
 
-// Create a hook to use the canvas context
+// Create a hook to use the canvas context this is usefull
 export const useCanvas = () => {
   const context = useContext(CanvasContext);
 
