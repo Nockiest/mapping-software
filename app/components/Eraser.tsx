@@ -6,8 +6,8 @@ type EraseRadiusProps = {
   radius: number;
 };
 
-const eraseInRadius = ({ canvasRef, position, radius }) => {
-    const canvas = canvasRef.current;
+const eraseInRadius  = ({ canvasRef, position, radius }:EraseRadiusProps) => {
+  const canvas = canvasRef.current;
     if (!canvas) return;
   
     const ctx = canvas.getContext('2d');
