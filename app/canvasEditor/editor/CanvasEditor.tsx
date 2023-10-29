@@ -1,8 +1,8 @@
 "use client";
-import React, { useRef, useEffect, useReducer } from "react";
+import React, { useState, useRef, useEffect, useReducer } from "react";
 import eraseInRadius from "../../components/Eraser";
 import CanvasToImage from "../../components/CanvasToImg";
-
+import drawLineOnCanvas from "@/app/components/LineDrawer";
 enum ButtonState {
   Idle,
   Drawing,
@@ -38,9 +38,17 @@ type DrawingCanvasProps = {
   color: string; // CSS color
   radius: number;
 };
+
+type Vector2 = {
+  x:number
+  y:number
+}
+ 
+
 const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [state, dispatch] = useReducer(reducer, ButtonState.Idle);
+  const [lastMousePos, setLastMousePos] = useState<Vector2 | null>(null);
 
   const changeState = (newState: StateMachineAction) => {
     dispatch(newState);
@@ -63,8 +71,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
         // Left mouse button is pressed, start drawing
         changeState({ type: "DRAW" });
         if (ctx) {
-          ctx.beginPath();
-          ctx.moveTo(x, y);
+          setLastMousePos({ x, y });
         }
       }
     };
@@ -79,13 +86,12 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
 
       if (state === ButtonState.Drawing) {
         // Left mouse button is pressed, draw
-        if (ctx) {
-          ctx.strokeStyle = color; // Set the line color
-          ctx.lineWidth = radius ; // Adjust line width based on radius
-          ctx.lineTo(x, y);
-          ctx.stroke();
+        if (ctx && lastMousePos) {
+          // ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+          drawLineOnCanvas(ctx, lastMousePos, { x, y }, color, radius);
         }
-      }
+      } 
+      setLastMousePos({x,y})
     };
 
     const handleMouseUp = () => {
@@ -115,7 +121,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
       canvas.removeEventListener("mouseup", handleMouseUp);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [state, color, radius]);
+  }, [state, color, radius, lastMousePos]);
 
   return (
     <div>
