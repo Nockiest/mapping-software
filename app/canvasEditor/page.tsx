@@ -16,11 +16,11 @@ const Page: React.FC = () => {
   const handleSettingsChange = (color: string, radius: number) => {
     setDrawingSettings({ color, radius });
   };
-
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   return (
     <div>
       <DebugInfo data={{radius: drawingSettings.radius}} />
-      <CanvasSettings onSettingsChange={handleSettingsChange} />
+      <CanvasSettings onSettingsChange={handleSettingsChange} canvasRef={canvasRef} />
       <DrawingCanvas color={drawingSettings.color} radius={drawingSettings.radius} />
     </div>
   );
