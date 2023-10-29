@@ -1,8 +1,10 @@
 "use client";
-import React, { useState, useRef, useEffect, useReducer } from "react";
+import React, { useState, useRef, useEffect, useReducer, useContext } from "react";
 import eraseInRadius from "../../components/Eraser";
 import CanvasToImage from "../../components/CanvasToImg";
 import drawLineOnCanvas from "@/app/components/LineDrawer";
+import { Vector2 } from "@/public/types/GeometryTypes";
+import { CanvasContext } from "../page";
 enum ButtonState {
   Idle,
   Drawing,
@@ -39,22 +41,21 @@ type DrawingCanvasProps = {
   radius: number;
 };
 
-type Vector2 = {
-  x:number
-  y:number
-}
- 
 
 const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRef = useContext(CanvasContext)//useRef<HTMLCanvasElement | null>(null);
   const [state, dispatch] = useReducer(reducer, ButtonState.Idle);
   const [lastMousePos, setLastMousePos] = useState<Vector2 | null>(null);
 
   const changeState = (newState: StateMachineAction) => {
     dispatch(newState);
   };
+ 
 
   useEffect(() => {
+    if (!canvasRef){
+      return
+    }
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -87,11 +88,10 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
       if (state === ButtonState.Drawing) {
         // Left mouse button is pressed, draw
         if (ctx && lastMousePos) {
-          // ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
           drawLineOnCanvas(ctx, lastMousePos, { x, y }, color, radius);
         }
-      } 
-      setLastMousePos({x,y})
+      }
+      setLastMousePos({ x, y });
     };
 
     const handleMouseUp = () => {
@@ -109,14 +109,14 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
     };
 
     canvas.addEventListener("mousedown", handleMouseDown);
-    canvas.addEventListener("contextmenu", (e) => e.preventDefault()); // Disable right-click context menu
+    canvas.addEventListener("contextmenu", (e:React.MouseEvent<HTMLCanvasElement>) => e.preventDefault()); // Disable right-click context menu
     canvas.addEventListener("mousemove", handleMouseMovement);
     canvas.addEventListener("mouseup", handleMouseUp);
     canvas.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
       canvas.removeEventListener("mousedown", handleMouseDown);
-      canvas.removeEventListener("contextmenu", (e) => e.preventDefault());
+      canvas.removeEventListener("contextmenu", (e:React.MouseEvent<HTMLCanvasElement>) => e.preventDefault());
       canvas.removeEventListener("mousemove", handleMouseMovement);
       canvas.removeEventListener("mouseup", handleMouseUp);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
@@ -132,9 +132,13 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
         style={{ border: "1px solid #000" }}
         onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
       />
+      {/* <button onClick={resetCanvas}>Reset Canvas</button> */}
+      <CanvasToImage  canvasRef={canvasRef}/>
       {/* Include your CanvasToImage component here if needed */}
     </div>
   );
 };
+
+ 
 
 export default DrawingCanvas;
