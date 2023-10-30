@@ -48,7 +48,7 @@ export const useBackground = () => {
 
 // Now, your Page component using the CanvasProvider and the useCanvas hook
 const Page: React.FC = () => {
-  const canvasRef = useCanvas();
+  // const canvasRef = useCanvas();
   const [drawingSettings, setDrawingSettings] = useState<{ color: string; radius: number }>({
     color: '#000000',
     radius: 5,

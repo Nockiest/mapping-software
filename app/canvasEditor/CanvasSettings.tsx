@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import CanvasClear from "@/app/components/ClearCanvas";// Adjust the import path based on your project structure
 import { CanvasContext } from "./page";
 
@@ -19,9 +19,13 @@ const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange  }) =>
     setRadius(parseInt(e.target.value, 10));
   };
 
-  const handleApplySettings = () => {
-    onSettingsChange(color, radius);
-  };
+  // const handleApplySettings = () => {
+  //   onSettingsChange(color, radius);
+  // };
+
+  useEffect(() => {
+    onSettingsChange(color, radius) 
+  }, [color, radius])
 
   return (
     <div>
@@ -35,7 +39,7 @@ const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange  }) =>
         <input type="number" value={radius} onChange={handleRadiusChange} />
       </label>
       <br />
-      <button
+      {/* <button
         style={{
           backgroundColor: '#4CAF50',
           color: 'white',
@@ -47,7 +51,7 @@ const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange  }) =>
         onClick={handleApplySettings}
       >
         Apply Settings
-      </button>
+      </button> */}
       <br />
       <CanvasClear canvasRef={canvasRef} />
     </div>
