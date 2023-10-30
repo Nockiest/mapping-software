@@ -35,13 +35,13 @@ const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }
   };
 
   return (
-    <div>
+    <div className='absolute' style={{position:"absolute", top:"0px"}}>
       <input type="file" onChange={handleFileChange} />
       {image && (
-        <div>
+        <div  >
           <img
             id="background-image"
-            className="canvas-rectangle"
+            // className="canvas-rectangle"
             src={URL.createObjectURL(image)}
             alt="Selected"
             style={{ pointerEvents: 'none', objectFit:"contain" , border:"0px", padding:"0" ,margin:"0" }}
