@@ -19,21 +19,26 @@ type StateMachineAction =
   | { type: "MOUSE_LEAVE" };
 
 const reducer: React.Reducer<ButtonState, StateMachineAction> = (state, action) => {
-  switch (state) {
-    case ButtonState.Idle:
-      if (action.type === "DRAW") return ButtonState.Drawing;
-      if (action.type === "ERASE") return ButtonState.Erasing;
-      break;
-    case ButtonState.Drawing:
-      if (action.type === "DRAW") return ButtonState.Drawing;
-      if (action.type === "ERASE") return ButtonState.Erasing;
-      if (action.type === "MOUSE_UP") return ButtonState.Idle;
-      break;
-    case ButtonState.Erasing:
-      if (action.type === "DRAW") return ButtonState.Drawing;
-      if (action.type === "MOUSE_UP") return ButtonState.Idle;
-      break;
-  }
+  if (action.type === "DRAW") return ButtonState.Drawing;
+  if (action.type === "ERASE") return ButtonState.Erasing;
+  if (action.type === "MOUSE_UP") return ButtonState.Idle;
+  // switch (1) {
+  //   case 1:
+     
+    // case ButtonState.Idle:
+    //   if (action.type === "DRAW") return ButtonState.Drawing;
+    //   if (action.type === "ERASE") return ButtonState.Erasing;
+    //   break;
+    // case ButtonState.Drawing:
+    //   if (action.type === "DRAW") return ButtonState.Drawing;
+    //   if (action.type === "ERASE") return ButtonState.Erasing;
+    //   if (action.type === "MOUSE_UP") return ButtonState.Idle;
+    //   break;
+    // case ButtonState.Erasing:
+    //   if (action.type === "DRAW") return ButtonState.Drawing;
+    //   if (action.type === "MOUSE_UP") return ButtonState.Idle;
+    //   break;
+  // }
   return state;
 };
 
@@ -91,6 +96,7 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
       if (state === ButtonState.Drawing) {
         // Left mouse button is pressed, draw
         if (ctx && lastMousePos) {
+          console.log("DRAWING")
           drawLineWithSquares(ctx, lastMousePos, { x, y }, color, radius);
         }
       }
@@ -130,12 +136,12 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
  
       <canvas 
         ref={canvasRef}
-        width={700}
+        width={750}
         height={500}
         
         onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
-        className="canvas-rectangle z-10"
-        style={{ border: "1px solid #000",  zIndex: 10,  }}
+        className="canvas-rectangle "
+        style={{   zIndex: 10,  }}
       />
  
   );

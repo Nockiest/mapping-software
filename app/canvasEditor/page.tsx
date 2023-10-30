@@ -25,11 +25,12 @@ export const CanvasSettingsContext = createContext<CanvasSettingsType | undefine
 // Create a provider to wrap your components with
 export const CanvasProvider: React.FC = ({ children }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [settings, setSettings] = useState<Settings>({radius: 0, color:"black"});
-  const backgroundCanvas = {image: null}
+  const [settings, setSettings] = useState<Settings>({radius: 5, color:"black"});
+  const backgroundCanvasRef  = useRef<HTMLCanvasElement | null>(null);
+  const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
   return (
     <CanvasContext.Provider value={{ canvasRef }}>
-      <BackgroundContext.Provider value={{ backgroundCanvas }}>
+      <BackgroundContext.Provider value={{ backgroundCanvasRef , backgroundImage, setBackgroundImage}}>
         <CanvasSettingsContext.Provider  value={{ settings, setSettings }}>
          {children}
         </CanvasSettingsContext.Provider>

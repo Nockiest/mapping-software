@@ -56,15 +56,17 @@ type DrawingCanvasProps = {
 const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
   const canvasRef = useContext(CanvasContext);
   const [image, setImage] = useState<string | null>(null); // Updated to store the image URL
+  const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
   const [canvasDimensions, setCanvasDimensions] = useState<Vector2>({x:500, y: 500})
   return (
     <div>
       {/* Drawing layer */}
       <div className="relative" style={{ position: 'relative' }}>
-      <DrawingLayer color={color} radius={radius}   />
+       
 
       {/* Background image layer */}
-      <BackgroundImageLayer onImageLoad={(imageUrl) => setImage(imageUrl)} className="absolute top-0 left-0"   />
+      <BackgroundImageLayer onImageLoad={(imageUrl) => setImage(imageUrl)}    />
+      <DrawingLayer color={color} radius={radius}  className="z-10" />
     </div>
     
       {/* Splicer to combine layers */}

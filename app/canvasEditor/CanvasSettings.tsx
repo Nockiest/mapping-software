@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import CanvasClear from "@/app/components/ClearCanvas";// Adjust the import path based on your project structure
  
-import { CanvasContext, CanvasSettingsContext } from "./page";
+import { BackgroundContext, CanvasContext, CanvasSettingsContext } from "./page";
  
 type CanvasSettingsProps = {
   onSettingsChange: (color: string, radius: number) => void;
@@ -12,7 +12,8 @@ type CanvasSettingsProps = {
 const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange }) => {
   const { settings, setSettings } = useContext(CanvasSettingsContext);
   const canvasRef = useContext(CanvasContext);
- 
+  const { setBackgroundImage } = useContext(BackgroundContext);
+
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSettings((prevSettings) => ({ ...prevSettings, color: e.target.value }));
   };
@@ -21,19 +22,9 @@ const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange }) => 
     setSettings((prevSettings) => ({ ...prevSettings, radius: parseInt(e.target.value, 10) }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (!selectedFile){
-      return
-    }
-    // const canvas = canvasRef.current;
-    // const ctx = canvas.getContext("2d");
-    // drawImageToBackGround(ctx, selectedFile)
-    // if (selectedFile) {
-    //   setImage(selectedFile);
-    //   loadImage(selectedFile);
-    //   setFileExtension(getExtension(selectedFile))
-    // }
+  const handleImageRevert = () => {
+    setBackgroundImage(null);
+    // Add additional logic here if needed
   };
 
   return (
@@ -55,6 +46,18 @@ const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange }) => 
         Radius:
         <input type="number" value={settings.radius} onChange={handleRadiusChange} style={{ color: 'black' }} />
       </label>
+      <input
+        type="file"
+        onChange={(e) => {
+          const selectedFile = e.target.files?.[0];
+          if (selectedFile) {
+            setBackgroundImage(selectedFile);
+          }
+          // Add additional logic here if needed
+        }}
+      />
+      <br />
+      <button onClick={handleImageRevert}>Revert Background Image</button>
       <br />
       <br />
       <CanvasClear canvasRef={canvasRef} />
@@ -62,6 +65,4 @@ const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange }) => 
   );
 };
 
-export default CanvasSettings
-
- 
+export default CanvasSettings;
