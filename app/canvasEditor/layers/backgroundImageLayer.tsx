@@ -3,7 +3,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import { BackgroundContext } from '../page';
  
 const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }> = ({ onImageLoad }) => {
-  const [image, setImage] = useState<File | null>(null);
   const { backgroundCanvasRef, backgroundImage } = useContext(BackgroundContext);
 
   useEffect(() => {
@@ -28,7 +27,6 @@ const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }
 
     if (backgroundImage instanceof File) {
       const imageUrl = await loadImage(backgroundImage);
-      setImage(backgroundImage);
       drawImageOnCanvas(imageUrl);
       onImageLoad(imageUrl);
     } else {
@@ -58,18 +56,17 @@ const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }
   };
 
   return (
-    <div className='absolute' style={{ position: 'absolute', top: '0px', zIndex: 0, pointerEvents: 'none' }}>
-      {(image && backgroundCanvasRef) && (
-        <div>
+    <   >
+      {(  backgroundCanvasRef) && (
           <canvas
             ref={backgroundCanvasRef}
             width={800}
             height={600}
-            style={{ pointerEvents: 'none', objectFit: 'contain', border: '0px', padding: '0', margin: '0' }}
+            className='absolute background-layer top-0 opacity-40'
+            style={{ pointerEvents: 'none', objectFit: 'contain', border: '0px', padding: '0', margin: '0'  }}
           />
-        </div>
       )}
-    </div>
+    </>
   );
 };
 

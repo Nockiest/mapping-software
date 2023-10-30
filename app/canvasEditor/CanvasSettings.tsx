@@ -19,7 +19,12 @@ const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange }) => 
   };
 
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSettings((prevSettings) => ({ ...prevSettings, radius: parseInt(e.target.value, 10) }));
+    const newRadius = parseInt(e.target.value, 10);
+  
+    // Check if the new radius is less than 0, set it to 0
+    const sanitizedRadius = newRadius < 0 ? 0 : newRadius;
+  
+    setSettings((prevSettings) => ({ ...prevSettings, radius: sanitizedRadius }));
   };
 
   const handleImageRevert = () => {

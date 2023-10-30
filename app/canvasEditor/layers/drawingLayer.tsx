@@ -136,12 +136,12 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
  
       <canvas 
         ref={canvasRef}
-        width={750}
-        height={500}
+        width={800}
+        height={600}
         
         onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
-        className="canvas-rectangle "
-        style={{   zIndex: 10,  }}
+        className="canvas-rectangle draw-canvas   top-0 z-10 "
+        style={{      }}
       />
  
   );

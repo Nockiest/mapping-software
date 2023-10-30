@@ -12,7 +12,13 @@
   border: 1px solid #000; /* Set your desired border style */
   /* Add any other styles you need */
 }
- 
+ .draw-canvas{
+  z-index: 100;
+ }
+
+ .background-layer{
+  z-index:   0;
+ }
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

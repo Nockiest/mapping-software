@@ -18,7 +18,7 @@ export default function drawLineWithCenteredSquares(
       Math.pow(lineEnd.x - lineStart.x, 2) + Math.pow(lineEnd.y - lineStart.y, 2)
     );
   
-    const numberOfSquares = Math.floor(distance);
+    const numberOfSquares = Math.floor(distance *2);
     const deltaX = (lineEnd.x - lineStart.x) / numberOfSquares;
     const deltaY = (lineEnd.y - lineStart.y) / numberOfSquares;
   
