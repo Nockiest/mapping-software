@@ -2,17 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
+ 
 .canvas-rectangle {
-  position: absolute;
+  /* position: absolute;
   top: 200px;
   left: calc(50% - 350px);
-  width: 700px; /* Set your desired width */
-  height: 500px; /* Set your desired height */
+  width: 700px;  
+  height: 500px;  t */
   border: 1px solid #000; /* Set your desired border style */
   /* Add any other styles you need */
 }
+ 
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

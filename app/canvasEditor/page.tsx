@@ -1,44 +1,100 @@
 "use client"
-import React, { useRef, useState, createContext } from 'react';
+ 
+import React, { useRef, useState, createContext, useContext, ReactNode } from 'react';
 import CanvasToImage from '../components/CanvasToImg';
-import CanvasEditor from './CanvasEditor';
-import CanvasSettings from './CanvasSettings';  
+import DrawingCanvas from './CanvasEditor';
+import CanvasSettings from './CanvasSettings';
 import DebugInfo from '../components/Debugger';
-import DualCanvas from '../components/DualCanvas';
-// import { useCanvas, CanvasProvider } from './CanvasContext';
+import Timeline from './Timeline';
 
- 
- 
-
-const Page: React.FC = () => {
-  // const { canvasRef, backgroundCanvasRef } = useCanvas();
-  const [drawingSettings, setDrawingSettings] = useState<{ color: string; radius: number }>({
-    color: '#000000',
-    radius: 5,
-  });
-
-  const handleSettingsChange = (color: string, radius: number) => {
-    setDrawingSettings({ color, radius });
-  };
-
+// Create a context for the canvas
+interface CanvasContextType {
+  canvasRef: React.RefObject<HTMLCanvasElement | null>;
+}
+interface CanvasSettingsType {
+  settings: Settings
+  setSettings: React.Dispatch<React.SetStateAction<Settings>>;
+}
+type Settings = {
+  radius:number,
+  color: string
+}
+export const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
+export const BackgroundContext = createContext<CanvasContextType | undefined>(undefined);
+export const CanvasSettingsContext = createContext<CanvasSettingsType | undefined>(undefined);
+// Create a provider to wrap your components with
+export const CanvasProvider: React.FC = ({ children }) => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [settings, setSettings] = useState<Settings>({radius: 0, color:"black"});
+  const backgroundCanvas = {image: null}
   return (
-    <div >
-      {/* <DebugInfo data={{ radius: drawingSettings.radius }} />   */}
-      {/* <CanvasSettings onSettingsChange={handleSettingsChange} /> */}
-      <CanvasEditor color={drawingSettings.color} radius={drawingSettings.radius} />
-      {/* <DualCanvas /> */}
-      </div>
+    <CanvasContext.Provider value={{ canvasRef }}>
+      <BackgroundContext.Provider value={{ backgroundCanvas }}>
+        <CanvasSettingsContext.Provider  value={{ settings, setSettings }}>
+         {children}
+        </CanvasSettingsContext.Provider>
+      </BackgroundContext.Provider>
+    </CanvasContext.Provider>
   );
 };
 
- 
-// const App: React.FC = () => {
-//   return (
-//     <CanvasProvider>
-//       {/* Your app content */}
-//       <Page />
-//     </CanvasProvider>
-//   );
-// };
+export const useCanvas = () => {
+  const context = useContext(CanvasContext);
 
-// export default App;
+  if (!context) {
+    throw new Error('useCanvas must be used within a CanvasProvider');
+  }
+
+  return context;
+};
+
+export const useBackground = () => {
+  const context = useContext(BackgroundContext);
+
+  if (!context) {
+    throw new Error('useBackground must be used within a CanvasProvider');
+  }
+
+  return context;
+};
+
+export const useCanvasSettings = () => {
+  const context = useContext(CanvasSettingsContext);
+
+  if (!context) {
+    throw new Error('useBackground must be used within a CanvasProvider');
+  }
+
+  return context;
+};
+
+// Now, your Page component using the CanvasProvider and the useCanvas hook
+const Page: React.FC = () => {
+  const {settings, setSettings } =  useContext(CanvasSettingsContext)
+ 
+  const handleSettingsChange = (color: string, radius: number) => {
+    setSettings({ color, radius });
+  };
+
+  return (
+ 
+    <>
+      <DebugInfo data={{ radius: settings.radius }} />
+      <CanvasSettings onSettingsChange={handleSettingsChange} />
+      <DrawingCanvas color={settings.color} radius={settings.radius} />
+      <Timeline />
+    </>
+  );
+};
+ 
+// Wrap your application or the relevant part of it with the CanvasProvider
+const App: React.FC = () => {
+  return (
+    <CanvasProvider>
+      {/* Your app content */}
+      <Page />
+    </CanvasProvider>
+  );
+};
+
+export default App 

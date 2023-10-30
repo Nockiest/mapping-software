@@ -1,36 +1,57 @@
-import React, { useContext, useEffect } from 'react';
-// import { CanvasProvider } from '../CanvasContext';
-import drawImageToBackground from '@/app/components/DrawBackgroundCanvasImg';
+ 
+import React, { useState, useContext } from 'react';
+import { BackgroundContext } from '../page';
+ 
+ 
 
-type BackgroundImageLayerProps = {
-  image: HTMLImageElement;
+const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }> = ({ onImageLoad }) => {
+  const [image, setImage] = useState<File | null>(null);
+
+  const loadImage = (file: File) => {
+    return new Promise<string>((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        resolve(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      const imageUrl = await loadImage(selectedFile);
+      setImage(selectedFile);
+      setCanvasBackground(imageUrl);
+      onImageLoad(imageUrl); // Notify the parent component about the loaded image
+    }
+  };
+
+  const setCanvasBackground = (imageUrl: string) => {
+    const imgElement = document.getElementById('background-image') as HTMLImageElement;
+    if (imgElement) {
+      imgElement.src = imageUrl;
+      imgElement.style.pointerEvents = 'none'; // Ignore mouse events on the image
+    }
+  };
+
+  return (
+    <div className='absolute' style={{position:"absolute", top:"0px"}}>
+      <input type="file" onChange={handleFileChange} />
+      {image && (
+        <div  >
+          <img
+            id="background-image"
+            // className="canvas-rectangle"
+            src={URL.createObjectURL(image)}
+            alt="Selected"
+            style={{ pointerEvents: 'none', objectFit:"contain" , border:"0px", padding:"0" ,margin:"0" }}
+          />
+          {/* <button onClick={() => setCanvasBackground(URL.createObjectURL(image))}>Redraw Canvas</button> */}
+        </div>
+      )}
+    </div>
+  );
 };
-
-const BackgroundImageLayer: React.FC<BackgroundImageLayerProps> = ({ image }) => {
-  // const backgroundCanvasRef = useContext(CanvasProvider);
-
-  // useEffect(() => {
-  //   if (!image || !backgroundCanvasRef) {
-  //     console.error('Image or canvas reference is undefined or null');
-  //     return;
-  //   }
-
-  //   const canvas = backgroundCanvasRef.current;
-  //   if (!canvas) {
-  //     console.error('Canvas reference is undefined or null');
-  //     return;
-  //   }
-
-  //   const ctx = canvas.getContext('2d');
-  //   if (!ctx) {
-  //     console.error('Canvas 2D context is not supported');
-  //     return;
-  //   }
-
-  //   drawImageToBackground(ctx, image);
-  // }, [image, backgroundCanvasRef]);
-
-  return <canvas className="canvas-rectangle">backgroundImageLayer</canvas>;
-};
-
+ 
 export default BackgroundImageLayer;
