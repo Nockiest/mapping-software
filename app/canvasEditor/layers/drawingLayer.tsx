@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useReducer, useContext } from "react";
-import eraseInRadius from "@/app/components/Eraser";
+import eraseLine from "@/app/components/Eraser";
 import CanvasToImage from "@/app/components/CanvasToImg";
 import drawLineWithSquares from "@/app/components/SquaredLineDrawer";
 import { Vector2 } from "@/public/types/GeometryTypes";
@@ -57,7 +57,7 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
       const y = e.offsetY;
 
       if (canvasState === DrawingState.Erasing) {
-        eraseInRadius({ canvasRef, position: { x, y }, diameter: radius });
+        eraseLine({canvasRef, start:lastMousePos, end:{ x, y },  radius}) 
       } else if (canvasState === DrawingState.Drawing) {
         // Left mouse button is pressed, draw
         if (ctx && lastMousePos) {

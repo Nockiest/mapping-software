@@ -42,11 +42,8 @@ export type DrawAction =
         }
        
       case "ERASE":
-        if (DrawingState.BucketFill== state) {
-            return  DrawingState.BucketFill;
-        } else {
+      
             return DrawingState.Erasing;
-        }
     
       case "MOUSE_UP":
     //   case "MOUSE_LEAVE":
