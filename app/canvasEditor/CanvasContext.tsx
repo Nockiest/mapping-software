@@ -69,7 +69,7 @@ export const CanvasSettingsContext = createContext<CanvasSettingsType | undefine
 
 export const CanvasProvider: React.FC = ({ children }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [settings, setSettings] = useState<Settings>({ radius: 5, color: "black", lineType: "squared", activeLayer: "draw" });
+  const [settings, setSettings] = useState<Settings>({ radius: 5, color: [0,0,0,255], lineType: "squared", activeLayer: "draw" });
   const backgroundCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
   const [canvasState, dispatch] = useReducer(reducer, DrawingState.Idle);
@@ -114,4 +114,13 @@ export const CanvasProvider: React.FC = ({ children }) => {
   
     return context;
   };
-  
+  // import { useState, useEffect } from "react";
+ 
+// import { CanvasSettings } from "./CanvasSettings.1";
+ 
+// export type CanvasSettingsProps = {
+//   onSettingsChange: (color: string, radius: number) => void;
+//   // canvasRef: React.RefObject<HTMLCanvasElement>;
+// };
+ 
+// export default CanvasSettings;

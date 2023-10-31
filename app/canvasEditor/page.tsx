@@ -3,7 +3,7 @@
 import React, { useRef, useState, createContext, useContext, ReactNode } from "react";
 import CanvasToImage from "../components/CanvasToImg";
 import DrawingCanvas from "./CanvasEditor";
-import CanvasSettings from "./CanvasSettings";
+import CanvasSettings from "./settings/CanvasSettings";
 import DebugInfo from "../components/Debugger";
 import Timeline from "./Timeline";
 import { CanvasContext, CanvasProvider, CanvasSettingsContext } from "./CanvasContext";

@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect, useReducer, useContext } from "react";
-import eraseLine from "@/app/components/Eraser";
+import eraseLine from "@/app/components/drawing/Eraser";
 import CanvasToImage from "@/app/components/CanvasToImg";
-import drawLineWithSquares from "@/app/components/SquaredLineDrawer";
+import drawLineWithSquares from "@/app/components/drawing/SquaredLineDrawer";
 import { Vector2,  } from "@/public/types/GeometryTypes";
 import { CanvasContext, CanvasContextType, CanvasSettingsContext, DrawAction } from "../CanvasContext";
 import { DrawingState } from "@/public/types/ButtonEvents";
-import bucketFill from "@/app/components/BucketFill";
-import drawCircledLine from "../../components/CircledLineDrawer";
+import bucketFill from "@/app/components/drawing/BucketFill";
+import drawCircledLine from "../../components/drawing/CircledLineDrawer";
 import { Color } from "@/public/types/OtherTypes";
 type DrawingCanvasProps = {
   color: Color; // CSS color

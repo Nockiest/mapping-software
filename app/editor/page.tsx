@@ -2,7 +2,7 @@
  
 import React, { useState, useRef } from 'react';
 import getExtension from '../utils/ExtensionExtractor';
-import createDotOnImage from '../components/CanvasDotCreator';
+import createDotOnImage from '../components/drawing/CanvasDotCreator';
 
 const ImageEditor = () => {
     const [image, setImage] = useState<File | null>(null);
