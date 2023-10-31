@@ -1,9 +1,9 @@
 import {createContext, useContext, useState, useRef, useReducer } from "react"
 import { DrawingState } from "@/public/types/ButtonEvents";
-interface CanvasContextType {
+export interface CanvasContextType {
     canvasRef: React.RefObject<HTMLCanvasElement | null>;
   }
-interface CanvasSettingsType {
+export interface CanvasSettingsType {
     settings: Settings
     setSettings: React.Dispatch<React.SetStateAction<Settings>>;
   }
@@ -13,6 +13,7 @@ interface CanvasSettingsType {
 type Settings = {
     radius:number,
     color: string
+    lineType: "square" | "rounded"
   }
 
 export type DrawAction =
@@ -40,7 +41,7 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
         } else {
             return DrawingState.Erasing;
         }
-       
+    
       case "MOUSE_UP":
     //   case "MOUSE_LEAVE":
         if (DrawingState.BucketFill== state) {
@@ -64,7 +65,7 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
   
   export const CanvasProvider: React.FC = ({ children }) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const [settings, setSettings] = useState<Settings>({radius: 5, color:"black"});
+    const [settings, setSettings] = useState<Settings>({radius: 5, color:"black", lineType: "square"});
     const backgroundCanvasRef  = useRef<HTMLCanvasElement | null>(null);
     const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
     const [canvasState, dispatch] = useReducer(reducer, DrawingState.Idle);
