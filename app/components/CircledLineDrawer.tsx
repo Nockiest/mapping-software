@@ -1,3 +1,4 @@
+import { Color } from "@/public/types/OtherTypes";
 interface Point {
     x: number;
     y: number;
@@ -5,11 +6,12 @@ interface Point {
   
   type CanvasRenderingContext = CanvasRenderingContext2D | null;
   
-  function drawCircledLine(
+  
+  export default function drawCircledLine(
     ctx: CanvasRenderingContext2D,
     lineStart: Point,
     lineEnd: Point,
-    color: string,
+    color: Color,
     radius: number
   ): void {
     if (!ctx) {
@@ -24,7 +26,8 @@ interface Point {
     const deltaX = (lineEnd.x - lineStart.x) / numberOfDots;
     const deltaY = (lineEnd.y - lineStart.y) / numberOfDots;
   
-    ctx.fillStyle = color;
+    const colorArray = typeof color === 'string' ? hexToRGBA(color) : color;
+    ctx.fillStyle = `rgba(${colorArray[0]}, ${colorArray[1]}, ${colorArray[2]}, ${colorArray[3] / 255})`;
   
     for (let i = 0; i < numberOfDots - 1; i++) {
       const x = lineStart.x + i * deltaX;
@@ -36,6 +39,12 @@ interface Point {
     }
   }
   
-  export default drawCircledLine;
- 
- 
+  // ... (remaining functions unchanged)
+  
+  function hexToRGBA(hex: string): [number, number, number, number] | null {
+    const match = hex.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
+    if (!match) return null;
+  
+    const [, r, g, b] = match.map((component) => parseInt(component, 16));
+    return [r, g, b, 255];
+  }

@@ -18,7 +18,7 @@ const Page: React.FC = () => {
 
   return (
     <>
-      <DebugInfo data={{ radius: settings.radius, canvasState: canvasState, state, lineType:settings.lineType }} />
+      <DebugInfo data={{ radius: settings.radius, canvasState: canvasState,  lineType:settings.lineType, color: settings.color }} />
       <CanvasSettings onSettingsChange={handleSettingsChange} />
       <DrawingCanvas color={settings.color} radius={settings.radius} />
       <Timeline />

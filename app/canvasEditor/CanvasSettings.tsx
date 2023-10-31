@@ -9,7 +9,6 @@ type CanvasSettingsProps = {
   // canvasRef: React.RefObject<HTMLCanvasElement>;
 };
  
- 
 const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange }) => {
   const { settings, setSettings } = useContext<CanvasSettingsType>(CanvasSettingsContext);
   const { canvasRef, dispatch, state } = useContext<CanvasContextType>(CanvasContext);

@@ -17,8 +17,9 @@ export default function bucketFill(ctx: CanvasRenderingContext2D, x: number, y: 
 
     if (isInsideCanvas(currentX, currentY, ctx.canvas.width, ctx.canvas.height) && areColorsEqual(targetColor, getColorAtPixel(ctx, data, currentX, currentY))) {
       // Set the fill color with alpha blending
+      const fillColorArray = typeof fillColor === 'string' ? hexToRGBA(fillColor) : fillColor;
       for (let i = 0; i < 3; i++) {
-        data[pixelIndex + i] = (fillColor[i] * fillColor[3] + data[pixelIndex + i] * (255 - fillColor[3])) / 255;
+        data[pixelIndex + i] = (fillColorArray[i] * fillColorArray[3] + data[pixelIndex + i] * (255 - fillColorArray[3])) / 255;
       }
       data[pixelIndex + 3] = 255; // Set alpha to fully opaque
 
@@ -30,6 +31,16 @@ export default function bucketFill(ctx: CanvasRenderingContext2D, x: number, y: 
   }
 
   ctx.putImageData(imageData, 0, 0);
+}
+
+// ... (remaining functions unchanged)
+
+function hexToRGBA(hex: string): [number, number, number, number] | null {
+  const match = hex.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
+  if (!match) return null;
+
+  const [, r, g, b] = match.map((component) => parseInt(component, 16));
+  return [r, g, b, 255];
 }
 
 function getColorAtPixel(ctx: CanvasRenderingContext2D,data: Uint8ClampedArray, x: number, y: number,  ): Color {
