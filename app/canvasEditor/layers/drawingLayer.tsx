@@ -7,7 +7,7 @@ import drawLineWithSquares from "@/app/components/SquaredLineDrawer";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { CanvasContext, DrawAction } from "../CanvasContext";
 import { DrawingState } from "@/public/types/ButtonEvents";
- 
+import bucketFill from "@/app/components/BucketFill";
 
 type DrawingCanvasProps = {
   color: string; // CSS color
@@ -41,13 +41,20 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
         if (e.button === 2) {
           // Right mouse button is pressed, use EraseInRadius
           changeState({ type: "ERASE" }); 
-        } else {
+        } else if (e.button === 0) {
           // Left mouse button is pressed, start drawing
-          changeState({ type: "DRAW" });
-          if (ctx) {
-            ctx.beginPath();
-            setLastMousePos({ x, y });
+          console.log(canvasState , DrawingState.BucketFill)
+          if  (canvasState === DrawingState.BucketFill){
+            console.log("FILLING WITH BUCKET")
+            bucketFill(ctx,  x , y , [255, 0, 0, 255])
+          } else {
+            changeState({ type: "DRAW" });
+            if (ctx) {
+              ctx.beginPath();
+              setLastMousePos({ x, y });
+            }
           }
+          
         }
       };
 
@@ -56,17 +63,17 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
       const y = e.offsetY;
 
       if (canvasState === DrawingState.Erasing) {
-       console.log("ERASING")
         eraseInRadius({ canvasRef, position: { x, y }, diameter:radius});
       }
 
-      if (canvasState === DrawingState.Drawing) {
+      else if (canvasState === DrawingState.Drawing) {
         // Left mouse button is pressed, draw
-        if (ctx && lastMousePos) {
-          console.log("DRAWING")
+        if (ctx && lastMousePos) { 
           drawLineWithSquares(ctx, lastMousePos, { x, y }, color, radius);
         }
       }
+
+      
       setLastMousePos({ x, y });
     };
 

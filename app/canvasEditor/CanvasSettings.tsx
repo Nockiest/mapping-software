@@ -41,8 +41,9 @@ const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange }) => 
   };
 
   const handleBucketFill = () => {
- 
+    
     dispatch({ type: "ENTER_BUCKET_MODE" });
+    console.log( state, DrawingState.BucketFill)
   };
 
   return (

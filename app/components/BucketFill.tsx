@@ -1,9 +1,9 @@
-type Color = [number, number, number, number];
+import { Color } from "@/public/types/OtherTypes"; 
 
-function bucketFill(ctx: CanvasRenderingContext2D, x: number, y: number, fillColor: Color): void {
+export default function bucketFill(ctx: CanvasRenderingContext2D, x: number, y: number, fillColor: Color): void {
   const imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
   const data = imageData.data;
-  const targetColor = getColorAtPixel(data, x, y);
+  const targetColor = getColorAtPixel(ctx, data, x, y);
 
   if (areColorsEqual(targetColor, fillColor)) {
     return; // No need to fill if target and fill colors are the same
@@ -15,11 +15,12 @@ function bucketFill(ctx: CanvasRenderingContext2D, x: number, y: number, fillCol
     const [currentX, currentY] = stack.pop()!;
     const pixelIndex = (currentY * ctx.canvas.width + currentX) * 4;
 
-    if (isInsideCanvas(currentX, currentY, ctx.canvas.width, ctx.canvas.height) && areColorsEqual(targetColor, getColorAtPixel(data, currentX, currentY))) {
-      data[pixelIndex] = fillColor[0];
-      data[pixelIndex + 1] = fillColor[1];
-      data[pixelIndex + 2] = fillColor[2];
-      data[pixelIndex + 3] = fillColor[3];
+    if (isInsideCanvas(currentX, currentY, ctx.canvas.width, ctx.canvas.height) && areColorsEqual(targetColor, getColorAtPixel(ctx, data, currentX, currentY))) {
+      // Set the fill color with alpha blending
+      for (let i = 0; i < 3; i++) {
+        data[pixelIndex + i] = (fillColor[i] * fillColor[3] + data[pixelIndex + i] * (255 - fillColor[3])) / 255;
+      }
+      data[pixelIndex + 3] = 255; // Set alpha to fully opaque
 
       stack.push([currentX + 1, currentY]);
       stack.push([currentX - 1, currentY]);
@@ -31,7 +32,7 @@ function bucketFill(ctx: CanvasRenderingContext2D, x: number, y: number, fillCol
   ctx.putImageData(imageData, 0, 0);
 }
 
-function getColorAtPixel(data: Uint8ClampedArray, x: number, y: number): Color {
+function getColorAtPixel(ctx: CanvasRenderingContext2D,data: Uint8ClampedArray, x: number, y: number,  ): Color {
   const pixelIndex = (y * ctx.canvas.width + x) * 4;
   return [data[pixelIndex], data[pixelIndex + 1], data[pixelIndex + 2], data[pixelIndex + 3]];
 }

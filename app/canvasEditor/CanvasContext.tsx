@@ -28,14 +28,29 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
     // console.log("SWITCHING TO ", action.type)
     switch (action.type) {
       case "DRAW":
-        return DrawingState.Drawing;
+        if (DrawingState.BucketFill== state) {
+            return DrawingState.BucketFill;
+        } else {
+            return DrawingState.Drawing;
+        }
+       
       case "ERASE":
-        return DrawingState.Erasing;
+        if (DrawingState.BucketFill== state) {
+            return  DrawingState.BucketFill;
+        } else {
+            return DrawingState.Erasing;
+        }
+       
       case "MOUSE_UP":
-      case "MOUSE_LEAVE":
-        return DrawingState.Idle;
+    //   case "MOUSE_LEAVE":
+        if (DrawingState.BucketFill== state) {
+            return DrawingState.BucketFill;
+        } else {
+            return DrawingState.Idle;
+        }
+         
       case "ENTER_BUCKET_MODE":
-        return DrawingState.BucketFill;
+        return DrawingState.BucketFill === state? DrawingState.Idle: DrawingState.BucketFill;
       default:
         console.error("INVALID ACTION: " + action.type);
         return state;
@@ -86,9 +101,9 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
   
   export const useCanvasSettings = () => {
     const context = useContext(CanvasSettingsContext);
-  
+    
     if (!context) {
-      throw new Error('useBackground must be used within a CanvasProvider');
+        throw new Error('useCanvasSettings must be used within a CanvasProvider');
     }
   
     return context;
