@@ -50,6 +50,9 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
     const ctx = canvas.getContext("2d");
 
     const handleMouseDown = (e: MouseEvent) => {
+      if (settings.activeLayer !== "draw"){
+        return
+      }
       const x = e.offsetX;
       const y = e.offsetY;
 
@@ -74,6 +77,9 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
     const handleMouseMovement = (e: MouseEvent) => {
       const x = e.offsetX;
       const y = e.offsetY;
+      if (settings.activeLayer !== "draw"){
+        return
+      }
 
       if (canvasState === DrawingState.Erasing) {
         eraseLine({ canvasRef, start: lastMousePos, end: { x, y }, radius });
@@ -91,6 +97,9 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
     };
 
     const handleMouseUp = () => {
+      if (settings.activeLayer !== "draw"){
+        return
+      }
       changeState({ type: "MOUSE_UP" });
       if (ctx) {
         ctx.closePath();
@@ -118,76 +127,11 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
       width={800}
       height={600}
       onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
-      className="canvas-rectangle draw-canvas top-0"
+      className={`canvas-rectangle draw-canvas top-0 ${settings.activeLayer === 'draw' ? 'opacity-100' : 'opacity-50'} `}
     />
   );
 };
 
 export default DrawingLayer;
 
-    // const handleMouseLeave = () => {
-    //   changeState({ type: 'MOUSE_LEAVE' });
-    //   if (ctx) {
-    //     ctx.closePath();
-    //   }
-    // };
-
-    // const handleWheel = (e: WheelEvent) => {
-    //   if (e.ctrlKey) {
-    //     console.log("APPLYING ZOOM")
-    //     // Ctrl key is pressed, handle zooming
-    //     const zoomFactor = e.deltaY > 0 ? 1.1 : 0.9;
-    //     applyZoom(canvas, zoomFactor);
-    //     e.preventDefault(); // Prevent default behavior to avoid page scrolling
-    //   }
-    // };
-
-  //   canvas.addEventListener("mousedown", handleMouseDown);
-  //   canvas.addEventListener("contextmenu", (e: React.MouseEvent<HTMLCanvasElement>) => e.preventDefault()); // Disable right-click context menu
-  //   canvas.addEventListener("mousemove", handleMouseMovement);
-  //   canvas.addEventListener("mouseup", handleMouseUp);
-  //   // canvas.addEventListener('mouseleave', handleMouseLeave);
-  //   // canvas.addEventListener('wheel', handleWheel);
-
-  //   return () => {
-  //     canvas.removeEventListener("mousedown", handleMouseDown);
-  //     canvas.removeEventListener("contextmenu", (e: React.MouseEvent<HTMLCanvasElement>) => e.preventDefault());
-  //     canvas.removeEventListener("mousemove", handleMouseMovement);
-  //     canvas.removeEventListener("mouseup", handleMouseUp);
-  //     // canvas.removeEventListener('mouseleave', handleMouseLeave);
-  //     // canvas.removeEventListener('wheel', handleWheel);
-  //   };
-  // }, [canvasState, color, radius, lastMousePos]);
-
-  // const applyZoom = (canvas: HTMLCanvasElement, zoomFactor: number) => {
-  //   const ctx = canvas.getContext('2d');
-  //   if (!ctx) return;
-
-  //   // Clear the canvas
-  //   // ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  //   // Save the current state
-  //   ctx.save();
-
-  //   // Apply the scale transformation
-  //   ctx.scale(zoomFactor, zoomFactor);
-
-  //   // Redraw your content at the zoomed scale (you may need to adjust this part based on your drawing logic)
-  //   // ...
-
-  //   // Restore the previous state
-  //   ctx.restore();
-  // };
-
-//   return (
-//     <canvas
-//       ref={canvasRef}
-//       width={800}
-//       height={600}
-//       onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
-//       className="canvas-rectangle draw-canvas   top-0  "
-//     />
-//   );
-// };
-
-// export default DrawingLayer;
+    

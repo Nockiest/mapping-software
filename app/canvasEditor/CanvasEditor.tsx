@@ -10,10 +10,11 @@ import { Vector2 } from "@/public/types/GeometryTypes";
 // import { CanvasContext } from "./page ";
 import drawImageToBackground from "@/app/components/DrawBackgroundCanvasImg";
 import DrawLayer from "./layers/drawLayer";
-import BackgroundImageLayer from "./layers/backgroundImageLayer";
+import BackgroundImageLayer from "./layers/BackgroundImageLayer";
 import { CanvasContext } from "./CanvasContext";
-import DrawingLayer from "./layers/drawingLayer";
+import DrawingLayer from "./layers/DrawingLayer";
 import LayerSplicer from "../components/LayerSplicer";
+import UnitMarkerLayer from "./layers/UnitMarkerLayer";
 
 type DrawingCanvasProps = {
   color: string;
@@ -24,12 +25,14 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
   const canvasRef = useContext(CanvasContext);
   // const [image, setImage] = useState<string | null>(null); // Updated to store the image URL
   const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
+  
   // const [canvasDimensions, setCanvasDimensions] = useState<Vector2>({x:500, y: 500})
   return (
     <div>
       {/* Drawing layer */}
       <div className="relative" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <DrawingLayer color={color} radius={radius} />
+        <UnitMarkerLayer />
         <BackgroundImageLayer onImageLoad={() => {}} /> {/*(imageUrl) => setImage(imageUrl) */}
       </div>
 

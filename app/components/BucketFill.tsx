@@ -1,5 +1,19 @@
 import { Color } from "@/public/types/OtherTypes"; 
 
+function namedColorToRGBA(color: string): Color {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1;
+  canvas.height = 1;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) {
+    throw new Error('Canvas 2D context not supported');
+  }
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, 1, 1);
+  const [r, g, b, a] = Array.from(ctx.getImageData(0, 0, 1, 1).data);
+  return [r, g, b, a];
+}
+
 export default function bucketFill(ctx: CanvasRenderingContext2D, x: number, y: number, fillColor: Color): void {
   const imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
   const data = imageData.data;
@@ -17,7 +31,7 @@ export default function bucketFill(ctx: CanvasRenderingContext2D, x: number, y: 
 
     if (isInsideCanvas(currentX, currentY, ctx.canvas.width, ctx.canvas.height) && areColorsEqual(targetColor, getColorAtPixel(ctx, data, currentX, currentY))) {
       // Set the fill color with alpha blending
-      const fillColorArray = typeof fillColor === 'string' ? hexToRGBA(fillColor) : fillColor;
+      const fillColorArray = typeof fillColor === 'string' ? namedColorToRGBA(fillColor) : fillColor;
       for (let i = 0; i < 3; i++) {
         data[pixelIndex + i] = (fillColorArray[i] * fillColorArray[3] + data[pixelIndex + i] * (255 - fillColorArray[3])) / 255;
       }
@@ -35,12 +49,20 @@ export default function bucketFill(ctx: CanvasRenderingContext2D, x: number, y: 
 
 // ... (remaining functions unchanged)
 
-function hexToRGBA(hex: string): [number, number, number, number] | null {
-  const match = hex.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
-  if (!match) return null;
+// Convert a hex color to RGBA format
+function hexToRGBA(hex: string): Color {
+  // Check if the input is a valid hex color
+  const hexRegex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
+  const result = hexRegex.exec(hex);
+  if (!result) {
+    throw new Error(`Invalid hex color: ${hex}`);
+  }
 
-  const [, r, g, b] = match.map((component) => parseInt(component, 16));
-  return [r, g, b, 255];
+  // Extract the RGB values
+  const [, red, green, blue] = result.map((value) => parseInt(value, 16));
+
+  // Return the RGBA format
+  return [red, green, blue, 255];
 }
 
 function getColorAtPixel(ctx: CanvasRenderingContext2D,data: Uint8ClampedArray, x: number, y: number,  ): Color {

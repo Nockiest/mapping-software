@@ -21,6 +21,7 @@ export type Settings = {
   radius: number;
   color: string;
   lineType: "squared" | "rounded";
+  activeLayer: "draw" | "marker" | "background"
 };
  
 
@@ -68,7 +69,7 @@ export const CanvasSettingsContext = createContext<CanvasSettingsType | undefine
 
 export const CanvasProvider: React.FC = ({ children }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [settings, setSettings] = useState<Settings>({ radius: 5, color: "black", lineType: "squared" });
+  const [settings, setSettings] = useState<Settings>({ radius: 5, color: "black", lineType: "squared", activeLayer: "draw" });
   const backgroundCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
   const [canvasState, dispatch] = useReducer(reducer, DrawingState.Idle);

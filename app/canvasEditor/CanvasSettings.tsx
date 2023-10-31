@@ -15,34 +15,36 @@ const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange }) => 
   const { setBackgroundImage, backgroundImage } = useContext<CanvasContextType>(BackgroundContext);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
+  // Handle color change, radius change, and additional logic for active layer change
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSettings((prevSettings) => ({ ...prevSettings, color: e.target.value }));
   };
 
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newRadius = parseInt(e.target.value, 10);
-
-    // Check if the new radius is less than 0, set it to 0
     const sanitizedRadius = newRadius < 0 ? 0 : newRadius;
-
     setSettings((prevSettings) => ({ ...prevSettings, radius: sanitizedRadius }));
   };
 
   const handleImageRevert = () => {
     setBackgroundImage(null);
 
-    // Reset the value of the image input
     if (imageInputRef.current) {
       imageInputRef.current.value = '';
     }
-
-    // Add additional logic here if needed
+    // Additional logic here if needed
   };
 
   const handleBucketFill = () => {
     dispatch({ type: "ENTER_BUCKET_MODE" });
   };
 
+  // Handle active layer change
+  const handleActiveLayerChange = (newActiveLayer: "draw" | "marker" | "background") => {
+    setSettings((prevSettings) => ({ ...prevSettings, activeLayer: newActiveLayer }));
+  };
+
+  // Handle line type change
   const handleLineTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newLineType = e.target.value as "rounded" | "squared";
     setSettings((prevSettings) => ({ ...prevSettings, lineType: newLineType }));
@@ -77,6 +79,16 @@ const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange }) => 
         </select>
       </label>
       <br />
+      {/* Dropdown for active layer */}
+      <label>
+        Active Layer:
+        <select value={settings.activeLayer} onChange={(e) => handleActiveLayerChange(e.target.value as "draw" | "marker" | "background")} className="text-black">
+          <option value="draw">Draw</option>
+          <option value="marker">Marker</option>
+          <option value="background">Background</option>
+        </select>
+      </label>
+      <br />
       <input
         type="file"
         ref={imageInputRef}
@@ -85,7 +97,7 @@ const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange }) => 
           if (selectedFile) {
             setBackgroundImage(selectedFile);
           }
-          // Add additional logic here if needed
+          // Additional logic here if needed
         }}
       />
       <br />
