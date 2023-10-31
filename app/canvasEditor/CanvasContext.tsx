@@ -1,29 +1,60 @@
-import {createContext, useContext, useState, useRef, } from "react"
-
+import {createContext, useContext, useState, useRef, useReducer } from "react"
+import { DrawingState } from "@/public/types/ButtonEvents";
 interface CanvasContextType {
     canvasRef: React.RefObject<HTMLCanvasElement | null>;
   }
-  interface CanvasSettingsType {
+interface CanvasSettingsType {
     settings: Settings
     setSettings: React.Dispatch<React.SetStateAction<Settings>>;
   }
-  type Settings = {
+
+ 
+
+type Settings = {
     radius:number,
     color: string
   }
+
+export type DrawAction =
+  | { type: "DRAW" }
+  | { type: "ERASE"  }  
+  | { type: "MOUSE_UP" }
+  | { type: "MOUSE_LEAVE" }
+  | { type: "ENTER_BUCKET_MODE" }
+  ;
+    
+
+const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
+    // console.log("SWITCHING TO ", action.type)
+    switch (action.type) {
+      case "DRAW":
+        return DrawingState.Drawing;
+      case "ERASE":
+        return DrawingState.Erasing;
+      case "MOUSE_UP":
+      case "MOUSE_LEAVE":
+        return DrawingState.Idle;
+      case "ENTER_BUCKET_MODE":
+        return DrawingState.BucketFill;
+      default:
+        console.error("INVALID ACTION: " + action.type);
+        return state;
+    }
+  };
+
   export const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
   export const BackgroundContext = createContext<CanvasContextType | undefined>(undefined);
   export const CanvasSettingsContext = createContext<CanvasSettingsType | undefined>(undefined);
-  // Create a provider to wrap your components with
-  
+ 
   
   export const CanvasProvider: React.FC = ({ children }) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [settings, setSettings] = useState<Settings>({radius: 5, color:"black"});
     const backgroundCanvasRef  = useRef<HTMLCanvasElement | null>(null);
     const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
+    const [canvasState, dispatch] = useReducer(reducer, DrawingState.Idle);
     return (
-      <CanvasContext.Provider value={{ canvasRef }}>
+      <CanvasContext.Provider value={{ canvasRef, canvasState, dispatch }}>
         <BackgroundContext.Provider value={{ backgroundCanvasRef , backgroundImage, setBackgroundImage}}>
           <CanvasSettingsContext.Provider  value={{ settings, setSettings }}>
            {children}

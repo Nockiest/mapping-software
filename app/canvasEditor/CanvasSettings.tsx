@@ -2,16 +2,17 @@ import { useState, useContext, useEffect, useRef } from "react";
 import CanvasClear from "@/app/components/ClearCanvas";// Adjust the import path based on your project structure
  
 import { BackgroundContext, CanvasContext, CanvasSettingsContext } from "./CanvasContext";
+import { DrawingState } from "@/public/types/ButtonEvents";
  
 type CanvasSettingsProps = {
   onSettingsChange: (color: string, radius: number) => void;
   // canvasRef: React.RefObject<HTMLCanvasElement>;
 };
-
+ 
  
 const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange }) => {
   const { settings, setSettings } = useContext(CanvasSettingsContext);
-  const canvasRef = useContext(CanvasContext);
+  const { canvasRef, dispatch, state } = useContext(CanvasContext);
   const { setBackgroundImage, backgroundImage } = useContext(BackgroundContext);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
@@ -35,8 +36,13 @@ const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange }) => 
     if (imageInputRef.current) {
       imageInputRef.current.value = '';
     }
-    
+
     // Add additional logic here if needed
+  };
+
+  const handleBucketFill = () => {
+ 
+    dispatch({ type: "ENTER_BUCKET_MODE" });
   };
 
   return (
@@ -73,6 +79,10 @@ const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange }) => 
       <br />
       {backgroundImage && <button onClick={handleImageRevert}>Revert Background Image</button>}
       <br />
+      {/* Add the bucket fill button */}
+      <button style={{ backgroundColor: state === DrawingState.BucketFill ? 'red' : 'initial' }} onClick={handleBucketFill}>
+        Bucket Fill
+      </button>
       <br />
       <CanvasClear canvasRef={canvasRef} />
     </div>

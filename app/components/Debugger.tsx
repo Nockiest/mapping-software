@@ -1,5 +1,5 @@
 import React from 'react';
-
+ 
 type DebugInfoProps = {
   data: Record<string, any>;
 };

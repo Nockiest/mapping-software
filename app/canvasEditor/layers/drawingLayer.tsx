@@ -5,38 +5,9 @@ import CanvasToImage from "@/app/components/CanvasToImg";
 import drawLineOnCanvas from "@/app/components/LineDrawer";
 import drawLineWithSquares from "@/app/components/SquaredLineDrawer";
 import { Vector2 } from "@/public/types/GeometryTypes";
-import { CanvasContext } from "../CanvasContext";
-enum ButtonState {
-  Idle,
-  Drawing,
-  Erasing,
-  BucketFill
-}
-
-type StateMachineAction =
-  | { type: "DRAW" }
-  | { type: "ERASE"; position: { x: number; y: number }; radius: number }
-  | { type: "MOUSE_UP" }
-  | { type: "MOUSE_LEAVE" }
-  | { type: "ENTER_BUCKET_MODE" }
-  ;
-    
-
-  const reducer: React.Reducer<ButtonState, StateMachineAction> = (state, action) => {
-    switch (action.type) {
-      case "DRAW":
-        return ButtonState.Drawing;
-      case "ERASE":
-        return ButtonState.Erasing;
-      case "MOUSE_UP" || "MOUSE_LEAVE":
-        return ButtonState.Idle;
-      case "ENTER_BUCKET_MODE":
-        return ButtonState.BucketFill;
-      default:
-        console.error("INVALID ACTION: " + action.type);
-        return state;
-    }
-  };
+import { CanvasContext, DrawAction } from "../CanvasContext";
+import { DrawingState } from "@/public/types/ButtonEvents";
+ 
 
 type DrawingCanvasProps = {
   color: string; // CSS color
@@ -45,11 +16,11 @@ type DrawingCanvasProps = {
 
 
 const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
-  const canvasRef = useContext(CanvasContext)//useRef<HTMLCanvasElement | null>(null);
-  const [state, dispatch] = useReducer(reducer, ButtonState.Idle);
+  const {canvasRef, canvasState, dispatch} = useContext(CanvasContext)//useRef<HTMLCanvasElement | null>(null);
+  
   const [lastMousePos, setLastMousePos] = useState<Vector2 | null>(null);
 
-  const changeState = (newState: StateMachineAction) => {
+  const changeState = (newState: DrawAction) => {
     dispatch(newState);
   };
  
@@ -69,7 +40,7 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
       
         if (e.button === 2) {
           // Right mouse button is pressed, use EraseInRadius
-          changeState({ type: "ERASE", position: { x, y }, radius });
+          changeState({ type: "ERASE" }); 
         } else {
           // Left mouse button is pressed, start drawing
           changeState({ type: "DRAW" });
@@ -84,12 +55,12 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
       const x = e.offsetX;
       const y = e.offsetY;
 
-      if (state === ButtonState.Erasing) {
+      if (canvasState === DrawingState.Erasing) {
        console.log("ERASING")
         eraseInRadius({ canvasRef, position: { x, y }, diameter:radius});
       }
 
-      if (state === ButtonState.Drawing) {
+      if (canvasState === DrawingState.Drawing) {
         // Left mouse button is pressed, draw
         if (ctx && lastMousePos) {
           console.log("DRAWING")
@@ -126,7 +97,7 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
       canvas.removeEventListener("mouseup", handleMouseUp);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [state, color, radius, lastMousePos]);
+  }, [canvasState, color, radius, lastMousePos]);
 
   return (
  
