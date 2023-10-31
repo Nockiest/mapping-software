@@ -1,24 +1,21 @@
- 
 import React, { useState, useRef, useEffect, useReducer, useContext } from "react";
 import eraseInRadius from "@/app/components/Eraser";
 import CanvasToImage from "@/app/components/CanvasToImg";
-import drawLineOnCanvas from "@/app/components/LineDrawer";
 import drawLineWithSquares from "@/app/components/SquaredLineDrawer";
 import { Vector2 } from "@/public/types/GeometryTypes";
-import { CanvasContext, DrawAction } from "../CanvasContext";
+import { CanvasContext, CanvasContextType, CanvasSettingsContext, DrawAction } from "../CanvasContext";
 import { DrawingState } from "@/public/types/ButtonEvents";
 import bucketFill from "@/app/components/BucketFill";
-
+import drawCircledLine from "../../components/CircledLineDrawer";
 type DrawingCanvasProps = {
   color: string; // CSS color
   radius: number;
 };
 
-
 const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
-  const { canvasRef, canvasState, dispatch } = useContext(CanvasContext);
+  const { canvasRef, canvasState, dispatch } = useContext<CanvasContextType| null>(CanvasContext);
   const [lastMousePos, setLastMousePos] = useState<Vector2 | null>(null);
-
+  const { settings } = useContext(CanvasSettingsContext);
   const changeState = (newState: DrawAction) => {
     dispatch(newState);
   };
@@ -31,7 +28,7 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
 
     const handleMouseDown = (e: MouseEvent) => {
       const x = e.offsetX;
@@ -39,14 +36,14 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
 
       if (e.button === 2) {
         // Right mouse button is pressed, use EraseInRadius
-        changeState({ type: 'ERASE' });
+        changeState({ type: "ERASE" });
       } else if (e.button === 0) {
         // Left mouse button is pressed, start drawing or filling
         if (canvasState === DrawingState.BucketFill) {
-          console.log('FILLING WITH BUCKET');
+          console.log("FILLING WITH BUCKET");
           bucketFill(ctx, x, y, [255, 0, 0, 255]);
         } else {
-          changeState({ type: 'DRAW' });
+          changeState({ type: "DRAW" });
           if (ctx) {
             ctx.beginPath();
             setLastMousePos({ x, y });
@@ -64,15 +61,18 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
       } else if (canvasState === DrawingState.Drawing) {
         // Left mouse button is pressed, draw
         if (ctx && lastMousePos) {
-          drawLineWithSquares(ctx, lastMousePos, { x, y }, color, radius);
+          if (settings.lineType === "rounded") {
+            drawCircledLine(ctx, lastMousePos, { x, y }, color, radius);
+          } else if (settings.lineType === "squared") {
+            drawLineWithSquares(ctx, lastMousePos, { x, y }, color, radius);
+          }
         }
       }
-
       setLastMousePos({ x, y });
     };
 
     const handleMouseUp = () => {
-      changeState({ type: 'MOUSE_UP' });
+      changeState({ type: "MOUSE_UP" });
       if (ctx) {
         ctx.closePath();
       }
@@ -85,52 +85,52 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
     //   }
     // };
 
-    const handleWheel = (e: WheelEvent) => {
-      if (e.ctrlKey) {
-        console.log("APPLYING ZOOM")
-        // Ctrl key is pressed, handle zooming
-        const zoomFactor = e.deltaY > 0 ? 1.1 : 0.9;
-        applyZoom(canvas, zoomFactor);
-        e.preventDefault(); // Prevent default behavior to avoid page scrolling
-      }
-    };
+    // const handleWheel = (e: WheelEvent) => {
+    //   if (e.ctrlKey) {
+    //     console.log("APPLYING ZOOM")
+    //     // Ctrl key is pressed, handle zooming
+    //     const zoomFactor = e.deltaY > 0 ? 1.1 : 0.9;
+    //     applyZoom(canvas, zoomFactor);
+    //     e.preventDefault(); // Prevent default behavior to avoid page scrolling
+    //   }
+    // };
 
-    canvas.addEventListener('mousedown', handleMouseDown);
-    canvas.addEventListener('contextmenu', (e: React.MouseEvent<HTMLCanvasElement>) => e.preventDefault()); // Disable right-click context menu
-    canvas.addEventListener('mousemove', handleMouseMovement);
-    canvas.addEventListener('mouseup', handleMouseUp);
+    canvas.addEventListener("mousedown", handleMouseDown);
+    canvas.addEventListener("contextmenu", (e: React.MouseEvent<HTMLCanvasElement>) => e.preventDefault()); // Disable right-click context menu
+    canvas.addEventListener("mousemove", handleMouseMovement);
+    canvas.addEventListener("mouseup", handleMouseUp);
     // canvas.addEventListener('mouseleave', handleMouseLeave);
-    canvas.addEventListener('wheel', handleWheel);
+    // canvas.addEventListener('wheel', handleWheel);
 
     return () => {
-      canvas.removeEventListener('mousedown', handleMouseDown);
-      canvas.removeEventListener('contextmenu', (e: React.MouseEvent<HTMLCanvasElement>) => e.preventDefault());
-      canvas.removeEventListener('mousemove', handleMouseMovement);
-      canvas.removeEventListener('mouseup', handleMouseUp);
+      canvas.removeEventListener("mousedown", handleMouseDown);
+      canvas.removeEventListener("contextmenu", (e: React.MouseEvent<HTMLCanvasElement>) => e.preventDefault());
+      canvas.removeEventListener("mousemove", handleMouseMovement);
+      canvas.removeEventListener("mouseup", handleMouseUp);
       // canvas.removeEventListener('mouseleave', handleMouseLeave);
-      canvas.removeEventListener('wheel', handleWheel);
+      // canvas.removeEventListener('wheel', handleWheel);
     };
   }, [canvasState, color, radius, lastMousePos]);
 
-  const applyZoom = (canvas: HTMLCanvasElement, zoomFactor: number) => {
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+  // const applyZoom = (canvas: HTMLCanvasElement, zoomFactor: number) => {
+  //   const ctx = canvas.getContext('2d');
+  //   if (!ctx) return;
 
-    // Clear the canvas
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
+  //   // Clear the canvas
+  //   // ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Save the current state
-    ctx.save();
+  //   // Save the current state
+  //   ctx.save();
 
-    // Apply the scale transformation
-    ctx.scale(zoomFactor, zoomFactor);
+  //   // Apply the scale transformation
+  //   ctx.scale(zoomFactor, zoomFactor);
 
-    // Redraw your content at the zoomed scale (you may need to adjust this part based on your drawing logic)
-    // ...
+  //   // Redraw your content at the zoomed scale (you may need to adjust this part based on your drawing logic)
+  //   // ...
 
-    // Restore the previous state
-    ctx.restore();
-  };
+  //   // Restore the previous state
+  //   ctx.restore();
+  // };
 
   return (
     <canvas

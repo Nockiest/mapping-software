@@ -5,7 +5,7 @@ interface Point {
   
   type CanvasRenderingContext = CanvasRenderingContext2D | null;
   
-  function drawLineOnCanvas(
+  function drawCircledLine(
     ctx: CanvasRenderingContext2D,
     lineStart: Point,
     lineEnd: Point,
@@ -20,7 +20,7 @@ interface Point {
       Math.pow(lineEnd.x - lineStart.x, 2) + Math.pow(lineEnd.y - lineStart.y, 2)
     );
   
-    const numberOfDots = Math.floor(distance);
+    const numberOfDots = Math.floor(distance * 5);
     const deltaX = (lineEnd.x - lineStart.x) / numberOfDots;
     const deltaY = (lineEnd.y - lineStart.y) / numberOfDots;
   
@@ -36,7 +36,7 @@ interface Point {
     }
   }
   
-  export default drawLineOnCanvas;
+  export default drawCircledLine;
  
 //   // Example usage:
 //   const canvas = document.getElementById('yourOriginalCanvasId') as HTMLCanvasElement;

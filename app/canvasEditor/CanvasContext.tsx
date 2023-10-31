@@ -1,32 +1,38 @@
 import {createContext, useContext, useState, useRef, useReducer } from "react"
 import { DrawingState } from "@/public/types/ButtonEvents";
 export interface CanvasContextType {
-    canvasRef: React.RefObject<HTMLCanvasElement | null>;
-  }
+  canvasRef: React.RefObject<HTMLCanvasElement | null>;
+  canvasState: DrawingState;
+  dispatch: Dispatch<DrawAction>;
+}
+
+export interface BackgroundContextType {
+  backgroundCanvasRef: React.RefObject<HTMLCanvasElement | null>;
+  backgroundImage: File | null;
+  setBackgroundImage: React.Dispatch<React.SetStateAction<File | null>>;
+}
+
 export interface CanvasSettingsType {
-    settings: Settings
-    setSettings: React.Dispatch<React.SetStateAction<Settings>>;
-  }
+  settings: Settings;
+  setSettings: React.Dispatch<React.SetStateAction<Settings>>;
+}
 
+export type Settings = {
+  radius: number;
+  color: string;
+  lineType: "squared" | "rounded";
+};
  
-
-type Settings = {
-    radius:number,
-    color: string
-    lineType: "square" | "rounded"
-  }
 
 export type DrawAction =
   | { type: "DRAW" }
-  | { type: "ERASE"  }  
+  | { type: "ERASE" }
   | { type: "MOUSE_UP" }
   | { type: "MOUSE_LEAVE" }
-  | { type: "ENTER_BUCKET_MODE" }
-  ;
-    
+  | { type: "ENTER_BUCKET_MODE" };
 
-const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
-    // console.log("SWITCHING TO ", action.type)
+  const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
+    console.log("SWITCHING TO ", action.type)
     switch (action.type) {
       case "DRAW":
         if (DrawingState.BucketFill== state) {
@@ -58,27 +64,28 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
     }
   };
 
-  export const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
-  export const BackgroundContext = createContext<CanvasContextType | undefined>(undefined);
-  export const CanvasSettingsContext = createContext<CanvasSettingsType | undefined>(undefined);
- 
-  
-  export const CanvasProvider: React.FC = ({ children }) => {
-    const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const [settings, setSettings] = useState<Settings>({radius: 5, color:"black", lineType: "square"});
-    const backgroundCanvasRef  = useRef<HTMLCanvasElement | null>(null);
-    const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
-    const [canvasState, dispatch] = useReducer(reducer, DrawingState.Idle);
-    return (
-      <CanvasContext.Provider value={{ canvasRef, canvasState, dispatch }}>
-        <BackgroundContext.Provider value={{ backgroundCanvasRef , backgroundImage, setBackgroundImage}}>
-          <CanvasSettingsContext.Provider  value={{ settings, setSettings }}>
-           {children}
-          </CanvasSettingsContext.Provider>
-        </BackgroundContext.Provider>
-      </CanvasContext.Provider>
-    );
-  };
+
+export const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
+export const BackgroundContext = createContext<BackgroundContextType | undefined>(undefined);
+export const CanvasSettingsContext = createContext<CanvasSettingsType | undefined>(undefined);
+
+export const CanvasProvider: React.FC = ({ children }) => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [settings, setSettings] = useState<Settings>({ radius: 5, color: "black", lineType: "squared" });
+  const backgroundCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
+  const [canvasState, dispatch] = useReducer(reducer, DrawingState.Idle);
+
+  return (
+    <CanvasContext.Provider value={{ canvasRef, canvasState, dispatch }}>
+      <BackgroundContext.Provider value={{ backgroundCanvasRef, backgroundImage, setBackgroundImage }}>
+        <CanvasSettingsContext.Provider value={{ settings, setSettings }}>
+          {children}
+        </CanvasSettingsContext.Provider>
+      </BackgroundContext.Provider>
+    </CanvasContext.Provider>
+  );
+};
   
   export const useCanvas = () => {
     const context = useContext(CanvasContext);

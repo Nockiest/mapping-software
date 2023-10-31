@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect, useReducer, useContext, CSSProperti
 
 import eraseInRadius from "../components/Eraser";
 import CanvasToImage from "../components/CanvasToImg";
-import drawLineOnCanvas from "@/app/components/LineDrawer";
+import drawLineOnCanvas from "@/app/components/CircledLineDrawer";
 import drawLineWithSquares from "@/app/components/SquaredLineDrawer";
 import { Vector2 } from "@/public/types/GeometryTypes";
 // import { CanvasContext } from "./page ";
