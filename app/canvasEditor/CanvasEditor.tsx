@@ -11,41 +11,9 @@ import { Vector2 } from "@/public/types/GeometryTypes";
 import drawImageToBackground from "@/app/components/DrawBackgroundCanvasImg";
 import DrawLayer from "./layers/drawLayer";
 import BackgroundImageLayer from "./layers/backgroundImageLayer";
-import { CanvasContext } from "./page";
+import { CanvasContext } from "./CanvasContext";
 import DrawingLayer from "./layers/drawingLayer";
 import LayerSplicer from "../components/LayerSplicer";
-enum ButtonState {
-  Idle,
-  Drawing,
-  Erasing,
-}
-
-type StateMachineAction =
-  | { type: "DRAW" }
-  | { type: "ERASE"; position: { x: number; y: number }; radius: number }
-  | { type: "MOUSE_UP" }
-  | { type: "MOUSE_LEAVE" };
-
-const reducer: React.Reducer<ButtonState, StateMachineAction> = (state, action) => {
-  switch (state) {
-    case ButtonState.Idle:
-      if (action.type === "DRAW") return ButtonState.Drawing;
-      if (action.type === "ERASE") return ButtonState.Erasing;
-      break;
-    case ButtonState.Drawing:
-      if (action.type === "DRAW") return ButtonState.Drawing;
-      if (action.type === "ERASE") return ButtonState.Erasing;
-      if (action.type === "MOUSE_UP") return ButtonState.Idle;
-      break;
-    case ButtonState.Erasing:
-      if (action.type === "DRAW") return ButtonState.Drawing;
-      if (action.type === "MOUSE_UP") return ButtonState.Idle;
-      break;
-  }
-  return state;
-};
-
- 
  
  
 type DrawingCanvasProps = {

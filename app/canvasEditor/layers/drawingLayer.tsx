@@ -5,42 +5,38 @@ import CanvasToImage from "@/app/components/CanvasToImg";
 import drawLineOnCanvas from "@/app/components/LineDrawer";
 import drawLineWithSquares from "@/app/components/SquaredLineDrawer";
 import { Vector2 } from "@/public/types/GeometryTypes";
-import { CanvasContext } from "../page";
+import { CanvasContext } from "../CanvasContext";
 enum ButtonState {
   Idle,
   Drawing,
   Erasing,
+  BucketFill
 }
 
 type StateMachineAction =
   | { type: "DRAW" }
   | { type: "ERASE"; position: { x: number; y: number }; radius: number }
   | { type: "MOUSE_UP" }
-  | { type: "MOUSE_LEAVE" };
+  | { type: "MOUSE_LEAVE" }
+  | { type: "ENTER_BUCKET_MODE" }
+  ;
+    
 
-const reducer: React.Reducer<ButtonState, StateMachineAction> = (state, action) => {
-  if (action.type === "DRAW") return ButtonState.Drawing;
-  if (action.type === "ERASE") return ButtonState.Erasing;
-  if (action.type === "MOUSE_UP") return ButtonState.Idle;
-  // switch (1) {
-  //   case 1:
-     
-    // case ButtonState.Idle:
-    //   if (action.type === "DRAW") return ButtonState.Drawing;
-    //   if (action.type === "ERASE") return ButtonState.Erasing;
-    //   break;
-    // case ButtonState.Drawing:
-    //   if (action.type === "DRAW") return ButtonState.Drawing;
-    //   if (action.type === "ERASE") return ButtonState.Erasing;
-    //   if (action.type === "MOUSE_UP") return ButtonState.Idle;
-    //   break;
-    // case ButtonState.Erasing:
-    //   if (action.type === "DRAW") return ButtonState.Drawing;
-    //   if (action.type === "MOUSE_UP") return ButtonState.Idle;
-    //   break;
-  // }
-  return state;
-};
+  const reducer: React.Reducer<ButtonState, StateMachineAction> = (state, action) => {
+    switch (action.type) {
+      case "DRAW":
+        return ButtonState.Drawing;
+      case "ERASE":
+        return ButtonState.Erasing;
+      case "MOUSE_UP" || "MOUSE_LEAVE":
+        return ButtonState.Idle;
+      case "ENTER_BUCKET_MODE":
+        return ButtonState.BucketFill;
+      default:
+        console.error("INVALID ACTION: " + action.type);
+        return state;
+    }
+  };
 
 type DrawingCanvasProps = {
   color: string; // CSS color
@@ -138,9 +134,8 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
         ref={canvasRef}
         width={800}
         height={600}
-        
         onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
-        className="canvas-rectangle draw-canvas   top-0 z-10 "
+        className="canvas-rectangle draw-canvas   top-0  "
         style={{      }}
       />
  

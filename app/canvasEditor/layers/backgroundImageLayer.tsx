@@ -1,6 +1,6 @@
  
 import React, { useState, useContext, useEffect } from 'react';
-import { BackgroundContext } from '../page';
+import { BackgroundContext } from '../CanvasContext';
  
 const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }> = ({ onImageLoad }) => {
   const { backgroundCanvasRef, backgroundImage } = useContext(BackgroundContext);
