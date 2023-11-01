@@ -10,7 +10,7 @@ import { CanvasContext, CanvasProvider, CanvasSettingsContext } from "./CanvasCo
 // Now, your Page component using the CanvasProvider and the useCanvas hook
 const Page: React.FC = () => {
   const { settings, setSettings } = useContext(CanvasSettingsContext);
-  const { canvasState, state } = useContext(CanvasContext);
+  const { canvasState    } = useContext(CanvasContext);
 
   const handleSettingsChange = (color: string, radius: number) => {
     setSettings({ color, radius });

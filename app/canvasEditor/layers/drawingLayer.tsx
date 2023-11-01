@@ -107,10 +107,19 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
     };
 
     // Add event listeners
-    canvas.addEventListener("mousedown", handleMouseDown);
-    canvas.addEventListener("contextmenu", (e: React.MouseEvent<HTMLCanvasElement>) => e.preventDefault());
-    canvas.addEventListener("mousemove", handleMouseMovement);
-    canvas.addEventListener("mouseup", handleMouseUp);
+    if (settings.activeLayer === "draw") {
+      canvas.addEventListener("mousedown", handleMouseDown);
+      canvas.addEventListener("contextmenu", (e: React.MouseEvent<HTMLCanvasElement>) => e.preventDefault());
+      canvas.addEventListener("mousemove", handleMouseMovement);
+      canvas.addEventListener("mouseup", handleMouseUp);
+    } else {
+      canvas.removeEventListener("mousedown", handleMouseDown);
+      canvas.removeEventListener("contextmenu", (e: React.MouseEvent<HTMLCanvasElement>) => e.preventDefault());
+      canvas.removeEventListener("mousemove", handleMouseMovement);
+      canvas.removeEventListener("mouseup", handleMouseUp);
+    }
+  
+   
 
     // Remove event listeners on component unmount
     return () => {

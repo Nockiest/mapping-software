@@ -6,7 +6,7 @@ import MarkerEditorSettings from "./MarkerEditorSettings";
 import { CanvasSettingsProps } from "../layers/CanvasSettings";
 import LineTypeSettings from "@/app/components/settings/LineTypeSettings";
 import ActiveLayerSettings from "@/app/components/settings/ActiveLayerSettings";
-
+import { hexToRgb } from "@/public/utils";
  const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange }) => {
   const { settings, setSettings } = useContext<CanvasSettingsType>(CanvasSettingsContext);
   const { canvasRef, dispatch, state } = useContext<CanvasContextType>(CanvasContext);
@@ -15,7 +15,10 @@ import ActiveLayerSettings from "@/app/components/settings/ActiveLayerSettings";
 
   // Handle color change, radius change, and additional logic for active layer change
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSettings((prevSettings) => ({ ...prevSettings, color: e.target.value }));
+    const hexColor = e.target.value;
+    const rgbColor = hexToRgb(hexColor);
+  
+    setSettings((prevSettings) => ({ ...prevSettings, color: rgbColor }));
   };
 
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +33,6 @@ import ActiveLayerSettings from "@/app/components/settings/ActiveLayerSettings";
     if (imageInputRef.current) {
       imageInputRef.current.value = '';
     }
-    // Additional logic here if needed
   };
 
   const handleBucketFill = () => {
@@ -58,6 +60,7 @@ import ActiveLayerSettings from "@/app/components/settings/ActiveLayerSettings";
         borderRadius: '4px',
       }}
     >
+       <ActiveLayerSettings activeLayer={settings.activeLayer} handleActiveLayerChange={handleActiveLayerChange} /><br/>
       {settings.activeLayer === "draw" ? (
         <>
           <label>
@@ -73,16 +76,7 @@ import ActiveLayerSettings from "@/app/components/settings/ActiveLayerSettings";
           {/* Dropdown for line type */}
           <LineTypeSettings lineType={settings.lineType} handleLineTypeChange={handleLineTypeChange} />
           <br />
-          <ActiveLayerSettings activeLayer={settings.activeLayer} handleActiveLayerChange={handleActiveLayerChange} />
-          {/* Dropdown for active layer */}
-          {/* <label>
-            Active Layer:
-            <select value={settings.activeLayer} onChange={(e) => handleActiveLayerChange(e.target.value as "draw" | "marker" | "background")} className="text-black">
-              <option value="draw">Draw</option>
-              <option value="marker">Marker</option>
-              <option value="background">Background</option>
-            </select>
-          </label> */}
+          
           <br />
           <input
             type="file"
@@ -92,7 +86,6 @@ import ActiveLayerSettings from "@/app/components/settings/ActiveLayerSettings";
               if (selectedFile) {
                 setBackgroundImage(selectedFile);
               }
-              // Additional logic here if needed
             }} />
           <br />
           {backgroundImage && <button onClick={handleImageRevert}>Revert Background Image</button>}

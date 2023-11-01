@@ -1,7 +1,9 @@
 import {createContext, useContext, useState, useRef, useReducer } from "react"
 import { DrawingState } from "@/public/types/ButtonEvents";
+import { Color } from "@/public/types/OtherTypes";
 export interface CanvasContextType {
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
+  markerCanvasRef: React.RefObject<HTMLCanvasElement | null>;
   canvasState: DrawingState;
   dispatch: Dispatch<DrawAction>;
 }
@@ -19,7 +21,7 @@ export interface CanvasSettingsType {
 
 export type Settings = {
   radius: number;
-  color: string;
+  color: Color;
   lineType: "squared" | "rounded";
   activeLayer: "draw" | "marker" | "background"
 };
@@ -69,13 +71,14 @@ export const CanvasSettingsContext = createContext<CanvasSettingsType | undefine
 
 export const CanvasProvider: React.FC = ({ children }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const markerCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [settings, setSettings] = useState<Settings>({ radius: 5, color: [0,0,0,255], lineType: "squared", activeLayer: "draw" });
   const backgroundCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
   const [canvasState, dispatch] = useReducer(reducer, DrawingState.Idle);
 
   return (
-    <CanvasContext.Provider value={{ canvasRef, canvasState, dispatch }}>
+    <CanvasContext.Provider value={{ canvasRef,markerCanvasRef, canvasState, dispatch }}>
       <BackgroundContext.Provider value={{ backgroundCanvasRef, backgroundImage, setBackgroundImage }}>
         <CanvasSettingsContext.Provider value={{ settings, setSettings }}>
           {children}
