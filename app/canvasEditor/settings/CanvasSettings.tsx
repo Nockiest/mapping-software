@@ -1,32 +1,57 @@
 import { useContext, useRef } from "react";
 import CanvasClear from "@/app/components/ClearCanvas";
-import { BackgroundContext, CanvasContext, CanvasSettingsContext, CanvasContextType, CanvasSettingsType } from "../CanvasContext";
+import { BackgroundContext, CanvasContext,  CanvasContextType, CanvasSettingsType } from "../CanvasContext";//CanvasSettingsContext, 
 import { DrawingState } from "@/public/types/ButtonEvents";
 import MarkerEditorSettings from "./MarkerEditorSettings";
-import { CanvasSettingsProps } from "../layers/CanvasSettings";
+// import { CanvasSettingsProps } from "../layers/CanvasSettings";
 import LineTypeSettings from "@/app/components/settings/LineTypeSettings";
 import ActiveLayerSettings from "@/app/components/settings/ActiveLayerSettings";
 import { hexToRgb } from "@/public/utils";
- const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange }) => {
-  const { settings, setSettings } = useContext<CanvasSettingsType>(CanvasSettingsContext);
-  const { canvasRef, dispatch, state } = useContext<CanvasContextType>(CanvasContext);
-  const { setBackgroundImage, backgroundImage } = useContext<CanvasContextType>(BackgroundContext);
+import { signal } from "@preact/signals";
+import { Settings } from "@/public/types/OtherTypes";
+
+export const settings:Settings = signal({
+  radius: 5,
+  color: `#000000`,
+  lineType: "squared",
+  activeLayer: "draw",
+  markerSettings: { width: 10, color: `#000000`, topValue: "X", bottomValue: "Y" },
+});
+
+const CanvasSettings = ({ onSettingsChange }) => {
   const imageInputRef = useRef<HTMLInputElement>(null);
 
-  // Handle color change, radius change, and additional logic for active layer change
+  const changeSettings = (property: string, value: any) => {
+    // Assuming settings is a mutable signal, otherwise, you might need to use `setSettings` if it's a state
+    settings.value[property] = value;
+  };
+
+  // Handle color change
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const hexColor = e.target.value;
     const rgbColor = hexToRgb(hexColor);
-  
-    setSettings((prevSettings) => ({ ...prevSettings, color: rgbColor }));
+    changeSettings('color', rgbColor);
   };
 
+  // Handle radius change
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newRadius = parseInt(e.target.value, 10);
     const sanitizedRadius = newRadius < 0 ? 0 : newRadius;
-    setSettings((prevSettings) => ({ ...prevSettings, radius: sanitizedRadius }));
+    changeSettings('radius', sanitizedRadius);
   };
 
+  // Handle active layer change
+  const handleActiveLayerChange = (newActiveLayer: "draw" | "marker" | "background") => {
+    changeSettings('activeLayer', newActiveLayer);
+  };
+
+  // Handle line type change
+  const handleLineTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newLineType = e.target.value as "rounded" | "squared";
+    changeSettings('lineType', newLineType);
+  };
+
+  // Handle image revert
   const handleImageRevert = () => {
     setBackgroundImage(null);
 
@@ -35,19 +60,9 @@ import { hexToRgb } from "@/public/utils";
     }
   };
 
+  // Handle bucket fill
   const handleBucketFill = () => {
-    dispatch({ type: "ENTER_BUCKET_MODE" });
-  };
-
-  // Handle active layer change
-  const handleActiveLayerChange = (newActiveLayer: "draw" | "marker" | "background") => {
-    setSettings((prevSettings) => ({ ...prevSettings, activeLayer: newActiveLayer }));
-  };
-
-  // Handle line type change
-  const handleLineTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newLineType = e.target.value as "rounded" | "squared";
-    setSettings((prevSettings) => ({ ...prevSettings, lineType: newLineType }));
+    dispatch({ type: 'ENTER_BUCKET_MODE' });
   };
 
   return (
@@ -60,8 +75,9 @@ import { hexToRgb } from "@/public/utils";
         borderRadius: '4px',
       }}
     >
-       <ActiveLayerSettings activeLayer={settings.activeLayer} handleActiveLayerChange={handleActiveLayerChange} /><br/>
-      {settings.activeLayer === "draw" ? (
+      <ActiveLayerSettings activeLayer={settings.activeLayer} handleActiveLayerChange={handleActiveLayerChange} />
+      <br />
+      {settings.activeLayer === 'draw' ? (
         <>
           <label>
             Color:
@@ -76,7 +92,7 @@ import { hexToRgb } from "@/public/utils";
           {/* Dropdown for line type */}
           <LineTypeSettings lineType={settings.lineType} handleLineTypeChange={handleLineTypeChange} />
           <br />
-          
+
           <br />
           <input
             type="file"
@@ -86,7 +102,8 @@ import { hexToRgb } from "@/public/utils";
               if (selectedFile) {
                 setBackgroundImage(selectedFile);
               }
-            }} />
+            }}
+          />
           <br />
           {backgroundImage && <button onClick={handleImageRevert}>Revert Background Image</button>}
           <br />
@@ -96,11 +113,12 @@ import { hexToRgb } from "@/public/utils";
           </button>
         </>
       ) : (
-        <MarkerEditorSettings />
+        <MarkerEditorSettings changeSettings={changeSettings} />
       )}
 
-      <CanvasClear canvasRef={canvasRef} />
+      {/* <CanvasClear canvasRef={canvasRef} /> */}
     </div>
   );
 };
-export default CanvasSettings
+
+export default CanvasSettings;

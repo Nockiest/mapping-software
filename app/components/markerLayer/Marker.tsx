@@ -1,4 +1,4 @@
-import { CanvasSettingsContext } from "@/app/canvasEditor/CanvasContext";
+// import { CanvasSettingsContext } from "@/app/canvasEditor/CanvasContext";
 import { MousePositionContext } from "@/app/canvasEditor/page";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { Color } from "@/public/types/OtherTypes";

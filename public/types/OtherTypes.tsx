@@ -10,3 +10,11 @@ export type MarkerType = {
     isDragging: boolean;
   };
   
+
+export type Settings = {
+    radius: number;
+    color: Color;
+    lineType: "squared" | "rounded";
+    activeLayer: "draw" | "marker" | "background";
+    markerSettings:{width:number,  color: Color, topValue:string, bottomValue:string} 
+  };

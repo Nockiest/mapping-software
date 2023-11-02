@@ -5,7 +5,7 @@ import DrawingCanvas from "./CanvasEditor";
 import CanvasSettings from "./settings/CanvasSettings";
 import DebugInfo from "../components/Debugger";
 import Timeline from "./Timeline";
-import { CanvasContext, CanvasProvider, CanvasSettingsContext } from "./CanvasContext";
+import { CanvasContext, CanvasProvider,   } from "./CanvasContext";//CanvasSettingsContext
 
 // Create a context for mouse position
 export const MousePositionContext = createContext<{ x: number; y: number } | null>(null);
@@ -38,19 +38,19 @@ const MousePositionProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 };
 
 const Page: React.FC = () => {
-  const { settings, setSettings } = useContext(CanvasSettingsContext);
+  // const { settings, setSettings } = useContext(CanvasSettingsContext);
   const { canvasState } = useContext(CanvasContext);
   const mousePosition = useContext(MousePositionContext);
 
-  const handleSettingsChange = (color: string, radius: number) => {
-    setSettings({ color, radius });
-  };
+  // const handleSettingsChange = (color: string, radius: number) => {
+  //   setSettings({ color, radius });
+  // };
 
   // Use mousePosition wherever needed
 
   return (
     <>
-      <DebugInfo
+      {/* <DebugInfo
         data={{
           radius: settings.radius,
           canvasState: canvasState,
@@ -59,9 +59,9 @@ const Page: React.FC = () => {
           layer: settings.activeLayer,
           mousePosition: mousePosition,
         }}
-      />
-      <CanvasSettings onSettingsChange={handleSettingsChange} />
-      <DrawingCanvas color={settings.color} radius={settings.radius} />
+      />*/}
+        <CanvasSettings  /> {/* onSettingsChange={handleSettingsChange}  */}
+      {/* <DrawingCanvas color={settings.color} radius={settings.radius} /> */}
       <Timeline />
     </>
   );
