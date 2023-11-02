@@ -39,7 +39,7 @@ export const hexToRgb = (hex: string): string => {
   return `rgb(${r}, ${g}, ${b})`;
 };
 
-const rgbToHex = (r: number, g: number, b: number): string => {
+export const rgbToHex = (r: number, g: number, b: number): string => {
   // Ensure the RGB components are within the valid range (0 to 255)
   const validR = Math.min(255, Math.max(0, r));
   const validG = Math.min(255, Math.max(0, g));
@@ -53,3 +53,11 @@ const rgbToHex = (r: number, g: number, b: number): string => {
   // Return the hex color value
   return `#${hexR}${hexG}${hexB}`;
 };
+
+export const hexToRGBA = (hex: string): [number, number, number, number] => {
+  const match = hex.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
+  if (!match) throw new Error("trying to convert color with incorrect format")
+
+  const [, r, g, b] = match.map((component) => parseInt(component, 16));
+  return [r, g, b, 255];
+}

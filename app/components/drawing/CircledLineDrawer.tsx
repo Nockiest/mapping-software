@@ -1,21 +1,17 @@
 import { Color } from "@/public/types/OtherTypes";
-interface Point {
-    x: number;
-    y: number;
-  }
-  
-  type CanvasRenderingContext = CanvasRenderingContext2D | null;
+import { Vector2 } from "@/public/types/GeometryTypes";
+import { hexToRGBA } from "@/public/utils";
   
   
   export default function drawCircledLine(
     ctx: CanvasRenderingContext2D,
-    lineStart: Point,
-    lineEnd: Point,
+    lineStart: Vector2,
+    lineEnd: Vector2,
     color: Color,
-    radius: number
+    diameter: number
   ): void {
     if (!ctx) {
-      throw new Error('Canvas 2D context not supported');
+      throw new Error(`Canvas 2D context not supported: ${ctx}`);
     }
   
     const distance = Math.sqrt(
@@ -34,17 +30,10 @@ interface Point {
       const y = lineStart.y + i * deltaY;
   
       ctx.beginPath();
-      ctx.arc(x, y, radius, 0, 2 * Math.PI);
+      ctx.arc(x, y, diameter/2, 0, 2 * Math.PI);
       ctx.fill();
     }
   }
   
-  // ... (remaining functions unchanged)
   
-  function hexToRGBA(hex: string): [number, number, number, number] | null {
-    const match = hex.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
-    if (!match) return null;
-  
-    const [, r, g, b] = match.map((component) => parseInt(component, 16));
-    return [r, g, b, 255];
-  }
+ 
