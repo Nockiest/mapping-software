@@ -77,20 +77,7 @@ const UnitMarkerLayer: React.FC = () => {
       }
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      // if (markerLayerState === MarkerLayerState.Dragging) {
-      //   const rect = canvas.getBoundingClientRect();
-      //   const x = e.clientX - rect.left;
-      //   const y = e.clientY - rect.top;
-
-      //   setMarkers((prevMarkers) =>
-      //     prevMarkers.map((marker, index) =>
-      //       index === draggingMarkerIndex ? { ...marker, position: { x, y } } : marker
-      //     )
-      //   );
-      // }
-    };
-
+ 
     const handleMouseUp = () => {
       if (markerLayerState === MarkerLayerState.Dragging) {
         dispatch({ type: 'MOUSE_UP' });
@@ -103,7 +90,7 @@ const UnitMarkerLayer: React.FC = () => {
     };
 
     canvas.addEventListener('mousedown', handleMouseDown);
-    canvas.addEventListener('mousemove', handleMouseMove);
+    // canvas.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mouseup', handleMouseUp);
     window.addEventListener('resize', handleResize);
 
@@ -112,7 +99,7 @@ const UnitMarkerLayer: React.FC = () => {
 
     return () => {
       canvas.removeEventListener('mousedown', handleMouseDown);
-      canvas.removeEventListener('mousemove', handleMouseMove);
+      // canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseup', handleMouseUp);
       window.removeEventListener('resize', handleResize);
     };
@@ -122,7 +109,7 @@ const UnitMarkerLayer: React.FC = () => {
     <div className="absolute top-10 z-100" onContextMenu={(e) => e.preventDefault()}>
       <canvas width={800} height={600} className="border-2 canvas-rectangle" ref={markerCanvasRef} />
       {markers.map((marker, index) => (
-        <Marker key={index} topLeftOffset={topLeftOffset}  />
+        <Marker key={index} topLeftOffset={topLeftOffset} initialPosition={marker.position} markerSettings={settings.markerSettings} />
       ))}
       {markerLayerState}
     </div>
@@ -130,3 +117,18 @@ const UnitMarkerLayer: React.FC = () => {
 };
 
 export default UnitMarkerLayer;
+
+
+const handleMouseMove = (e: MouseEvent) => {
+  // if (markerLayerState === MarkerLayerState.Dragging) {
+  //   const rect = canvas.getBoundingClientRect();
+  //   const x = e.clientX - rect.left;
+  //   const y = e.clientY - rect.top;
+
+  //   setMarkers((prevMarkers) =>
+  //     prevMarkers.map((marker, index) =>
+  //       index === draggingMarkerIndex ? { ...marker, position: { x, y } } : marker
+  //     )
+  //   );
+  // }
+};
