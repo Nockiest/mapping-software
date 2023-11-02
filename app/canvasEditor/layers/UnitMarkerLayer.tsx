@@ -1,8 +1,9 @@
 "use client"
-import  { useState,useEffect ,useContext, useReducer} from 'react';
+import { useState, useEffect, useContext, useReducer } from 'react';
 import Marker from '@/app/components/markerLayer/Marker'; // Adjust the import path as needed
 import { CanvasSettingsContext, CanvasContext } from '../CanvasContext';
-import { Color, MarkerType } from '@/public/types/OtherTypes';
+import { Color } from '@/public/types/OtherTypes';
+import { Vector2 } from '@/public/types/GeometryTypes';
 
 enum MarkerLayerState {
   Idle,
@@ -10,7 +11,12 @@ enum MarkerLayerState {
   EditingMarker,
 }
 
- 
+// type MarkerType = {
+//   color: Color;
+//   position: Vector2;
+//   isDragging: boolean;
+// };
+
 type MarkerLayerAction =
   | { type: 'DRAG'; markerIndex: number }
   | { type: 'MOUSE_UP' | 'MOUSE_LEAVE' | 'IDLE' }
@@ -38,9 +44,8 @@ const UnitMarkerLayer: React.FC = () => {
   const { settings } = useContext(CanvasSettingsContext);
   const { markerCanvasRef } = useContext(CanvasContext);
   const [markerLayerState, dispatch] = useReducer(markerLayerStateMachine, MarkerLayerState.Idle);
-  const [draggingMarker, setDraggingMarker] = useState(null)
- 
- 
+  const [topLeftOffset, setTopLeftOffset] = useState<Vector2>({ x: 0, y: 0 });
+
   useEffect(() => {
     if (!markerCanvasRef) {
       return;
@@ -53,23 +58,19 @@ const UnitMarkerLayer: React.FC = () => {
       if (settings.activeLayer !== 'marker') {
         return;
       }
-    
+
       const rect = canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-    
+
       if (e.button === 2) {
-        // Right mouse button is pressed, find if we are clicking on a marker
         const clickedMarkerIndex = markers.findIndex(
           (marker) => Math.abs(marker.position.x - x) < 10 && Math.abs(marker.position.y - y) < 10
         );
-    
+
         if (clickedMarkerIndex !== -1) {
-          // Start dragging the clicked marker
           dispatch({ type: 'DRAG', markerIndex: clickedMarkerIndex });
-          // setDraggingMarker(clickedMarkerIndex); // Set draggingMarkerIndex here
         } else {
-          // Assuming you have a color defined somewhere
           const newMarker: MarkerType = { color: settings.color, position: { x, y }, isDragging: false };
           setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
         }
@@ -96,30 +97,32 @@ const UnitMarkerLayer: React.FC = () => {
       }
     };
 
-    // Add event listeners
+    const handleResize = () => {
+      const rect = canvas.getBoundingClientRect();
+      setTopLeftOffset({ x: rect.left, y: rect.top });
+    };
+
     canvas.addEventListener('mousedown', handleMouseDown);
     canvas.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('resize', handleResize);
 
-    // Remove event listeners on component unmount
+    // Initial setup
+    handleResize();
+
     return () => {
       canvas.removeEventListener('mousedown', handleMouseDown);
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('resize', handleResize);
     };
   }, [markerCanvasRef, markers, markerLayerState, settings]);
 
   return (
     <div className="absolute top-10 z-100" onContextMenu={(e) => e.preventDefault()}>
-      <canvas
-        width={800}
-        height={600}
-        className="border-2 canvas-rectangle"
-        ref={markerCanvasRef}
-        // style={{ pointerEvents: 'auto' }}
-      />
+      <canvas width={800} height={600} className="border-2 canvas-rectangle" ref={markerCanvasRef} />
       {markers.map((marker, index) => (
-        <Marker key={index} color={marker.color}  updateMarkerPosition={updateMarkerPosition} draggingMarker={draggingMarker} setDraggingMarker={setDraggingMarker} />
+        <Marker key={index} topLeftOffset={topLeftOffset}  />
       ))}
       {markerLayerState}
     </div>

@@ -25,7 +25,37 @@ export type Settings = {
   lineType: "squared" | "rounded";
   activeLayer: "draw" | "marker" | "background"
 };
- 
+export interface MousePositionContextType {
+  mouseX: number;
+  mouseY: number;
+}
+
+// const MousePositionContext = createContext<MousePositionContextType | undefined>(undefined);
+
+// export const useMousePosition = () => {
+//   const context = useContext(MousePositionContext);
+//   if (!context) {
+//     throw new Error('useMousePosition must be used within a MousePositionProvider');
+//   }
+//   return context;
+// };
+
+// export const MousePositionProvider: React.FC = ({ children }) => {
+//   const [mousePosition, setMousePosition] = useState({ mouseX: 0, mouseY: 0 });
+
+//   const handleMouseMove = (e: MouseEvent) => {
+//     setMousePosition({ mouseX: e.clientX, mouseY: e.clientY });
+//   };
+
+//   useEffect(() => {
+//     window.addEventListener('mousemove', handleMouseMove);
+//     return () => {
+//       window.removeEventListener('mousemove', handleMouseMove);
+//     };
+//   }, []);
+
+//   return <MousePositionContext.Provider value={mousePosition}>{children}</MousePositionContext.Provider>;
+// };
 
 export type DrawAction =
   | { type: "DRAW" }
