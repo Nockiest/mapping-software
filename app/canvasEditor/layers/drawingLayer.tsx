@@ -8,6 +8,7 @@ import { DrawingState } from "@/public/types/ButtonEvents";
 import bucketFill from "@/app/components/drawing/BucketFill";
 import drawCircledLine from "../../components/drawing/CircledLineDrawer";
 import { Color } from "@/public/types/OtherTypes";
+import { MousePositionContext } from "../page";
 type DrawingCanvasProps = {
   color: Color; // CSS color
   radius: number;
@@ -17,6 +18,8 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
   const { canvasRef, canvasState, dispatch } = useContext<CanvasContextType | null>(CanvasContext);
   const [lastMousePos, setLastMousePos] = useState<Vector2 | null>(null);
   const { settings } = useContext(CanvasSettingsContext);
+  // const mousePosition = useContext(MousePositionContext);
+  
   const changeState = (newState: DrawAction) => {
     dispatch(newState);
   };
@@ -53,6 +56,8 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
       if (settings.activeLayer !== "draw"){
         return
       }
+      // const rect = canvas.getBoundingClientRect();
+      // const {x - ,y} = mousePosition
       const x = e.offsetX;
       const y = e.offsetY;
 
