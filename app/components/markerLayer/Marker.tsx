@@ -17,11 +17,9 @@ interface MarkerProps {
       height: '20px', // Adjust as needed
       borderRadius: '50%',
       backgroundColor: color,
-      
       transform: 'translate(-50%, -50%)', // Center the marker at the specified position
     };
   
     return <div style={markerStyle}></div>;
   };
-  
   export default Marker;
