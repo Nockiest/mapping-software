@@ -72,7 +72,7 @@ export const CanvasSettingsContext = createContext<CanvasSettingsType | undefine
 export const CanvasProvider: React.FC = ({ children }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const markerCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [settings, setSettings] = useState<Settings>({ radius: 5, color: [0,0,0,255], lineType: "squared", activeLayer: "draw" });
+  const [settings, setSettings] = useState<Settings>({ radius: 5, color: `#000000`, lineType: "squared", activeLayer: "draw" });
   const backgroundCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
   const [canvasState, dispatch] = useReducer(reducer, DrawingState.Idle);

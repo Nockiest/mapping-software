@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useReducer, useContext, CSSProperties } from "react";
-
 import eraseInRadius from "../components/drawing/Eraser";
 import CanvasToImage from "../components/CanvasToImg";
 import drawLineOnCanvas from "@/app/components/drawing/CircledLineDrawer";
@@ -15,9 +14,10 @@ import { CanvasContext } from "./CanvasContext";
 import DrawingLayer from "./layers/DrawingLayer";
 import LayerSplicer from "../components/LayerSplicer";
 import UnitMarkerLayer from "./layers/UnitMarkerLayer";
+import { Color } from "@/public/types/OtherTypes";
 
 type DrawingCanvasProps = {
-  color: string;
+  color: Color;
   radius: number;
 };
 
