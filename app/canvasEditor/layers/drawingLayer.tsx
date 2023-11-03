@@ -1,15 +1,16 @@
 import React, { useState, useRef, useEffect, useReducer, useContext } from "react";
 import eraseLine from "@/app/components/drawing/Eraser";
 import CanvasToImage from "@/app/components/CanvasToImg";
-import drawLineWithSquares from "@/app/components/drawing/SquaredLineDrawer";
-import { Vector2,  } from "@/public/types/GeometryTypes";
-import { CanvasContext, CanvasContextType, CanvasSettingsContext, DrawAction } from "../CanvasContext";
+// import drawLineWithSquares from "@/app/components/drawing/SquaredLineDrawer";
+import { Vector2   } from "@/public/types/GeometryTypes";
+import { CanvasContext, CanvasContextType,  DrawAction } from "../CanvasContext";
 import { DrawingState } from "@/public/types/ButtonEvents";
 import bucketFill from "@/app/components/drawing/BucketFill";
 import drawCircledLine from "../../components/drawing/CircledLineDrawer";
 import { Color } from "@/public/types/OtherTypes";
 import { MousePositionContext } from "../page";
 import { settings } from "../StoredSettingsValues";
+import drawLineWithShape from "../../components/drawing/CircledLineDrawer";
 type DrawingCanvasProps = {
   // color: Color; // CSS color
   // radius: number;
@@ -81,12 +82,13 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ( ) => {
         // Left mouse button is pressed, draw
         if (ctx && lastMousePos) {
           console.log(settings.value.lineType )
-          if (settings.value.lineType === "rounded") {
-            drawCircledLine(ctx, lastMousePos, { x, y }, color, radius);
-          } else if (settings.value.lineType === "squared") {
-            console.log("DRAWING A LINE")
-            drawLineWithSquares(ctx, lastMousePos, { x, y }, color, radius);
-          }
+          drawLineWithShape(ctx, lastMousePos, { x, y }, color, radius, settings.value.lineType)
+          // if (settings.value.lineType === "rounded") {
+          //   drawCircledLine(ctx, lastMousePos, { x, y }, color, radius);
+          // } else if (settings.value.lineType === "squared") {
+          //   console.log("DRAWING A LINE")
+          //   drawLineWithSquares(ctx, lastMousePos, { x, y }, color, radius);
+          // }
         }
       }
       setLastMousePos({ x, y });

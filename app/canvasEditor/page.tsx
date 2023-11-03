@@ -42,12 +42,8 @@ const Page: React.FC = () => {
   const { canvasState } = useContext(CanvasContext);
   const mousePosition = useContext(MousePositionContext);
 
-  // const handleSettingsChange = (color: string, radius: number) => {
-  //   setSettings({ color, radius });
-  // };
-
-  // Use mousePosition wherever needed
-
+ 
+ 
   return (
     <>
       <DebugInfo
