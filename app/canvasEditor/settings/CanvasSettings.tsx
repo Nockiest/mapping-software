@@ -83,7 +83,7 @@ const CanvasSettings = ( ) => {
           <br />
           <label>
             Radius:
-            <input type="number" value={settings.value.radius} onChange={handleRadiusChange} style={{ color: 'black' }} />
+            <input type="number" value={settings.value.radius} onChange={handleRadiusChange} style={{ color: 'black' }} min="1" />
           </label>
           <br />
           {/* Dropdown for line type */}

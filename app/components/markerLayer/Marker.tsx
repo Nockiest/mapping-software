@@ -26,10 +26,12 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition }) => {
     top: `${currentPosition.y}px`,
     width: `${initialMarkerSettings.current.width}px`,
     height: `${initialMarkerSettings.current.width}px`,
+    fontSize: `${initialMarkerSettings.current.width/2}px`,
     borderRadius: '50%',
     backgroundColor: initialMarkerSettings.current.color,
     transform: 'translate(-50%, -50%)',
     cursor: 'grab',
+    userSelect: "none",
   };
 
   const textBackgroundStyle: React.CSSProperties = {
@@ -39,6 +41,7 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition }) => {
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
     padding: '5px',
     borderRadius: '5px',
+    userSelect: "none",
   };
 
   const handleMouseDown = () => {
@@ -48,12 +51,13 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition }) => {
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isDragged) {
       const updatedPosition = {
-        x: e.clientX - topLeftOffset.x,
-        y: e.clientY - topLeftOffset.y,
+        x: e.clientX - topLeftOffset.x + window.scrollX,
+        y: e.clientY - topLeftOffset.y + window.scrollY, // Add window scroll
       };
       setCurrentPosition(updatedPosition);
     }
   };
+  
 
   const handleMouseUp = () => {
     setIsDragged(false);
@@ -69,9 +73,9 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition }) => {
       <p style={{ ...textBackgroundStyle, top: '-10px' }}>
         {initialMarkerSettings.current.topValue}
       </p>
-      <p style={{ ...textBackgroundStyle, bottom: '-10px' }}>
+      { initialMarkerSettings.current.width >20 && <p style={{ ...textBackgroundStyle, bottom: '-10px' }}>
         {initialMarkerSettings.current.bottomValue}
-      </p>
+      </p>}
     </div>
   );
 };
