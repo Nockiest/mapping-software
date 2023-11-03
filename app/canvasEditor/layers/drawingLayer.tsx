@@ -76,7 +76,7 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ( ) => {
       }
       console.log(canvasState === DrawingState.Drawing)
       if (canvasState === DrawingState.Erasing) {
-        eraseLine({ canvasRef, start: lastMousePos|| {x:0,y:0}, end: { x, y }, radius });
+        eraseLine({ canvasRef, start: lastMousePos|| {x:0,y:0}, end: { x, y }, radius , eraseShape:settings.value.lineType});
       } else if (canvasState === DrawingState.Drawing) {
         // Left mouse button is pressed, draw
         if (ctx && lastMousePos) {
