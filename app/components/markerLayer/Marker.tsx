@@ -2,8 +2,8 @@
 import { MousePositionContext } from "@/app/canvasEditor/page";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { Color } from "@/public/types/OtherTypes";
-import { useState, useContext, useEffect } from "react";
-
+import { useState, useContext, useEffect,useRef } from "react";
+import { settings } from "@/app/canvasEditor/StoredSettingsValues";
 type MarkerProps = {
  
   topLeftOffset:Vector2
@@ -11,19 +11,23 @@ type MarkerProps = {
 };
 
 const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition }) => {
-  const { settings } = useContext(CanvasSettingsContext);
   const mousePosition = useContext(MousePositionContext) || { x: 0, y: 0 };
   const [currentPosition, setCurrentPosition] = useState<Vector2>(initialPosition);
   const [isDragged, setIsDragged] = useState<boolean>(false);
 
+  // Store the initial settings locally in the Marker component
+  const initialMarkerSettings = useRef(settings.value.markerSettings);
+  useEffect(() => {
+    console.log('Initial Marker Settings:', initialMarkerSettings.current);
+  }, []); // Empty dependency array ensures the effect runs only once when the component mounts
   const markerStyle: React.CSSProperties = {
     position: 'absolute',
     left: `${currentPosition.x}px`,
     top: `${currentPosition.y}px`,
-    width: `${settings.markerSettings.width}px`, // Use marker width from settings
-    height: `${settings.markerSettings.width}px`, // Assuming width and height are the same
+    width: `${initialMarkerSettings.current.width}px`,
+    height: `${initialMarkerSettings.current.width}px`,
     borderRadius: '50%',
-    backgroundColor: settings.markerSettings.color, // Use marker color from settings
+    backgroundColor: initialMarkerSettings.current.color,
     transform: 'translate(-50%, -50%)',
     cursor: 'grab',
   };
@@ -32,9 +36,9 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition }) => {
     position: 'absolute',
     left: '50%',
     transform: 'translateX(-50%)',
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Adjust the background color and opacity as needed
-    padding: '5px', // Adjust the padding as needed
-    borderRadius: '5px', // Adjust the border-radius as needed
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    padding: '5px',
+    borderRadius: '5px',
   };
 
   const handleMouseDown = () => {
@@ -63,10 +67,10 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition }) => {
       onMouseUp={handleMouseUp}
     >
       <p style={{ ...textBackgroundStyle, top: '-10px' }}>
-        {settings.markerSettings.topValue}
+        {initialMarkerSettings.current.topValue}
       </p>
       <p style={{ ...textBackgroundStyle, bottom: '-10px' }}>
-        {settings.markerSettings.bottomValue}
+        {initialMarkerSettings.current.bottomValue}
       </p>
     </div>
   );

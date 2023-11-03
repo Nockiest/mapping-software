@@ -55,7 +55,7 @@ const UnitMarkerLayer: React.FC = () => {
     if (!canvas) return;
 
     const handleMouseDown = (e: MouseEvent) => {
-      if (settings.activeLayer !== 'marker') {
+      if (settings.value.activeLayer !== 'marker') {
         return;
       }
 
@@ -71,7 +71,7 @@ const UnitMarkerLayer: React.FC = () => {
         if (clickedMarkerIndex !== -1) {
           dispatch({ type: 'DRAG', markerIndex: clickedMarkerIndex });
         } else {
-          const newMarker: MarkerType = { color: settings.color, position: { x, y }, isDragging: false };
+          const newMarker: MarkerType = { color: settings.value.color, position: { x, y }, isDragging: false };
           setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
         }
       }
@@ -119,16 +119,16 @@ const UnitMarkerLayer: React.FC = () => {
 export default UnitMarkerLayer;
 
 
-const handleMouseMove = (e: MouseEvent) => {
-  // if (markerLayerState === MarkerLayerState.Dragging) {
-  //   const rect = canvas.getBoundingClientRect();
-  //   const x = e.clientX - rect.left;
-  //   const y = e.clientY - rect.top;
+// const handleMouseMove = (e: MouseEvent) => {
+//   // if (markerLayerState === MarkerLayerState.Dragging) {
+//   //   const rect = canvas.getBoundingClientRect();
+//   //   const x = e.clientX - rect.left;
+//   //   const y = e.clientY - rect.top;
 
-  //   setMarkers((prevMarkers) =>
-  //     prevMarkers.map((marker, index) =>
-  //       index === draggingMarkerIndex ? { ...marker, position: { x, y } } : marker
-  //     )
-  //   );
-  // }
-};
+//   //   setMarkers((prevMarkers) =>
+//   //     prevMarkers.map((marker, index) =>
+//   //       index === draggingMarkerIndex ? { ...marker, position: { x, y } } : marker
+//   //     )
+//   //   );
+//   // }
+// };

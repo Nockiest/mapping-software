@@ -12,14 +12,13 @@ import { settings } from "../StoredSettingsValues";
 import { Color, Settings } from "@/public/types/OtherTypes";
 
  
-const CanvasSettings = ({ onSettingsChange }) => {
+const CanvasSettings = ( ) => {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const {backgroundImage, setBackgroundImage} = useContext(BackgroundContext)
   const changeSettings = <K extends keyof Settings['value']>(property: K, newValue: Settings['value'][K]) => {
     // Assuming settings is a mutable signal, otherwise, you might need to use `setSettings` if it's a state
     settings.value = { ...settings.value, [property]: newValue };
-    console.log("NEW VALUE ", settings.value, )
-    console.log( property,newValue )
+    
   };
   
 
@@ -34,7 +33,7 @@ const CanvasSettings = ({ onSettingsChange }) => {
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newRadius = parseInt(e.target.value, 10);
     const sanitizedRadius = newRadius < 0 ? 0 : newRadius;
-    console.log(sanitizedRadius)
+    
     changeSettings('radius', sanitizedRadius);
   };
 
@@ -60,7 +59,7 @@ const CanvasSettings = ({ onSettingsChange }) => {
 
   // Handle bucket fill
   const handleBucketFill = () => {
-    // dispatch({ type: 'ENTER_BUCKET_MODE' });
+    dispatch({ type: 'ENTER_BUCKET_MODE' });
   };
 
   return (
@@ -106,9 +105,10 @@ const CanvasSettings = ({ onSettingsChange }) => {
           {backgroundImage && <button onClick={handleImageRevert}>Revert Background Image</button>}
           <br />
           {/* Add the bucket fill button */}
-          {/* <button style={{ backgroundColor: state === DrawingState.BucketFill ? 'red' : 'initial' }} onClick={handleBucketFill}>
+          <button   onClick={handleBucketFill}>
+            {/* style={{ backgroundColor: state === DrawingState.BucketFill ? 'red' : 'initial' }} */}
             Bucket Fill
-          </button> */}
+          </button>
         </>
       ) : (
         <MarkerEditorSettings changeSettings={changeSettings} />

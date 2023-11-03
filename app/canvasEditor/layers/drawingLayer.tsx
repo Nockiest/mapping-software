@@ -11,14 +11,14 @@ import { Color } from "@/public/types/OtherTypes";
 import { MousePositionContext } from "../page";
 import { settings } from "../StoredSettingsValues";
 type DrawingCanvasProps = {
-  color: Color; // CSS color
-  radius: number;
+  // color: Color; // CSS color
+  // radius: number;
 };
-
-const DrawingLayer: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
+//{ color, radius }
+const DrawingLayer: React.FC<DrawingCanvasProps> = ( ) => {
   const { canvasRef, canvasState, dispatch } = useContext<CanvasContextType | null>(CanvasContext);
   const [lastMousePos, setLastMousePos] = useState<Vector2 | null>(null);
- 
+  const { color, radius} = settings.value
   const changeState = (newState: DrawAction) => {
     dispatch(newState);
   };

@@ -60,7 +60,7 @@ const Page: React.FC = () => {
           mousePosition: mousePosition,
         }}
       />
-        <CanvasSettings  /> {/* onSettingsChange={handleSettingsChange}  */}
+        <CanvasSettings  />  
       <DrawingCanvas color={settings.value.color} radius={settings.value.radius} />
       <Timeline />
     </>
