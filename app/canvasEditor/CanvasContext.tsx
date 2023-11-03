@@ -38,9 +38,8 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
     case "MOUSE_LEAVE":
       if (DrawingState.BucketFill == state) {
         return DrawingState.BucketFill;
-      } else if (DrawingState.Erasing == state) {
-        DrawingState.Erasing;
-      } else {
+       }  
+       else {
         return DrawingState.Idle;
       }
 
