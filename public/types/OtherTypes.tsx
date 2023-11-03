@@ -1,3 +1,5 @@
+import { Signal } from "@preact/signals";
+
 export type RGB = `rgb(${number}, ${number}, ${number})`;
 export type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
 export type HEX = `#${string}`;
@@ -11,10 +13,10 @@ export type MarkerType = {
   };
   
 
-export type Settings = {
+export type Settings = Signal<{
     radius: number;
     color: Color;
     lineType: "squared" | "rounded";
     activeLayer: "draw" | "marker" | "background";
     markerSettings:{width:number,  color: Color, topValue:string, bottomValue:string} 
-  };
+  }>;

@@ -4,7 +4,7 @@ import Marker from '@/app/components/markerLayer/Marker'; // Adjust the import p
 import { CanvasSettingsContext, CanvasContext } from '../CanvasContext';
 import { Color } from '@/public/types/OtherTypes';
 import { Vector2 } from '@/public/types/GeometryTypes';
-
+import { settings } from '../StoredSettingsValues';
 enum MarkerLayerState {
   Idle,
   Dragging,
@@ -41,7 +41,7 @@ const markerLayerStateMachine: React.Reducer<MarkerLayerState, MarkerLayerAction
 
 const UnitMarkerLayer: React.FC = () => {
   const [markers, setMarkers] = useState<MarkerType[]>([]);
-  const { settings } = useContext(CanvasSettingsContext);
+  // const { settings } = useContext(CanvasSettingsContext);
   const { markerCanvasRef } = useContext(CanvasContext);
   const [markerLayerState, dispatch] = useReducer(markerLayerStateMachine, MarkerLayerState.Idle);
   const [topLeftOffset, setTopLeftOffset] = useState<Vector2>({ x: 0, y: 0 });

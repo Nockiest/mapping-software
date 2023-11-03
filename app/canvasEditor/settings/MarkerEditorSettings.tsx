@@ -1,7 +1,7 @@
 import {useContext} from 'react'
 import { CanvasSettingsType } from '../CanvasContext';// CanvasSettingsContext, 
 import { hexToRgb } from '@/public/utils';
-import { settings } from './CanvasSettings';
+import { settings } from '../StoredSettingsValues';
 const MarkerEditorSettings = ({ changeSettings }) => {
   const handleMarkerWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newWidth = parseInt(e.target.value, 10);

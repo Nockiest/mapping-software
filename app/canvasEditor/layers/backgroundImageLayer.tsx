@@ -1,10 +1,10 @@
  
 import React, { useState, useContext, useEffect } from 'react';
 import { BackgroundContext, CanvasSettingsContext } from '../CanvasContext';
- 
+import { settings } from '../StoredSettingsValues';
 const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }> = ({ onImageLoad }) => {
   const { backgroundCanvasRef, backgroundImage } = useContext(BackgroundContext);
-  const { settings } = useContext(CanvasSettingsContext);
+ 
   useEffect(() => {
     handleFileChange(backgroundImage);
   }, [backgroundImage]);
@@ -62,7 +62,7 @@ const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }
             ref={backgroundCanvasRef}
             width={800}
             height={600}
-            className={`absolute background-layer top-0 ${settings.activeLayer === "background" ? 'opacity-100' : 'opacity-40'}`}
+            className={`absolute background-layer top-0 ${settings.value.activeLayer === "background" ? 'opacity-100' : 'opacity-40'}`}
             style={{ pointerEvents: 'none', objectFit: 'contain', border: '0px', padding: '0', margin: '0'  }}
           />
       )}

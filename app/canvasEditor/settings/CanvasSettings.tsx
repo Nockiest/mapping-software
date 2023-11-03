@@ -8,35 +8,33 @@ import LineTypeSettings from "@/app/components/settings/LineTypeSettings";
 import ActiveLayerSettings from "@/app/components/settings/ActiveLayerSettings";
 import { hexToRgb } from "@/public/utils";
 import { signal } from "@preact/signals";
-import { Settings } from "@/public/types/OtherTypes";
+import { settings } from "../StoredSettingsValues";
+import { Color, Settings } from "@/public/types/OtherTypes";
 
-export const settings:Settings = signal({
-  radius: 5,
-  color: `#000000`,
-  lineType: "squared",
-  activeLayer: "draw",
-  markerSettings: { width: 10, color: `#000000`, topValue: "X", bottomValue: "Y" },
-});
-
+ 
 const CanvasSettings = ({ onSettingsChange }) => {
   const imageInputRef = useRef<HTMLInputElement>(null);
-
-  const changeSettings = (property: string, value: any) => {
+  const {backgroundImage, setBackgroundImage} = useContext(BackgroundContext)
+  const changeSettings = <K extends keyof Settings['value']>(property: K, newValue: Settings['value'][K]) => {
     // Assuming settings is a mutable signal, otherwise, you might need to use `setSettings` if it's a state
-    settings.value[property] = value;
+    settings.value = { ...settings.value, [property]: newValue };
+    console.log("NEW VALUE ", settings.value, )
+    console.log( property,newValue )
   };
+  
 
   // Handle color change
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const hexColor = e.target.value;
-    const rgbColor = hexToRgb(hexColor);
-    changeSettings('color', rgbColor);
+    const hexColor = e.target.value as Color;
+    // const rgbColor = hexToRgb(hexColor);
+    changeSettings('color', hexColor);
   };
 
   // Handle radius change
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newRadius = parseInt(e.target.value, 10);
     const sanitizedRadius = newRadius < 0 ? 0 : newRadius;
+    console.log(sanitizedRadius)
     changeSettings('radius', sanitizedRadius);
   };
 
@@ -62,7 +60,7 @@ const CanvasSettings = ({ onSettingsChange }) => {
 
   // Handle bucket fill
   const handleBucketFill = () => {
-    dispatch({ type: 'ENTER_BUCKET_MODE' });
+    // dispatch({ type: 'ENTER_BUCKET_MODE' });
   };
 
   return (
@@ -75,22 +73,22 @@ const CanvasSettings = ({ onSettingsChange }) => {
         borderRadius: '4px',
       }}
     >
-      <ActiveLayerSettings activeLayer={settings.activeLayer} handleActiveLayerChange={handleActiveLayerChange} />
+      <ActiveLayerSettings activeLayer={settings.value.activeLayer} handleActiveLayerChange={handleActiveLayerChange} />
       <br />
-      {settings.activeLayer === 'draw' ? (
+      {settings.value.activeLayer === 'draw' ? (
         <>
           <label>
             Color:
-            <input type="color" value={settings.color} onChange={handleColorChange} />
+            <input type="color" value={settings.value.color} onChange={handleColorChange} />
           </label>
           <br />
           <label>
             Radius:
-            <input type="number" value={settings.radius} onChange={handleRadiusChange} style={{ color: 'black' }} />
+            <input type="number" value={settings.value.radius} onChange={handleRadiusChange} style={{ color: 'black' }} />
           </label>
           <br />
           {/* Dropdown for line type */}
-          <LineTypeSettings lineType={settings.lineType} handleLineTypeChange={handleLineTypeChange} />
+          <LineTypeSettings lineType={settings.value.lineType} handleLineTypeChange={handleLineTypeChange} />
           <br />
 
           <br />
@@ -108,9 +106,9 @@ const CanvasSettings = ({ onSettingsChange }) => {
           {backgroundImage && <button onClick={handleImageRevert}>Revert Background Image</button>}
           <br />
           {/* Add the bucket fill button */}
-          <button style={{ backgroundColor: state === DrawingState.BucketFill ? 'red' : 'initial' }} onClick={handleBucketFill}>
+          {/* <button style={{ backgroundColor: state === DrawingState.BucketFill ? 'red' : 'initial' }} onClick={handleBucketFill}>
             Bucket Fill
-          </button>
+          </button> */}
         </>
       ) : (
         <MarkerEditorSettings changeSettings={changeSettings} />

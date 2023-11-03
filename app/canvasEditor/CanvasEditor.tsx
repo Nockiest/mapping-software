@@ -31,10 +31,10 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ color, radius }) => {
     <div>
       {/* Drawing layer */}
       <div className="relative" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-         <UnitMarkerLayer />
-        {/* <DrawingLayer color={color} radius={radius} /> */}
+         {/* <UnitMarkerLayer /> */}
+        <DrawingLayer color={color} radius={radius} />
          
-        <BackgroundImageLayer onImageLoad={() => {}} /> {/*(imageUrl) => setImage(imageUrl) */}
+        {/* <BackgroundImageLayer onImageLoad={() => {}} /> (imageUrl) => setImage(imageUrl) */}
       </div>
 
       {/* Splicer to combine layers */}

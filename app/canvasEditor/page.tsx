@@ -6,7 +6,7 @@ import CanvasSettings from "./settings/CanvasSettings";
 import DebugInfo from "../components/Debugger";
 import Timeline from "./Timeline";
 import { CanvasContext, CanvasProvider,   } from "./CanvasContext";//CanvasSettingsContext
-
+import { settings } from "./StoredSettingsValues";
 // Create a context for mouse position
 export const MousePositionContext = createContext<{ x: number; y: number } | null>(null);
 
@@ -50,18 +50,18 @@ const Page: React.FC = () => {
 
   return (
     <>
-      {/* <DebugInfo
+      <DebugInfo
         data={{
-          radius: settings.radius,
+          radius: settings.value.radius,
           canvasState: canvasState,
-          lineType: settings.lineType,
-          color: settings.color,
-          layer: settings.activeLayer,
+          lineType: settings.value.lineType,
+          color: settings.value.color,
+          layer: settings.value.activeLayer,
           mousePosition: mousePosition,
         }}
-      />*/}
+      />
         <CanvasSettings  /> {/* onSettingsChange={handleSettingsChange}  */}
-      {/* <DrawingCanvas color={settings.color} radius={settings.radius} /> */}
+      <DrawingCanvas color={settings.value.color} radius={settings.value.radius} />
       <Timeline />
     </>
   );
