@@ -3,13 +3,13 @@ import { settings } from '../StoredSettingsValues';
 import LineTypeSettings from '@/app/components/settings/LineTypeSettings';
 import { Color, Settings } from '@/public/types/OtherTypes';
 import { BackgroundContext } from '../CanvasContext';
+import { LineEdge } from '@/public/types/GeometryTypes';
 const DrawingLayerSettings = ( ) => {
    const imageInputRef = useRef<HTMLInputElement>(null);
   const {backgroundImage, setBackgroundImage} = useContext(BackgroundContext)
   const changeSettings = <K extends keyof Settings['value']>(property: K, newValue: Settings['value'][K]) => {
     // Assuming settings is a mutable signal, otherwise, you might need to use `setSettings` if it's a state
     settings.value = { ...settings.value, [property]: newValue };
-    
   };
   
 
@@ -28,14 +28,9 @@ const DrawingLayerSettings = ( ) => {
     changeSettings('radius', sanitizedRadius);
   };
 
-  // Handle active layer change
-  const handleActiveLayerChange = (newActiveLayer: "draw" | "marker" | "background") => {
-    changeSettings('activeLayer', newActiveLayer);
-  };
-
   // Handle line type change
   const handleLineTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newLineType = e.target.value as "rounded" | "squared";
+    const newLineType = e.target.value as LineEdge// "rounded" | "squared";
     changeSettings('lineType', newLineType);
   };
 
@@ -50,7 +45,7 @@ const DrawingLayerSettings = ( ) => {
 
   // Handle bucket fill
   const handleBucketFill = () => {
-    dispatch({ type: 'ENTER_BUCKET_MODE' });
+    // dispatch({ type: 'ENTER_BUCKET_MODE' });
   };
 
   return (
@@ -61,15 +56,22 @@ const DrawingLayerSettings = ( ) => {
           </label>
           <br />
           <label>
-            Radius:
-            <input type="number" value={settings.value.radius} onChange={handleRadiusChange} style={{ color: 'black' }} min="1" />
+            Radius: {settings.value.radius}
+            <input
+                type="range"
+                value={settings.value.radius}
+                onChange={handleRadiusChange}
+                style={{ color: 'black' }}
+                min="1"
+                max="100"
+            />
           </label>
           <br />
           {/* Dropdown for line type */}
           <LineTypeSettings lineType={settings.value.lineType} handleLineTypeChange={handleLineTypeChange} />
           <br />
 
-          <br />
+          {/* <br />
           <input
             type="file"
             ref={imageInputRef}
@@ -80,7 +82,7 @@ const DrawingLayerSettings = ( ) => {
               }
             }}
           />
-          <br />
+          <br /> */}
           {backgroundImage && <button onClick={handleImageRevert}>Revert Background Image</button>}
           <br />
           {/* Add the bucket fill button */}

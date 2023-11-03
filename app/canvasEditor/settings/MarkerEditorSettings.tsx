@@ -1,64 +1,94 @@
-import {useContext} from 'react'
-import { CanvasSettingsType } from '../CanvasContext';// CanvasSettingsContext, 
-import { hexToRgb } from '@/public/utils';
-import { settings } from '../StoredSettingsValues';
+import { useContext, useState } from "react";
+import { CanvasSettingsType } from "../CanvasContext"; // CanvasSettingsContext,
+import { hexToRgb } from "@/public/utils";
+import { settings } from "../StoredSettingsValues";
 
-// tenhle komponent setuje marker settings object špatně
+ 
+// Import necessary dependencies
+
 const MarkerEditorSettings = ({ changeSettings }) => {
-  const markerSettings = { ...settings.value.markerSettings };
+  const [newMarkerSettings, setNewMarkerSettings] = useState({ ...settings.value.markerSettings });
+  const [isDirty, setIsDirty] = useState(false);
 
   const handleMarkerWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newWidth = Math.max(1, parseInt(e.target.value, 10)); // Ensure newWidth is at least 1
-    const newMarkerSettings = { ...markerSettings, width: newWidth };
-    changeSettings('markerSettings', newMarkerSettings);
+    setNewMarkerSettings((prevSettings) => ({ ...prevSettings, width: newWidth }));
+    setIsDirty(true);
   };
 
   const handleMarkerColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const hexColor = e.target.value;
     const rgbColor = hexToRgb(hexColor);
-    const newMarkerSettings = { ...markerSettings, color: rgbColor };
-    changeSettings('markerSettings', newMarkerSettings);
+    setNewMarkerSettings((prevSettings) => ({ ...prevSettings, color: rgbColor }));
+    setIsDirty(true);
   };
 
   const handleMarkerTopValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTopValue = e.target.value;
-    const newMarkerSettings = { ...markerSettings, topValue: newTopValue };
-    changeSettings('markerSettings', newMarkerSettings);
+    setNewMarkerSettings((prevSettings) => ({ ...prevSettings, topValue: newTopValue }));
+    setIsDirty(true);
   };
 
   const handleMarkerBottomValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newBottomValue = e.target.value;
-    const newMarkerSettings = { ...markerSettings, bottomValue: newBottomValue };
-    changeSettings('markerSettings', newMarkerSettings);
+    setNewMarkerSettings((prevSettings) => ({ ...prevSettings, bottomValue: newBottomValue }));
+    setIsDirty(true);
   };
 
+  // Button click handler to apply the changes
+  const applyChanges = () => {
+    changeSettings("markerSettings", newMarkerSettings);
+    setIsDirty(false);
+  };
+
+  // Validation message
+  const validationMessage = isDirty ? "Changes not applied. Click 'Apply Changes' to save." : "";
+
   return (
-    <div>
-      <p style={{ color: 'black' }}>
-        Marker Width: {markerSettings.width}
-        <input
-          type="range"
-          value={markerSettings.width}
-          onChange={handleMarkerWidthChange}
-          min="10"
-          max="60"
-        />
-      </p>
-      <p style={{ color: 'black' }}>
-        Marker Color:
-        <input type="color" value={markerSettings.color} onChange={handleMarkerColorChange} />
-      </p>
-      <p style={{ color: 'black' }}>
-        Marker TopValue:
-        <input type="text" value={markerSettings.topValue} onChange={handleMarkerTopValueChange} />
-      </p>
-     {markerSettings.width>=20&& <p style={{ color: 'black' }}>
-        Marker BottomValue:
-        <input type="text" value={markerSettings.bottomValue} onChange={handleMarkerBottomValueChange} />
-      </p>}
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      {/* First Column - Input Controls */}
+      <div>
+        <p style={{ color: "black" }}>
+          Marker Width: {newMarkerSettings.width}
+          <input type="range" value={newMarkerSettings.width} onChange={handleMarkerWidthChange} min="10" max="60" />
+        </p>
+        <p style={{ color: "black" }}>
+          Marker Color:
+          <input type="color" value={newMarkerSettings.color} onChange={handleMarkerColorChange} />
+        </p>
+        <p style={{ color: "black" }}>
+          Marker TopValue:
+          <input type="text" value={newMarkerSettings.topValue} onChange={handleMarkerTopValueChange} />
+        </p>
+        {newMarkerSettings.width >= 20 && (
+          <p style={{ color: "black" }}>
+            Marker BottomValue:
+            <input type="text" value={newMarkerSettings.bottomValue} onChange={handleMarkerBottomValueChange} />
+          </p>
+        )}
+        <button onClick={applyChanges}>Apply Changes</button>
+      </div>
+
+      {/* Second Column - Display Current Values */}
+      <div style={{ marginLeft: '20px' }}>
+        <p style={{ color: "black" }}>
+          Current Marker Width: {settings.value.markerSettings.width}
+        </p>
+        <p style={{ color: "black" }}>
+          Current Marker Color: {settings.value.markerSettings.color}
+        </p>
+        <p style={{ color: "black" }}>
+          Current Marker TopValue: {settings.value.markerSettings.topValue}
+        </p>
+        {settings.value.markerSettings.width >= 20 && (
+          <p style={{ color: "black" }}>
+            Current Marker BottomValue: {settings.value.markerSettings.bottomValue}
+          </p>
+        )}
+        <p style={{ color: "red" }}>{validationMessage}</p>
+      </div>
     </div>
   );
 };
 
 export default MarkerEditorSettings;
-
