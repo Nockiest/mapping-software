@@ -8,9 +8,10 @@ type MarkerProps = {
  
   topLeftOffset:Vector2
   initialPosition:Vector2
+  canvasSize: Vector2
 };
 
-const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition }) => {
+const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasSize }) => {
   const mousePosition = useContext(MousePositionContext) || { x: 0, y: 0 };
   const [currentPosition, setCurrentPosition] = useState<Vector2>(initialPosition);
   const [isDragged, setIsDragged] = useState<boolean>(false);
@@ -50,14 +51,17 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition }) => {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isDragged) {
+      
+  
+      // Calculate updated position
       const updatedPosition = {
-        x: e.clientX - topLeftOffset.x + window.scrollX,
-        y: e.clientY - topLeftOffset.y + window.scrollY, // Add window scroll
+        x: Math.min(Math.max(e.clientX - topLeftOffset.x + window.scrollX, 0), canvasSize.x),
+        y: Math.min(Math.max(e.clientY - topLeftOffset.y + window.scrollY, 0), canvasSize.y),
       };
+  
       setCurrentPosition(updatedPosition);
     }
   };
-  
 
   const handleMouseUp = () => {
     setIsDragged(false);
