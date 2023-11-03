@@ -10,6 +10,7 @@ import { hexToRgb } from "@/public/utils";
 import { signal } from "@preact/signals";
 import { settings } from "../StoredSettingsValues";
 import { Color, Settings } from "@/public/types/OtherTypes";
+import DrawingLayerSettings from "./DrawingLayerSettings";
 
  
 const CanvasSettings = ( ) => {
@@ -75,41 +76,42 @@ const CanvasSettings = ( ) => {
       <ActiveLayerSettings activeLayer={settings.value.activeLayer} handleActiveLayerChange={handleActiveLayerChange} />
       <br />
       {settings.value.activeLayer === 'draw' ? (
-        <>
-          <label>
-            Color:
-            <input type="color" value={settings.value.color} onChange={handleColorChange} />
-          </label>
-          <br />
-          <label>
-            Radius:
-            <input type="number" value={settings.value.radius} onChange={handleRadiusChange} style={{ color: 'black' }} min="1" />
-          </label>
-          <br />
-          {/* Dropdown for line type */}
-          <LineTypeSettings lineType={settings.value.lineType} handleLineTypeChange={handleLineTypeChange} />
-          <br />
+        <DrawingLayerSettings />
+        // <>
+        //   <label>
+        //     Color:
+        //     <input type="color" value={settings.value.color} onChange={handleColorChange} />
+        //   </label>
+        //   <br />
+        //   <label>
+        //     Radius:
+        //     <input type="number" value={settings.value.radius} onChange={handleRadiusChange} style={{ color: 'black' }} min="1" />
+        //   </label>
+        //   <br />
+        //   {/* Dropdown for line type */}
+        //   <LineTypeSettings lineType={settings.value.lineType} handleLineTypeChange={handleLineTypeChange} />
+        //   <br />
 
-          <br />
-          <input
-            type="file"
-            ref={imageInputRef}
-            onChange={(e) => {
-              const selectedFile = e.target.files?.[0];
-              if (selectedFile) {
-                setBackgroundImage(selectedFile);
-              }
-            }}
-          />
-          <br />
-          {backgroundImage && <button onClick={handleImageRevert}>Revert Background Image</button>}
-          <br />
-          {/* Add the bucket fill button */}
-          <button   onClick={handleBucketFill}>
-            {/* style={{ backgroundColor: state === DrawingState.BucketFill ? 'red' : 'initial' }} */}
-            Bucket Fill
-          </button>
-        </>
+        //   <br />
+        //   <input
+        //     type="file"
+        //     ref={imageInputRef}
+        //     onChange={(e) => {
+        //       const selectedFile = e.target.files?.[0];
+        //       if (selectedFile) {
+        //         setBackgroundImage(selectedFile);
+        //       }
+        //     }}
+        //   />
+        //   <br />
+        //   {backgroundImage && <button onClick={handleImageRevert}>Revert Background Image</button>}
+        //   <br />
+        //   {/* Add the bucket fill button */}
+        //   <button   onClick={handleBucketFill}>
+        //     {/* style={{ backgroundColor: state === DrawingState.BucketFill ? 'red' : 'initial' }} */}
+        //     Bucket Fill
+        //   </button>
+        // </>
       ) : (
         <MarkerEditorSettings changeSettings={changeSettings} />
       )}
