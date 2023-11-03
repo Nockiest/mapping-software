@@ -4,6 +4,7 @@ import { Vector2 } from "@/public/types/GeometryTypes";
 import { Color } from "@/public/types/OtherTypes";
 import { useState, useContext, useEffect,useRef } from "react";
 import { settings } from "@/app/canvasEditor/StoredSettingsValues";
+import Image from "next/image";
 type MarkerProps = {
  
   topLeftOffset:Vector2
@@ -21,18 +22,14 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
   useEffect(() => {
     console.log('Initial Marker Settings:', initialMarkerSettings.current);
   }, []); // Empty dependency array ensures the effect runs only once when the component mounts
+
   const markerStyle: React.CSSProperties = {
     position: 'absolute',
     left: `${currentPosition.x}px`,
     top: `${currentPosition.y}px`,
-    width: `${initialMarkerSettings.current.width}px`,
-    height: `${initialMarkerSettings.current.width}px`,
-    fontSize: `${initialMarkerSettings.current.width/2}px`,
-    borderRadius: '50%',
-    backgroundColor: initialMarkerSettings.current.color,
     transform: 'translate(-50%, -50%)',
     cursor: 'grab',
-    userSelect: "none",
+    userSelect: 'none',
   };
 
   const textBackgroundStyle: React.CSSProperties = {
@@ -42,7 +39,13 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
     padding: '5px',
     borderRadius: '5px',
-    userSelect: "none",
+    userSelect: 'none',
+  };
+
+  const imageStyle: React.CSSProperties = {
+    width: '100%', // Adjust the width as needed
+    height: 'auto', // Maintain aspect ratio
+    borderRadius: '50%', // Match the marker's border radius
   };
 
   const handleMouseDown = () => {
@@ -51,14 +54,12 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isDragged) {
-      
-  
       // Calculate updated position
       const updatedPosition = {
         x: Math.min(Math.max(e.clientX - topLeftOffset.x + window.scrollX, 0), canvasSize.x),
         y: Math.min(Math.max(e.clientY - topLeftOffset.y + window.scrollY, 0), canvasSize.y),
       };
-  
+
       setCurrentPosition(updatedPosition);
     }
   };
@@ -77,14 +78,29 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
       <p style={{ ...textBackgroundStyle, top: '-10px' }}>
         {initialMarkerSettings.current.topValue}
       </p>
-      { initialMarkerSettings.current.width >20 && <p style={{ ...textBackgroundStyle, bottom: '-10px' }}>
-        {initialMarkerSettings.current.bottomValue}
-      </p>}
+      {initialMarkerSettings.current.width > 20 && (
+        <>
+          <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+            {initialMarkerSettings.current.image&& <Image
+              src={initialMarkerSettings.current.image}
+              alt="Marker Image"
+              layout="fill"
+              objectFit="cover"
+              objectPosition="center center"
+            />}
+          </div>
+          <p style={{ ...textBackgroundStyle, bottom: '-10px' }}>
+            {initialMarkerSettings.current.bottomValue}
+          </p>
+        </>
+      )}
     </div>
   );
 };
 
 export default Marker;
+
+ 
  /// set initial position
   // useEffect(() => {
   //   const initialPosition = {
