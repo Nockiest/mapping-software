@@ -6,6 +6,7 @@ export const settings:Settings = signal({
     lineType: "squared",
     activeLayer: "draw",
     markerSettings: { width: 10, color: `#000000`, topValue: "X", bottomValue: "Y" , image:null},
+    popularColors: []
   });
   
 export const backgroundImage = signal<File | null>(null);

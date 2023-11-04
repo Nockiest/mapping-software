@@ -19,5 +19,5 @@ export type Settings = Signal<{
     lineType: "squared" | "rounded";
     activeLayer: "draw" | "marker" | "background";
     markerSettings:{width:number,  color: Color, topValue:string, bottomValue:string,  image:File|null} ;
-    
+    popularColors: Array<Color>;
   }>;

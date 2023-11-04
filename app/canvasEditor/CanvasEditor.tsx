@@ -16,14 +16,12 @@ import { Color } from "@/public/types/OtherTypes";
  
 const DrawingCanvas: React.FC  = ( ) => {
   const canvasRef = useCanvas( );
-  // const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
-  
   // const [canvasDimensions, setCanvasDimensions] = useState<Vector2>({x:500, y: 500})
   return (
     <div>
  
       <div className="relative" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-         <UnitMarkerLayer />
+        <UnitMarkerLayer />
         <DrawingLayer  />
          
         <BackgroundImageLayer onImageLoad={() => {}} />  

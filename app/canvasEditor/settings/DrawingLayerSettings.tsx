@@ -4,9 +4,40 @@ import LineTypeSettings from '@/app/components/settings/LineTypeSettings';
 import { Color, Settings } from '@/public/types/OtherTypes';
 import { LineEdge } from '@/public/types/GeometryTypes';
 import { CanvasContext, useCanvas } from '../CanvasContext';
+interface ColorRectangleProps {
+  color: Color;
+  onClick: () => void;
+}
+const ColorRectangle: React.FC<{ color: Color }> = ({ color }) => {
+  const handleColorClick = () => {
+    // changeSettings('color', color);
+    settings.value.color = color
+  };
+
+  const handleRightClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Remove color from popularColors
+    settings.value.popularColors = settings.value.popularColors.filter((c) => c !== color);
+    // setPopularColors((prevColors) => prevColors.filter((c) => c !== color));
+  };
+
+  return (
+    <input
+      style={{
+        width: '30px',
+        height: '30px',
+        backgroundColor: color,
+        cursor: 'pointer',
+      }}
+      onClick={handleColorClick}
+      onContextMenu={handleRightClick}
+    />
+  );
+};
+
 const DrawingLayerSettings = ( ) => {
    const imageInputRef = useRef<HTMLInputElement>(null);
-  const {dispatch }= useCanvas( )
+  const {dispatch,   }= useCanvas( )
   const changeSettings = <K extends keyof Settings['value']>(property: K, newValue: Settings['value'][K]) => {
     // Assuming settings is a mutable signal, otherwise, you might need to use `setSettings` if it's a state
     settings.value = { ...settings.value, [property]: newValue };
@@ -39,13 +70,35 @@ const DrawingLayerSettings = ( ) => {
    if(dispatch){dispatch({ type: 'ENTER_BUCKET_MODE' })}
    
   };
-
+  const handleSaveToFavorites = () => {
+    const currentColor = settings.value.color;
+    if (!settings.value.popularColors.includes(currentColor)) {
+      // Save the color to favorites if it's not already in the list
+      settings.value.popularColors.push(currentColor);
+ 
+    }
+  };
+  const handleColorClick = (color: Color) => {
+    // Set the settings color on click
+    changeSettings('color', color);
+  };
   return (
     <>
-          <label>
-            Color:
-            <input type="color" value={settings.value.color} onChange={handleColorChange} />
-          </label>
+      <label>
+        Color:
+        <input type="color" value={settings.value.color} onChange={handleColorChange} />
+        {  !settings.value.popularColors.includes(settings.value.color) &&
+        <button className="border-black-1 bg-black "onClick={handleSaveToFavorites}>Save Color to Favorites</button>}  
+
+        
+        <div style={{ display: 'flex', gap: '5px' }}>
+        {settings.value.popularColors.map((color, index) => (
+          <ColorRectangle key={index} color={color} onClick={() => handleColorClick(color)} />
+          ))}
+        </div>
+        
+    
+      </label>
           <br />
           <label>
             Radius: {settings.value.radius}
