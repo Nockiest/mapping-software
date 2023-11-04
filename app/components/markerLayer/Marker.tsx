@@ -20,13 +20,24 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
   // Store the initial settings locally in the Marker component
   const initialMarkerSettings = useRef(settings.value.markerSettings);
   useEffect(() => {
-    console.log('Initial Marker Settings:', initialMarkerSettings.current);
+    console.log('Initial Marker Settings:', initialMarkerSettings.current.image);
   }, []); // Empty dependency array ensures the effect runs only once when the component mounts
+  const imageUrl = initialMarkerSettings.current.image instanceof File
+  ? URL.createObjectURL(initialMarkerSettings.current.image)
+  : initialMarkerSettings.current.image;
 
   const markerStyle: React.CSSProperties = {
     position: 'absolute',
     left: `${currentPosition.x}px`,
     top: `${currentPosition.y}px`,
+    width: `${initialMarkerSettings.current.width}px`,
+    height: `${initialMarkerSettings.current.width}px`,
+    fontSize: `${initialMarkerSettings.current.width / 2}px`,
+    borderRadius: '50%',
+    border: "1px solid black",
+    // backgroundColor: initialMarkerSettings.current.color,
+    // backgroundImage: `url(${settings.value.image})`, // Set the background image
+    // backgroundSize: 'cover', // Adjust the background size as needed
     transform: 'translate(-50%, -50%)',
     cursor: 'grab',
     userSelect: 'none',
@@ -36,7 +47,7 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
     position: 'absolute',
     left: '50%',
     transform: 'translateX(-50%)',
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    // backgroundColor: 'rgba(255, 255, 255, 0.7)',
     padding: '5px',
     borderRadius: '5px',
     userSelect: 'none',
@@ -82,7 +93,7 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
         <>
           <div style={{ position: 'relative', width: '100%', height: '100%' }}>
             {initialMarkerSettings.current.image&& <Image
-              src={initialMarkerSettings.current.image}
+              src={imageUrl}
               alt="Marker Image"
               layout="fill"
               objectFit="cover"

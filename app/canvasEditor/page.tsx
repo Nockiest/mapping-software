@@ -38,12 +38,9 @@ const MousePositionProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 };
 
 const Page: React.FC = () => {
-  // const { settings, setSettings } = useContext(CanvasSettingsContext);
   const { canvasState } = useContext(CanvasContext);
   const mousePosition = useContext(MousePositionContext);
 
- 
- 
   return (
     <>
       <DebugInfo
@@ -56,8 +53,8 @@ const Page: React.FC = () => {
           mousePosition: mousePosition,
         }}
       />
-        <CanvasSettings  />  
-      <DrawingCanvas color={settings.value.color} radius={settings.value.radius} />
+      <CanvasSettings  />  
+      <DrawingCanvas   />
       <Timeline />
     </>
   );

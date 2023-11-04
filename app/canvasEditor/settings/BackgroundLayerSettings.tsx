@@ -5,10 +5,18 @@ import { BackgroundContext } from '../CanvasContext';
 const BackgroundLayerSettings = () => {
     const imageInputRef = useRef<HTMLInputElement>(null);
     const {backgroundImage, setBackgroundImage} = useContext(BackgroundContext)
+    const handleImageRevert = () => {
+    setBackgroundImage(null);
+
+    if (imageInputRef.current) {
+      imageInputRef.current.value = '';
+    }
+  };
   return (
-    <div>
+    <>
         <BackgroundImageSetter setBackgroundImage={setBackgroundImage} backgroundImage={backgroundImage} />
-    </div>
+        {backgroundImage && <button onClick={handleImageRevert}>Revert Background Image</button>}
+    </ >
   )
 }
 
