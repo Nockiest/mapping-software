@@ -16,12 +16,13 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
   const mousePosition = useContext(MousePositionContext) || { x: 0, y: 0 };
   const [currentPosition, setCurrentPosition] = useState<Vector2>(initialPosition);
   const [isDragged, setIsDragged] = useState<boolean>(false);
-
+  // const [isLoaded, setIsLoaded] = useState(false);
+  const [canRemove, setCanRemove] = useState(false);
+ 
+ 
   // Store the initial settings locally in the Marker component
   const initialMarkerSettings = useRef(settings.value.markerSettings);
-  useEffect(() => {
-    console.log('Initial Marker Settings:', initialMarkerSettings.current.image);
-  }, []); // Empty dependency array ensures the effect runs only once when the component mounts
+ 
   const imageUrl = initialMarkerSettings.current.image instanceof File
   ? URL.createObjectURL(initialMarkerSettings.current.image)
   : initialMarkerSettings.current.image;
@@ -35,7 +36,7 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
     fontSize: `${initialMarkerSettings.current.width / 2}px`,
     borderRadius: '50%',
     border: "1px solid black",
-    // backgroundColor: initialMarkerSettings.current.color,
+    backgroundColor: initialMarkerSettings.current.color,
     // backgroundImage: `url(${settings.value.image})`, // Set the background image
     // backgroundSize: 'cover', // Adjust the background size as needed
     transform: 'translate(-50%, -50%)',
@@ -47,7 +48,7 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
     position: 'absolute',
     left: '50%',
     transform: 'translateX(-50%)',
-    // backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
     padding: '5px',
     borderRadius: '5px',
     userSelect: 'none',
@@ -76,15 +77,21 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
   };
 
   const handleMouseUp = () => {
+     
     setIsDragged(false);
   };
   const handleContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault(); // Prevent the default context menu
-    // Call the onDestroy callback to remove the marker from the parent component
-    const markerElement = e.currentTarget as HTMLDivElement;
-    markerElement.remove();
-    // Log a message to the console
-    console.log('Marker destroyed!');
+
+    // Check if the marker is loaded before allowing destruction
+    if (canRemove) {
+      // Call the onDestroy callback to remove the marker from the parent component
+      const markerElement = e.currentTarget as HTMLDivElement;
+      markerElement.remove();
+      // Log a message to the console
+      console.log('Marker destroyed!');
+    }
+    setCanRemove(true)
   };
   return (
     <div

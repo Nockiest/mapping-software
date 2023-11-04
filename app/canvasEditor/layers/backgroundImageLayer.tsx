@@ -1,6 +1,6 @@
  
 import React, { useState, useContext, useEffect } from 'react';
-import {  CanvasSettingsContext,BackgroundContext } from '../CanvasContext';
+import {   BackgroundContext } from '../CanvasContext';
 import { settings } from '../Signals';
 import { backgroundImage } from '../Signals';
 const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }> = ({ onImageLoad }) => {
