@@ -8,4 +8,4 @@ export const settings:Settings = signal({
     markerSettings: { width: 10, color: `#000000`, topValue: "X", bottomValue: "Y" , image:null},
   });
   
-export const backgroundImage = signal(null)
+export const backgroundImage = signal<File | null>(null);

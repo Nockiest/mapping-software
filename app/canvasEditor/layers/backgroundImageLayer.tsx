@@ -8,7 +8,7 @@ const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }
  
   useEffect(() => {
     handleFileChange( );
-  }, [backgroundImage]);
+  }, [backgroundImage.value]);
 
   const loadImage = (file: File) => {
     return new Promise<string>((resolve) => {
@@ -21,13 +21,13 @@ const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }
   };
 
   const handleFileChange = async ( ) => {
-    if (!backgroundImage) {
+    if (!backgroundImage.value) {
       clearCanvas();
       return;
     }
 
-    if (backgroundImage instanceof File) {
-      const imageUrl = await loadImage(backgroundImage);
+    if (backgroundImage.value instanceof File) {
+      const imageUrl = await loadImage(backgroundImage.value);
       drawImageOnCanvas(imageUrl);
       onImageLoad(imageUrl);
     } else {
