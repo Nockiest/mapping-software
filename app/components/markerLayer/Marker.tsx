@@ -5,7 +5,6 @@ import { Color } from "@/public/types/OtherTypes";
 import { useState, useContext, useEffect,useRef } from "react";
 import { settings } from "@/app/canvasEditor/Signals";
 import Image from "next/image";
-import { signal } from "@preact/signals";
 type MarkerProps = {
  
   topLeftOffset:Vector2
@@ -17,7 +16,9 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
   const mousePosition = useContext(MousePositionContext) || { x: 0, y: 0 };
   const [currentPosition, setCurrentPosition] = useState<Vector2>(initialPosition);
   const [isDragged, setIsDragged] = useState<boolean>(false);
-  const canRemove = signal(false)
+  // const [isLoaded, setIsLoaded] = useState(false);
+  const [canRemove, setCanRemove] = useState(false);
+  
  
   // Store the initial settings locally in the Marker component
   const initialMarkerSettings = useRef(settings.value.markerSettings);
@@ -32,7 +33,7 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
     top: `${currentPosition.y}px`,
     width: `${initialMarkerSettings.current.width}px`,
     height: `${initialMarkerSettings.current.width}px`,
-    fontSize: `${initialMarkerSettings.current.width / 4}px`,
+    fontSize: `${initialMarkerSettings.current.width / 2}px`,
     borderRadius: '50%',
     border: "1px solid black",
     backgroundColor: initialMarkerSettings.current.color,
@@ -55,8 +56,8 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
   };
 
   const imageStyle: React.CSSProperties = {
-    width: '10px', // Adjust the width as needed
-    height: '10px', // Maintain aspect ratio
+    width: '100%', // Adjust the width as needed
+    height: 'auto', // Maintain aspect ratio
     borderRadius: '50%', // Match the marker's border radius
   };
 
@@ -83,14 +84,14 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
     e.preventDefault(); // Prevent the default context menu
 
     // Check if the marker is loaded before allowing destruction
-    if (canRemove.value) {
+    if (canRemove) {
       // Call the onDestroy callback to remove the marker from the parent component
       const markerElement = e.currentTarget as HTMLDivElement;
       markerElement.remove();
       // Log a message to the console
       console.log('Marker destroyed!');
     }
-    canRemove.value = true
+    setCanRemove(true)
   };
   return (
     <div
@@ -100,7 +101,7 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
       onMouseUp={handleMouseUp}
       onContextMenu={handleContextMenu}
     >
-      <p style={{ ...textBackgroundStyle, top: '-5px' }}>
+      <p style={{ ...textBackgroundStyle, top: '-10px' }}>
         {initialMarkerSettings.current.topValue}
       </p>
       {initialMarkerSettings.current.width > 20 && (
@@ -114,7 +115,7 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
               objectPosition="center center"
             />}
           </div>
-          <p style={{ ...textBackgroundStyle, bottom: '-5px' }}>
+          <p style={{ ...textBackgroundStyle, bottom: '-10px' }}>
             {initialMarkerSettings.current.bottomValue}
           </p>
         </>

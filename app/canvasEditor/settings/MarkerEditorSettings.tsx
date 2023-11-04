@@ -2,6 +2,8 @@ import { useContext, useState } from "react";
 import { CanvasSettingsType } from "../CanvasContext"; // CanvasSettingsContext,
 import { hexToRgb } from "@/public/utils";
 import { settings } from "../Signals";
+import FavoriteColorLister from "@/app/components/settings/FavoriteColorLister";
+import { Color } from "@/public/types/OtherTypes";
  
 const MarkerEditorSettings = ({ changeSettings }) => {
   const [newMarkerSettings, setNewMarkerSettings] = useState({ ...settings.value.markerSettings });
@@ -45,7 +47,10 @@ const MarkerEditorSettings = ({ changeSettings }) => {
     changeSettings('markerSettings', newMarkerSettings);
     setIsDirty(false);
   };
-
+  const handleColorClick = (color: Color) => {
+    // Set the settings color on click
+    setNewMarkerSettings((prevSettings) => ({ ...prevSettings, color: color }));
+  };
   // Validation message
   const validationMessage = isDirty ? "Changes not applied. Click 'Apply Changes' to save." : "";
 
@@ -60,6 +65,7 @@ const MarkerEditorSettings = ({ changeSettings }) => {
         <p style={{ color: 'black' }}>
           Marker Color:
           <input type="color" value={newMarkerSettings.color} onChange={handleMarkerColorChange} />
+          <FavoriteColorLister handleColorClick={handleColorClick} colorList={ newMarkerSettings.popularMarkerColors} newColor={newMarkerSettings.color} />
         </p>
         <p style={{ color: 'black' }}>
           Marker TopValue:

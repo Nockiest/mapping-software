@@ -5,7 +5,7 @@ export const settings:Settings = signal({
     color: `#000000`,
     lineType: "squared",
     activeLayer: "draw",
-    markerSettings: { width: 10, color: `#000000`, topValue: "X", bottomValue: "Y" , image:null},
+    markerSettings: { width: 10, color: `#000000`, topValue: "X", bottomValue: "Y" , image:null, popularMarkerColors: []},
     popularColors: []
   });
   

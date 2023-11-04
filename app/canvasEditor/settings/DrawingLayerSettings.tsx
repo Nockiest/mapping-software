@@ -4,37 +4,10 @@ import LineTypeSettings from '@/app/components/settings/LineTypeSettings';
 import { Color, Settings } from '@/public/types/OtherTypes';
 import { LineEdge } from '@/public/types/GeometryTypes';
 import { CanvasContext, useCanvas } from '../CanvasContext';
-interface ColorRectangleProps {
-  color: Color;
-  onClick: () => void;
-}
-const ColorRectangle: React.FC<{ color: Color }> = ({ color }) => {
-  const handleColorClick = () => {
-    // changeSettings('color', color);
-    settings.value.color = color
-  };
+import FavoriteColorLister from '@/app/components/settings/FavoriteColorLister';
+ 
 
-  const handleRightClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    // Remove color from popularColors
-    settings.value.popularColors = settings.value.popularColors.filter((c) => c !== color);
-    // setPopularColors((prevColors) => prevColors.filter((c) => c !== color));
-  };
-
-  return (
-    <input
-      style={{
-        width: '30px',
-        height: '30px',
-        backgroundColor: color,
-        cursor: 'pointer',
-      }}
-      onClick={handleColorClick}
-      onContextMenu={handleRightClick}
-    />
-  );
-};
-
+ 
 const DrawingLayerSettings = ( ) => {
    const imageInputRef = useRef<HTMLInputElement>(null);
   const {dispatch,   }= useCanvas( )
@@ -87,15 +60,13 @@ const DrawingLayerSettings = ( ) => {
       <label>
         Color:
         <input type="color" value={settings.value.color} onChange={handleColorChange} />
-        {  !settings.value.popularColors.includes(settings.value.color) &&
-        <button className="border-black-1 bg-black "onClick={handleSaveToFavorites}>Save Color to Favorites</button>}  
-
-        
-        <div style={{ display: 'flex', gap: '5px' }}>
+       
+        <FavoriteColorLister handleColorClick={handleColorClick} colorList={ settings.value.popularColors} newColor={settings.value.color} />
+        {/* <div style={{ display: 'flex', gap: '5px' }}>
         {settings.value.popularColors.map((color, index) => (
           <ColorRectangle key={index} color={color} onClick={() => handleColorClick(color)} />
           ))}
-        </div>
+        </div> */}
         
     
       </label>
