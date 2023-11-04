@@ -8,14 +8,14 @@ import LineTypeSettings from "@/app/components/settings/LineTypeSettings";
 import ActiveLayerSettings from "@/app/components/settings/ActiveLayerSettings";
 import { hexToRgb } from "@/public/utils";
 import { signal } from "@preact/signals";
-import { settings } from "../StoredSettingsValues";
+import { settings } from "../Signals";
 import { Color, Settings } from "@/public/types/OtherTypes";
 import DrawingLayerSettings from "./DrawingLayerSettings";
 import BackgroundLayerSettings from "./BackgroundLayerSettings";
 
  
 const CanvasSettings = ( ) => {
-  const imageInputRef = useRef<HTMLInputElement>(null);
+  // const imageInputRef = useRef<HTMLInputElement>(null);
   const changeSettings = <K extends keyof Settings['value']>(property: K, newValue: Settings['value'][K]) => {
     // Assuming settings is a mutable signal, otherwise, you might need to use `setSettings` if it's a state
     settings.value = { ...settings.value, [property]: newValue };

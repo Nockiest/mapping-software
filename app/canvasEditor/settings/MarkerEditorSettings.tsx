@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { CanvasSettingsType } from "../CanvasContext"; // CanvasSettingsContext,
 import { hexToRgb } from "@/public/utils";
-import { settings } from "../StoredSettingsValues";
+import { settings } from "../Signals";
  
 const MarkerEditorSettings = ({ changeSettings }) => {
   const [newMarkerSettings, setNewMarkerSettings] = useState({ ...settings.value.markerSettings });

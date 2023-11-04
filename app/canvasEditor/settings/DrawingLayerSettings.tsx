@@ -1,5 +1,5 @@
 import  {useRef,useContext} from 'react'
-import { settings } from '../StoredSettingsValues';
+import { settings } from '../Signals';
 import LineTypeSettings from '@/app/components/settings/LineTypeSettings';
 import { Color, Settings } from '@/public/types/OtherTypes';
 import { LineEdge } from '@/public/types/GeometryTypes';

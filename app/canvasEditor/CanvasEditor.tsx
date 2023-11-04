@@ -23,7 +23,7 @@ const DrawingCanvas: React.FC  = ( ) => {
     <div>
  
       <div className="relative" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-         {/* <UnitMarkerLayer /> */}
+         <UnitMarkerLayer />
         <DrawingLayer  />
          
         <BackgroundImageLayer onImageLoad={() => {}} />  

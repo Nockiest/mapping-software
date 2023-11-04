@@ -1,12 +1,13 @@
  
 import React, { useState, useContext, useEffect } from 'react';
-import { BackgroundContext, CanvasSettingsContext } from '../CanvasContext';
-import { settings } from '../StoredSettingsValues';
+import {  CanvasSettingsContext,BackgroundContext } from '../CanvasContext';
+import { settings } from '../Signals';
+import { backgroundImage } from '../Signals';
 const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }> = ({ onImageLoad }) => {
-  const { backgroundCanvasRef, backgroundImage } = useContext(BackgroundContext);
+  const { backgroundCanvasRef   } = useContext(BackgroundContext);
  
   useEffect(() => {
-    handleFileChange(backgroundImage);
+    handleFileChange( );
   }, [backgroundImage]);
 
   const loadImage = (file: File) => {
@@ -19,7 +20,7 @@ const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }
     });
   };
 
-  const handleFileChange = async (backgroundImage: File | null) => {
+  const handleFileChange = async ( ) => {
     if (!backgroundImage) {
       clearCanvas();
       return;

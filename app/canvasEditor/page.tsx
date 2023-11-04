@@ -6,7 +6,7 @@ import CanvasSettings from "./settings/CanvasSettings";
 import DebugInfo from "../components/Debugger";
 import Timeline from "./Timeline";
 import { CanvasContext, CanvasProvider, useCanvas,   } from "./CanvasContext";//CanvasSettingsContext
-import { settings } from "./StoredSettingsValues";
+import { settings } from "./Signals";
 // Create a context for mouse position
 export const MousePositionContext = createContext<{ x: number; y: number } | null>(null);
 

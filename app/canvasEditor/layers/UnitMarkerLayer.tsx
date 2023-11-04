@@ -4,7 +4,7 @@ import Marker from '@/app/components/markerLayer/Marker'; // Adjust the import p
 import { CanvasSettingsContext, CanvasContext } from '../CanvasContext';
 import { Color } from '@/public/types/OtherTypes';
 import { Vector2 } from '@/public/types/GeometryTypes';
-import { settings } from '../StoredSettingsValues';
+import { settings } from '../Signals';
 enum MarkerLayerState {
   Idle,
   Dragging,
@@ -106,8 +106,8 @@ const UnitMarkerLayer: React.FC = () => {
   }, [markerCanvasRef, markers, markerLayerState, settings]);
 
   return (
-    <div className="absolute top-10 z-100" onContextMenu={(e) => e.preventDefault()}>
-      <canvas width={800} height={600} className="border-2 canvas-rectangle" ref={markerCanvasRef} />
+    <div className="absolute " onContextMenu={(e) => e.preventDefault()}>
+      <canvas width={800} height={600} className="border-2 canvas-rectangle" ref={markerCanvasRef}   style={{ pointerEvents: settings.value.activeLayer === 'marker' ? 'auto' : 'none'}} />
       {markers.map((marker, index) => (
         <Marker key={index} topLeftOffset={topLeftOffset} initialPosition={marker.position} canvasSize={{ x:800 , y:600}}  />
       ))}

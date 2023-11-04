@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useRef, useReducer } from "react";
 import { DrawingState } from "@/public/types/ButtonEvents";
 import { Color, Settings } from "@/public/types/OtherTypes";
 export interface CanvasContextType {
-  canvasRef: React.RefObject<HTMLCanvasElement | null>;
+  canvasRef: React.RefObject<HTMLCanvasElement | undefined>;
   markerCanvasRef: React.RefObject<HTMLCanvasElement | null>;
   canvasState: DrawingState;
   dispatch: Dispatch<DrawAction>;
@@ -10,8 +10,8 @@ export interface CanvasContextType {
 
 export interface BackgroundContextType {
   backgroundCanvasRef: React.RefObject<HTMLCanvasElement | null>;
-  backgroundImage: File | null;
-  setBackgroundImage: React.Dispatch<React.SetStateAction<File | null>>;
+//   backgroundImage: File | null;
+//   setBackgroundImage: React.Dispatch<React.SetStateAction<File | null>>;
 }
 
 export interface CanvasSettingsType {
@@ -55,7 +55,7 @@ export const CanvasContext = createContext<CanvasContextType | undefined>(undefi
 export const BackgroundContext = createContext<BackgroundContextType | undefined>(undefined);
  
 export const CanvasProvider: React.FC = ({ children }) => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | undefined>(null);
   const markerCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const backgroundCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
@@ -63,7 +63,7 @@ export const CanvasProvider: React.FC = ({ children }) => {
 
   return (
     <CanvasContext.Provider value={{ canvasRef, markerCanvasRef, canvasState, dispatch }}>
-      <BackgroundContext.Provider value={{ backgroundCanvasRef, backgroundImage, setBackgroundImage }}>
+      <BackgroundContext.Provider value={{ backgroundCanvasRef,  }}>
         {/* <CanvasSettingsContext.Provider value={{ settings, setSettings }}> */}
         {children}
         {/* </CanvasSettingsContext.Provider> */}
@@ -82,15 +82,15 @@ export const useCanvas = () => {
   return context;
 };
 
-export const useBackground = () => {
-  const context = useContext(BackgroundContext);
+// export const useBackground = () => {
+//   const context = useContext(BackgroundContext);
 
-  if (!context) {
-    throw new Error("useBackground must be used within a CanvasProvider");
-  }
+//   if (!context) {
+//     throw new Error("useBackground must be used within a CanvasProvider");
+//   }
 
-  return context;
-};
+//   return context;
+// };
 
 export const useCanvasSettings = () => {
   const context = useContext(CanvasSettingsContext);

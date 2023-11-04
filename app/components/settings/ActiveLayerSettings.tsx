@@ -1,5 +1,5 @@
 import React from 'react'
-import { settings } from '@/app/canvasEditor/StoredSettingsValues';
+import { settings } from '@/app/canvasEditor/Signals';
 // type ActiveLayerSettingsProps = {
 //     activeLayer: "draw" | "marker" | "background";
 //     handleActiveLayerChange: (newActiveLayer: "draw" | "marker" | "background") => void;

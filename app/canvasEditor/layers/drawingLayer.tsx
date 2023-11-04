@@ -6,10 +6,10 @@ import { Vector2   } from "@/public/types/GeometryTypes";
 import { CanvasContext, CanvasContextType,  DrawAction, useCanvas } from "../CanvasContext";
 import { DrawingState } from "@/public/types/ButtonEvents";
 import bucketFill from "@/app/components/drawing/BucketFill";
-import drawCircledLine from "../../components/drawing/LineDrawer";
+// import drawCircledLine from "../../components/drawing/LineDrawer";
 import { Color } from "@/public/types/OtherTypes";
 import { MousePositionContext } from "../page";
-import { settings } from "../StoredSettingsValues";
+import { settings } from "../Signals";
 import drawLineWithShape from "../../components/drawing/LineDrawer";
 // import customCursor from '@/public/cursor.cur';
  
@@ -102,14 +102,12 @@ const DrawingLayer: React.FC  = ( ) => {
     // Add event listeners
     if (settings.value.activeLayer === "draw") {
       canvas.addEventListener("mousedown", handleMouseDown);
-      canvas.addEventListener("contextmenu", (e: React.MouseEvent<HTMLCanvasElement>) => e.preventDefault());
       canvas.addEventListener("mousemove", handleMouseMovement);
       canvas.addEventListener("mouseup", handleMouseUp);
       canvas.addEventListener("mouseleave", handleMouseLeave );
     } else {
       // Remove event listeners if not in draw mode
       canvas.removeEventListener("mousedown", handleMouseDown);
-      canvas.removeEventListener("contextmenu", (e: React.MouseEvent<HTMLCanvasElement>) => e.preventDefault());
       canvas.removeEventListener("mousemove", handleMouseMovement);
       canvas.removeEventListener("mouseup", handleMouseUp);
       canvas.removeEventListener("mouseleave", handleMouseLeave );
@@ -118,7 +116,6 @@ const DrawingLayer: React.FC  = ( ) => {
     // Remove event listeners on component unmount
     return () => {
       canvas.removeEventListener("mousedown", handleMouseDown);
-      canvas.removeEventListener("contextmenu", (e: React.MouseEvent<HTMLCanvasElement>) => e.preventDefault());
       canvas.removeEventListener("mousemove", handleMouseMovement);
       canvas.removeEventListener("mouseup", handleMouseUp);
       canvas.removeEventListener("mouseleave", handleMouseLeave );
@@ -126,13 +123,16 @@ const DrawingLayer: React.FC  = ( ) => {
   }, [canvasRef, canvasState, lastMousePos, settings, dispatch]);
 
   return (
-    <canvas
+    <>  
+    {canvasRef && <canvas
       ref={canvasRef}
       width={800}
       height={600}
       onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
-      className={`canvas-rectangle draw-canvas top-0 ${settings.value.activeLayer === 'draw' ? 'opacity-100' : 'opacity-50'} `}
-    />
+      className="canvas-rectangle draw-canvas top-0"
+      style={{ pointerEvents: settings.value.activeLayer === 'draw' ? 'auto' : 'none', opacity: settings.value.activeLayer === 'draw' ? 1 : 0.5 }}
+    />}
+    </>
   );
 };
 

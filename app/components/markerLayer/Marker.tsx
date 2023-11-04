@@ -3,7 +3,7 @@ import { MousePositionContext } from "@/app/canvasEditor/page";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { Color } from "@/public/types/OtherTypes";
 import { useState, useContext, useEffect,useRef } from "react";
-import { settings } from "@/app/canvasEditor/StoredSettingsValues";
+import { settings } from "@/app/canvasEditor/Signals";
 import Image from "next/image";
 type MarkerProps = {
  
