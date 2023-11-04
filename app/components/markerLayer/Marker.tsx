@@ -55,8 +55,8 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
   };
 
   const imageStyle: React.CSSProperties = {
-    width: '100%', // Adjust the width as needed
-    height: 'auto', // Maintain aspect ratio
+    width: '10px', // Adjust the width as needed
+    height: '10px', // Maintain aspect ratio
     borderRadius: '50%', // Match the marker's border radius
   };
 
