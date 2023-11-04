@@ -53,6 +53,7 @@ const DrawingLayer: React.FC  = ( ) => {
 
       if (e.button === 2) {
         // Right mouse button is pressed, use EraseInRadius
+        eraseLine({ canvasRef, start: lastMousePos|| {x ,y }, end: { x, y }, radius , eraseShape:settings.value.lineType});
         changeState({ type: "ERASE" });
       } else if (e.button === 0) {
         // Left mouse button is pressed, start drawing or filling
@@ -63,6 +64,16 @@ const DrawingLayer: React.FC  = ( ) => {
           changeState({ type: "DRAW" });
           if (ctx) {
             ctx.beginPath();
+            console.log("DRAWING AN ARC")
+            // Draw based on lineType
+            if (settings.value.lineType === 'rounded') {
+              ctx.arc(x, y, radius / 2, 0, 2 * Math.PI);
+            } else if (settings.value.lineType === 'squared') {
+              ctx.rect(x - radius / 2, y - radius / 2, radius, radius);
+            }
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.closePath(); //draw a dot
             setLastMousePos({ x, y });
           }
         }
