@@ -3,7 +3,7 @@ import eraseLine from "@/app/components/drawing/Eraser";
 import CanvasToImage from "@/app/components/CanvasToImg";
 // import drawLineWithSquares from "@/app/components/drawing/SquaredLineDrawer";
 import { Vector2   } from "@/public/types/GeometryTypes";
-import { CanvasContext, CanvasContextType,  DrawAction } from "../CanvasContext";
+import { CanvasContext, CanvasContextType,  DrawAction, useCanvas } from "../CanvasContext";
 import { DrawingState } from "@/public/types/ButtonEvents";
 import bucketFill from "@/app/components/drawing/BucketFill";
 import drawCircledLine from "../../components/drawing/LineDrawer";
@@ -11,15 +11,16 @@ import { Color } from "@/public/types/OtherTypes";
 import { MousePositionContext } from "../page";
 import { settings } from "../StoredSettingsValues";
 import drawLineWithShape from "../../components/drawing/LineDrawer";
-type DrawingCanvasProps = {
-  // color: Color; // CSS color
-  // radius: number;
-};
-//{ color, radius }
-const DrawingLayer: React.FC<DrawingCanvasProps> = ( ) => {
-  const { canvasRef, canvasState, dispatch } = useContext<CanvasContextType | null>(CanvasContext);
+// import customCursor from '@/public/cursor.cur';
+ 
+const DrawingLayer: React.FC  = ( ) => {
+  const { canvasRef, canvasState, dispatch } = useCanvas();
   const [lastMousePos, setLastMousePos] = useState<Vector2 | null>(null);
   const { color, radius} = settings.value
+  
+  // const globalCursorStyle = {
+  //   cursor: `url(${customCursor}), auto`,
+  // };
   const changeState = (newState: DrawAction) => {
     dispatch(newState);
   };
@@ -75,13 +76,13 @@ const DrawingLayer: React.FC<DrawingCanvasProps> = ( ) => {
       if (settings.value.activeLayer !== "draw"){
         return
       }
-      console.log(canvasState === DrawingState.Drawing)
+      // console.log(canvasState === DrawingState.Drawing)
       if (canvasState === DrawingState.Erasing) {
         eraseLine({ canvasRef, start: lastMousePos|| {x:0,y:0}, end: { x, y }, radius , eraseShape:settings.value.lineType});
       } else if (canvasState === DrawingState.Drawing) {
         // Left mouse button is pressed, draw
         if (ctx && lastMousePos) {
-          console.log(settings.value.lineType )
+          // console.log(settings.value.lineType )
           drawLineWithShape(ctx, lastMousePos, { x, y }, color, radius, settings.value.lineType)
         }
       }

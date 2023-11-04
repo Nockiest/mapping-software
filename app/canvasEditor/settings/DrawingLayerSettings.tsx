@@ -3,10 +3,10 @@ import { settings } from '../StoredSettingsValues';
 import LineTypeSettings from '@/app/components/settings/LineTypeSettings';
 import { Color, Settings } from '@/public/types/OtherTypes';
 import { LineEdge } from '@/public/types/GeometryTypes';
-import { CanvasContext } from '../CanvasContext';
+import { CanvasContext, useCanvas } from '../CanvasContext';
 const DrawingLayerSettings = ( ) => {
    const imageInputRef = useRef<HTMLInputElement>(null);
-  const {dispatch }= useContext(CanvasContext)
+  const {dispatch }= useCanvas( )
   const changeSettings = <K extends keyof Settings['value']>(property: K, newValue: Settings['value'][K]) => {
     // Assuming settings is a mutable signal, otherwise, you might need to use `setSettings` if it's a state
     settings.value = { ...settings.value, [property]: newValue };

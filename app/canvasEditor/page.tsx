@@ -5,7 +5,7 @@ import DrawingCanvas from "./CanvasEditor";
 import CanvasSettings from "./settings/CanvasSettings";
 import DebugInfo from "../components/Debugger";
 import Timeline from "./Timeline";
-import { CanvasContext, CanvasProvider,   } from "./CanvasContext";//CanvasSettingsContext
+import { CanvasContext, CanvasProvider, useCanvas,   } from "./CanvasContext";//CanvasSettingsContext
 import { settings } from "./StoredSettingsValues";
 // Create a context for mouse position
 export const MousePositionContext = createContext<{ x: number; y: number } | null>(null);
@@ -38,7 +38,7 @@ const MousePositionProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 };
 
 const Page: React.FC = () => {
-  const { canvasState } = useContext(CanvasContext);
+  const { canvasState } = useCanvas( );
   const mousePosition = useContext(MousePositionContext);
 
   return (

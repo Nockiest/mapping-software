@@ -7,7 +7,7 @@ import drawLineOnCanvas from "@/app/components/drawing/LineDrawer";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import drawImageToBackground from "@/app/components/DrawBackgroundCanvasImg";
 import BackgroundImageLayer from "./layers/BackgroundImageLayer";
-import { CanvasContext } from "./CanvasContext";
+import { CanvasContext, useCanvas } from "./CanvasContext";
 import DrawingLayer from "./layers/DrawingLayer";
 import LayerSplicer from "../components/LayerSplicer";
 import UnitMarkerLayer from "./layers/UnitMarkerLayer";
@@ -15,7 +15,7 @@ import { Color } from "@/public/types/OtherTypes";
 
  
 const DrawingCanvas: React.FC  = ( ) => {
-  const canvasRef = useContext(CanvasContext);
+  const canvasRef = useCanvas( );
   // const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
   
   // const [canvasDimensions, setCanvasDimensions] = useState<Vector2>({x:500, y: 500})
