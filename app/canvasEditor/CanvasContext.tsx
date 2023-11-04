@@ -3,6 +3,7 @@ import { DrawingState } from "@/public/types/ButtonEvents";
 import { Color, Settings } from "@/public/types/OtherTypes";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { EraseArgs } from "../components/drawing/Eraser";
+import { DrawPayload } from "../components/drawing/LineDrawer";
 export interface CanvasContextType {
   canvasRef: React.RefObject<HTMLCanvasElement | undefined>;
   markerCanvasRef: React.RefObject<HTMLCanvasElement | null>;
@@ -22,36 +23,35 @@ export interface CanvasSettingsType {
 }
 
  
+ 
+export type  ErasePayload = {
+  eraseFunction: (args: EraseArgs) => void;
+  eraseArgs: EraseArgs;
+}
+ 
+
+// Update the DrawAction type to include the "DRAW" payload
 export type DrawAction =
-  | { type: "DRAW"; payload: {} }
+  | { type: "DRAW"; payload: DrawPayload }
   | { type: "ERASE"; payload: ErasePayload }
   | { type: "MOUSE_UP" }
   | { type: "MOUSE_LEAVE" }
   | { type: "ENTER_BUCKET_MODE" };
 
-export type  ErasePayload = {
-  eraseFunction: (args: EraseArgs) => void;
-  eraseArgs: EraseArgs;
-}
-
-// interface EraseArgs {
-//   canvasRef: React.RefObject<HTMLCanvasElement>;
-//   start: Vector2;
-//   end: Vector2;
-//   radius: number;
-//   eraseShape: string; // Adjust the type accordingly
-//   // Add other necessary properties
-// }
-
+// Modify the reducer function
 const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
   console.log("SWITCHING TO ", action.type);
   switch (action.type) {
     case "DRAW":
-      if (DrawingState.BucketFill == state) {
-        return DrawingState.BucketFill;
-      } else {
-        return DrawingState.Drawing;
-      }
+      const drawPayload = action.payload as DrawPayload;
+      drawPayload.drawFunction(
+        drawPayload.drawArgs.ctx,
+        drawPayload.drawArgs.x,
+        drawPayload.drawArgs.y,
+        drawPayload.drawArgs.radius,
+        drawPayload.drawArgs.color
+      );
+      return DrawingState.Drawing;
 
     case "ERASE":
       const erasePayload = action.payload as ErasePayload;
@@ -60,11 +60,7 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
 
     case "MOUSE_UP":
     case "MOUSE_LEAVE":
-      if (DrawingState.BucketFill == state) {
-        return DrawingState.BucketFill;
-      } else {
-        return DrawingState.Idle;
-      }
+      return DrawingState.Idle;
 
     case "ENTER_BUCKET_MODE":
       return DrawingState.BucketFill === state ? DrawingState.Idle : DrawingState.BucketFill;

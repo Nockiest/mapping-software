@@ -1,16 +1,14 @@
 import React, { useState, useRef, useEffect, useReducer, useContext } from "react";
 import eraseLine from "@/app/components/drawing/Eraser";
 import CanvasToImage from "@/app/components/CanvasToImg";
-// import drawLineWithSquares from "@/app/components/drawing/SquaredLineDrawer";
 import { Vector2   } from "@/public/types/GeometryTypes";
 import { CanvasContext, CanvasContextType,  DrawAction, ErasePayload, useCanvas } from "../CanvasContext";
 import { DrawingState } from "@/public/types/ButtonEvents";
 import bucketFill from "@/app/components/drawing/BucketFill";
-// import drawCircledLine from "../../components/drawing/LineDrawer";
 import { Color } from "@/public/types/OtherTypes";
 import { MousePositionContext } from "../page";
 import { settings } from "../Signals";
-import drawLineWithShape from "../../components/drawing/LineDrawer";
+import drawLineWithShape, { DrawPayload } from "../../components/drawing/LineDrawer";
 // import customCursor from '@/public/cursor.cur';
  
 const DrawingLayer: React.FC  = ( ) => {
@@ -32,6 +30,22 @@ const DrawingLayer: React.FC  = ( ) => {
     changeState({ type: "MOUSE_LEAVE" });
   };
 
+  const drawDot: (ctx: CanvasRenderingContext2D, x: number, y: number, radius: number, color: string) => void = (
+    ctx,
+    x,
+    y,
+    radius,
+    color
+  ) => {
+    // Draw based on lineType
+    if (settings.value.lineType === 'rounded') {
+      ctx.arc(x, y, radius / 2, 0, 2 * Math.PI);
+    } else if (settings.value.lineType === 'squared') {
+      ctx.rect(x - radius / 2, y - radius / 2, radius, radius);
+    }
+    ctx.fillStyle = color;
+    ctx.fill();
+  };
   useEffect(() => {
     if (!canvasRef) {
       return;
@@ -66,18 +80,16 @@ const DrawingLayer: React.FC  = ( ) => {
           console.log("FILLING WITH BUCKET");
           bucketFill(ctx, x, y, color);
         } else {
-          changeState({ type: "DRAW" , payload: {}});
+          const drawPayload: DrawPayload = {
+            drawFunction: drawDot, // Replace with your actual draw function
+            drawArgs: { ctx, x, y, radius, color },
+          };
+          
+          changeState({ type: "DRAW", payload: drawPayload });
           if (ctx) {
             ctx.beginPath();
             console.log("DRAWING AN ARC")
-            // Draw based on lineType
-            if (settings.value.lineType === 'rounded') {
-              ctx.arc(x, y, radius / 2, 0, 2 * Math.PI);
-            } else if (settings.value.lineType === 'squared') {
-              ctx.rect(x - radius / 2, y - radius / 2, radius, radius);
-            }
-            ctx.fillStyle = color;
-            ctx.fill();
+            
             ctx.closePath(); //draw a dot
             setLastMousePos({ x, y });
           }
