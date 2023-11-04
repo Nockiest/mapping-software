@@ -78,13 +78,21 @@ const Marker: React.FC<MarkerProps> = ({ topLeftOffset, initialPosition, canvasS
   const handleMouseUp = () => {
     setIsDragged(false);
   };
-
+  const handleContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault(); // Prevent the default context menu
+    // Call the onDestroy callback to remove the marker from the parent component
+    const markerElement = e.currentTarget as HTMLDivElement;
+    markerElement.remove();
+    // Log a message to the console
+    console.log('Marker destroyed!');
+  };
   return (
     <div
       style={markerStyle}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
+      onContextMenu={handleContextMenu}
     >
       <p style={{ ...textBackgroundStyle, top: '-10px' }}>
         {initialMarkerSettings.current.topValue}
