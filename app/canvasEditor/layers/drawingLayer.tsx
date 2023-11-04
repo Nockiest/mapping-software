@@ -3,7 +3,7 @@ import eraseLine from "@/app/components/drawing/Eraser";
 import CanvasToImage from "@/app/components/CanvasToImg";
 // import drawLineWithSquares from "@/app/components/drawing/SquaredLineDrawer";
 import { Vector2   } from "@/public/types/GeometryTypes";
-import { CanvasContext, CanvasContextType,  DrawAction, useCanvas } from "../CanvasContext";
+import { CanvasContext, CanvasContextType,  DrawAction, ErasePayload, useCanvas } from "../CanvasContext";
 import { DrawingState } from "@/public/types/ButtonEvents";
 import bucketFill from "@/app/components/drawing/BucketFill";
 // import drawCircledLine from "../../components/drawing/LineDrawer";
@@ -52,16 +52,21 @@ const DrawingLayer: React.FC  = ( ) => {
       const y = e.offsetY;
 
       if (e.button === 2) {
-        // Right mouse button is pressed, use EraseInRadius
-        eraseLine({ canvasRef, start: lastMousePos|| {x ,y }, end: { x, y }, radius , eraseShape:settings.value.lineType});
-        changeState({ type: "ERASE" });
+        // this will be a problem, if there is a condtion under which erase shouldnt be called
+        // eraseLine({ canvasRef, start: lastMousePos|| {x ,y }, end: { x, y }, radius , eraseShape:settings.value.lineType});
+        // changeState({ type: "ERASE" });
+        const erasePayload: ErasePayload = {
+          eraseFunction: eraseLine,
+          eraseArgs: { canvasRef, start: lastMousePos || { x, y }, end: { x, y }, radius, eraseShape: settings.value.lineType },
+        };
+        changeState({ type: "ERASE", payload: erasePayload });
       } else if (e.button === 0) {
         // Left mouse button is pressed, start drawing or filling
         if (canvasState === DrawingState.BucketFill) {
           console.log("FILLING WITH BUCKET");
           bucketFill(ctx, x, y, color);
         } else {
-          changeState({ type: "DRAW" });
+          changeState({ type: "DRAW" , payload: {}});
           if (ctx) {
             ctx.beginPath();
             console.log("DRAWING AN ARC")

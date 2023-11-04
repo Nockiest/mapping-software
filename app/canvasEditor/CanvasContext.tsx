@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useRef, useReducer } from "react";
 import { DrawingState } from "@/public/types/ButtonEvents";
 import { Color, Settings } from "@/public/types/OtherTypes";
+import { Vector2 } from "@/public/types/GeometryTypes";
+import { EraseArgs } from "../components/drawing/Eraser";
 export interface CanvasContextType {
   canvasRef: React.RefObject<HTMLCanvasElement | undefined>;
   markerCanvasRef: React.RefObject<HTMLCanvasElement | null>;
@@ -19,7 +21,27 @@ export interface CanvasSettingsType {
   setSettings: React.Dispatch<React.SetStateAction<Settings>>;
 }
 
-export type DrawAction = { type: "DRAW" } | { type: "ERASE" } | { type: "MOUSE_UP" } | { type: "MOUSE_LEAVE" } | { type: "ENTER_BUCKET_MODE" };
+ 
+export type DrawAction =
+  | { type: "DRAW"; payload: {} }
+  | { type: "ERASE"; payload: ErasePayload }
+  | { type: "MOUSE_UP" }
+  | { type: "MOUSE_LEAVE" }
+  | { type: "ENTER_BUCKET_MODE" };
+
+export type  ErasePayload = {
+  eraseFunction: (args: EraseArgs) => void;
+  eraseArgs: EraseArgs;
+}
+
+// interface EraseArgs {
+//   canvasRef: React.RefObject<HTMLCanvasElement>;
+//   start: Vector2;
+//   end: Vector2;
+//   radius: number;
+//   eraseShape: string; // Adjust the type accordingly
+//   // Add other necessary properties
+// }
 
 const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
   console.log("SWITCHING TO ", action.type);
@@ -32,19 +54,21 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
       }
 
     case "ERASE":
+      const erasePayload = action.payload as ErasePayload;
+      erasePayload.eraseFunction(erasePayload.eraseArgs);
       return DrawingState.Erasing;
 
     case "MOUSE_UP":
     case "MOUSE_LEAVE":
       if (DrawingState.BucketFill == state) {
         return DrawingState.BucketFill;
-       }  
-       else {
+      } else {
         return DrawingState.Idle;
       }
 
     case "ENTER_BUCKET_MODE":
       return DrawingState.BucketFill === state ? DrawingState.Idle : DrawingState.BucketFill;
+
     default:
       console.error("INVALID ACTION: " + action.type);
       return state;

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { LineEdge, Vector2 } from '@/public/types/GeometryTypes';
 
-interface EraseLineProps {
+export type EraseArgs = {
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
   start: Vector2;
   end: Vector2;
@@ -9,7 +9,7 @@ interface EraseLineProps {
   eraseShape: LineEdge
 }
 
-const eraseLine = ({ canvasRef, start, end, radius, eraseShape }: EraseLineProps) => {
+const eraseLine = ({ canvasRef, start, end, radius, eraseShape }: EraseArgs) => {
   const canvas = canvasRef.current;
   if (!canvas) return;
 
