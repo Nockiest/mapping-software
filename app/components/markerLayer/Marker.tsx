@@ -128,89 +128,13 @@ const Marker: React.FC<MarkerProps> = ({
         {usedSettings.topValue}
       </p>
       {usedSettings.width > 20 && (
-        <>
-          {/* <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-            {usedSettings.image && (
-              <Image
-                src={imageUrl}
-                alt="Marker Image"
-                layout="fill"
-                objectFit="cover"
-                objectPosition="center center"
-              />
-            )}
-          </div> */}
           <p style={{ ...textBackgroundStyle, bottom: '-5px' }}>
             {usedSettings.bottomValue}
           </p>
-        </>
       )}
     </div>
   );
 };
 
 export default Marker;
-
- 
-  
-//     position: 'absolute',
-//     left: `${currentPosition.x}px`,
-//     top: `${currentPosition.y}px`,
-//     width: `${usedSettings().width}px`,
-//     height: `${usedSettings().width}px`,
-//     fontSize: `${usedSettings().width / 4}px`,
-//     borderRadius: '50%',
-//     border: '1px solid black',
-//     backgroundColor: initialMarkerSettings.current.color,
-//     transform: 'translate(-50%, -50%)',
-//     cursor: 'grab',
-//     userSelect: 'none',
-//     zIndex: isDragged ? 10 : 1,
-//   };
-
-//   const textBackgroundStyle: React.CSSProperties = {
-//     position: 'absolute',
-//     left: '50%',
-//     transform: 'translateX(-50%)',
-//     backgroundColor: 'rgba(255, 255, 255, 0.7)',
-//     padding: '5px',
-//     borderRadius: '5px',
-//     userSelect: 'none',
-//   };
-
-//   const imageStyle: React.CSSProperties = {
-//     width: '10px',
-//     height: '10px',
-//     borderRadius: '50%',
-//   };
-
-//   return (
-//     <div
-//       style={markerStyle}
-//       onMouseDown={handleMouseDown}
-//       onContextMenu={handleContextMenu}
-//     >
-//       <p style={{ ...textBackgroundStyle, top: '-5px' }}>
-//         {usedSettings().topValue}
-//       </p>
-//       {usedSettings().width > 20 && (
-//         <>
-//           <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-//             {usedSettings().image && (
-//               <Image
-//                 src={imageUrl}
-//                 alt="Marker Image"
-//                 layout="fill"
-//                 objectFit="cover"
-//                 objectPosition="center center"
-//               />
-//             )}
-//           </div>
-//           <p style={{ ...textBackgroundStyle, bottom: '-5px' }}>
-//             {usedSettings().bottomValue}
-//           </p>
-//         </>
-//       )}
-//     </div>
-//   );
  

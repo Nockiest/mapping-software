@@ -7,6 +7,7 @@ import { DrawPayload } from "../components/drawing/LineDrawer";
 export interface CanvasContextType {
   canvasRef: React.RefObject<HTMLCanvasElement | undefined>;
   markerCanvasRef: React.RefObject<HTMLCanvasElement | null>;
+  forntlineCanvasRef: React.RefObject<HTMLCanvasElement | null>;
   canvasState: DrawingState;
   dispatch: Dispatch<DrawAction>;
 }
@@ -77,6 +78,7 @@ export const BackgroundContext = createContext<BackgroundContextType | undefined
 export const CanvasProvider: React.FC<{ children: ReactNode}> = ({ children }) => {
   const canvasRef = useRef<HTMLCanvasElement | undefined>(null);
   const markerCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const forntlineCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const backgroundCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [canvasState, dispatch] = useReducer<Reducer<DrawingState, Action>>(reducer, DrawingState.Idle);
 
@@ -85,6 +87,7 @@ export const CanvasProvider: React.FC<{ children: ReactNode}> = ({ children }) =
     markerCanvasRef,
     canvasState,
     dispatch,
+    forntlineCanvasRef
   };
 
   const backgroundContextValue: BackgroundContextType = {

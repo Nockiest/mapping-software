@@ -11,6 +11,7 @@ import {   useCanvas } from "./CanvasContext";
 import DrawingLayer from "./layers/DrawingLayer";
 import LayerSplicer from "../components/LayerSplicer";
 import UnitMarkerLayer from "./layers/UnitMarkerLayer";
+import FronlineLayer from "./layers/FronlineLayer";
  
 const DrawingCanvas: React.FC  = ( ) => {
   const canvasRef = useCanvas( );
@@ -21,7 +22,7 @@ const DrawingCanvas: React.FC  = ( ) => {
       <div className="relative" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <UnitMarkerLayer />
         <DrawingLayer  />
-         
+        <FronlineLayer />
         <BackgroundImageLayer onImageLoad={() => {}} />  
       </div>
 

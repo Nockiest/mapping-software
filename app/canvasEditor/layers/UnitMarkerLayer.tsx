@@ -50,9 +50,10 @@ const UnitMarkerLayer: React.FC = () => {
   const { markerCanvasRef } = useCanvas()/// useContext(CanvasContext);
   const [markerLayerState, dispatch] = useReducer(markerLayerStateMachine, MarkerLayerState.Idle);
   const [topLeftOffset, setTopLeftOffset] = useState<Vector2>({ x: 0, y: 0 });
-  const [lineStartPosition, setLineStartPosition] = useState<Vector2 | null>(null);
-  const [lineEndPosition, setLineEndPosition] = useState<Vector2 | null>(null);
+  // const [lineStartPosition, setLineStartPosition] = useState<Vector2 | null>(null);
+  // const [lineEndPosition, setLineEndPosition] = useState<Vector2 | null>(null);
   const mousePosition = useContext(MousePositionContext)
+ 
   useEffect(() => {
     console.log('Marker layer state:', markerLayerState);
   }, [markerLayerState]);
@@ -125,14 +126,14 @@ const UnitMarkerLayer: React.FC = () => {
       {markers.map((marker, index) => (
         <Marker key={index} topLeftOffset={topLeftOffset} initialPosition={marker.position} canvasSize={{ x: 800, y: 600 }} />
       ))}
-      {markerLayerState === MarkerLayerState.MakingLine && lineStartPosition && (
+      {/* {markerLayerState === MarkerLayerState.MakingLine && lineStartPosition && (
         <LineComponent
           start={lineStartPosition}
           end={lineEndPosition} // Set the end position as needed
           topLeftOffset={topLeftOffset}
         />
-      )}
-      {markerLayerState}
+      )} */}
+      {markerLayerState} 
     </div>
   );
 };

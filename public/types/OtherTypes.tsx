@@ -17,7 +17,7 @@ export type Settings = Signal<{
     radius: number;
     color: Color;
     lineType: "squared" | "rounded";
-    activeLayer: "draw" | "marker" | "background";
+    activeLayer: "draw" | "marker" | "background"| "frontLine";
     markerSettings:{width:number,  color: Color, textColor:Color, topValue:string, bottomValue:string,  imageURL: string|null, popularMarkerColors: Array<Color>} ;
     popularColors: Array<Color>;
   }>;
