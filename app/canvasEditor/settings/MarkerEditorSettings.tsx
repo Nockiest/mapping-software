@@ -59,6 +59,11 @@ const MarkerEditorSettings = ({ changeSettings }) => {
       fileInputRef.current.value = '';
     }
   };
+  const handleMarkerTextColorChange = (e) =>{
+    const hexColor = e.target.value;
+    newMarkerSettings.value = { ...newMarkerSettings.value, textColor: hexColor}
+    setIsDirty(true);
+  }
 
   // Button click handler to apply the changes
   const applyChanges = () => {
@@ -84,6 +89,11 @@ const MarkerEditorSettings = ({ changeSettings }) => {
         <p style={{ color: 'black' }}>
           Marker Color:
           <input type="color" value={newMarkerSettings.value.color} onChange={handleMarkerColorChange} />
+          <FavoriteColorLister handleColorClick={handleColorClick} colorList={ newMarkerSettings.value.popularMarkerColors} newColor={newMarkerSettings.color} />
+        </p>
+        <p style={{ color: 'black' }}>
+          Marker Text Color:
+          <input type="color" value={newMarkerSettings.value.textColor} onChange={handleMarkerTextColorChange} />
           <FavoriteColorLister handleColorClick={handleColorClick} colorList={ newMarkerSettings.value.popularMarkerColors} newColor={newMarkerSettings.color} />
         </p>
         <p style={{ color: 'black' }}>
@@ -121,7 +131,7 @@ const MarkerEditorSettings = ({ changeSettings }) => {
       </div>
 
       <div style={{ marginLeft: '20px' }}>
-         <Marker topLeftOffset={{x:500,y:100}}initialPosition={{x:800,y:75}} canvasSize={{x:1000, y:1000}} shouldUpdateOnSettingsChange={true} />
+         <Marker topLeftOffset={{x:500,y:100}}initialPosition={{x:900,y:75}} canvasSize={{x:1000, y:1000}} shouldUpdateOnSettingsChange={true} />
       </div>
     </div>
   );

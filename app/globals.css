@@ -19,7 +19,17 @@
   z-index:   0;
  }
 
- 
+ button {
+  background-color: #5c0101; /* Green background */
+  color: white; /* White text color */
+  padding: 8px 6px; /* Padding for better appearance */
+  font-size: 12px; /* Font size */
+  /*border: none; /*  No border */
+  margin: 0px 4px;
+  cursor: pointer; /* Pointer cursor on hover */
+  border-radius: 5px; /* Rounded corners */
+}
+
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

@@ -85,6 +85,7 @@ const Marker: React.FC<MarkerProps> = ({
     left: `${currentPosition.x}px`,
     top: `${currentPosition.y}px`,
     width: `${usedSettings.width}px`,
+    color: `${usedSettings.textColor} `,
     height: `${usedSettings.width}px`,
     fontSize: `${usedSettings.width / 4}px`,
     borderRadius: '50%',
