@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useRef, useReducer,ReactNode ,Reducer, Action} from "react";
+import { createContext, useContext, useState, useRef, useReducer,ReactNode ,Reducer   } from "react";
 import { DrawingState } from "@/public/types/ButtonEvents";
 import {Settings } from "@/public/types/OtherTypes";
 import { Vector2 } from "@/public/types/GeometryTypes";
@@ -66,7 +66,7 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
       return DrawingState.BucketFill === state ? DrawingState.Idle : DrawingState.BucketFill;
 
     default:
-      console.error("INVALID ACTION: " + action.type);
+      console.error("INVALID ACTION: "  );
       return state;
   }
 };
@@ -109,23 +109,5 @@ export const useCanvas = () => {
   return context;
 };
 
-// export const useBackground = () => {
-//   const context = useContext(BackgroundContext);
-
-//   if (!context) {
-//     throw new Error("useBackground must be used within a CanvasProvider");
-//   }
-
-//   return context;
-// };
-
-export const useCanvasSettings = () => {
-  const context = useContext(CanvasSettingsContext);
-
-  if (!context) {
-    throw new Error("useCanvasSettings must be used within a CanvasProvider");
-  }
-
-  return context;
-};
+ 
  

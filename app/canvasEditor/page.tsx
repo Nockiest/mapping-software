@@ -64,7 +64,6 @@ const App: React.FC = () => {
   return (
     <CanvasProvider>
       <MousePositionProvider>
-        {/* Your app content */}
         <Page />
       </MousePositionProvider>
     </CanvasProvider>

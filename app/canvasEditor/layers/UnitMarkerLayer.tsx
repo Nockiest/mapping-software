@@ -1,11 +1,13 @@
 "use client"
 import { useState, useEffect, useContext, useReducer } from 'react';
 import Marker from '@/app/components/markerLayer/Marker'; // Adjust the import path as needed
-import {  CanvasContext } from '../CanvasContext';
+import {  CanvasContext, useCanvas } from '../CanvasContext';
 // import { Color } from '@/public/types/OtherTypes';
 import { Vector2 } from '@/public/types/GeometryTypes';
 import { settings } from '../Signals';
 import { Color } from '@/public/types/OtherTypes';
+import LineComponent from '@/app/components/markerLayer/FrontLine2D';
+import { MousePositionContext } from '../page';
 enum MarkerLayerState {
   Idle,
   Dragging,
@@ -35,6 +37,7 @@ const markerLayerStateMachine: React.Reducer<MarkerLayerState, MarkerLayerAction
     case 'EDITING_MARKER':
       return state === MarkerLayerState.EditingMarker ? MarkerLayerState.Idle : MarkerLayerState.EditingMarker;
     case "MAKING_LINE":
+      console.log("DISPATCHED")
       return state === MarkerLayerState.MakingLine ? MarkerLayerState.Idle : MarkerLayerState.MakingLine;
     default:
       console.error('INVALID ACTION: ' + action);
@@ -43,39 +46,35 @@ const markerLayerStateMachine: React.Reducer<MarkerLayerState, MarkerLayerAction
 };
 
 const UnitMarkerLayer: React.FC = () => {
-  const [markers, setMarkers] = useState<typeof Marker[]>([]);
-  const { markerCanvasRef } = useContext(CanvasContext);
+  const [markers, setMarkers] = useState<MarkerType[]>([]);
+  const { markerCanvasRef } = useCanvas()/// useContext(CanvasContext);
   const [markerLayerState, dispatch] = useReducer(markerLayerStateMachine, MarkerLayerState.Idle);
   const [topLeftOffset, setTopLeftOffset] = useState<Vector2>({ x: 0, y: 0 });
-useEffect(() =>{
-  console.log(topLeftOffset)
-}, [topLeftOffset])
-
-useEffect(() => {
-  const handleResize = () => {
-    const canvas = markerCanvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    setTopLeftOffset({ x: rect.left, y: rect.top });
-    console.log(rect.left, rect.top)
-  };
-  handleResize()
-}, [settings.value.activeLayer])
+  const [lineStartPosition, setLineStartPosition] = useState<Vector2 | null>(null);
+  const [lineEndPosition, setLineEndPosition] = useState<Vector2 | null>(null);
+  const mousePosition = useContext(MousePositionContext)
   useEffect(() => {
-    if (!markerCanvasRef) {
-      return;
-    }
+    console.log('Marker layer state:', markerLayerState);
+  }, [markerLayerState]);
 
-    const canvas = markerCanvasRef.current;
-    if (!canvas) return;
+  useEffect(() => {
+    const handleResize = () => {
+      const canvas = markerCanvasRef.current;
+      const rect = canvas.getBoundingClientRect();
+      setTopLeftOffset({ x: rect.left, y: rect.top });
+    };
+    handleResize();
+  }, [settings.value.activeLayer]);
 
+  useEffect(() => {
     const handleMouseDown = (e: MouseEvent) => {
       if (settings.value.activeLayer !== 'marker') {
         return;
       }
 
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const rect = markerCanvasRef.current?.getBoundingClientRect();
+      const x = e.clientX - rect!.left;
+      const y = e.clientY - rect!.top;
 
       if (e.button === 2) {
         const clickedMarkerIndex = markers.findIndex(
@@ -84,40 +83,61 @@ useEffect(() => {
 
         if (clickedMarkerIndex !== -1) {
           dispatch({ type: 'DRAG', markerIndex: clickedMarkerIndex });
+          
         } else {
           const newMarker: MarkerType = { color: settings.value.color, position: { x, y }, isDragging: false };
           setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
         }
+      } else if (e.button === 0 && markerLayerState === MarkerLayerState.MakingLine  ) {
+        // Set the starting position for the line
+        console.log(mousePosition)
+        setLineEndPosition({ x , y  } );
       }
     };
 
-     
+    const handleMarkerDoubleClick = (e: MouseEvent) => {
+      const rect = markerCanvasRef.current?.getBoundingClientRect();
+      const x = e.clientX - rect!.left;
+      const y = e.clientY - rect!.top;
+      console.log('Marker double-clicked!');
+      dispatch({ type: 'MAKING_LINE' });
+      setLineStartPosition({ x  , y});
+    };
 
-    canvas.addEventListener('mousedown', handleMouseDown);
-    
-
-    // Initial setup
-     
+    markerCanvasRef.current?.addEventListener('mousedown', handleMouseDown);
+    markerCanvasRef.current?.addEventListener('dblclick', handleMarkerDoubleClick);
 
     return () => {
-      canvas.removeEventListener('mousedown', handleMouseDown);
- 
+      markerCanvasRef.current?.removeEventListener('mousedown', handleMouseDown);
+      markerCanvasRef.current?.removeEventListener('dblclick', handleMarkerDoubleClick);
     };
-  }, [markerCanvasRef, markers, markerLayerState, settings]);
+  }, [markerCanvasRef, markers,mousePosition, settings, markerLayerState]);
 
   return (
     <div className="absolute top-0 " onContextMenu={(e) => e.preventDefault()}>
-      <canvas width={800} height={600} className="border-2 canvas-rectangle" ref={markerCanvasRef}   style={{ pointerEvents: settings.value.activeLayer === 'marker' ? 'auto' : 'none'}} />
+      <canvas
+        width={800}
+        height={600}
+        className="border-2 canvas-rectangle"
+        ref={markerCanvasRef}
+        style={{ pointerEvents: settings.value.activeLayer === 'marker' ? 'auto' : 'none' }}
+      />
       {markers.map((marker, index) => (
-        <Marker key={index} topLeftOffset={topLeftOffset} initialPosition={marker.position} canvasSize={{ x:800 , y:600}}   />
+        <Marker key={index} topLeftOffset={topLeftOffset} initialPosition={marker.position} canvasSize={{ x: 800, y: 600 }} />
       ))}
+      {markerLayerState === MarkerLayerState.MakingLine && lineStartPosition && (
+        <LineComponent
+          start={lineStartPosition}
+          end={lineEndPosition} // Set the end position as needed
+          topLeftOffset={topLeftOffset}
+        />
+      )}
       {markerLayerState}
     </div>
   );
 };
 
 export default UnitMarkerLayer;
-
 
 // const handleMouseMove = (e: MouseEvent) => {
 //   // if (markerLayerState === MarkerLayerState.Dragging) {

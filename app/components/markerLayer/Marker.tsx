@@ -129,7 +129,7 @@ const Marker: React.FC<MarkerProps> = ({
       </p>
       {usedSettings.width > 20 && (
         <>
-          <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+          {/* <div style={{ position: 'relative', width: '100%', height: '100%' }}>
             {usedSettings.image && (
               <Image
                 src={imageUrl}
@@ -139,7 +139,7 @@ const Marker: React.FC<MarkerProps> = ({
                 objectPosition="center center"
               />
             )}
-          </div>
+          </div> */}
           <p style={{ ...textBackgroundStyle, bottom: '-5px' }}>
             {usedSettings.bottomValue}
           </p>
