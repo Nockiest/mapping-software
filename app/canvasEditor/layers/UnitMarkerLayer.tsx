@@ -50,6 +50,16 @@ const UnitMarkerLayer: React.FC = () => {
 useEffect(() =>{
   console.log(topLeftOffset)
 }, [topLeftOffset])
+
+useEffect(() => {
+  const handleResize = () => {
+    const canvas = markerCanvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    setTopLeftOffset({ x: rect.left, y: rect.top });
+    console.log(rect.left, rect.top)
+  };
+  handleResize()
+}, [settings.value.activeLayer])
   useEffect(() => {
     if (!markerCanvasRef) {
       return;
@@ -81,32 +91,17 @@ useEffect(() =>{
       }
     };
 
- 
-    // const handleMouseUp = () => {
-    //   if (markerLayerState === MarkerLayerState.Dragging) {
-    //     dispatch({ type: 'MOUSE_UP' });
-    //   }
-    // };
-
-    const handleResize = () => {
-      const rect = canvas.getBoundingClientRect();
-      setTopLeftOffset({ x: rect.left, y: rect.top });
-      console.log(rect.left, rect.top)
-    };
+     
 
     canvas.addEventListener('mousedown', handleMouseDown);
-    // canvas.addEventListener('mousemove', handleMouseMove);
-    // canvas.addEventListener('mouseup', handleMouseUp);
-    // window.addEventListener('resize', handleResize);
+    
 
     // Initial setup
-    handleResize();
+     
 
     return () => {
       canvas.removeEventListener('mousedown', handleMouseDown);
-      // canvas.removeEventListener('mousemove', handleMouseMove);
-      // canvas.removeEventListener('mouseup', handleMouseUp);
-      // window.removeEventListener('resize', handleResize);
+ 
     };
   }, [markerCanvasRef, markers, markerLayerState, settings]);
 
