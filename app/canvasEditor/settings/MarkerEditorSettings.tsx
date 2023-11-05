@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useRef } from "react";
 import { CanvasSettingsType } from "../CanvasContext"; // CanvasSettingsContext,
 import { hexToRgb } from "@/public/utils";
 import { settings } from "../Signals";
@@ -13,7 +13,7 @@ export const newMarkerSettings = signal({ ...settings.value.markerSettings })
 const MarkerEditorSettings = ({ changeSettings }) => {
   // const [newMarkerSettings, setNewMarkerSettings] = useState({ ...settings.value.markerSettings });
   const [isDirty, setIsDirty] = useState(false);
-
+  const fileInputRef = useRef<HTMLInputElement | null>(null); // Create a ref for the file input
   const handleMarkerWidthChange = (e) => {
     const newWidth = Math.max(1, parseInt(e.target.value, 10)); // Ensure newWidth is at least 1
     newMarkerSettings.value = { ...newMarkerSettings.value, width: newWidth }
@@ -46,9 +46,17 @@ const MarkerEditorSettings = ({ changeSettings }) => {
   const handleImageChange = (e) => {
     const selectedImage = e.target.files?.[0];
     if (selectedImage) {
-      newMarkerSettings.value = { ...newMarkerSettings.value, backgroundImage: URL.createObjectURL(selectedImage) }
-      // setNewMarkerSettings((prevSettings) => ({ ...prevSettings, backgroundImage: URL.createObjectURL(selectedImage) }));
+      newMarkerSettings.value = { ...newMarkerSettings.value, imageURL: URL.createObjectURL(selectedImage) };
       setIsDirty(true);
+    }
+  };
+
+  const handleUndoImage = () => {
+    newMarkerSettings.value = { ...newMarkerSettings.value, imageURL: null }; // Reset image URL
+    setIsDirty(true);
+    const inputElement = document.getElementById('imageInput');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
@@ -88,7 +96,8 @@ const MarkerEditorSettings = ({ changeSettings }) => {
             <input type="text" value={newMarkerSettings.value.bottomValue} onChange={handleMarkerBottomValueChange} />
           </p>
         )}
-        <input type="file" onChange={handleImageChange} />
+        <input type="file" ref={fileInputRef} onChange={handleImageChange} />
+        <button onClick={handleUndoImage}>Undo Image</button>
         <button onClick={applyChanges}>Apply Changes</button>
       </div>
 

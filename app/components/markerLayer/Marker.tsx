@@ -23,21 +23,17 @@ const Marker: React.FC<MarkerProps> = ({
   const [currentPosition, setCurrentPosition] = useState<Vector2>(initialPosition);
   const [isDragged, setIsDragged] = useState<boolean>(false);
   const [canRemove, setCanRemove] = useState<Boolean>(false);
-  // const [usedSettings, setUsedSettings] =  useState(shouldUpdateOnSettingsChange? settings.value.markerSettings:initialMarkerSettings.current)
-  // Store the initial settings locally in the Marker component
   const [initialMarkerSettings, setInitialMarkerSettings] = useState({
     ...settings.value.markerSettings
   });
   const usedSettings = shouldUpdateOnSettingsChange? newMarkerSettings.value:initialMarkerSettings
-  // useEffect(() => {
-  
-  // }, [ ])
-  
+ 
   
   const imageUrl =
-  usedSettings.image instanceof File
-      ? URL.createObjectURL(usedSettings.image)
-      : usedSettings.image;
+  usedSettings.imageURL instanceof File
+    ? URL.createObjectURL(usedSettings.imageURL)
+    : usedSettings.imageURL; // Change this line
+
 
   const handleMouseDown = () => {
     setIsDragged(true);
@@ -60,7 +56,6 @@ const Marker: React.FC<MarkerProps> = ({
 
   const handleContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault(); // Prevent the default context menu
- 
     // Check if the marker is loaded before allowing destruction
     if (canRemove ) {
       // Call the onDestroy callback to remove the marker from the parent component
@@ -70,20 +65,8 @@ const Marker: React.FC<MarkerProps> = ({
       console.log('Marker destroyed!');
     }
     setCanRemove(true)
-   
   };
   
-    // const updateMarkerSettings = () => {
-    //   // Check if the marker should update on settings change
-    //   if (shouldUpdateOnSettingsChange) {
-    //     // Update the marker settings
-    //     initialMarkerSettings.current = settings.value.markerSettings;
-    //     // You may add additional logic here to handle the update
-    //   }
-    // };
-    // useEffect(() => {
-    //   updateMarkerSettings()
-    // }, [settings.value.markerSettings])
   
   useEffect(() => {
     // Attach global event listeners when the component mounts
@@ -107,9 +90,12 @@ const Marker: React.FC<MarkerProps> = ({
     borderRadius: '50%',
     border: '1px solid black',
     backgroundColor: usedSettings .color,
+    backgroundSize: 'cover', // Scale the background image to cover the entire container
+    backgroundPosition: 'center', // Center the background image
     transform: 'translate(-50%, -50%)',
     cursor: 'grab',
     userSelect: 'none',
+    backgroundImage: usedSettings.imageURL ? `url(${imageUrl})` : 'none',
     zIndex: isDragged ? 10 : 1,
   };
 
@@ -163,13 +149,66 @@ const Marker: React.FC<MarkerProps> = ({
 
 export default Marker;
 
-
  
- /// set initial position
-  // useEffect(() => {
-  //   const initialPosition = {
-  //     x:mousePosition.x - topLeftOffset.x,
-  //     y:mousePosition.y - topLeftOffset.y,
-  //   };
-  //   // setCurrentPosition(initialPosition);
-  // }, [ ]); // Dependency on topLeftOffset to re-run the effect when it changes
+  
+//     position: 'absolute',
+//     left: `${currentPosition.x}px`,
+//     top: `${currentPosition.y}px`,
+//     width: `${usedSettings().width}px`,
+//     height: `${usedSettings().width}px`,
+//     fontSize: `${usedSettings().width / 4}px`,
+//     borderRadius: '50%',
+//     border: '1px solid black',
+//     backgroundColor: initialMarkerSettings.current.color,
+//     transform: 'translate(-50%, -50%)',
+//     cursor: 'grab',
+//     userSelect: 'none',
+//     zIndex: isDragged ? 10 : 1,
+//   };
+
+//   const textBackgroundStyle: React.CSSProperties = {
+//     position: 'absolute',
+//     left: '50%',
+//     transform: 'translateX(-50%)',
+//     backgroundColor: 'rgba(255, 255, 255, 0.7)',
+//     padding: '5px',
+//     borderRadius: '5px',
+//     userSelect: 'none',
+//   };
+
+//   const imageStyle: React.CSSProperties = {
+//     width: '10px',
+//     height: '10px',
+//     borderRadius: '50%',
+//   };
+
+//   return (
+//     <div
+//       style={markerStyle}
+//       onMouseDown={handleMouseDown}
+//       onContextMenu={handleContextMenu}
+//     >
+//       <p style={{ ...textBackgroundStyle, top: '-5px' }}>
+//         {usedSettings().topValue}
+//       </p>
+//       {usedSettings().width > 20 && (
+//         <>
+//           <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+//             {usedSettings().image && (
+//               <Image
+//                 src={imageUrl}
+//                 alt="Marker Image"
+//                 layout="fill"
+//                 objectFit="cover"
+//                 objectPosition="center center"
+//               />
+//             )}
+//           </div>
+//           <p style={{ ...textBackgroundStyle, bottom: '-5px' }}>
+//             {usedSettings().bottomValue}
+//           </p>
+//         </>
+//       )}
+//     </div>
+//   );
+ 
