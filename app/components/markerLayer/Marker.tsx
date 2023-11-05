@@ -7,7 +7,7 @@ import { settings } from "@/app/canvasEditor/Signals";
 import Image from "next/image";
 import { signal } from "@preact/signals";
 import { newMarkerSettings } from "@/app/canvasEditor/settings/MarkerEditorSettings";
-interface MarkerProps {
+export type MarkerProps = {
   topLeftOffset: Vector2;
   initialPosition: Vector2;
   canvasSize: Vector2;
@@ -41,11 +41,12 @@ const Marker: React.FC<MarkerProps> = ({
 
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragged) {
-      // Calculate updated position
+      // Calculate updated position without subtracting topLeftOffset.y and window.scrollY
       const updatedPosition = {
         x: Math.min(Math.max(e.clientX - topLeftOffset.x + window.scrollX, 0), canvasSize.x),
         y: Math.min(Math.max(e.clientY - topLeftOffset.y + window.scrollY, 0), canvasSize.y),
       };
+      console.log(e.clientY , topLeftOffset.y, window.scrollY, updatedPosition)
       setCurrentPosition(updatedPosition);
     }
   };

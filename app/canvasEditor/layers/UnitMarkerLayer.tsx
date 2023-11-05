@@ -46,7 +46,9 @@ const UnitMarkerLayer: React.FC = () => {
   const { markerCanvasRef } = useContext(CanvasContext);
   const [markerLayerState, dispatch] = useReducer(markerLayerStateMachine, MarkerLayerState.Idle);
   const [topLeftOffset, setTopLeftOffset] = useState<Vector2>({ x: 0, y: 0 });
-
+useEffect(() =>{
+  console.log(topLeftOffset)
+}, [topLeftOffset])
   useEffect(() => {
     if (!markerCanvasRef) {
       return;
@@ -88,12 +90,13 @@ const UnitMarkerLayer: React.FC = () => {
     const handleResize = () => {
       const rect = canvas.getBoundingClientRect();
       setTopLeftOffset({ x: rect.left, y: rect.top });
+      console.log(rect.left, rect.top)
     };
 
     canvas.addEventListener('mousedown', handleMouseDown);
     // canvas.addEventListener('mousemove', handleMouseMove);
     // canvas.addEventListener('mouseup', handleMouseUp);
-    window.addEventListener('resize', handleResize);
+    // window.addEventListener('resize', handleResize);
 
     // Initial setup
     handleResize();
@@ -102,7 +105,7 @@ const UnitMarkerLayer: React.FC = () => {
       canvas.removeEventListener('mousedown', handleMouseDown);
       // canvas.removeEventListener('mousemove', handleMouseMove);
       // canvas.removeEventListener('mouseup', handleMouseUp);
-      window.removeEventListener('resize', handleResize);
+      // window.removeEventListener('resize', handleResize);
     };
   }, [markerCanvasRef, markers, markerLayerState, settings]);
 
