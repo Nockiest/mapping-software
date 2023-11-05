@@ -7,74 +7,34 @@ import { Color } from "@/public/types/OtherTypes";
 import { signal } from "@preact/signals";
 import Marker from "@/app/components/markerLayer/Marker";
  
-
+type UpdateMarkerSettingsCallback = (value: any) => void;
 export const newMarkerSettings = signal({ ...settings.value.markerSettings })
 
 const MarkerEditorSettings = ({ changeSettings }) => {
-  // const [newMarkerSettings, setNewMarkerSettings] = useState({ ...settings.value.markerSettings });
   const [isDirty, setIsDirty] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null); // Create a ref for the file input
-  const handleMarkerWidthChange = (e) => {
-    const newWidth = Math.max(1, parseInt(e.target.value, 10)); // Ensure newWidth is at least 1
-    newMarkerSettings.value = { ...newMarkerSettings.value, width: newWidth }
-    // setNewMarkerSettings((prevSettings) => ({ ...prevSettings, width: newWidth }));
-    setIsDirty(true);
-  };
 
-  const handleMarkerColorChange = (e) => {
-    const hexColor = e.target.value;
-    // console.log('New Color:', hexColor);
-    // const rgbColor = hexToRgb(hexColor);
-    newMarkerSettings.value = { ...newMarkerSettings.value, color: hexColor}
-    // setNewMarkerSettings((prevSettings) => ({ ...prevSettings, color: hexColor }));
-    setIsDirty(true);
-  };
-  const handleMarkerTopValueChange = (e) => {
-    const newTopValue = e.target.value;
-    newMarkerSettings.value = { ...newMarkerSettings.value,topValue: newTopValue }
-    // setNewMarkerSettings((prevSettings) => ({ ...prevSettings, topValue: newTopValue }));
-    setIsDirty(true);
-  };
+  const updateMarkerSettings = (  
+    value: any,
+    property: string,
+    callback?: UpdateMarkerSettingsCallback) => {
+    // Update temporary marker settings
+    newMarkerSettings.value = { ...newMarkerSettings.value, [property]: value };
 
-  const handleMarkerBottomValueChange = (e) => {
-    const newBottomValue = e.target.value;
-    newMarkerSettings.value = { ...newMarkerSettings.value,bottomValue: newBottomValue }
-    // setNewMarkerSettings((prevSettings) => ({ ...prevSettings, bottomValue: newBottomValue }));
-    setIsDirty(true);
-  };
-
-  const handleImageChange = (e) => {
-    const selectedImage = e.target.files?.[0];
-    if (selectedImage) {
-      newMarkerSettings.value = { ...newMarkerSettings.value, imageURL: URL.createObjectURL(selectedImage) };
-      setIsDirty(true);
+    // Call the provided callback
+    if (callback) {
+      callback(value);
     }
+
+    // Set the dirty flag
+    setIsDirty(true);
   };
 
-  const handleUndoImage = () => {
-    newMarkerSettings.value = { ...newMarkerSettings.value, imageURL: null }; // Reset image URL
-    setIsDirty(true);
-    const inputElement = document.getElementById('imageInput');
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
-  const handleMarkerTextColorChange = (e) =>{
-    const hexColor = e.target.value;
-    newMarkerSettings.value = { ...newMarkerSettings.value, textColor: hexColor}
-    setIsDirty(true);
-  }
-
-  // Button click handler to apply the changes
   const applyChanges = () => {
     changeSettings('markerSettings', newMarkerSettings.value);
     setIsDirty(false);
   };
-  const handleColorClick = (color: Color) => {
-    // Set the settings color on click
-    newMarkerSettings.value = { ...newMarkerSettings.value, color: color  }
-    // setNewMarkerSettings((prevSettings) => ({ ...prevSettings, color: color }));
-  };
+
   // Validation message
   const validationMessage = isDirty ? "Changes not applied. Click 'Apply Changes' to save." : "";
 
@@ -84,30 +44,28 @@ const MarkerEditorSettings = ({ changeSettings }) => {
       <div>
         <p style={{ color: 'black' }}>
           Marker Width: {newMarkerSettings.value.width}
-          <input type="range" value={newMarkerSettings.value.width} onChange={handleMarkerWidthChange} min="10" max="60" />
+          <input type="range" value={newMarkerSettings.value.width} onChange={(e) => updateMarkerSettings(Math.max(1, parseInt(e.target.value, 10)), 'width')} min="10" max="60" />
         </p>
         <p style={{ color: 'black' }}>
           Marker Color:
-          <input type="color" value={newMarkerSettings.value.color} onChange={handleMarkerColorChange} />
-          <FavoriteColorLister handleColorClick={handleColorClick} colorList={ newMarkerSettings.value.popularMarkerColors} newColor={newMarkerSettings.color} />
+          <input type="color" value={newMarkerSettings.value.color} onChange={(e) => updateMarkerSettings(e.target.value, 'color')} />
         </p>
         <p style={{ color: 'black' }}>
           Marker Text Color:
-          <input type="color" value={newMarkerSettings.value.textColor} onChange={handleMarkerTextColorChange} />
-          <FavoriteColorLister handleColorClick={handleColorClick} colorList={ newMarkerSettings.value.popularMarkerColors} newColor={newMarkerSettings.color} />
+          <input type="color" value={newMarkerSettings.value.textColor} onChange={(e) => updateMarkerSettings(e.target.value, 'textColor')} />
         </p>
         <p style={{ color: 'black' }}>
           Marker TopValue:
-          <input type="text" value={newMarkerSettings.value.topValue} onChange={handleMarkerTopValueChange} />
+          <input type="text" value={newMarkerSettings.value.topValue} onChange={(e) => updateMarkerSettings(e.target.value, 'topValue')} />
         </p>
         {newMarkerSettings.value.width >= 20 && (
           <p style={{ color: 'black' }}>
             Marker BottomValue:
-            <input type="text" value={newMarkerSettings.value.bottomValue} onChange={handleMarkerBottomValueChange} />
+            <input type="text" value={newMarkerSettings.value.bottomValue} onChange={(e) => updateMarkerSettings(e.target.value, 'bottomValue')} />
           </p>
         )}
-        <input type="file" ref={fileInputRef} onChange={handleImageChange} />
-        <button onClick={handleUndoImage}>Undo Image</button>
+        <input type="file" ref={fileInputRef} onChange={(e) => updateMarkerSettings(URL.createObjectURL(e.target.files?.[0]), 'imageURL')} />
+        <button onClick={() => updateMarkerSettings(null, 'imageURL', () => fileInputRef.current && (fileInputRef.current.value = ''))}>Undo Image</button>
         <button onClick={applyChanges}>Apply Changes</button>
       </div>
 
@@ -131,7 +89,7 @@ const MarkerEditorSettings = ({ changeSettings }) => {
       </div>
 
       <div style={{ marginLeft: '20px' }}>
-         <Marker topLeftOffset={{x:500,y:100}}initialPosition={{x:900,y:75}} canvasSize={{x:1000, y:1000}} shouldUpdateOnSettingsChange={true} />
+      <Marker topLeftOffset={{x:500,y:100}}initialPosition={{x:900,y:75}} canvasSize={{x:1000, y:1000}} shouldUpdateOnSettingsChange={true} />
       </div>
     </div>
   );
