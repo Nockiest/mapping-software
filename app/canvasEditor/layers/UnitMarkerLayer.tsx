@@ -1,14 +1,15 @@
 "use client"
 import { useState, useEffect, useContext, useReducer } from 'react';
 import Marker from '@/app/components/markerLayer/Marker'; // Adjust the import path as needed
-import { CanvasSettingsContext, CanvasContext } from '../CanvasContext';
+import {  CanvasContext } from '../CanvasContext';
 import { Color } from '@/public/types/OtherTypes';
 import { Vector2 } from '@/public/types/GeometryTypes';
-import { settings } from '../StoredSettingsValues';
+import { settings } from '../Signals';
 enum MarkerLayerState {
   Idle,
   Dragging,
   EditingMarker,
+  MakingLine
 }
 
 // type MarkerType = {
@@ -19,20 +20,21 @@ enum MarkerLayerState {
 
 type MarkerLayerAction =
   | { type: 'DRAG'; markerIndex: number }
-  | { type: 'MOUSE_UP' | 'MOUSE_LEAVE' | 'IDLE' }
+  | { type: "MAKING_LINE" | 'IDLE' }
   | { type: 'EDITING_MARKER' };
+
 
 const markerLayerStateMachine: React.Reducer<MarkerLayerState, MarkerLayerAction> = (state, action) => {
   console.log('SWITCHING TO ', action);
   switch (action.type) {
     case 'DRAG':
       return MarkerLayerState.Dragging;
-    case 'MOUSE_UP':
-    case 'MOUSE_LEAVE':
     case 'IDLE':
       return MarkerLayerState.Idle;
     case 'EDITING_MARKER':
       return state === MarkerLayerState.EditingMarker ? MarkerLayerState.Idle : MarkerLayerState.EditingMarker;
+    case "MAKING_LINE":
+      return state === MarkerLayerState.MakingLine ? MarkerLayerState.Idle : MarkerLayerState.MakingLine;
     default:
       console.error('INVALID ACTION: ' + action);
       return state;
@@ -40,8 +42,7 @@ const markerLayerStateMachine: React.Reducer<MarkerLayerState, MarkerLayerAction
 };
 
 const UnitMarkerLayer: React.FC = () => {
-  const [markers, setMarkers] = useState<MarkerType[]>([]);
-  // const { settings } = useContext(CanvasSettingsContext);
+  const [markers, setMarkers] = useState<typeof Marker[]>([]);
   const { markerCanvasRef } = useContext(CanvasContext);
   const [markerLayerState, dispatch] = useReducer(markerLayerStateMachine, MarkerLayerState.Idle);
   const [topLeftOffset, setTopLeftOffset] = useState<Vector2>({ x: 0, y: 0 });
@@ -78,11 +79,11 @@ const UnitMarkerLayer: React.FC = () => {
     };
 
  
-    const handleMouseUp = () => {
-      if (markerLayerState === MarkerLayerState.Dragging) {
-        dispatch({ type: 'MOUSE_UP' });
-      }
-    };
+    // const handleMouseUp = () => {
+    //   if (markerLayerState === MarkerLayerState.Dragging) {
+    //     dispatch({ type: 'MOUSE_UP' });
+    //   }
+    // };
 
     const handleResize = () => {
       const rect = canvas.getBoundingClientRect();
@@ -91,7 +92,7 @@ const UnitMarkerLayer: React.FC = () => {
 
     canvas.addEventListener('mousedown', handleMouseDown);
     // canvas.addEventListener('mousemove', handleMouseMove);
-    canvas.addEventListener('mouseup', handleMouseUp);
+    // canvas.addEventListener('mouseup', handleMouseUp);
     window.addEventListener('resize', handleResize);
 
     // Initial setup
@@ -100,14 +101,14 @@ const UnitMarkerLayer: React.FC = () => {
     return () => {
       canvas.removeEventListener('mousedown', handleMouseDown);
       // canvas.removeEventListener('mousemove', handleMouseMove);
-      canvas.removeEventListener('mouseup', handleMouseUp);
+      // canvas.removeEventListener('mouseup', handleMouseUp);
       window.removeEventListener('resize', handleResize);
     };
   }, [markerCanvasRef, markers, markerLayerState, settings]);
 
   return (
-    <div className="absolute top-10 z-100" onContextMenu={(e) => e.preventDefault()}>
-      <canvas width={800} height={600} className="border-2 canvas-rectangle" ref={markerCanvasRef} />
+    <div className="absolute top-0 " onContextMenu={(e) => e.preventDefault()}>
+      <canvas width={800} height={600} className="border-2 canvas-rectangle" ref={markerCanvasRef}   style={{ pointerEvents: settings.value.activeLayer === 'marker' ? 'auto' : 'none'}} />
       {markers.map((marker, index) => (
         <Marker key={index} topLeftOffset={topLeftOffset} initialPosition={marker.position} canvasSize={{ x:800 , y:600}}  />
       ))}

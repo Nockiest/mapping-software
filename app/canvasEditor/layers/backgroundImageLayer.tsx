@@ -1,13 +1,14 @@
  
 import React, { useState, useContext, useEffect } from 'react';
-import { BackgroundContext, CanvasSettingsContext } from '../CanvasContext';
-import { settings } from '../StoredSettingsValues';
+import {   BackgroundContext } from '../CanvasContext';
+import { settings } from '../Signals';
+import { backgroundImage } from '../Signals';
 const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }> = ({ onImageLoad }) => {
-  const { backgroundCanvasRef, backgroundImage } = useContext(BackgroundContext);
+  const { backgroundCanvasRef   } = useContext(BackgroundContext);
  
   useEffect(() => {
-    handleFileChange(backgroundImage);
-  }, [backgroundImage]);
+    handleFileChange( );
+  }, [backgroundImage.value]);
 
   const loadImage = (file: File) => {
     return new Promise<string>((resolve) => {
@@ -19,14 +20,14 @@ const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }
     });
   };
 
-  const handleFileChange = async (backgroundImage: File | null) => {
-    if (!backgroundImage) {
+  const handleFileChange = async ( ) => {
+    if (!backgroundImage.value) {
       clearCanvas();
       return;
     }
 
-    if (backgroundImage instanceof File) {
-      const imageUrl = await loadImage(backgroundImage);
+    if (backgroundImage.value instanceof File) {
+      const imageUrl = await loadImage(backgroundImage.value);
       drawImageOnCanvas(imageUrl);
       onImageLoad(imageUrl);
     } else {

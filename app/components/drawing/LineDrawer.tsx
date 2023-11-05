@@ -2,6 +2,18 @@ import { Color,  } from "@/public/types/OtherTypes";
 import { Vector2, LineEdge } from "@/public/types/GeometryTypes";
 import { hexToRGBA } from "@/public/utils";
   
+
+export type DrawPayload = {
+  drawFunction: (ctx: CanvasRenderingContext2D, x: number, y: number, radius: number, color: string) => void;
+  drawArgs: {
+    ctx: CanvasRenderingContext2D;
+    x: number;
+    y: number;
+    radius: number;
+    color: string;
+  };
+}
+
   export default function drawLineWithShape(
     ctx: CanvasRenderingContext2D,
     lineStart: Vector2,
