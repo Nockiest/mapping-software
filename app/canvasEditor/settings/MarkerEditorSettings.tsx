@@ -5,9 +5,10 @@ import { settings } from "../Signals";
 import FavoriteColorLister from "@/app/components/settings/FavoriteColorLister";
 import { Color } from "@/public/types/OtherTypes";
 import { signal } from "@preact/signals";
+import Marker from "@/app/components/markerLayer/Marker";
  
 
-const newMarkerSettings = signal({ ...settings.value.markerSettings })
+export const newMarkerSettings = signal({ ...settings.value.markerSettings })
 
 const MarkerEditorSettings = ({ changeSettings }) => {
   // const [newMarkerSettings, setNewMarkerSettings] = useState({ ...settings.value.markerSettings });
@@ -108,6 +109,10 @@ const MarkerEditorSettings = ({ changeSettings }) => {
           </p>
         )}
         <p style={{ color: 'red' }}>{validationMessage}</p>
+      </div>
+
+      <div style={{ marginLeft: '20px' }}>
+         <Marker topLeftOffset={{x:500,y:100}}initialPosition={{x:800,y:75}} canvasSize={{x:1000, y:1000}} shouldUpdateOnSettingsChange={true} />
       </div>
     </div>
   );

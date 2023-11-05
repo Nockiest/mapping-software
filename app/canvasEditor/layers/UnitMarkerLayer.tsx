@@ -110,7 +110,7 @@ const UnitMarkerLayer: React.FC = () => {
     <div className="absolute top-0 " onContextMenu={(e) => e.preventDefault()}>
       <canvas width={800} height={600} className="border-2 canvas-rectangle" ref={markerCanvasRef}   style={{ pointerEvents: settings.value.activeLayer === 'marker' ? 'auto' : 'none'}} />
       {markers.map((marker, index) => (
-        <Marker key={index} topLeftOffset={topLeftOffset} initialPosition={marker.position} canvasSize={{ x:800 , y:600}} shouldUpdateOnSettingsChange={true} />
+        <Marker key={index} topLeftOffset={topLeftOffset} initialPosition={marker.position} canvasSize={{ x:800 , y:600}}   />
       ))}
       {markerLayerState}
     </div>

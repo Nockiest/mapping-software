@@ -6,6 +6,7 @@ import { useState, useContext, useEffect,useRef } from "react";
 import { settings } from "@/app/canvasEditor/Signals";
 import Image from "next/image";
 import { signal } from "@preact/signals";
+import { newMarkerSettings } from "@/app/canvasEditor/settings/MarkerEditorSettings";
 interface MarkerProps {
   topLeftOffset: Vector2;
   initialPosition: Vector2;
@@ -22,15 +23,15 @@ const Marker: React.FC<MarkerProps> = ({
   const [currentPosition, setCurrentPosition] = useState<Vector2>(initialPosition);
   const [isDragged, setIsDragged] = useState<boolean>(false);
   const [canRemove, setCanRemove] = useState<Boolean>(false);
-  const [usedSettings, setUsedSettings] =  useState(shouldUpdateOnSettingsChange? settings.value.markerSettings:initialMarkerSettings.current)
+  // const [usedSettings, setUsedSettings] =  useState(shouldUpdateOnSettingsChange? settings.value.markerSettings:initialMarkerSettings.current)
   // Store the initial settings locally in the Marker component
-  const initialMarkerSettings = useRef(settings.value.markerSettings);
+  const [initialMarkerSettings, setInitialMarkerSettings] = useState({
+    ...settings.value.markerSettings
+  });
+  const usedSettings = shouldUpdateOnSettingsChange? newMarkerSettings.value:initialMarkerSettings
+  // useEffect(() => {
   
-  useEffect(() => {
-    shouldUpdateOnSettingsChange?
-    setUsedSettings(initialMarkerSettings.current):
-    setUsedSettings(settings.value.markerSettings)
-  }, [settings.value.markerSettings])
+  // }, [ ])
   
   
   const imageUrl =
@@ -105,7 +106,7 @@ const Marker: React.FC<MarkerProps> = ({
     fontSize: `${usedSettings.width / 4}px`,
     borderRadius: '50%',
     border: '1px solid black',
-    backgroundColor: initialMarkerSettings.current.color,
+    backgroundColor: usedSettings .color,
     transform: 'translate(-50%, -50%)',
     cursor: 'grab',
     userSelect: 'none',
