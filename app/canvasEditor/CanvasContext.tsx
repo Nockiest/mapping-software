@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useRef, useReducer } from "react";
 import { DrawingState } from "@/public/types/ButtonEvents";
-import { Color, Settings } from "@/public/types/OtherTypes";
+import {Settings } from "@/public/types/OtherTypes";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { EraseArgs } from "../components/drawing/Eraser";
 import { DrawPayload } from "../components/drawing/LineDrawer";

@@ -1,9 +1,9 @@
 import React from 'react'
 import { settings } from '@/app/canvasEditor/Signals';
-// type ActiveLayerSettingsProps = {
-//     activeLayer: "draw" | "marker" | "background";
-//     handleActiveLayerChange: (newActiveLayer: "draw" | "marker" | "background") => void;
-//   };
+type ActiveLayerSettingsProps = {
+    activeLayer: "draw" | "marker" | "background";
+    handleActiveLayerChange: (newActiveLayer: "draw" | "marker" | "background") => void;
+  };
   
   // { activeLayer, handleActiveLayerChange }
   // ActiveLayerSettings component

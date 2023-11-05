@@ -5,7 +5,7 @@ import { Vector2 } from "@/public/types/GeometryTypes";
 import { CanvasContext, CanvasContextType, DrawAction, ErasePayload, useCanvas } from "../CanvasContext";
 import { DrawingState } from "@/public/types/ButtonEvents";
 import bucketFill from "@/app/components/drawing/BucketFill";
-import { Color } from "@/public/types/OtherTypes";
+// import { Color } from "@/public/types/OtherTypes";
 import { MousePositionContext } from "../page";
 import { settings } from "../Signals";
 import drawLineWithShape, { DrawPayload } from "../../components/drawing/LineDrawer";

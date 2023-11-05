@@ -10,7 +10,7 @@ export type DrawPayload = {
     x: number;
     y: number;
     radius: number;
-    color: string;
+    color: Color;
   };
 }
 

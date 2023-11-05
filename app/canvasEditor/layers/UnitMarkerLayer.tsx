@@ -2,7 +2,7 @@
 import { useState, useEffect, useContext, useReducer } from 'react';
 import Marker from '@/app/components/markerLayer/Marker'; // Adjust the import path as needed
 import {  CanvasContext } from '../CanvasContext';
-import { Color } from '@/public/types/OtherTypes';
+// import { Color } from '@/public/types/OtherTypes';
 import { Vector2 } from '@/public/types/GeometryTypes';
 import { settings } from '../Signals';
 enum MarkerLayerState {
