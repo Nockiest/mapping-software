@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState, useContext } from 'react';
-import Marker from '../../../../Marker'; // Assuming you have a Marker component
+import Marker from './Marker'; // Assuming you have a Marker component
 // import { CanvasContext, settings, MarkerLayerState } from './CanvasContext'; // Adjust the imports based on your project structure
 import { Vector2 } from '@/public/types/GeometryTypes';
 
