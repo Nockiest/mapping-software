@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useRef, useReducer } from "react";
+import { createContext, useContext, useState, useRef, useReducer,ReactNode ,Reducer, Action} from "react";
 import { DrawingState } from "@/public/types/ButtonEvents";
 import {Settings } from "@/public/types/OtherTypes";
 import { Vector2 } from "@/public/types/GeometryTypes";
@@ -74,23 +74,31 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
 export const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
 export const BackgroundContext = createContext<BackgroundContextType | undefined>(undefined);
  
-export const CanvasProvider: React.FC = ({ children }) => {
+export const CanvasProvider: React.FC<{ children: ReactNode}> = ({ children }) => {
   const canvasRef = useRef<HTMLCanvasElement | undefined>(null);
   const markerCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const backgroundCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [backgroundImage, setBackgroundImage] = useState<File | null>(null);
-  const [canvasState, dispatch] = useReducer(reducer, DrawingState.Idle);
+  const [canvasState, dispatch] = useReducer<Reducer<DrawingState, Action>>(reducer, DrawingState.Idle);
+
+  const canvasContextValue: CanvasContextType = {
+    canvasRef,
+    markerCanvasRef,
+    canvasState,
+    dispatch,
+  };
+
+  const backgroundContextValue: BackgroundContextType = {
+    backgroundCanvasRef,
+  };
 
   return (
-    <CanvasContext.Provider value={{ canvasRef, markerCanvasRef, canvasState, dispatch }}>
-      <BackgroundContext.Provider value={{ backgroundCanvasRef,  }}>
-        {/* <CanvasSettingsContext.Provider value={{ settings, setSettings }}> */}
+    <CanvasContext.Provider value={canvasContextValue}>
+      <BackgroundContext.Provider value={backgroundContextValue}>
         {children}
       </BackgroundContext.Provider>
     </CanvasContext.Provider>
   );
 };
-
 export const useCanvas = () => {
   const context = useContext(CanvasContext);
 

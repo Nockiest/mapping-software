@@ -5,6 +5,7 @@ import {  CanvasContext } from '../CanvasContext';
 // import { Color } from '@/public/types/OtherTypes';
 import { Vector2 } from '@/public/types/GeometryTypes';
 import { settings } from '../Signals';
+import { Color } from '@/public/types/OtherTypes';
 enum MarkerLayerState {
   Idle,
   Dragging,
@@ -12,11 +13,11 @@ enum MarkerLayerState {
   MakingLine
 }
 
-// type MarkerType = {
-//   color: Color;
-//   position: Vector2;
-//   isDragging: boolean;
-// };
+type MarkerType = {
+  color: Color;
+  position: Vector2;
+  isDragging: boolean;
+};
 
 type MarkerLayerAction =
   | { type: 'DRAG'; markerIndex: number }
