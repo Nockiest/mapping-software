@@ -6,8 +6,9 @@ import {  CanvasContext, useCanvas } from '../CanvasContext';
 import { Vector2 } from '@/public/types/GeometryTypes';
 import { settings } from '../Signals';
 import { Color } from '@/public/types/OtherTypes';
-import LineComponent from '@/app/components/markerLayer/FrontLine2D';
+import LineComponent from '@/app/components/frontline/FrontLine2D';
 import { MousePositionContext } from '../page';
+import { followMouseComponent } from '@/public/utils';
 enum MarkerLayerState {
   Idle,
   Dragging,
@@ -92,7 +93,7 @@ const UnitMarkerLayer: React.FC = () => {
       } else if (e.button === 0 && markerLayerState === MarkerLayerState.MakingLine  ) {
         // Set the starting position for the line
         console.log(mousePosition)
-        setLineEndPosition({ x , y  } );
+        // setLineEndPosition({ x , y  } );
       }
     };
 
@@ -102,7 +103,7 @@ const UnitMarkerLayer: React.FC = () => {
       const y = e.clientY - rect!.top;
       console.log('Marker double-clicked!');
       dispatch({ type: 'MAKING_LINE' });
-      setLineStartPosition({ x  , y});
+      // setLineStartPosition({ x  , y});
     };
 
     markerCanvasRef.current?.addEventListener('mousedown', handleMouseDown);
@@ -124,15 +125,8 @@ const UnitMarkerLayer: React.FC = () => {
         style={{ pointerEvents: settings.value.activeLayer === 'marker' ? 'auto' : 'none' }}
       />
       {markers.map((marker, index) => (
-        <Marker key={index} topLeftOffset={topLeftOffset} initialPosition={marker.position} canvasSize={{ x: 800, y: 600 }} />
+        <Marker key={index} topLeftOffset={topLeftOffset} initialPosition={marker.position} canvasSize={{ x: 800, y: 600 }}  dragHandler={followMouseComponent} />
       ))}
-      {/* {markerLayerState === MarkerLayerState.MakingLine && lineStartPosition && (
-        <LineComponent
-          start={lineStartPosition}
-          end={lineEndPosition} // Set the end position as needed
-          topLeftOffset={topLeftOffset}
-        />
-      )} */}
       {markerLayerState} 
     </div>
   );

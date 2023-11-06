@@ -14,8 +14,7 @@ export interface CanvasContextType {
 
 export interface BackgroundContextType {
   backgroundCanvasRef: React.RefObject<HTMLCanvasElement | null>;
-//   backgroundImage: File | null;
-//   setBackgroundImage: React.Dispatch<React.SetStateAction<File | null>>;
+ 
 }
 
 export interface CanvasSettingsType {

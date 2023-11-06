@@ -15,14 +15,24 @@
   z-index: 100;
  }
 
+ .marker {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid black;
+  background-size: cover;
+  background-position: center;
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  user-select: none;
+}
  .background-layer{
   z-index:   0;
  }
 
  button {
-  background-color: #5c0101; /* Green background */
+  background-color: #937474; /* Green background */
   color: white; /* White text color */
-  padding: 8px 6px; /* Padding for better appearance */
+  padding: 8px 6px;  
   font-size: 12px; /* Font size */
   /*border: none; /*  No border */
   margin: 0px 4px;

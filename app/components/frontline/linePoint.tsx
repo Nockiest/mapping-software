@@ -7,24 +7,29 @@ const Point: React.FC<{ position: Vector2; onDrag?: (position: Vector2) => void;
     topLeft,
   }) => {
     const [isDragging, setIsDragging] = useState(false);
-    const [dragStart, setDragStart] = useState<Vector2 | null>(null);
+    // const [dragStart, setDragStart] = useState<Vector2 | null>(null);
   
     const handleMouseDown = (e: React.MouseEvent) => {
-      e.preventDefault();
+    //   e.preventDefault();
+      if (e.button != 0){ return}
       setIsDragging(true);
-      setDragStart({ x: e.clientX, y: e.clientY });
+    //   setDragStart({ x: e.clientX, y: e.clientY });
     };
   
     const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging && dragStart) {
-        const deltaX = e.clientX - dragStart.x + window.scrollX;
-        const deltaY = e.clientY - dragStart.y + window.scrollY;
+      if (isDragging   ) {
+        console.log(e.clientX , topLeft.x , window.scrollX)
+        const deltaX = e.clientX - topLeft.x + window.scrollX;
+        const deltaY = e.clientY - topLeft.y + window.scrollY;
+      //   const newPosition = { x: position.x + deltaX, y: position.y + deltaY };
   
+        
         // Calculate the new position with the center as the clicked point
         const adjustedPosition = {
-          x: position.x + deltaX - 5, // Adjusted for half of the width
-          y: position.y + deltaY - 5, // Adjusted for half of the height
+          x:   deltaX - 5, // Adjusted for half of the width
+          y:   deltaY - 5, // Adjusted for half of the height
         };
+        console.log(adjustedPosition.x, e.clientX, topLeft.x)
   
         onDrag?.(adjustedPosition);
       }
@@ -32,7 +37,7 @@ const Point: React.FC<{ position: Vector2; onDrag?: (position: Vector2) => void;
   
     const handleMouseUp = () => {
       setIsDragging(false);
-      setDragStart(null);
+    //   setDragStart(null);
     };
   
     useEffect(() => {

@@ -1,3 +1,5 @@
+import { Vector2 } from "./types/GeometryTypes";
+
 function zoomIn(scale: number, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
     scale *= 1.1; // Increase the scale factor (you can adjust this value)
     applyZoom(scale, canvas, ctx);
@@ -61,3 +63,20 @@ export const hexToRGBA = (hex: string): [number, number, number, number] => {
   const [, r, g, b] = match.map((component) => parseInt(component, 16));
   return [r, g, b, 255];
 }
+
+type FollowMouseFunction = (
+  e: MouseEvent,
+  topLeftOffset: Vector2,
+  maxPosition: Vector2,
+  withscroll: boolean
+) => Vector2;
+
+export const followMouseComponent: FollowMouseFunction = (e,withscroll, topLeftOffset, maxPosition) => {
+  // Calculate updated position without subtracting topLeftOffset.y and window.scrollY
+  const updatedPosition: Vector2 = {
+    x: Math.min(Math.max(e.clientX - topLeftOffset.x + (withscroll ? window.scrollX : 0), 0), maxPosition.x),
+    y: Math.min(Math.max(e.clientY - topLeftOffset.y + (withscroll ? window.scrollY : 0), 0), maxPosition.y),
+  };
+  console.log(e.clientY, topLeftOffset.y, window.scrollY, updatedPosition);
+  return updatedPosition;
+};
