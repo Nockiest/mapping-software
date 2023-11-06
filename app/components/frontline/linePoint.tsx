@@ -1,13 +1,34 @@
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { useEffect, useState } from "react";
 
-const Point: React.FC<{ position: Vector2; onDrag?: (position: Vector2) => void; topLeft: Vector2 }> = ({
+
+export type PointProps =  { 
+    position: Vector2;
+    topLeft?: Vector2;
+    radius?: number;
+    leftClk?: ()=> void;
+    rightClk?: ()=> void;
+    mouseWheelClk?: ()=> void;
+    styling?: {
+        [key: string]: string; // Allow any CSS property
+      };   // Optional styling prop
+      onDrag?: (position: Vector2) => void; 
+    onDelete?: ()=> void // Callback for deletion
+
+}
+const Point: React.FC <PointProps> = ({
     position,
+    topLeft = {x:0,y:0},
+    radius = 15,
+    leftClk,
+    rightClk,
+    mouseWheelClk,
+    styling= {}, // Optional styling prop
     onDrag,
-    topLeft,
+    onDelete // Callback for deletion
   }) => {
     const [isDragging, setIsDragging] = useState(false);
-    // const [dragStart, setDragStart] = useState<Vector2 | null>(null);
+    const [rightMouseDownTime, setRightMouseDownTime] = useState<number | null>(null);
   
     const handleMouseDown = (e: React.MouseEvent) => {
     //   e.preventDefault();
@@ -36,33 +57,50 @@ const Point: React.FC<{ position: Vector2; onDrag?: (position: Vector2) => void;
     };
   
     const handleMouseUp = () => {
-      setIsDragging(false);
-    //   setDragStart(null);
-    };
+        setIsDragging(false);
+        setRightMouseDownTime(null);
+      };
   
     useEffect(() => {
       if (isDragging) {
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('mouseup', handleMouseUp);
       }
-  
       return () => {
         window.removeEventListener('mousemove', handleMouseMove);
         window.removeEventListener('mouseup', handleMouseUp);
       };
     }, [isDragging, handleMouseMove, handleMouseUp]);
-  
+
+    useEffect(() => {
+        if (rightMouseDownTime) {
+          const checkHoldDuration = () => {
+            const currentTime = Date.now();
+            const holdDuration = currentTime - rightMouseDownTime;
+    
+            if (holdDuration >= 1000) {
+              // If the hold duration exceeds 1 second, trigger deletion
+              onDelete?.();
+              setRightMouseDownTime(null);
+            }
+          };
+    
+          const intervalId = setInterval(checkHoldDuration, 100);
+          return () => clearInterval(intervalId);
+        }
+      }, [rightMouseDownTime, onDelete]);
     return (
-      <div
+        <div
         style={{
           position: 'absolute',
-          left: `${position.x - 5}px`, // Adjusted for half of the width
-          top: `${position.y - 5}px`, // Adjusted for half of the height
-          width: '10px',
-          height: '10px',
+          left: `${position.x - radius}px`,
+          top: `${position.y - radius}px`,
+          width: `${radius * 2}px`,
+          height: `${radius * 2}px`,
           borderRadius: '50%',
           background: 'blue',
           cursor: 'pointer',
+          ...styling
         }}
         onMouseDown={handleMouseDown}
       />

@@ -125,7 +125,7 @@ const UnitMarkerLayer: React.FC = () => {
         style={{ pointerEvents: settings.value.activeLayer === 'marker' ? 'auto' : 'none' }}
       />
       {markers.map((marker, index) => (
-        <Marker key={index} topLeftOffset={topLeftOffset} initialPosition={marker.position} canvasSize={{ x: 800, y: 600 }}  dragHandler={followMouseComponent} />
+        <Marker key={index} topLeftOffset={topLeftOffset} initialPosition={marker.position} canvasSize={{ x: 800, y: 600 }}  dragHandler={followMouseComponent} customSettings={settings.value.markerSettings} />
       ))}
       {markerLayerState} 
     </div>

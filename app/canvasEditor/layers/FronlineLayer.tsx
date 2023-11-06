@@ -5,12 +5,13 @@ import { settings } from '../Signals';
 import { useCanvas } from '../CanvasContext';
 import Point from '@/app/components/frontline/linePoint';
  
+
 const FrontlineLayer = () => {
     const mousePosition = useContext(MousePositionContext);
     const { forntlineCanvasRef } = useCanvas();
     const [points, setPoints] = useState<Vector2[]>([]);
     const [topLeft, setTopLeft] = useState<Vector2>({ x: 0, y: 0 });
-    const [endPointIndex, setEndPointIndex] = useState<number | null>(null);
+    const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
   
     useEffect(() => {
       const canvas = forntlineCanvasRef.current;
@@ -88,7 +89,24 @@ const FrontlineLayer = () => {
         return newPoints;
       });
     };
+    const testRightClick = (clickedPoint: Vector2) => {
+      console.log("Clicked Point Position:", clickedPoint);
   
+      // Find the index of the clicked point in the points array
+      const clickedPointIndex = points.findIndex(
+        (point) => point.x === clickedPoint.x && point.y === clickedPoint.y
+      );
+  
+      // Set the clicked point as the endpoint
+      setEndPointIndex(clickedPointIndex);
+    };
+    const handleDeletePoint = (index: number) => {
+      setPoints((prevPoints) => {
+        const newPoints = [...prevPoints];
+        newPoints.splice(index, 1); // Remove the point at the specified index
+        return newPoints;
+      });
+    };
     return (
       <div className="absolute top-0" onContextMenu={(e) => e.preventDefault()}>
         <canvas
@@ -108,8 +126,17 @@ const FrontlineLayer = () => {
             position={point}
             topLeft={topLeft} // Pass the topLeft position
             onDrag={(newPosition) => handlePointDrag(index, newPosition)}
+            radius={5}
+            mouseWheelClk={() => handleDeletePoint(point)}
+            onRightClk={() =>  testRightClick(point)}
+            onDelete={() => handleDeletePoint(index)} // Pass the deletion callback
+            styling={{
+              background: index === points.length - 1 ? 'white' : 'red',
+              border: '2px solid black'
+            }}
           />
         ))}
+        <p>  {endPointIndex}</p> 
       </div>
     );
   };
