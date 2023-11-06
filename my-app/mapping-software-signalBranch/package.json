@@ -1,0 +1,47 @@
+{
+  "name": "mapping-software",
+  "version": "0.1.0",
+  "private": true,
+  "configurations": [
+    {
+      "name": "Next: Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "webpack:///./*": "${webRoot}/*"
+      }
+    }
+  ],
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@preact/signals": "^1.2.1",
+    "next": "14.0.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-dropzone": "^14.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.0",
+    "postcss": "^8",
+    "postcss-preset-env": "^9.2.0",
+    "tailwindcss": "^3.3.5",
+    "typescript": "^5"
+  }
+}
+ 
+ 
+ 
+ 
+ 
