@@ -13,6 +13,7 @@ export type MarkerProps = {
   canvasSize: Vector2;
   shouldUpdateOnSettingsChange?: boolean;
   dragHandler?: (event: MouseEvent, isDragging: boolean, currentPosition: Vector2, dragStartPosition: Vector2) => Vector2;
+  customSettings?: {x:any}
 }
 
 const Marker: React.FC<MarkerProps> = ({
@@ -21,12 +22,13 @@ const Marker: React.FC<MarkerProps> = ({
   canvasSize,
   shouldUpdateOnSettingsChange = false,
   dragHandler ,
+  customSettings
 }) => {
   const [currentPosition, setCurrentPosition] = useState<Vector2>(initialPosition);
   const [isDragged, setIsDragged] = useState<boolean>(false);
   const [canRemove, setCanRemove] = useState<boolean>(false);
   const [initialMarkerSettings, setInitialMarkerSettings] = useState({
-    ...settings.value.markerSettings,
+   ...customSettings // ...settings.value.markerSettings,
   });
   const usedSettings = shouldUpdateOnSettingsChange ? newMarkerSettings.value : initialMarkerSettings;
 
