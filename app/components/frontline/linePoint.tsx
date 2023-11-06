@@ -32,7 +32,20 @@ const Point: React.FC <PointProps> = ({
   
     const handleMouseDown = (e: React.MouseEvent) => {
     //   e.preventDefault();
-      if (e.button != 0){ return}
+      if (e.button == 0 && leftClk){ 
+        leftClk()
+      } else if   (e.button === 1 && mouseWheelClk) {
+        // setRightMouseDownTime(Date.now());
+        mouseWheelClk(this)
+      }  else if   (e.button === 2 && rightClk) {
+        rightClk(this); // You can directly pass the component
+        setRightMouseDownTime(Date.now());
+      }  else if (onDelete){
+        onDelete()
+      }
+
+
+        
       setIsDragging(true);
     //   setDragStart({ x: e.clientX, y: e.clientY });
     };

@@ -96,7 +96,7 @@ const FrontlineLayer = () => {
       const clickedPointIndex = points.findIndex(
         (point) => point.x === clickedPoint.x && point.y === clickedPoint.y
       );
-  
+        console.log(clickedPointIndex)
       // Set the clicked point as the endpoint
       setEndPointIndex(clickedPointIndex);
     };
@@ -128,7 +128,7 @@ const FrontlineLayer = () => {
             onDrag={(newPosition) => handlePointDrag(index, newPosition)}
             radius={5}
             mouseWheelClk={() => handleDeletePoint(point)}
-            onRightClk={() =>  testRightClick(point)}
+            rightClk={() =>  testRightClick(point)}
             onDelete={() => handleDeletePoint(index)} // Pass the deletion callback
             styling={{
               background: index === points.length - 1 ? 'white' : 'red',

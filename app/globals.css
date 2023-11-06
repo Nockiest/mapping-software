@@ -6,7 +6,7 @@
 .canvas-rectangle {
  
   /* top: 200px; */
-  /* left: calc(50% - 350px); */
+  left: calc(50% - 350px);
   
   border: 1px solid #000; /* Set your desired border style */
   /* Add any other styles you need */

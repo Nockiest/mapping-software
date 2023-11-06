@@ -1,16 +1,19 @@
+import { settings } from '@/app/canvasEditor/Signals';
 import React from 'react';
 
 interface ReusableLayerProps {
   canvasRef:  React.RefObject<HTMLCanvasElement | undefined>;
-  layerType: string  ;
-  image?: string;
-  name?: string;
+  layerName: string  ;
   onLeftClick?: () => void;
   onRightClick?: () => void;
+  style?: {
+    [key: string]: string; // Allow any CSS property
+  };
 }
 
-const ReusableLayer: React.FC<ReusableLayerProps> = ({ canvasRef, layerType, image, name, onLeftClick, onRightClick }) => {
+const ReusableLayer: React.FC<ReusableLayerProps> = ({ canvasRef, layerName,    onLeftClick, onRightClick,style }) => {
   const handleMouseClick = (e: React.MouseEvent) => {
+    if (layerName !== settings.value.activeLayer) {return}
     if (e.button === 0 && onLeftClick) {
       // Left click
       onLeftClick();
@@ -21,11 +24,16 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({ canvasRef, layerType, ima
   };
 
   return (
-    <div onClick={handleMouseClick}>
-        <canvas />
+    <canvas className={`canvas-rectangle top-0 absolute ${layerName}`} 
+        onClick={handleMouseClick} 
+        ref={canvasRef}
+        width={settings.value.canvasSize.x} 
+        height={settings.value.canvasSize.y} 
+        style={{ pointerEvents: 'none',  ...style }}> 
+{/*         
       {name && <h2>{name}</h2>}
-      {image && <img src={image} alt="Layer Image" />}
-    </div>
+      {image && <img src={image} alt="Layer Image" />} */}
+    </canvas>
   );
 };
 

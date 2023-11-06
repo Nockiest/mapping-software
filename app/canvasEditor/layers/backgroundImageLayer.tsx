@@ -3,6 +3,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import {   BackgroundContext } from '../CanvasContext';
 import { settings } from '../Signals';
 import { backgroundImage } from '../Signals';
+import ReusableLayer from '@/app/components/utility/ResuableLayer';
 const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }> = ({ onImageLoad }) => {
   const { backgroundCanvasRef   } = useContext(BackgroundContext);
  
@@ -57,15 +58,20 @@ const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }
   };
 
   return (
-    <   >
+    <  >
       {(  backgroundCanvasRef) && (
-          <canvas
-            ref={backgroundCanvasRef}
-            width={800}
-            height={600}
-            className={`absolute background-layer top-0 ${settings.value.activeLayer === "background" ? 'opacity-100' : 'opacity-40'}`}
-            style={{ pointerEvents: 'none', objectFit: 'contain', border: '0px', padding: '0', margin: '0'  }}
+
+          <ReusableLayer
+          canvasRef={backgroundCanvasRef}
+          layerName="background" // Set the layerName prop for ReusableLayer
           />
+          // <canvas
+          //   ref={backgroundCanvasRef}
+          //   width={800}
+          //   height={600}
+          //   className={`absolute background-layer top-0 ${settings.value.activeLayer === "background" ? 'opacity-100' : 'opacity-40'}`}
+          //   style={{ pointerEvents: 'none', objectFit: 'contain', border: '0px', padding: '0', margin: '0'  }}
+          // />
       )}
     </>
   );

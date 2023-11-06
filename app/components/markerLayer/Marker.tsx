@@ -54,6 +54,7 @@ const Marker: React.FC<MarkerProps> = ({
 
   const handleContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
+    if (settings.value.activeLayer !== "marker"){return}
     if (canRemove) {
       const markerElement = e.currentTarget as HTMLDivElement;
       markerElement.remove();

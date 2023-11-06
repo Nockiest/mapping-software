@@ -148,10 +148,11 @@ const DrawingLayer: React.FC = () => {
           width={800}
           height={600}
           onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
-          className="canvas-rectangle draw-canvas top-0"
+          className="absolute canvas-rectangle draw-canvas top-0"
           style={{ pointerEvents: settings.value.activeLayer === "draw" ? "auto" : "none", opacity: settings.value.activeLayer === "draw" ? 1 : 0.5, cursor: canvasState === DrawingState.BucketFill?  "url('/cursor.cur'),auto": "auto" }}
         />
       )}
+    
     </>
   );
 };
