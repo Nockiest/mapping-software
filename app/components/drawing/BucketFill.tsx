@@ -1,6 +1,8 @@
-import { Color } from "@/public/types/OtherTypes"; 
+import { Color } from "@/public/types/OtherTypes";
 
-function namedColorToRGBA(color: string): Color {
+ 
+ 
+function namedColorToRGBA(color: string): Array<number> {
   const canvas = document.createElement('canvas');
   canvas.width = 1;
   canvas.height = 1;
@@ -42,6 +44,7 @@ export default function bucketFill(ctx: CanvasRenderingContext2D, x: number, y: 
       stack.push([currentX, currentY + 1]);
       stack.push([currentX, currentY - 1]);
     }
+     
   }
 
   ctx.putImageData(imageData, 0, 0);
@@ -50,7 +53,7 @@ export default function bucketFill(ctx: CanvasRenderingContext2D, x: number, y: 
 // ... (remaining functions unchanged)
 
 // Convert a hex color to RGBA format
-function hexToRGBA(hex: string): Color {
+function hexToRGBA(hex: string): Array<number> {
   // Check if the input is a valid hex color
   const hexRegex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
   const result = hexRegex.exec(hex);
@@ -65,7 +68,7 @@ function hexToRGBA(hex: string): Color {
   return [red, green, blue, 255];
 }
 
-function getColorAtPixel(ctx: CanvasRenderingContext2D,data: Uint8ClampedArray, x: number, y: number,  ): Color {
+function getColorAtPixel(ctx: CanvasRenderingContext2D,data: Uint8ClampedArray, x: number, y: number,  ): Array<Number> {
   const pixelIndex = (y * ctx.canvas.width + x) * 4;
   return [data[pixelIndex], data[pixelIndex + 1], data[pixelIndex + 2], data[pixelIndex + 3]];
 }

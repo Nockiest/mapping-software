@@ -2,6 +2,18 @@
   "name": "mapping-software",
   "version": "0.1.0",
   "private": true,
+  "configurations": [
+    {
+      "name": "Next: Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "webpack:///./*": "${webRoot}/*"
+      }
+    }
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,6 +21,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@preact/signals": "^1.2.1",
     "next": "14.0.0",
     "react": "^18",
     "react-dom": "^18",
@@ -27,3 +40,8 @@
     "typescript": "^5"
   }
 }
+ 
+ 
+ 
+ 
+ 

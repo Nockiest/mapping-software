@@ -15,9 +15,31 @@
   z-index: 100;
  }
 
+ .marker {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid black;
+  background-size: cover;
+  background-position: center;
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  user-select: none;
+}
  .background-layer{
   z-index:   0;
  }
+
+ button {
+  background-color: #937474; /* Green background */
+  color: white; /* White text color */
+  padding: 8px 6px;  
+  font-size: 12px; /* Font size */
+  /*border: none; /*  No border */
+  margin: 0px 4px;
+  cursor: pointer; /* Pointer cursor on hover */
+  border-radius: 5px; /* Rounded corners */
+}
+
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

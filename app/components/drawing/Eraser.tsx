@@ -1,18 +1,15 @@
 import React, { useEffect, useRef } from 'react';
-import { Vector2 } from '@/public/types/GeometryTypes';
-// type EraseRadiusProps = {
-//   canvasRef: React.RefObject<HTMLCanvasElement>;
-//   position: { x: number; y: number };
-//   diameter: number;
-// };
-interface EraseLineProps {
+import { LineEdge, Vector2 } from '@/public/types/GeometryTypes';
+
+export type EraseArgs = {
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
   start: Vector2;
   end: Vector2;
   radius: number;
+  eraseShape: LineEdge
 }
 
-const eraseLine = ({ canvasRef, start, end, radius }: EraseLineProps) => {
+const eraseLine = ({ canvasRef, start, end, radius, eraseShape }: EraseArgs) => {
   const canvas = canvasRef.current;
   if (!canvas) return;
 
@@ -49,11 +46,23 @@ const eraseLine = ({ canvasRef, start, end, radius }: EraseLineProps) => {
           // Calculate the index of the current pixel in the image data array
           const index = (pixelY * imageData.width + pixelX) * 4;
 
-          // Set the color of the current pixel to a blank color (transparent black)
-          data[index] = 0;      // Red channel
-          data[index + 1] = 0;  // Green channel
-          data[index + 2] = 0;  // Blue channel
-          data[index + 3] = 0;  // Alpha channel (transparency)
+          // Set the color of the current pixel based on the erase shape
+          if (eraseShape === 'rounded') {
+            // Check if the current pixel is within the circular region
+            if (Math.sqrt(j ** 2 + k ** 2) <= radius) {
+              // Set the color of the current pixel to a blank color (transparent black)
+              data[index] = 0;      // Red channel
+              data[index + 1] = 0;  // Green channel
+              data[index + 2] = 0;  // Blue channel
+              data[index + 3] = 0;  // Alpha channel (transparency)
+            }
+          } else if (eraseShape === 'squared') {
+            // Set the color of the current pixel to a blank color (transparent black)
+            data[index] = 0;      // Red channel
+            data[index + 1] = 0;  // Green channel
+            data[index + 2] = 0;  // Blue channel
+            data[index + 3] = 0;  // Alpha channel (transparency)
+          }
         }
       }
     }
