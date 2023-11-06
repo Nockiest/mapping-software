@@ -9,31 +9,38 @@ type PointProps = {
     leftClk?: (self: ReactNode) => void ;
     rightClk?: (self: ReactNode) => void;
     mouseWheelClk?: (self: ReactNode) => void;
+    styling? 
+    onDelete?: (self: ReactNode) => void;
  }
 
- const Point: React.FC<PointProps> = ({
+ const Point: React.FC<PointProps & { onDelete?: () => void }> = ({
   position,
   onDrag,
   topLeft,
-  radius = 10,
+  radius = 15,
   leftClk,
   rightClk,
-  mouseWheelClk
+  mouseWheelClk,
+  styling, // Optional styling prop
+  onDelete // Callback for deletion
 }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [rightMouseDownTime, setRightMouseDownTime] = useState<number | null>(null);
+ 
+
+ 
 
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent the default context menu
     if (e.button === 0) {
       // Left click
-      
       setIsDragging(true);
       if (leftClk) {
         leftClk(this); // You can directly pass the component
       }
-    } else  if (e.button === 1 && mouseWheelClk) {
-      mouseWheelClk(this)
-     } else if (e.button === 2) {
+    } else if (e.button === 1 && mouseWheelClk) {
+      mouseWheelClk(this);
+    } else if (e.button === 2) {
       // Right click
       if (rightClk) {
         const adjustedPosition = {
@@ -41,7 +48,11 @@ type PointProps = {
           y: position.y - radius
         };
         rightClk(this); // You can directly pass the component
+      } else {
+        setRightMouseDownTime(Date.now());
       }
+      
+ 
     }
   };
 
@@ -62,6 +73,7 @@ type PointProps = {
 
   const handleMouseUp = () => {
     setIsDragging(false);
+    setRightMouseDownTime(null);
   };
 
   useEffect(() => {
@@ -76,6 +88,26 @@ type PointProps = {
     };
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
+  useEffect(() => {
+    if (rightMouseDownTime) {
+      const checkHoldDuration = () => {
+        const currentTime = Date.now();
+        const holdDuration = currentTime - rightMouseDownTime;
+
+        if (holdDuration >= 1000) {
+          // If the hold duration exceeds 1 second, trigger deletion
+          onDelete?.();
+          setRightMouseDownTime(null);
+        }
+      };
+
+      const intervalId = setInterval(checkHoldDuration, 100);
+      return () => clearInterval(intervalId);
+    }
+  }, [rightMouseDownTime, onDelete]);
+
+ 
+
   return (
     <div
       style={{
@@ -87,10 +119,13 @@ type PointProps = {
         borderRadius: '50%',
         background: 'blue',
         cursor: 'pointer',
+        ...styling // Apply optional styling
       }}
       onMouseDown={handleMouseDown}
     />
   );
 };
 
-export default Point;
+export default Point
+
+ 

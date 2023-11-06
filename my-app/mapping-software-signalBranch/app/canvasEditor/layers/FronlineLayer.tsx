@@ -55,7 +55,7 @@ const FrontlineLayer = () => {
     const handleRightClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
       e.preventDefault();
      console.log("HANDLING RIGHT CLICK")
-      if (settings.value.activeLayer === 'frontLine') {
+      if (settings.value.activeLayer !== 'frontLine') {return}
         const rect = forntlineCanvasRef.current?.getBoundingClientRect();
         const x = e.clientX - rect!.left;
         const y = e.clientY - rect!.top;
@@ -78,7 +78,7 @@ const FrontlineLayer = () => {
           // Add a new point
           setPoints((prevPoints) => [...prevPoints, { x, y }]);
         }
-      }
+       
     };
   
     const handlePointDrag = (index: number, newPosition: Vector2) => {
@@ -99,7 +99,13 @@ const FrontlineLayer = () => {
       // Set the clicked point as the endpoint
       setEndPointIndex(clickedPointIndex);
     };
-  
+    const handleDeletePoint = (index: number) => {
+      setPoints((prevPoints) => {
+        const newPoints = [...prevPoints];
+        newPoints.splice(index, 1); // Remove the point at the specified index
+        return newPoints;
+      });
+    };
     return (
       <div className="absolute top-0" onContextMenu={(e) => e.preventDefault()}>
         <canvas
@@ -121,6 +127,11 @@ const FrontlineLayer = () => {
             onDrag={(newPosition) => handlePointDrag(index, newPosition)}
             radius={5}
             mouseWheelClk={() => testRightClick(point)}
+            onDelete={() => handleDeletePoint(index)} // Pass the deletion callback
+            styling={{
+              background: index === points.length - 1 ? 'white' : 'red',
+              border: '2px solid black'
+            }}
           />
         ))}
         <p>  {endPointIndex}</p> 

@@ -134,16 +134,4 @@ const UnitMarkerLayer: React.FC = () => {
 
 export default UnitMarkerLayer;
 
-// const handleMouseMove = (e: MouseEvent) => {
-//   // if (markerLayerState === MarkerLayerState.Dragging) {
-//   //   const rect = canvas.getBoundingClientRect();
-//   //   const x = e.clientX - rect.left;
-//   //   const y = e.clientY - rect.top;
-
-//   //   setMarkers((prevMarkers) =>
-//   //     prevMarkers.map((marker, index) =>
-//   //       index === draggingMarkerIndex ? { ...marker, position: { x, y } } : marker
-//   //     )
-//   //   );
-//   // }
-// };
+ 
