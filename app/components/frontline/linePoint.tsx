@@ -1,14 +1,14 @@
 import { Vector2 } from "@/public/types/GeometryTypes";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ReactNode } from "react";
 
 
 export type PointProps =  { 
     position: Vector2;
     topLeft?: Vector2;
     radius?: number;
-    leftClk?: ()=> void;
-    rightClk?: ()=> void;
-    mouseWheelClk?: ()=> void;
+    leftClk?: ( )=> void;
+    rightClk?: ( )=> void;
+    mouseWheelClk?: ( )=> void;
     styling?: {
         [key: string]: string; // Allow any CSS property
       };   // Optional styling prop
@@ -33,16 +33,17 @@ const Point: React.FC <PointProps> = ({
     const handleMouseDown = (e: React.MouseEvent) => {
     //   e.preventDefault();
       if (e.button == 0 && leftClk){ 
-        leftClk()
+        leftClk( )
       } else if   (e.button === 1 && mouseWheelClk) {
         // setRightMouseDownTime(Date.now());
-        mouseWheelClk(this)
+        mouseWheelClk( )
       }  else if   (e.button === 2 && rightClk) {
-        rightClk(this); // You can directly pass the component
+        rightClk( ); // You can directly pass the component
         setRightMouseDownTime(Date.now());
-      }  else if (onDelete){
-        onDelete()
-      }
+      }  
+    //   else if (onDelete){
+    //     onDelete()
+    //   }
 
 
         
@@ -51,22 +52,22 @@ const Point: React.FC <PointProps> = ({
     };
   
     const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging   ) {
-        console.log(e.clientX , topLeft.x , window.scrollX)
-        const deltaX = e.clientX - topLeft.x + window.scrollX;
-        const deltaY = e.clientY - topLeft.y + window.scrollY;
-      //   const newPosition = { x: position.x + deltaX, y: position.y + deltaY };
-  
+        if (!isDragging) return 
+         
+        const newX = e.clientX - topLeft.x + window.scrollX;
+        const newY = e.clientY - topLeft.y + window.scrollY;
+        
         
         // Calculate the new position with the center as the clicked point
         const adjustedPosition = {
-          x:   deltaX - 5, // Adjusted for half of the width
-          y:   deltaY - 5, // Adjusted for half of the height
+            x:   newX - radius, // Adjusted for half of the width
+            y:   newY - radius, // Adjusted for half of the height
         };
-        console.log(adjustedPosition.x, e.clientX, topLeft.x)
-  
+        console.log(e.clientX , topLeft.x , window.scrollX)
+        console.log(adjustedPosition  )
+
         onDrag?.(adjustedPosition);
-      }
+      
     };
   
     const handleMouseUp = () => {
@@ -116,7 +117,8 @@ const Point: React.FC <PointProps> = ({
           ...styling
         }}
         onMouseDown={handleMouseDown}
-      />
+
+      >  {topLeft.x} {topLeft.y} </ div>
     );
   };
   
