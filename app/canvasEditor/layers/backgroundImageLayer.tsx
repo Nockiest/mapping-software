@@ -63,7 +63,8 @@ const BackgroundImageLayer: React.FC<> = ( ) => {
 
           <ReusableLayer
           canvasRef={backgroundCanvasRef}
-          layerName="background" // Set the layerName prop for ReusableLayer
+          layerName="background" 
+          // style={{ pointerEvents: 'none', } }
           />
           // <canvas
           //   ref={backgroundCanvasRef}

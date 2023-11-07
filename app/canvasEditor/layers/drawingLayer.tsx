@@ -9,16 +9,53 @@ import bucketFill from "@/app/components/drawing/BucketFill";
 import { MousePositionContext } from "../page";
 import { settings } from "../Signals";
 import drawLineWithShape, { DrawPayload } from "../../components/drawing/LineDrawer";
+import ReusableLayer from "@/app/components/utility/ResuableLayer";
 // import customCursor from '@/public/cursor.cur';
 
 const DrawingLayer: React.FC = () => {
   const { canvasRef, canvasState, dispatch } = useCanvas();
   const [lastMousePos, setLastMousePos] = useState<Vector2 | null>(null);
   const { color, radius } = settings.value;
+  
+  
+  const handleMouseDown = (e: MouseEvent) => {
+    if (settings.value.activeLayer !== "draw") {
+      return;
+    }
+    // const rect = canvas.getBoundingClientRect();
+    // const {x - ,y} = mousePosition
+    const x = e.offsetX;
+    const y = e.offsetY;
 
-  // const globalCursorStyle = {
-  //   cursor: `url(${customCursor}), auto`,
-  // };
+    if (e.button === 2) {
+      const erasePayload: ErasePayload = {
+        eraseFunction: eraseLine,
+        eraseArgs: { canvasRef, start: lastMousePos || { x, y }, end: { x, y }, radius, eraseShape: settings.value.lineType },
+      };
+      changeState({ type: "ERASE", payload: erasePayload });
+    } else if (e.button === 0) {
+      // Left mouse button is pressed, start drawing or filling
+      if (canvasState === DrawingState.BucketFill && ctx) {
+        console.log("FILLING WITH BUCKET");
+        bucketFill(ctx, x, y, color);
+      } else {
+        const drawPayload: DrawPayload = {
+          drawFunction: drawDot, // Replace with your actual draw function
+          drawArgs: { ctx, x, y, radius, color },
+        };
+
+        changeState({ type: "DRAW", payload: drawPayload });
+        if (ctx) {
+          ctx.beginPath();
+          console.log("DRAWING AN ARC");
+
+          ctx.closePath(); //draw a dot
+          setLastMousePos({ x, y });
+        }
+      }
+    }
+  };
+ 
   const changeState = (newState: DrawAction) => {
     dispatch(newState);
   };
@@ -49,44 +86,10 @@ const DrawingLayer: React.FC = () => {
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
-
-    const handleMouseDown = (e: MouseEvent) => {
-      if (settings.value.activeLayer !== "draw") {
-        return;
-      }
-      // const rect = canvas.getBoundingClientRect();
-      // const {x - ,y} = mousePosition
-      const x = e.offsetX;
-      const y = e.offsetY;
-
-      if (e.button === 2) {
-        const erasePayload: ErasePayload = {
-          eraseFunction: eraseLine,
-          eraseArgs: { canvasRef, start: lastMousePos || { x, y }, end: { x, y }, radius, eraseShape: settings.value.lineType },
-        };
-        changeState({ type: "ERASE", payload: erasePayload });
-      } else if (e.button === 0) {
-        // Left mouse button is pressed, start drawing or filling
-        if (canvasState === DrawingState.BucketFill) {
-          console.log("FILLING WITH BUCKET");
-          bucketFill(ctx, x, y, color);
-        } else {
-          const drawPayload: DrawPayload = {
-            drawFunction: drawDot, // Replace with your actual draw function
-            drawArgs: { ctx, x, y, radius, color },
-          };
-
-          changeState({ type: "DRAW", payload: drawPayload });
-          if (ctx) {
-            ctx.beginPath();
-            console.log("DRAWING AN ARC");
-
-            ctx.closePath(); //draw a dot
-            setLastMousePos({ x, y });
-          }
-        }
-      }
-    };
+    if (!ctx){
+      return
+    }
+     
 
     const handleMouseMovement = (e: MouseEvent) => {
       const x = e.offsetX;
@@ -143,14 +146,20 @@ const DrawingLayer: React.FC = () => {
   return (
     <>
       {canvasRef && (
-        <canvas
-          ref={canvasRef}
-          width={800}
-          height={600}
-          onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
-          className="absolute canvas-rectangle draw-canvas top-0"
-          style={{ pointerEvents: settings.value.activeLayer === "draw" ? "auto" : "none", opacity: settings.value.activeLayer === "draw" ? 1 : 0.5, cursor: canvasState === DrawingState.BucketFill?  "url('/cursor.cur'),auto": "auto" }}
+        <ReusableLayer 
+        canvasRef={canvasRef}
+        onLeftClick={handleMouseDown}
+        layerName="draw"
+        
         />
+        // <canvas
+        //   ref={canvasRef}
+        //   width={800}
+        //   height={600}
+        //   onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
+        //   className="absolute canvas-rectangle draw-canvas top-0"
+        //   style={{ pointerEvents: settings.value.activeLayer === "draw" ? "auto" : "none", opacity: settings.value.activeLayer === "draw" ? 1 : 0.5, cursor: canvasState === DrawingState.BucketFill?  "url('/cursor.cur'),auto": "auto" }}
+        // />
       )}
     
     </>

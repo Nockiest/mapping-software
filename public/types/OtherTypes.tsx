@@ -13,12 +13,12 @@ export type MarkerType = {
     isDragging: boolean;
   };
   
-
+export type LayerNames =  "draw" | "marker" | "background"| "frontLine"
 export type Settings = Signal<{
     radius: number;
     color: Color;
     lineType: "squared" | "rounded";
-    activeLayer: "draw" | "marker" | "background"| "frontLine";
+    activeLayer: LayerNames
     canvasSize: Vector2;
     markerSettings:{width:number,  color: Color, textColor:Color, topValue:string, bottomValue:string,  imageURL: string|null, popularMarkerColors: Array<Color>} ;
     popularColors: Array<Color>;
