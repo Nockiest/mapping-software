@@ -28,7 +28,7 @@ const Marker: React.FC<MarkerProps> = ({
   const [isDragged, setIsDragged] = useState<boolean>(false);
   const [canRemove, setCanRemove] = useState<boolean>(false);
   const [initialMarkerSettings, setInitialMarkerSettings] = useState({
-   ...customSettings // ...settings.value.markerSettings,
+   ...customSettings 
   });
   const usedSettings = shouldUpdateOnSettingsChange ? newMarkerSettings.value : initialMarkerSettings;
 

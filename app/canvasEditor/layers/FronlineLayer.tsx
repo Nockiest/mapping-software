@@ -141,10 +141,10 @@ const FrontlineLayer = () => {
           className="border-2 canvas-rectangle"
           ref={forntlineCanvasRef}
           style={{
-            pointerEvents: settings.value.activeLayer === 'frontLine' ? 'auto' : 'none',
+            // pointerEvents: settings.value.activeLayer === 'frontLine' ? 'auto' : 'none',
             opacity: settings.value.activeLayer === 'frontLine' ? '1' : '0.4',
           }}
-          onContextMenu={handleContextMenu}
+          onContextMenu={handleMouseDown}
           onMouseUp={handleMouseUp}
           onMouseDown={handleMouseDown}
         />

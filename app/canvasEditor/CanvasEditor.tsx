@@ -15,15 +15,14 @@ import FronlineLayer from "./layers/FronlineLayer";
  
 const DrawingCanvas: React.FC  = ( ) => {
   const canvasRef = useCanvas( );
-  // const [canvasDimensions, setCanvasDimensions] = useState<Vector2>({x:500, y: 500})
   return (
     <div>
  
       <div className="relative" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <UnitMarkerLayer    />
-        <DrawingLayer    />
+        {/* <UnitMarkerLayer    /> */}
+        {/* <DrawingLayer    /> */}
         <FronlineLayer  />
-        <BackgroundImageLayer   />  
+        {/* <BackgroundImageLayer   />  s tímhle nefunguje frontlinedrawer */}
       </div>
 
       {/* Splicer to combine layers */}

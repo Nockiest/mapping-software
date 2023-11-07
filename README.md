@@ -38,3 +38,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 z_indexes:
 Marker: 1
 Dragged Marker: 10
+reusable canvas active 100
+reusable canvas inactive 0

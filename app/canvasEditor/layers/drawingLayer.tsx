@@ -18,12 +18,18 @@ const DrawingLayer: React.FC = () => {
   const { color, radius } = settings.value;
   
   
-  const handleMouseDown = (e: MouseEvent) => {
-    if (settings.value.activeLayer !== "draw") {
-      return;
+  const handleMouseDown = (e: React.MouseEvent) => {
+    console.log("HANDLING MOUSE DOWN ", e.button)
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx){
+      return
     }
-    // const rect = canvas.getBoundingClientRect();
-    // const {x - ,y} = mousePosition
+     
+   
+ 
     const x = e.offsetX;
     const y = e.offsetY;
 
@@ -122,13 +128,13 @@ const DrawingLayer: React.FC = () => {
 
     // Add event listeners
     if (settings.value.activeLayer === "draw") {
-      canvas.addEventListener("mousedown", handleMouseDown);
+      // canvas.addEventListener("mousedown", handleMouseDown);
       canvas.addEventListener("mousemove", handleMouseMovement);
       canvas.addEventListener("mouseup", handleMouseUp);
       canvas.addEventListener("mouseleave", handleMouseLeave);
     } else {
       // Remove event listeners if not in draw mode
-      canvas.removeEventListener("mousedown", handleMouseDown);
+      // canvas.removeEventListener("mousedown", handleMouseDown);
       canvas.removeEventListener("mousemove", handleMouseMovement);
       canvas.removeEventListener("mouseup", handleMouseUp);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
@@ -136,7 +142,7 @@ const DrawingLayer: React.FC = () => {
 
     // Remove event listeners on component unmount
     return () => {
-      canvas.removeEventListener("mousedown", handleMouseDown);
+      // canvas.removeEventListener("mousedown", handleMouseDown);
       canvas.removeEventListener("mousemove", handleMouseMovement);
       canvas.removeEventListener("mouseup", handleMouseUp);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
@@ -148,10 +154,13 @@ const DrawingLayer: React.FC = () => {
       {canvasRef && (
         <ReusableLayer 
         canvasRef={canvasRef}
-        onLeftClick={handleMouseDown}
+        onLeftClick={(e) => handleMouseDown(e)}
+        onRightClick={(e) => handleMouseDown(e)}
+        onMouseUp={(e) => handleMouseDown(e)}
         layerName="draw"
         
         />
+        
         // <canvas
         //   ref={canvasRef}
         //   width={800}
@@ -161,7 +170,8 @@ const DrawingLayer: React.FC = () => {
         //   style={{ pointerEvents: settings.value.activeLayer === "draw" ? "auto" : "none", opacity: settings.value.activeLayer === "draw" ? 1 : 0.5, cursor: canvasState === DrawingState.BucketFill?  "url('/cursor.cur'),auto": "auto" }}
         // />
       )}
-    
+ 
+
     </>
   );
 };
