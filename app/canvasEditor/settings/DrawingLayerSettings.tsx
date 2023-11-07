@@ -10,7 +10,7 @@ import FavoriteColorLister from '@/app/components/settings/FavoriteColorLister';
  
 const DrawingLayerSettings = ( ) => {
    const imageInputRef = useRef<HTMLInputElement>(null);
-  const {dispatch,   }= useCanvas( )
+  const {dispatchState,   }= useCanvas( )
   const changeSettings = <K extends keyof Settings['value']>(property: K, newValue: Settings['value'][K]) => {
     // Assuming settings is a mutable signal, otherwise, you might need to use `setSettings` if it's a state
     settings.value = { ...settings.value, [property]: newValue };
@@ -40,7 +40,7 @@ const DrawingLayerSettings = ( ) => {
 
   // Handle bucket fill
   const handleBucketFill = () => {
-   if(dispatch){dispatch({ type: 'ENTER_BUCKET_MODE' })}
+   if(dispatchState){dispatchState({ type: 'ENTER_BUCKET_MODE' })}
    
   };
   const handleSaveToFavorites = () => {

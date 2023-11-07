@@ -10,3 +10,4 @@ export type Vector3 = {
   }
 
 export type LineEdge =  "rounded" | "squared"
+export type Shapes = "circle" | "square" | "triangle";

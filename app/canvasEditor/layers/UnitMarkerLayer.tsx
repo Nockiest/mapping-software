@@ -49,15 +49,10 @@ const markerLayerStateMachine: React.Reducer<MarkerLayerState, MarkerLayerAction
 const UnitMarkerLayer: React.FC = () => {
   const [markers, setMarkers] = useState<MarkerType[]>([]);
   const { markerCanvasRef } = useCanvas()/// useContext(CanvasContext);
-  const [markerLayerState, dispatch] = useReducer(markerLayerStateMachine, MarkerLayerState.Idle);
+  const [markerLayerState, dispatchState] = useReducer(markerLayerStateMachine, MarkerLayerState.Idle);
   const [topLeftOffset, setTopLeftOffset] = useState<Vector2>({ x: 0, y: 0 });
-  // const [lineStartPosition, setLineStartPosition] = useState<Vector2 | null>(null);
-  // const [lineEndPosition, setLineEndPosition] = useState<Vector2 | null>(null);
   const mousePosition = useContext(MousePositionContext)
  
-  useEffect(() => {
-    console.log('Marker layer state:', markerLayerState);
-  }, [markerLayerState]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -70,10 +65,8 @@ const UnitMarkerLayer: React.FC = () => {
 
   useEffect(() => {
     const handleMouseDown = (e: MouseEvent) => {
-      if (settings.value.activeLayer !== 'marker') {
-        return;
-      }
-
+      if (settings.value.activeLayer !== 'marker') {return;}
+      console.log("MOUSE DOWN")
       const rect = markerCanvasRef.current?.getBoundingClientRect();
       const x = e.clientX - rect!.left;
       const y = e.clientY - rect!.top;
@@ -84,7 +77,7 @@ const UnitMarkerLayer: React.FC = () => {
         );
 
         if (clickedMarkerIndex !== -1) {
-          dispatch({ type: 'DRAG', markerIndex: clickedMarkerIndex });
+          dispatchState({ type: 'DRAG', markerIndex: clickedMarkerIndex });
           
         } else {
           const newMarker: MarkerType = { color: settings.value.color, position: { x, y }, isDragging: false };
@@ -102,7 +95,7 @@ const UnitMarkerLayer: React.FC = () => {
       const x = e.clientX - rect!.left;
       const y = e.clientY - rect!.top;
       console.log('Marker double-clicked!');
-      dispatch({ type: 'MAKING_LINE' });
+      dispatchState({ type: 'MAKING_LINE' });
       // setLineStartPosition({ x  , y});
     };
 

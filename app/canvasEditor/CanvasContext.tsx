@@ -1,15 +1,17 @@
-import { createContext, useContext, useState, useRef, useReducer,ReactNode ,Reducer   } from "react";
-import { DrawingState } from "@/public/types/ButtonEvents";
+import { createContext, useContext, useState, useRef, useReducer,ReactNode ,Reducer , Dispatch, Action  } from "react";
+ 
 import {Settings } from "@/public/types/OtherTypes";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { EraseArgs } from "../components/drawing/Eraser";
 import { DrawPayload } from "../components/drawing/LineDrawer";
+import { DrawingState } from "./layers/DrawingLayer";
+
 export interface CanvasContextType {
   canvasRef: React.RefObject<HTMLCanvasElement | undefined>;
   markerCanvasRef: React.RefObject<HTMLCanvasElement | null>;
   forntlineCanvasRef: React.RefObject<HTMLCanvasElement | null>;
   canvasState: DrawingState;
-  dispatch: Dispatch<DrawAction>;
+  dispatchState: Dispatch<DrawAction>;
 }
 
 export interface BackgroundContextType {
@@ -21,15 +23,12 @@ export interface CanvasSettingsType {
   settings: Settings;
   setSettings: React.Dispatch<React.SetStateAction<Settings>>;
 }
-
- 
  
 export type  ErasePayload = {
   eraseFunction: (args: EraseArgs) => void;
   eraseArgs: EraseArgs;
 }
  
-
 // Update the DrawAction type to include the "DRAW" payload
 export type DrawAction =
   | { type: "DRAW"; payload: DrawPayload }
@@ -79,13 +78,13 @@ export const CanvasProvider: React.FC<{ children: ReactNode}> = ({ children }) =
   const markerCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const forntlineCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const backgroundCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [canvasState, dispatch] = useReducer<Reducer<DrawingState, Action>>(reducer, DrawingState.Idle);
+  const [canvasState, dispatchState] = useReducer<Reducer<DrawingState, Action>>(reducer, DrawingState.Idle);
 
   const canvasContextValue: CanvasContextType = {
     canvasRef,
     markerCanvasRef,
     canvasState,
-    dispatch,
+    dispatchState,
     forntlineCanvasRef
   };
 

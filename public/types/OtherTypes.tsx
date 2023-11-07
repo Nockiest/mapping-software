@@ -14,12 +14,23 @@ export type MarkerType = {
   };
   
 export type LayerNames =  "draw" | "marker" | "background"| "frontLine"
+
+export type MarkerSettings = {
+  width:number,  
+  color: Color, 
+  textColor:Color,
+  topValue:string, 
+  bottomValue:string, 
+  imageURL: string|null,
+  popularMarkerColors: Array<Color> 
+}
+
 export type Settings = Signal<{
     radius: number;
     color: Color;
     lineType: "squared" | "rounded";
     activeLayer: LayerNames
     canvasSize: Vector2;
-    markerSettings:{width:number,  color: Color, textColor:Color, topValue:string, bottomValue:string,  imageURL: string|null, popularMarkerColors: Array<Color>} ;
+    markerSettings: MarkerSettings
     popularColors: Array<Color>;
   }>;

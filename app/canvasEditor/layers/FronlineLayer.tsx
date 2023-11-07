@@ -3,7 +3,7 @@ import { MousePositionContext } from '../page'
 import { Vector2 } from '@/public/types/GeometryTypes';
 import { settings } from '../Signals';
 import { useCanvas } from '../CanvasContext';
-import Point from '@/app/components/frontline/linePoint';
+import Point from '@/app/components/frontline/Point';
  
 
 const FrontlineLayer = () => {
@@ -13,6 +13,7 @@ const FrontlineLayer = () => {
     const [topLeft, setTopLeft] = useState<Vector2>({ x: 0, y: 0 });
     const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
     const rightClickTimerRef = useRef<number | null>(null);
+   
     useEffect(() => {
       const canvas = forntlineCanvasRef.current;
       const rect = canvas?.getBoundingClientRect();
@@ -69,10 +70,10 @@ const FrontlineLayer = () => {
     
     const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
         e.preventDefault();
-        console.log(e.button)
+        // console.log(e.button)
         if (settings.value.activeLayer !== 'frontLine')  return  
 
-        if (e.button === 2){
+        if (e.button === 0){
             const rect = forntlineCanvasRef.current?.getBoundingClientRect();
             const x = e.clientX - rect!.left;
             const y = e.clientY - rect!.top;
@@ -141,7 +142,7 @@ const FrontlineLayer = () => {
           className="border-2 canvas-rectangle"
           ref={forntlineCanvasRef}
           style={{
-            // pointerEvents: settings.value.activeLayer === 'frontLine' ? 'auto' : 'none',
+            pointerEvents: settings.value.activeLayer === 'frontLine' ? 'auto' : 'none',
             opacity: settings.value.activeLayer === 'frontLine' ? '1' : '0.4',
           }}
           onContextMenu={handleMouseDown}
@@ -160,7 +161,8 @@ const FrontlineLayer = () => {
             onDelete={() => handleDeletePoint(index)} // Pass the deletion callback
             styling={{
               background: index === points.length - 1 ? 'white' : 'red',
-              border: '2px solid black'
+              border: '2px solid black',
+              pointerEvents: settings.value.activeLayer === 'frontLine' ? 'auto' : 'none',
             }}
           />
         ))}

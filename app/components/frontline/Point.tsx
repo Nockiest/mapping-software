@@ -1,21 +1,23 @@
-import { Vector2 } from "@/public/types/GeometryTypes";
+import { Vector2, Shapes } from "@/public/types/GeometryTypes";
+import { LayerNames } from "@/public/types/OtherTypes";
+import { followMouseComponent } from "@/public/utils";
 import { useEffect, useState, ReactNode } from "react";
 
-
-export type PointProps =  { 
+ 
+export type PointProps = {
     position: Vector2;
     topLeft?: Vector2;
     radius?: number;
-    leftClk?: ( )=> void;
-    rightClk?: ( )=> void;
-    mouseWheelClk?: ( )=> void;
-    styling?: {
-        [key: string]: string; // Allow any CSS property
-      };   // Optional styling prop
-      onDrag?: (position: Vector2) => void; 
-    onDelete?: ()=> void // Callback for deletion
-
-}
+    leftClk?: () => void;
+    rightClk?: (e: React.MouseEvent) => void;
+    mouseWheelClk?: () => void;
+    styling?: React.CSSProperties;
+    onDrag?: (position: Vector2) => void;
+    onDelete?: () => void;
+    children: React.ReactNode;
+    shape: Omit<Shapes, "triangle">;
+    dragable?: boolean
+};
 const Point: React.FC <PointProps> = ({
     position,
     topLeft = {x:0,y:0},
@@ -23,40 +25,34 @@ const Point: React.FC <PointProps> = ({
     leftClk,
     rightClk,
     mouseWheelClk,
-    styling= {}, // Optional styling prop
-    onDrag,
-    onDelete // Callback for deletion
+    styling= {},  
+    onDrag = followMouseComponent,
+    onDelete,  
+    children,
+    shape,
+    dragable = true,
+
   }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [rightMouseDownTime, setRightMouseDownTime] = useState<number | null>(null);
   
     const handleMouseDown = (e: React.MouseEvent) => {
-    //   e.preventDefault();
       if (e.button == 0 && leftClk){ 
         leftClk( )
       } else if   (e.button === 1 && mouseWheelClk) {
         // setRightMouseDownTime(Date.now());
         mouseWheelClk( )
       }  else if   (e.button === 2 && rightClk) {
-        rightClk( ); // You can directly pass the component
+        rightClk( e); // You can directly pass the component
         setRightMouseDownTime(Date.now());
       }  
-    //   else if (onDelete){
-    //     onDelete()
-    //   }
-
-
-        
       setIsDragging(true);
-    //   setDragStart({ x: e.clientX, y: e.clientY });
     };
   
     const handleMouseMove = (e: MouseEvent) => {
-        if (!isDragging) return 
-         
+        if (!isDragging || !dragable) return  
         const newX = e.clientX - topLeft.x + window.scrollX;
         const newY = e.clientY - topLeft.y + window.scrollY;
-        
         
         // Calculate the new position with the center as the clicked point
         const adjustedPosition = {
@@ -118,7 +114,7 @@ const Point: React.FC <PointProps> = ({
         }}
         onMouseDown={handleMouseDown}
 
-      >  </ div>
+      > {children} </ div>
     );
   };
   

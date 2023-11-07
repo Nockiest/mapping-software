@@ -1,41 +1,46 @@
 // import { CanvasSettingsContext } from "@/app/canvasEditor/CanvasContext";
 import { MousePositionContext } from "@/app/canvasEditor/page";
 import { Vector2 } from "@/public/types/GeometryTypes";
-import { Color } from "@/public/types/OtherTypes";
+import { Color, MarkerSettings } from "@/public/types/OtherTypes";
 import { useState, useContext, useEffect,useRef } from "react";
 import { settings } from "@/app/canvasEditor/Signals";
 import Image from "next/image";
 import { signal } from "@preact/signals";
 import { newMarkerSettings } from "@/app/canvasEditor/settings/MarkerEditorSettings";
-export type MarkerProps = {
+import Point from "../frontline/Point";
+ 
+ 
+
+type MarkerProps = {
   topLeftOffset: Vector2;
   initialPosition: Vector2;
   canvasSize: Vector2;
   shouldUpdateOnSettingsChange?: boolean;
-  dragHandler?: (event: MouseEvent, isDragging: boolean, currentPosition: Vector2, dragStartPosition: Vector2) => Vector2;
-  customSettings?: {x:any}
-}
+  dragHandler?: (
+    event: MouseEvent,
+    isDragging: boolean,
+    currentPosition: Vector2,
+    dragStartPosition: Vector2
+  ) => Vector2;
+  customSettings?: MarkerSettings;
+};
 
 const Marker: React.FC<MarkerProps> = ({
   topLeftOffset,
   initialPosition,
   canvasSize,
   shouldUpdateOnSettingsChange = false,
-  dragHandler ,
-  customSettings
+  dragHandler,
+  customSettings,
 }) => {
   const [currentPosition, setCurrentPosition] = useState<Vector2>(initialPosition);
   const [isDragged, setIsDragged] = useState<boolean>(false);
   const [canRemove, setCanRemove] = useState<boolean>(false);
-  const [initialMarkerSettings, setInitialMarkerSettings] = useState({
-   ...customSettings 
-  });
+  const [initialMarkerSettings] = useState<MarkerSettings>({ ...customSettings });
   const usedSettings = shouldUpdateOnSettingsChange ? newMarkerSettings.value : initialMarkerSettings;
 
   const imageUrl =
-    usedSettings.imageURL instanceof File
-      ? URL.createObjectURL(usedSettings.imageURL)
-      : usedSettings.imageURL; // Change this line
+    usedSettings.imageURL instanceof File ? URL.createObjectURL(usedSettings.imageURL) : usedSettings.imageURL;
 
   const handleMouseDown = () => {
     setIsDragged(true);
@@ -49,12 +54,15 @@ const Marker: React.FC<MarkerProps> = ({
   };
 
   const handleMouseUp = () => {
+    console.log('handle mouse up');
     setIsDragged(false);
   };
 
   const handleContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
-    if (settings.value.activeLayer !== "marker"){return}
+    if (settings.value.activeLayer !== 'marker') {
+      return;
+    }
     if (canRemove) {
       const markerElement = e.currentTarget as HTMLDivElement;
       markerElement.remove();
@@ -117,5 +125,10 @@ const Marker: React.FC<MarkerProps> = ({
 };
 
 export default Marker;
- 
-
+{/* <Point 
+        radius={usedSettings?.width}      
+        position={currentPosition}
+        leftClk={handleMouseDown}
+        rightClk={(e) => handleContextMenu(e)}
+        styling={markerStyle}
+      /> */}

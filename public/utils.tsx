@@ -66,9 +66,10 @@ export const hexToRGBA = (hex: string): [number, number, number, number] => {
 
 type FollowMouseFunction = (
   e: MouseEvent,
+  withscroll: boolean,
   topLeftOffset: Vector2,
   maxPosition: Vector2,
-  withscroll: boolean
+  
 ) => Vector2;
 
 export const followMouseComponent: FollowMouseFunction = (e,withscroll, topLeftOffset, maxPosition) => {
@@ -77,6 +78,6 @@ export const followMouseComponent: FollowMouseFunction = (e,withscroll, topLeftO
     x: Math.min(Math.max(e.clientX - topLeftOffset.x + (withscroll ? window.scrollX : 0), 0), maxPosition.x),
     y: Math.min(Math.max(e.clientY - topLeftOffset.y + (withscroll ? window.scrollY : 0), 0), maxPosition.y),
   };
-  console.log(e.clientY, topLeftOffset.y, window.scrollY, updatedPosition);
+  // console.log(e.clientY, topLeftOffset.y, window.scrollY, updatedPosition);
   return updatedPosition;
 };
