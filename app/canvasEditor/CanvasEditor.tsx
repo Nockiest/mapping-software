@@ -20,8 +20,8 @@ const DrawingCanvas: React.FC  = ( ) => {
  
       <div className="relative" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
         {/* <UnitMarkerLayer    /> */}
-        {/* <DrawingLayer    /> */}
-        <FronlineLayer  />
+        <DrawingLayer    />
+        {/* <FronlineLayer  /> */}
         {/* <BackgroundImageLayer   />  s tímhle nefunguje frontlinedrawer */}
       </div>
 
