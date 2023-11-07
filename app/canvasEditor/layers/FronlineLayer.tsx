@@ -136,8 +136,8 @@ const FrontlineLayer = () => {
     return (
       <div className="absolute top-0" onContextMenu={(e) => e.preventDefault()}>
         <canvas
-          width={800}
-          height={600}
+          width={settings.value.canvasSize.x}
+          height={settings.value.canvasSize.y}
           className="border-2 canvas-rectangle"
           ref={forntlineCanvasRef}
           style={{
@@ -164,7 +164,7 @@ const FrontlineLayer = () => {
             }}
           />
         ))}
-        <p>  {endPointIndex}</p> 
+        {/* <p>  {endPointIndex}</p>  */}
       </div>
     );
   };

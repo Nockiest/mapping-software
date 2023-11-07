@@ -30,9 +30,7 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({ canvasRef, layerName,    
         width={settings.value.canvasSize.x} 
         height={settings.value.canvasSize.y} 
         style={{ pointerEvents: 'none',  ...style }}> 
-{/*         
-      {name && <h2>{name}</h2>}
-      {image && <img src={image} alt="Layer Image" />} */}
+ 
     </canvas>
   );
 };

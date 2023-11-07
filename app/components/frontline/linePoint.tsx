@@ -118,7 +118,7 @@ const Point: React.FC <PointProps> = ({
         }}
         onMouseDown={handleMouseDown}
 
-      >  {topLeft.x} {topLeft.y} </ div>
+      >  </ div>
     );
   };
   

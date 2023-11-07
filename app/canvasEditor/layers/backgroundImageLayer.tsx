@@ -4,7 +4,7 @@ import {   BackgroundContext } from '../CanvasContext';
 import { settings } from '../Signals';
 import { backgroundImage } from '../Signals';
 import ReusableLayer from '@/app/components/utility/ResuableLayer';
-const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }> = ({ onImageLoad }) => {
+const BackgroundImageLayer: React.FC<> = ( ) => {
   const { backgroundCanvasRef   } = useContext(BackgroundContext);
  
   useEffect(() => {
@@ -30,7 +30,7 @@ const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }
     if (backgroundImage.value instanceof File) {
       const imageUrl = await loadImage(backgroundImage.value);
       drawImageOnCanvas(imageUrl);
-      onImageLoad(imageUrl);
+      // onImageLoad(imageUrl);
     } else {
       console.error('Invalid file type');
     }

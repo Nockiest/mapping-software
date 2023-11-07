@@ -23,7 +23,7 @@ const DrawingCanvas: React.FC  = ( ) => {
         <UnitMarkerLayer    />
         <DrawingLayer    />
         <FronlineLayer  />
-        <BackgroundImageLayer onImageLoad={() => {}} />  
+        <BackgroundImageLayer   />  
       </div>
 
       {/* Splicer to combine layers */}
