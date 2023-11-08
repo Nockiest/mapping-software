@@ -1,5 +1,5 @@
 import { useContext, useRef } from "react";
-import CanvasClear from "@/app/components/ClearCanvas";
+import CanvasClear from "@/app/components/utility/ClearCanvas";
 import { BackgroundContext, CanvasContext,  CanvasContextType, CanvasSettingsType } from "../CanvasContext";//CanvasSettingsContext, 
 import { DrawingState } from "@/public/types/ButtonEvents";
 import MarkerEditorSettings from "./MarkerEditorSettings";

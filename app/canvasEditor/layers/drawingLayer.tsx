@@ -6,7 +6,7 @@ import React, {
   useContext,
 } from "react";
 import eraseLine from "@/app/components/drawing/Eraser";
-import CanvasToImage from "@/app/components/CanvasToImg";
+import CanvasToImage from "@/app/components/utility/CanvasToImg";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import {
   CanvasContext,
@@ -31,9 +31,10 @@ export enum DrawingState {
 }
 const DrawingLayer: React.FC = () => {
   const { canvasRef, canvasState, dispatchState } = useCanvas();
+  const mousePosition = useContext(MousePositionContext)
   const [lastMousePos, setLastMousePos] = useState<Vector2 | null>(null);
   const { color, radius } = settings.value;
-
+  const isActive = settings.value.activeLayer === "draw";
   const handleMouseLeave = () => {
     if (settings.value.activeLayer !== "draw") {
       return;
@@ -57,6 +58,8 @@ const DrawingLayer: React.FC = () => {
     ctx.fillStyle = color;
     ctx.fill();
   };
+
+
   useEffect(() => {
     if (!canvasRef) {
       return;
@@ -68,6 +71,7 @@ const DrawingLayer: React.FC = () => {
     const ctx = canvas.getContext("2d");
 
     const handleMouseDown = (e: MouseEvent) => {
+      console.log("MOUSE DOWN")
       if (settings.value.activeLayer !== "draw") {
         return;
       }
@@ -154,18 +158,20 @@ const DrawingLayer: React.FC = () => {
     };
 
     // Add event listeners
-    if (settings.value.activeLayer === "draw") {
+    if (isActive) {
+      console.log("TURN ON")
       canvas.addEventListener("mousedown", handleMouseDown);
       canvas.addEventListener("mousemove", handleMouseMovement);
       canvas.addEventListener("mouseup", handleMouseUp);
       canvas.addEventListener("mouseleave", handleMouseLeave);
-    } else {
-      // Remove event listeners if not in draw mode
-      canvas.removeEventListener("mousedown", handleMouseDown);
-      canvas.removeEventListener("mousemove", handleMouseMovement);
-      canvas.removeEventListener("mouseup", handleMouseUp);
-      canvas.removeEventListener("mouseleave", handleMouseLeave);
     }
+    //  else {
+    //   // Remove event listeners if not in draw mode
+    //   canvas.removeEventListener("mousedown", handleMouseDown);
+    //   canvas.removeEventListener("mousemove", handleMouseMovement);
+    //   canvas.removeEventListener("mouseup", handleMouseUp);
+    //   canvas.removeEventListener("mouseleave", handleMouseLeave);
+    // }
 
     // Remove event listeners on component unmount
     return () => {
@@ -174,8 +180,9 @@ const DrawingLayer: React.FC = () => {
       canvas.removeEventListener("mouseup", handleMouseUp);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [canvasRef, canvasState, lastMousePos, settings, dispatchState]);
-  const isDrawLayerActive = settings.value.activeLayer === "draw";
+  }, [canvasRef, canvasState, mousePosition, lastMousePos, settings , dispatchState]);
+ 
+  // console.log(isActive)
   return (
     <>
       {canvasRef && (
@@ -183,11 +190,11 @@ const DrawingLayer: React.FC = () => {
           ref={canvasRef}
           width={800}
           height={600}
-          onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
-          className="canvas-rectangle draw-canvas top-0"
+          // onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
+          className={`canvas-rectangle draw-canvas top-0 ${isActive ? 'z-20 ' : 'z-10'}`}
           style={{
-            pointerEvents: isDrawLayerActive ? "auto" : "none",
-            opacity: isDrawLayerActive ? 1 : 0.5,
+            // pointerEvents: isActive ? "auto" : "none",
+            // opacity: isActive ? 1 : 0.5,
             cursor:
               canvasState === DrawingState.BucketFill
                 ? "url('/cursor.cur'),auto"

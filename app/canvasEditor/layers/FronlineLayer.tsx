@@ -133,21 +133,21 @@ const FrontlineLayer = () => {
         return newPoints;
       });
     };
-
+    const isActive= settings.value.activeLayer === 'frontLine'
     return (
-      <div className="absolute top-0" onContextMenu={(e) => e.preventDefault()}>
+      <div  className={`markerLayer absolute top-0 ${isActive ? 'z-20' : 'z-10'}`} onContextMenu={(e) => e.preventDefault()}>
         <canvas
           width={settings.value.canvasSize.x}
           height={settings.value.canvasSize.y}
           className="border-2 canvas-rectangle"
           ref={frontlineCanvasRef}
           style={{
-            pointerEvents: settings.value.activeLayer === 'frontLine' ? 'auto' : 'none',
-            opacity: settings.value.activeLayer === 'frontLine' ? '1' : '0.4',
+            pointerEvents:isActive ? 'auto' : 'none',
+            opacity: isActive ? '1' : '0.4',
           }}
-          onContextMenu={settings.value.activeLayer === 'frontLine' ? handleMouseDown : null}
-          onMouseUp={settings.value.activeLayer === 'frontLine' ? handleMouseUp : null}
-          onMouseDown={settings.value.activeLayer === 'frontLine' ? handleMouseDown : null}
+          onContextMenu={isActive ? handleMouseDown : null}
+          onMouseUp={isActive  ? handleMouseUp : null}
+          onMouseDown={isActive ? handleMouseDown : null}
         />
         {points.map((point, index) => (
           <Point
@@ -156,8 +156,8 @@ const FrontlineLayer = () => {
             topLeft={topLeft} // Pass the topLeft position
             onDrag={(newPosition) => handlePointDrag(index, newPosition)}
             radius={5}
-            mouseWheelClk={settings.value.activeLayer === 'frontLine' ? () => handleDeletePoint(point) : null}
-            rightClk={settings.value.activeLayer === 'frontLine' ? () => findNewEndPointIndex(point) : null}
+            mouseWheelClk={isActive ? () => handleDeletePoint(point) : null}
+            rightClk={isActive ? () => findNewEndPointIndex(point) : null}
             
             onDelete={() => handleDeletePoint(index)} // Pass the deletion callback
             styling={{

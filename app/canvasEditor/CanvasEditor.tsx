@@ -2,14 +2,14 @@
 
 import React, { useState, useRef, useEffect, useReducer, useContext, CSSProperties } from "react";
 import eraseInRadius from "../components/drawing/Eraser";
-import CanvasToImage from "../components/CanvasToImg";
+import CanvasToImage from "../components/utility/CanvasToImg";
 import drawLineOnCanvas from "@/app/components/drawing/LineDrawer";
 import { Vector2 } from "@/public/types/GeometryTypes";
-import drawImageToBackground from "@/app/components/DrawBackgroundCanvasImg";
+import drawImageToBackground from "@/app/components/utility/DrawBackgroundCanvasImg";
 import BackgroundImageLayer from "./layers/BackgroundImageLayer";
 import {   useCanvas } from "./CanvasContext";
 import DrawingLayer from "./layers/DrawingLayer";
-import LayerSplicer from "../components/LayerSplicer";
+import LayerSplicer from "../components/utility/LayerSplicer";
 import UnitMarkerLayer from "./layers/UnitMarkerLayer";
 import FronlineLayer from "./layers/FronlineLayer";
  
@@ -19,10 +19,12 @@ const DrawingCanvas: React.FC  = ( ) => {
     < >
  
       <div className="relative" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <UnitMarkerLayer    />
+         
         <DrawingLayer    />
-        {/* <FronlineLayer  /> */}
-           <BackgroundImageLayer   />{/*  s tímhle nefunguje frontlinedrawer */}
+        <UnitMarkerLayer    />
+        <FronlineLayer  />
+           <BackgroundImageLayer   />
+            {/* s tímhle nefunguje frontlinedrawer   */}
       </div>
 
       {/* Splicer to combine layers */}

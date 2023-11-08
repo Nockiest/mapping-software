@@ -11,10 +11,12 @@
   border: 1px solid #000; /* Set your desired border style */
   /* Add any other styles you need */
 }
- .draw-canvas{
+ /* .draw-canvas{
   z-index: 100;
- }
-
+ } */
+/* .markerLayer{
+  z-index: 100
+} */
  .marker {
   position: absolute;
   border-radius: 50%;

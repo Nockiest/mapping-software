@@ -1,4 +1,4 @@
-import ImageUploader from "@/app/components/Dropzone";
+import ImageUploader from "@/app/components/utility/Dropzone";
 
 const dropzoneStyles: React.CSSProperties = {
   border: '2px dashed #ccc',

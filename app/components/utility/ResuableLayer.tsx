@@ -26,6 +26,7 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
 }) => {
 
   const canvas = canvasRef.current
+  const isActive =  layerName === settings.value.activeLayer
   const handleMouseClick = (e: React.MouseEvent) => {
     e.preventDefault();
     // console.log("HANDLING CLICK", layerName, settings.value.activeLayer, layerName === settings.value.activeLayer);
@@ -64,18 +65,16 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
   
   
   
-
   return (
     <canvas
-      className={`canvas-rectangle top-0 absolute ${layerName}`}
-      onClick={handleMouseClick}
-      onContextMenu={handleMouseClick}
+      className={`canvas-rectangle absolute top-0 ${isActive ? 'z-20 ' : ''}`}
+      onClick={isActive? handleMouseClick: null}
+      onContextMenu={isActive? handleMouseClick: (e) => {e.preventDefault()}}
       // onMouseUp={handleMouseUp}
       ref={canvasRef}
       width={settings.value.canvasSize.x}
       height={settings.value.canvasSize.y}
       style={{
-        zIndex: layerName === settings.value.activeLayer ? '100' : '0',
         ...style,
       }}
     ></canvas>

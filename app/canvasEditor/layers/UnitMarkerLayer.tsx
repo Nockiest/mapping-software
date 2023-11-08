@@ -56,7 +56,8 @@ const UnitMarkerLayer: React.FC = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      const canvas = markerCanvasRef.current;
+      if(!markerCanvasRef.current) return
+      const canvas = markerCanvasRef.current
       const rect = canvas.getBoundingClientRect();
       setTopLeftOffset({ x: rect.left, y: rect.top });
     };
@@ -99,24 +100,35 @@ const UnitMarkerLayer: React.FC = () => {
       dispatchState({ type: 'MAKING_LINE' });
       // setLineStartPosition({ x  , y});
     };
+
+    const canvas = markerCanvasRef.current;
+    if (!canvas) return
     // console.log( markerCanvasRef.current)
-    markerCanvasRef.current?.addEventListener('mousedown', handleMouseDown);
-    markerCanvasRef.current?.addEventListener('dblclick', handleMarkerDoubleClick);
+    if (isActive){
+      console.log("TURN ON")
+      canvas.addEventListener('mousedown', handleMouseDown);
+      canvas.addEventListener('dblclick', handleMarkerDoubleClick);
+    } else {
+      // console.log("TURN OFF")
+      canvas.addEventListener('mousedown', handleMouseDown);
+      canvas.addEventListener('dblclick', handleMarkerDoubleClick);
+    }
+  
 
     return () => {
-      markerCanvasRef.current?.removeEventListener('mousedown', handleMouseDown);
-      markerCanvasRef.current?.removeEventListener('dblclick', handleMarkerDoubleClick);
+      canvas.removeEventListener('mousedown', handleMouseDown);
+      canvas.removeEventListener('dblclick', handleMarkerDoubleClick);
     };
   }, [markerCanvasRef, markers,mousePosition, settings, markerLayerState]);
-
+  const isActive= settings.value.activeLayer === 'marker'
   return (
-    <div className="markerLayer absolute top-0 " onContextMenu={(e) => e.preventDefault()}>
+    <div className={`markerLayer absolute top-0 ${isActive ? 'z-20' : 'z-10'}`} onContextMenu={(e) => e.preventDefault()}>
       <canvas
         width={800}
         height={600}
         className="border-2 canvas-rectangle"
         ref={markerCanvasRef}
-        style={{ pointerEvents: settings.value.activeLayer === 'marker' ? 'auto' : 'none' }}
+        // style={{ pointerEvents: isActive ? 'auto' : 'none' }}
       />
       {markers.map((marker, index) => (
         <Marker key={index} topLeftOffset={topLeftOffset} initialPosition={marker.position} canvasSize={{ x: 800, y: 600 }}  dragHandler={followMouseComponent} customSettings={settings.value.markerSettings} />

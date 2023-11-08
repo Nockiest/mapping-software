@@ -1,9 +1,9 @@
 "use client";
 import React, { useRef, useState, createContext, useContext, ReactNode, useEffect } from "react";
-import CanvasToImage from "../components/CanvasToImg";
+import CanvasToImage from "../components/utility/CanvasToImg";
 import DrawingCanvas from "./CanvasEditor";
 import CanvasSettings from "./settings/CanvasSettings";
-import DebugInfo from "../components/Debugger";
+import DebugInfo from "../components/utility/Debugger";
 import Timeline from "./Timeline";
 import { CanvasContext, CanvasProvider, useCanvas,   } from "./CanvasContext";//CanvasSettingsContext
 import { settings } from "./Signals";
