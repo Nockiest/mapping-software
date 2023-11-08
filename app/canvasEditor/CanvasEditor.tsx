@@ -21,8 +21,8 @@ const DrawingCanvas: React.FC  = ( ) => {
       <div className="relative" style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <UnitMarkerLayer    />
         <DrawingLayer    />
-        <FronlineLayer  />
-         {/* <BackgroundImageLayer   />  s tímhle nefunguje frontlinedrawer */}
+        {/* <FronlineLayer  /> */}
+           <BackgroundImageLayer   />{/*  s tímhle nefunguje frontlinedrawer */}
       </div>
 
       {/* Splicer to combine layers */}

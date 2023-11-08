@@ -8,23 +8,23 @@ import Point from '@/app/components/frontline/Point';
 
 const FrontlineLayer = () => {
     const mousePosition = useContext(MousePositionContext);
-    const { forntlineCanvasRef } = useCanvas();
+    const { frontlineCanvasRef } = useCanvas();
     const [points, setPoints] = useState<Vector2[]>([]);
     const [topLeft, setTopLeft] = useState<Vector2>({ x: 0, y: 0 });
     const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
     const rightClickTimerRef = useRef<number | null>(null);
    
     useEffect(() => {
-      const canvas = forntlineCanvasRef.current;
+      const canvas = frontlineCanvasRef.current;
       const rect = canvas?.getBoundingClientRect();
       if (rect) {
         console.log("SETTING TOP LEFT POS",{ x: rect.left, y: rect.top })
         setTopLeft({ x: rect.left, y: rect.top });
       }
-    }, [forntlineCanvasRef, settings.value.activeLayer]);
+    }, [frontlineCanvasRef, settings.value.activeLayer]);
   
     useEffect(() => {
-      const canvas = forntlineCanvasRef.current;
+      const canvas = frontlineCanvasRef.current;
       const ctx = canvas?.getContext('2d');
       if (!ctx) {
         return;
@@ -56,7 +56,7 @@ const FrontlineLayer = () => {
           ctx.closePath();
         }
       }
-    }, [mousePosition, settings.value.activeLayer, forntlineCanvasRef, points, endPointIndex]);
+    }, [mousePosition, settings.value.activeLayer, frontlineCanvasRef, points, endPointIndex]);
     
     const handleMouseUp = () => {
         // Clear the timer if the right mouse button is released before it expires
@@ -74,7 +74,7 @@ const FrontlineLayer = () => {
         if (settings.value.activeLayer !== 'frontLine')  return  
 
         if (e.button === 0){
-            const rect = forntlineCanvasRef.current?.getBoundingClientRect();
+            const rect = frontlineCanvasRef.current?.getBoundingClientRect();
             const x = e.clientX - rect!.left;
             const y = e.clientY - rect!.top;
     
@@ -140,14 +140,14 @@ const FrontlineLayer = () => {
           width={settings.value.canvasSize.x}
           height={settings.value.canvasSize.y}
           className="border-2 canvas-rectangle"
-          ref={forntlineCanvasRef}
+          ref={frontlineCanvasRef}
           style={{
             pointerEvents: settings.value.activeLayer === 'frontLine' ? 'auto' : 'none',
             opacity: settings.value.activeLayer === 'frontLine' ? '1' : '0.4',
           }}
-          onContextMenu={handleMouseDown}
-          onMouseUp={handleMouseUp}
-          onMouseDown={handleMouseDown}
+          onContextMenu={settings.value.activeLayer === 'frontLine' ? handleMouseDown : null}
+          onMouseUp={settings.value.activeLayer === 'frontLine' ? handleMouseUp : null}
+          onMouseDown={settings.value.activeLayer === 'frontLine' ? handleMouseDown : null}
         />
         {points.map((point, index) => (
           <Point
@@ -156,8 +156,9 @@ const FrontlineLayer = () => {
             topLeft={topLeft} // Pass the topLeft position
             onDrag={(newPosition) => handlePointDrag(index, newPosition)}
             radius={5}
-            mouseWheelClk={() => handleDeletePoint(point)}
-            rightClk={() =>  findNewEndPointIndex(point)}
+            mouseWheelClk={settings.value.activeLayer === 'frontLine' ? () => handleDeletePoint(point) : null}
+            rightClk={settings.value.activeLayer === 'frontLine' ? () => findNewEndPointIndex(point) : null}
+            
             onDelete={() => handleDeletePoint(index)} // Pass the deletion callback
             styling={{
               background: index === points.length - 1 ? 'white' : 'red',
@@ -166,7 +167,7 @@ const FrontlineLayer = () => {
             }}
           />
         ))}
-        {/* <p>  {endPointIndex}</p>  */}
+       
       </div>
     );
   };
@@ -176,7 +177,7 @@ const FrontlineLayer = () => {
 
       //  console.log("HANDLING RIGHT CLICK")
     //   if (settings.value.activeLayer === 'frontLine') {
-    //     const rect = forntlineCanvasRef.current?.getBoundingClientRect();
+    //     const rect = frontlineCanvasRef.current?.getBoundingClientRect();
     //     const x = e.clientX - rect!.left;
     //     const y = e.clientY - rect!.top;
   

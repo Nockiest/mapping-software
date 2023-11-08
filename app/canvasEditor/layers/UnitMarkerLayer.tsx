@@ -65,8 +65,9 @@ const UnitMarkerLayer: React.FC = () => {
 
   useEffect(() => {
     const handleMouseDown = (e: MouseEvent) => {
-      if (settings.value.activeLayer !== 'marker') {return;}
       console.log("MOUSE DOWN")
+      if (settings.value.activeLayer !== 'marker') {return;}
+       
       const rect = markerCanvasRef.current?.getBoundingClientRect();
       const x = e.clientX - rect!.left;
       const y = e.clientY - rect!.top;
@@ -98,7 +99,7 @@ const UnitMarkerLayer: React.FC = () => {
       dispatchState({ type: 'MAKING_LINE' });
       // setLineStartPosition({ x  , y});
     };
-
+    // console.log( markerCanvasRef.current)
     markerCanvasRef.current?.addEventListener('mousedown', handleMouseDown);
     markerCanvasRef.current?.addEventListener('dblclick', handleMarkerDoubleClick);
 
@@ -109,7 +110,7 @@ const UnitMarkerLayer: React.FC = () => {
   }, [markerCanvasRef, markers,mousePosition, settings, markerLayerState]);
 
   return (
-    <div className="absolute top-0 " onContextMenu={(e) => e.preventDefault()}>
+    <div className="markerLayer absolute top-0 " onContextMenu={(e) => e.preventDefault()}>
       <canvas
         width={800}
         height={600}

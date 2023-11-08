@@ -1,26 +1,39 @@
-import React, { useState, useRef, useEffect, useReducer, useContext } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useReducer,
+  useContext,
+} from "react";
 import eraseLine from "@/app/components/drawing/Eraser";
 import CanvasToImage from "@/app/components/CanvasToImg";
 import { Vector2 } from "@/public/types/GeometryTypes";
-import { CanvasContext, CanvasContextType, DrawAction, ErasePayload, useCanvas } from "../CanvasContext";
+import {
+  CanvasContext,
+  CanvasContextType,
+  DrawAction,
+  ErasePayload,
+  useCanvas,
+} from "../CanvasContext";
 // import { DrawingState } from "@/public/types/ButtonEvents";
 import bucketFill from "@/app/components/drawing/BucketFill";
 import { MousePositionContext } from "../page";
 import { settings } from "../Signals";
-import drawLineWithShape, { DrawPayload } from "../../components/drawing/LineDrawer";
+import drawLineWithShape, {
+  DrawPayload,
+} from "../../components/drawing/LineDrawer";
 import ReusableLayer from "@/app/components/utility/ResuableLayer";
 export enum DrawingState {
   Idle,
   Drawing,
   Erasing,
-  BucketFill
+  BucketFill,
 }
 const DrawingLayer: React.FC = () => {
   const { canvasRef, canvasState, dispatchState } = useCanvas();
   const [lastMousePos, setLastMousePos] = useState<Vector2 | null>(null);
   const { color, radius } = settings.value;
 
- 
   const handleMouseLeave = () => {
     if (settings.value.activeLayer !== "draw") {
       return;
@@ -28,7 +41,13 @@ const DrawingLayer: React.FC = () => {
     dispatchState({ type: "MOUSE_LEAVE" });
   };
 
-  const drawDot: (ctx: CanvasRenderingContext2D, x: number, y: number, radius: number, color: string) => void = (ctx, x, y, radius, color) => {
+  const drawDot: (
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    radius: number,
+    color: string
+  ) => void = (ctx, x, y, radius, color) => {
     // Draw based on lineType
     if (settings.value.lineType === "rounded") {
       ctx.arc(x, y, radius / 2, 0, 2 * Math.PI);
@@ -60,7 +79,13 @@ const DrawingLayer: React.FC = () => {
       if (e.button === 2) {
         const erasePayload: ErasePayload = {
           eraseFunction: eraseLine,
-          eraseArgs: { canvasRef, start: lastMousePos || { x, y }, end: { x, y }, radius, eraseShape: settings.value.lineType },
+          eraseArgs: {
+            canvasRef,
+            start: lastMousePos || { x, y },
+            end: { x, y },
+            radius,
+            eraseShape: settings.value.lineType,
+          },
         };
         dispatchState({ type: "ERASE", payload: erasePayload });
       } else if (e.button === 0) {
@@ -94,12 +119,25 @@ const DrawingLayer: React.FC = () => {
       }
       // console.log(canvasState === DrawingState.Drawing)
       if (canvasState === DrawingState.Erasing) {
-        eraseLine({ canvasRef, start: lastMousePos || { x: 0, y: 0 }, end: { x, y }, radius, eraseShape: settings.value.lineType });
+        eraseLine({
+          canvasRef,
+          start: lastMousePos || { x: 0, y: 0 },
+          end: { x, y },
+          radius,
+          eraseShape: settings.value.lineType,
+        });
       } else if (canvasState === DrawingState.Drawing) {
         // Left mouse button is pressed, draw
         if (ctx && lastMousePos) {
           // console.log(settings.value.lineType )
-          drawLineWithShape(ctx, lastMousePos, { x, y }, color, radius, settings.value.lineType);
+          drawLineWithShape(
+            ctx,
+            lastMousePos,
+            { x, y },
+            color,
+            radius,
+            settings.value.lineType
+          );
         }
       }
       setLastMousePos({ x, y });
@@ -137,7 +175,7 @@ const DrawingLayer: React.FC = () => {
       canvas.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, [canvasRef, canvasState, lastMousePos, settings, dispatchState]);
-
+  const isDrawLayerActive = settings.value.activeLayer === "draw";
   return (
     <>
       {canvasRef && (
@@ -147,7 +185,14 @@ const DrawingLayer: React.FC = () => {
           height={600}
           onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
           className="canvas-rectangle draw-canvas top-0"
-          style={{ pointerEvents: settings.value.activeLayer === "draw" ? "auto" : "none", opacity: settings.value.activeLayer === "draw" ? 1 : 0.5, cursor: canvasState === DrawingState.BucketFill?  "url('/cursor.cur'),auto": "auto" }}
+          style={{
+            pointerEvents: isDrawLayerActive ? "auto" : "none",
+            opacity: isDrawLayerActive ? 1 : 0.5,
+            cursor:
+              canvasState === DrawingState.BucketFill
+                ? "url('/cursor.cur'),auto"
+                : "auto",
+          }}
         />
       )}
     </>
@@ -156,15 +201,14 @@ const DrawingLayer: React.FC = () => {
 
 export default DrawingLayer;
 
-  
-        // <canvas
-        //   ref={canvasRef}
-        //   width={800}
-        //   height={600}
-        //   onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
-        //   className="absolute canvas-rectangle draw-canvas top-0"
-        //   style={{ pointerEvents: settings.value.activeLayer === "draw" ? "auto" : "none", opacity: settings.value.activeLayer === "draw" ? 1 : 0.5, cursor: canvasState === DrawingState.BucketFill?  "url('/cursor.cur'),auto": "auto" }}
-        // />
+// <canvas
+//   ref={canvasRef}
+//   width={800}
+//   height={600}
+//   onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
+//   className="absolute canvas-rectangle draw-canvas top-0"
+//   style={{ pointerEvents: settings.value.activeLayer === "draw" ? "auto" : "none", opacity: settings.value.activeLayer === "draw" ? 1 : 0.5, cursor: canvasState === DrawingState.BucketFill?  "url('/cursor.cur'),auto": "auto" }}
+// />
 // useEffect(() => {
 //   const canvas = canvasRef?.current;
 

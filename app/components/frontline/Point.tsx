@@ -8,9 +8,9 @@ export type PointProps = {
     position: Vector2;
     topLeft?: Vector2;
     radius?: number;
-    leftClk?: () => void;
-    rightClk?: (e: React.MouseEvent) => void;
-    mouseWheelClk?: () => void;
+    leftClk?: () => void|null;
+    rightClk?: (e: React.MouseEvent) => void|null;
+    mouseWheelClk?: () => void|null;
     styling?: React.CSSProperties;
     onDrag?: (position: Vector2) => void;
     onDelete?: () => void;

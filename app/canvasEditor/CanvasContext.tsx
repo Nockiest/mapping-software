@@ -9,7 +9,7 @@ import { DrawingState } from "./layers/DrawingLayer";
 export interface CanvasContextType {
   canvasRef: React.RefObject<HTMLCanvasElement | undefined>;
   markerCanvasRef: React.RefObject<HTMLCanvasElement | null>;
-  forntlineCanvasRef: React.RefObject<HTMLCanvasElement | null>;
+  frontlineCanvasRef: React.RefObject<HTMLCanvasElement | null>;
   canvasState: DrawingState;
   dispatchState: Dispatch<DrawAction>;
 }
@@ -76,7 +76,7 @@ export const BackgroundContext = createContext<BackgroundContextType | undefined
 export const CanvasProvider: React.FC<{ children: ReactNode}> = ({ children }) => {
   const canvasRef = useRef<HTMLCanvasElement | undefined>(null);
   const markerCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const forntlineCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const frontlineCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const backgroundCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [canvasState, dispatchState] = useReducer<Reducer<DrawingState, Action>>(reducer, DrawingState.Idle);
 
@@ -85,7 +85,7 @@ export const CanvasProvider: React.FC<{ children: ReactNode}> = ({ children }) =
     markerCanvasRef,
     canvasState,
     dispatchState,
-    forntlineCanvasRef
+    frontlineCanvasRef
   };
 
   const backgroundContextValue: BackgroundContextType = {
