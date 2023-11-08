@@ -67,7 +67,7 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
   
   return (
     <canvas
-      className={`canvas-rectangle absolute top-0 ${isActive ? 'z-20 ' : ''}`}
+      className={`canvas-rectangle absolute top-0 ${isActive ? 'z-20 ' : `${settings.value.canvasZindexes[layerName] } `}`}
       onClick={isActive? handleMouseClick: null}
       onContextMenu={isActive? handleMouseClick: (e) => {e.preventDefault()}}
       // onMouseUp={handleMouseUp}

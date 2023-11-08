@@ -33,4 +33,7 @@ export type Settings = Signal<{
     canvasSize: Vector2;
     markerSettings: MarkerSettings
     popularColors: Array<Color>;
+    canvasZindexes:{
+      [key:LayerNames]: number
+    }
   }>;
