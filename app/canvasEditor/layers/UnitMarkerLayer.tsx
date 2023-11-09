@@ -122,11 +122,11 @@ const UnitMarkerLayer: React.FC = () => {
   }, [markerCanvasRef, markers,mousePosition, settings, markerLayerState]);
   const isActive= settings.value.activeLayer === 'marker'
   return (
-    <div className={`markerLayer absolute top-0 ${isActive ? 'z-20' : 'z-10'}`} onContextMenu={(e) => e.preventDefault()}>
+    <div className={`  ${isActive ? 'z-20' : 'z-10'}`} onContextMenu={(e) => e.preventDefault()}>
       <canvas
         width={800}
         height={600}
-        className="border-2 canvas-rectangle"
+        className="border-2 canvas-rectangle markerLayer  "
         ref={markerCanvasRef}
         // style={{ pointerEvents: isActive ? 'auto' : 'none' }}
       />

@@ -30,7 +30,8 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
   const handleMouseClick = (e: React.MouseEvent) => {
     e.preventDefault();
     // console.log("HANDLING CLICK", layerName, settings.value.activeLayer, layerName === settings.value.activeLayer);
-    if (layerName !== settings.value.activeLayer) {
+    console.log(isActive)
+    if (!isActive) {
       return;
     }
 
@@ -46,28 +47,12 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
     }
   };
 
-  // useEffect(() => {
-  //   const handleMouseUp = (e:MouseEvent) => {
-  //     // Handle mouse up event
-  //     console.log("Mouse up event:", onMouseUp);
-  //     if( !onMouseUp){return}
-
-  //     onMouseUp()
-  //   };
-  //   if (!canvas ){return}
-
-  //   canvas.addEventListener("mouseup", handleMouseUp);
-  //   // Cleanup the event listener on component unmount
-  //   return () => {
-  //     canvas.removeEventListener("mouseup", handleMouseUp);
-  //   };
-  // }, [canvas]); // Make sure to include canvas as a dependency if it's used inside the effect
-  
+ 
   
   
   return (
     <canvas
-      className={`canvas-rectangle absolute top-0 ${isActive ? 'z-20 ' : `${settings.value.canvasZindexes[layerName] } `}`}
+      className={`canvas-rectangle absolute  top-0  ${isActive ? 'z-20 ' : `${settings.value.canvasZindexes[layerName] } `}`}
       onClick={isActive? handleMouseClick: null}
       onContextMenu={isActive? handleMouseClick: (e) => {e.preventDefault()}}
       // onMouseUp={handleMouseUp}
@@ -75,6 +60,7 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
       width={settings.value.canvasSize.x}
       height={settings.value.canvasSize.y}
       style={{
+        pointerEvents:isActive ? 'auto' : 'none',
         ...style,
       }}
     ></canvas>

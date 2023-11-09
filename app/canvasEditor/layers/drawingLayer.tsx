@@ -23,6 +23,7 @@ import drawLineWithShape, {
   DrawPayload,
 } from "../../components/drawing/LineDrawer";
 import ReusableLayer from "@/app/components/utility/ResuableLayer";
+import fillCanvas from "@/app/components/utility/fillCanvas"; 
 export enum DrawingState {
   Idle,
   Drawing,
@@ -158,21 +159,14 @@ const DrawingLayer: React.FC = () => {
     };
 
     // Add event listeners
-    if (isActive) {
+ 
       console.log("TURN ON")
       canvas.addEventListener("mousedown", handleMouseDown);
       canvas.addEventListener("mousemove", handleMouseMovement);
       canvas.addEventListener("mouseup", handleMouseUp);
       canvas.addEventListener("mouseleave", handleMouseLeave);
-    }
-    //  else {
-    //   // Remove event listeners if not in draw mode
-    //   canvas.removeEventListener("mousedown", handleMouseDown);
-    //   canvas.removeEventListener("mousemove", handleMouseMovement);
-    //   canvas.removeEventListener("mouseup", handleMouseUp);
-    //   canvas.removeEventListener("mouseleave", handleMouseLeave);
-    // }
-
+      fillCanvas (canvasRef, 'rgba(211, 211, 211, 0.3)');  // Adjust the color as needed
+ 
     // Remove event listeners on component unmount
     return () => {
       canvas.removeEventListener("mousedown", handleMouseDown);
@@ -186,21 +180,31 @@ const DrawingLayer: React.FC = () => {
   return (
     <>
       {canvasRef && (
-        <canvas
-          ref={canvasRef}
-          width={800}
-          height={600}
-          // onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
-          className={`canvas-rectangle draw-canvas top-0 ${isActive ? 'z-20 ' : 'z-10'}`}
-          style={{
-            // pointerEvents: isActive ? "auto" : "none",
-            // opacity: isActive ? 1 : 0.5,
+        <ReusableLayer 
+            canvasRef={canvasRef}
+            layerName="draw"
+            style={{
             cursor:
               canvasState === DrawingState.BucketFill
                 ? "url('/cursor.cur'),auto"
                 : "auto",
           }}
         />
+
+        // <canvas
+        //   ref={canvasRef}
+        //   width={800}
+        //   height={600}
+        //   // onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
+        //   className={` canvas-rectangle draw-canvas       ${isActive ? 'z-20 ' : 'z-10'}`}
+        //   style={{
+        //     // opacity: isActive ? 1 : 0.5,
+        //     cursor:
+        //       canvasState === DrawingState.BucketFill
+        //         ? "url('/cursor.cur'),auto"
+        //         : "auto",
+        //   }}
+        // />
       )}
     </>
   );

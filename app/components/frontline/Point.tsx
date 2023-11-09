@@ -17,6 +17,7 @@ export type PointProps = {
     children: React.ReactNode;
     shape: Omit<Shapes, "triangle">;
     dragable?: boolean
+    acceptInput: boolean
 };
 const Point: React.FC <PointProps> = ({
     position,
@@ -31,12 +32,15 @@ const Point: React.FC <PointProps> = ({
     children,
     shape,
     dragable = true,
-
+    acceptInput = true
   }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [rightMouseDownTime, setRightMouseDownTime] = useState<number | null>(null);
   
     const handleMouseDown = (e: React.MouseEvent) => {
+      if(!acceptInput){
+        console.log("NOT ACCEPTING INPUT")
+        return}
       if (e.button == 0 && leftClk){ 
         leftClk( )
       } else if   (e.button === 1 && mouseWheelClk) {
@@ -50,6 +54,9 @@ const Point: React.FC <PointProps> = ({
     };
   
     const handleMouseMove = (e: MouseEvent) => {
+      if(!acceptInput){
+        console.log("NOT ACCEPTING INPUT")
+        return}
         if (!isDragging || !dragable) return  
         const newX = e.clientX - topLeft.x + window.scrollX;
         const newY = e.clientY - topLeft.y + window.scrollY;

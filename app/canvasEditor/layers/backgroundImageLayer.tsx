@@ -4,12 +4,18 @@ import {   BackgroundContext } from '../CanvasContext';
 import { settings } from '../Signals';
 import { backgroundImage } from '../Signals';
 import ReusableLayer from '@/app/components/utility/ResuableLayer';
+import fillCanvas from '@/app/components/utility/fillCanvas';
 const BackgroundImageLayer: React.FC<> = ( ) => {
   const { backgroundCanvasRef   } = useContext(BackgroundContext);
  
   useEffect(() => {
     handleFileChange( );
+    
   }, [backgroundImage.value]);
+
+  useEffect(() => {
+    fillCanvas(backgroundCanvasRef, "rgba(0,255,0,0.2)")
+  }, [])
 
   const loadImage = (file: File) => {
     return new Promise<string>((resolve) => {
@@ -58,24 +64,25 @@ const BackgroundImageLayer: React.FC<> = ( ) => {
   };
 
   return (
-    <  >
+    < >
       {(  backgroundCanvasRef) && (
 
           <ReusableLayer
           canvasRef={backgroundCanvasRef}
           layerName="background" 
-          // style={{ pointerEvents: 'none', } }
           />
-          // <canvas
-          //   ref={backgroundCanvasRef}
-          //   width={800}
-          //   height={600}
-          //   className={`absolute background-layer top-0 ${settings.value.activeLayer === "background" ? 'opacity-100' : 'opacity-40'}`}
-          //   style={{ pointerEvents: 'none', objectFit: 'contain', border: '0px', padding: '0', margin: '0'  }}
-          // />
+         
       )}
     </>
   );
 };
 
 export default BackgroundImageLayer;
+
+  // <canvas
+          //   ref={backgroundCanvasRef}
+          //   width={800}
+          //   height={600}
+          //   className={`absolute background-layer top-0 ${settings.value.activeLayer === "background" ? 'opacity-100' : 'opacity-40'}`}
+          //   style={{ pointerEvents: 'none', objectFit: 'contain', border: '0px', padding: '0', margin: '0'  }}
+          // />
