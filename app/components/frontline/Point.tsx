@@ -19,6 +19,7 @@ export type PointProps = {
     shape: Omit<Shapes, "triangle">;
     dragable?: boolean
     acceptInput: boolean
+    label?: string
 };
 const Point: React.FC <PointProps> = ({
     globalPosition,
@@ -34,7 +35,8 @@ const Point: React.FC <PointProps> = ({
     children,
     shape,
     dragable = true,
-    acceptInput = true
+    acceptInput = true,
+    label
   }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [rightMouseDownTime, setRightMouseDownTime] = useState<number | null>(null);
@@ -128,7 +130,7 @@ const Point: React.FC <PointProps> = ({
         }}
         onMouseDown={handleMouseDown}
 
-      >  {globalPosition.x} {globalPosition.y} </ div>
+      >  {label}  </ div>
     );
   };
   

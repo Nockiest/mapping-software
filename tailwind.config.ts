@@ -1,6 +1,6 @@
 import type { Config } from 'tailwindcss'
 
-const config: Config = {
+const config = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     "./public/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      height: {
+        600: '600px', // Set your custom height here
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
@@ -17,8 +20,10 @@ const config: Config = {
     },
   },
   plugins: [],
-}
-export default config
+};
+
+export default config;
+
 // /** @type {import('tailwindcss').Config} */
 // module.exports = {
 //   content: [
