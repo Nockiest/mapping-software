@@ -12,6 +12,7 @@ import DrawingLayer from "./layers/DrawingLayer";
 import LayerSplicer from "../components/utility/LayerSplicer";
 import UnitMarkerLayer from "./layers/UnitMarkerLayer";
 import FronlineLayer from "./layers/FronlineLayer";
+import { settings } from "./Signals";
  
 const DrawingCanvas: React.FC  = ( ) => {
   const canvasRef = useCanvas( );
@@ -20,7 +21,7 @@ const DrawingCanvas: React.FC  = ( ) => {
     < >
  
    
-    <div className="relative flex items-center justify-center "  > 
+    <div className={`relative   w-${settings.value.canvasSize}  flex items-center justify-center `}  > 
       <DrawingLayer    />
       <UnitMarkerLayer    />
       <FronlineLayer  />

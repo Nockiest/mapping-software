@@ -36,7 +36,9 @@ const Point: React.FC <PointProps> = ({
   }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [rightMouseDownTime, setRightMouseDownTime] = useState<number | null>(null);
-  
+    // useEffect(() => {
+    //   console.log(topLeft)
+    // } )
     const handleMouseDown = (e: React.MouseEvent) => {
       if(!acceptInput){
         console.log("NOT ACCEPTING INPUT")
@@ -54,12 +56,13 @@ const Point: React.FC <PointProps> = ({
     };
   
     const handleMouseMove = (e: MouseEvent) => {
-      if(!acceptInput){
-        console.log("NOT ACCEPTING INPUT")
-        return}
-        if (!isDragging || !dragable) return  
-        const newX = e.clientX - topLeft.x + window.scrollX;
-        const newY = e.clientY - topLeft.y + window.scrollY;
+       
+        if (!acceptInput|| !isDragging || !dragable){ 
+          console.log("NOT ACCEPTING INPUT" ,!acceptInput,!isDragging ,!dragable )
+          return  
+        }
+        const newX = e.clientX  -topLeft.x + window.scrollX;
+        const newY = e.clientY  -topLeft.y + window.scrollY;
         
         // Calculate the new position with the center as the clicked point
         const adjustedPosition = {
@@ -68,7 +71,7 @@ const Point: React.FC <PointProps> = ({
         };
         console.log(e.clientX , topLeft.x , window.scrollX)
         console.log(adjustedPosition  )
-
+        
         onDrag?.(adjustedPosition);
       
     };
@@ -117,11 +120,13 @@ const Point: React.FC <PointProps> = ({
           borderRadius: '50%',
           background: 'blue',
           cursor: 'pointer',
-          ...styling
+          opacity: acceptInput? "0.4" : "1",
+          ...styling,
+         
         }}
         onMouseDown={handleMouseDown}
 
-      > {children} </ div>
+      > {topLeft.x} </ div>
     );
   };
   

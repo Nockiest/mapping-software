@@ -22,7 +22,7 @@ const FrontlineLayer = () => {
       console.log("SETTING TOP LEFT POS", { x: rect.left, y: rect.top });
       setTopLeft({ x: rect.left, y: rect.top });
     }
-    fillCanvas (frontlineCanvasRef, 'rgba(0,  0, 211, 0.3)'); 
+    // fillCanvas (frontlineCanvasRef, 'rgba(0,  0, 211, 0.3)'); 
   }, [frontlineCanvasRef, settings.value.activeLayer]);
 
   useEffect(() => {
@@ -32,6 +32,8 @@ const FrontlineLayer = () => {
       return;
     }
     if (isActive && mousePosition) {
+      // const x = e.clientX //- rect!.left;
+      // const y = e.clientY - rect!.top;
       // Clear the canvas
       ctx.clearRect(0, 0, canvas?.width!, canvas?.height!);
 
@@ -84,7 +86,7 @@ const FrontlineLayer = () => {
 
     if (e.button === 0) {
       const rect = frontlineCanvasRef.current?.getBoundingClientRect();
-      const x = e.clientX - rect!.left;
+      const x = e.clientX //- rect!.left;
       const y = e.clientY - rect!.top;
 
       // Check if an existing point is clicked
@@ -146,6 +148,7 @@ const FrontlineLayer = () => {
   return (
     < >
       {frontlineCanvasRef && (
+       <>
         <ReusableLayer
           canvasRef={frontlineCanvasRef}
           ref={frontlineCanvasRef}
@@ -156,26 +159,29 @@ const FrontlineLayer = () => {
           onLeftClick={handleMouseDown}
           onMouseUp={handleMouseUp}
           onRightClick={(e) => handleMouseDown(e)}
-        >
-          {points.map((point, index) => (
-            <Point
-              key={index}
-              position={point}
-              topLeft={topLeft}
-              onDrag={(newPosition) => handlePointDrag(index, newPosition)}
-              radius={5}
-              mouseWheelClk={isActive ? () => handleDeletePoint(point) : null}
-              rightClk={isActive ? () => findNewEndPointIndex(point) : null}
-              onDelete={() => handleDeletePoint(index)} // Pass the deletion callback
-              styling={{
-                background: index === points.length - 1 ? "white" : "red",
-                border: "2px solid black",
-                pointerEvents:
-                  settings.value.activeLayer === "frontLine" ? "auto" : "none",
-              }}
-            />
-          ))}
-        </ReusableLayer>
+         
+        />
+          {/* this topleft offset works in case the canvas editor has only vertical offset */}
+         {points.map((point, index) => (
+          <Point
+            key={index}
+            position={point}
+            topLeft={{x:0,y:topLeft.y}} 
+            onDrag={(newPosition) => handlePointDrag(index, newPosition)}
+            radius={5}
+            mouseWheelClk={isActive ? () => handleDeletePoint(point) : null}
+            rightClk={isActive ? () => findNewEndPointIndex(point) : null}
+            onDelete={() => handleDeletePoint(index)} // Pass the deletion callback
+            styling={{
+              background: index === points.length - 1 ? "white" : "red",
+              border: "2px solid black",
+              pointerEvents: isActive? "auto" : "none",
+              zIndex: "30"
+            }}
+          />
+        ))}
+       </>
+        
       )}
     </>
   );

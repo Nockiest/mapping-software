@@ -24,6 +24,7 @@ import drawLineWithShape, {
 } from "../../components/drawing/LineDrawer";
 import ReusableLayer from "@/app/components/utility/ResuableLayer";
 import fillCanvas from "@/app/components/utility/fillCanvas"; 
+import { drawDot } from "@/app/components/utility/canvas/CanvasUtils";
 export enum DrawingState {
   Idle,
   Drawing,
@@ -43,26 +44,11 @@ const DrawingLayer: React.FC = () => {
     dispatchState({ type: "MOUSE_LEAVE" });
   };
 
-  useEffect(() =>{
-    fillCanvas (canvasRef, 'rgba(211, 211, 211, 0.3)');  // Adjust the color as needed
-  }, [])
+  // useEffect(() =>{
+  //   fillCanvas (canvasRef, 'rgba(211, 211, 211, 0.3)');  // Adjust the color as needed
+  // }, [])
 
-  const drawDot: (
-    ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number,
-    radius: number,
-    color: string
-  ) => void = (ctx, x, y, radius, color) => {
-    // Draw based on lineType
-    if (settings.value.lineType === "rounded") {
-      ctx.arc(x, y, radius / 2, 0, 2 * Math.PI);
-    } else if (settings.value.lineType === "squared") {
-      ctx.rect(x - radius / 2, y - radius / 2, radius, radius);
-    }
-    ctx.fillStyle = color;
-    ctx.fill();
-  };
+   
 
 
   useEffect(() => {
@@ -164,7 +150,7 @@ const DrawingLayer: React.FC = () => {
 
     // Add event listeners
  
-      console.log("TURN ON")
+     
       canvas.addEventListener("mousedown", handleMouseDown);
       canvas.addEventListener("mousemove", handleMouseMovement);
       canvas.addEventListener("mouseup", handleMouseUp);

@@ -5,7 +5,7 @@ import { settings } from '../Signals';
 import { backgroundImage } from '../Signals';
 import ReusableLayer from '@/app/components/utility/ResuableLayer';
 import fillCanvas from '@/app/components/utility/fillCanvas';
-const BackgroundImageLayer: React.FC<> = ( ) => {
+const BackgroundImageLayer: React.FC  = ( ) => {
   const { backgroundCanvasRef   } = useContext(BackgroundContext);
  
   useEffect(() => {
@@ -13,9 +13,9 @@ const BackgroundImageLayer: React.FC<> = ( ) => {
     
   }, [backgroundImage.value]);
 
-  useEffect(() => {
-    fillCanvas(backgroundCanvasRef, "rgba(0,255,0,0.2)")
-  }, [])
+  // useEffect(() => {
+  //   fillCanvas(backgroundCanvasRef, "rgba(0,255,0,0.2)")
+  // }, [])
 
   const loadImage = (file: File) => {
     return new Promise<string>((resolve) => {

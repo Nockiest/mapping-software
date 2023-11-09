@@ -28,7 +28,7 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
 }) => {
   const canvas = canvasRef.current;
   const isActive = layerName === settings.value.activeLayer;
-
+ 
   const handleMouseClick = (e: React.MouseEvent) => {
     e.preventDefault();
     
@@ -62,7 +62,7 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
         ...style,
       }}
     >
-      {children} {/* Render children */}
+      {children}  
     </canvas>
   );
 };

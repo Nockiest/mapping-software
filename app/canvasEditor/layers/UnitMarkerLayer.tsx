@@ -53,7 +53,7 @@ const UnitMarkerLayer: React.FC = () => {
   const [markerLayerState, dispatchState] = useReducer(markerLayerStateMachine, MarkerLayerState.Idle);
   const [topLeftOffset, setTopLeftOffset] = useState<Vector2>({ x: 0, y: 0 });
   const mousePosition = useContext(MousePositionContext)
- 
+  const isActive= settings.value.activeLayer === 'marker'
 
   useEffect(() => {
     const handleResize = () => {
@@ -68,7 +68,7 @@ const UnitMarkerLayer: React.FC = () => {
   useEffect(() => {
     const handleMouseDown = (e: MouseEvent) => {
       console.log("MOUSE DOWN")
-      if (settings.value.activeLayer !== 'marker') {return;}
+      if (!isActive) {return }
        
       const rect = markerCanvasRef.current?.getBoundingClientRect();
       const x = e.clientX - rect!.left;
@@ -121,7 +121,7 @@ const UnitMarkerLayer: React.FC = () => {
       canvas.removeEventListener('dblclick', handleMarkerDoubleClick);
     };
   }, [markerCanvasRef, markers,mousePosition, settings, markerLayerState]);
-  const isActive= settings.value.activeLayer === 'marker'
+  
   return (
     < >
       <ReusableLayer
