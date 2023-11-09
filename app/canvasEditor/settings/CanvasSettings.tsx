@@ -32,22 +32,23 @@ const CanvasSettings = ( ) => {
         padding: '10px',
         border: 'black 1px solid',
         borderRadius: '4px',
+        height: '200px',
+        overflow: 'auto',  // Add this line for scrollability
       }}
     >
       <ActiveLayerSettings />
-      {/*  handleActiveLayerChange={handleActiveLayerChange}  */}
+      {/* handleActiveLayerChange={handleActiveLayerChange} */}
       <br />
       {settings.value.activeLayer === 'draw' ? (
         <DrawingLayerSettings />
       ) : settings.value.activeLayer === 'marker' ? (
         <MarkerEditorSettings changeSettings={changeSettings} />
-       ) : (
+      ) : (
         <BackgroundLayerSettings />
-       )
-       }
-
+      )}
       {/* <CanvasClear canvasRef={canvasRef} /> */}
-    </div>
+</div>
+
   );
 };
 

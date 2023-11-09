@@ -1,4 +1,5 @@
 import { settings } from "@/app/canvasEditor/Signals";
+import { Vector2 } from "@/public/types/GeometryTypes";
 
 export const drawDot: (
     ctx: CanvasRenderingContext2D,
@@ -16,3 +17,10 @@ export const drawDot: (
     ctx.fillStyle = color;
     ctx.fill();
   };
+
+export function calculateRelativePosition(position:Vector2, divTopLeft:Vector2) {
+    const relativeX = position.x - divTopLeft.x;
+    const relativeY = position.y - divTopLeft.y;
+  
+    return { x: relativeX, y: relativeY };
+  }

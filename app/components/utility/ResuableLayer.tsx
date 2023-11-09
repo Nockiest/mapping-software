@@ -49,21 +49,25 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
   };
 
   return (
-    <canvas
-      className={`canvas-rectangle absolute top-0 ${isActive ? 'z-20 ' : `${settings.value.canvasZindexes[layerName]} `}`}
-      onClick={isActive ? handleMouseClick : null}
-      onContextMenu={isActive ? handleMouseClick : (e) => { e.preventDefault(); }}
-      // onMouseUp={handleMouseUp}
-      ref={canvasRef}
-      width={settings.value.canvasSize.x}
-      height={settings.value.canvasSize.y}
-      style={{
-        pointerEvents: isActive ? 'auto' : 'none',
-        ...style,
-      }}
-    >
+    <div  className={`canvas-rectangle absolute top-0 ${isActive ? 'z-20 ' : `${settings.value.canvasZindexes[layerName]} `}`}>
+      <canvas
+        
+        onClick={isActive ? handleMouseClick : null}
+        onContextMenu={isActive ? handleMouseClick : (e) => { e.preventDefault(); }}
+        // onMouseUp={handleMouseUp}
+        ref={canvasRef}
+        width={settings.value.canvasSize.x}
+        height={settings.value.canvasSize.y}
+        style={{
+          pointerEvents: isActive ? 'auto' : 'none',
+          ...style,
+        }}
+      >
+        
+      </canvas>
       {children}  
-    </canvas>
+    </div>
+    
   );
 };
 

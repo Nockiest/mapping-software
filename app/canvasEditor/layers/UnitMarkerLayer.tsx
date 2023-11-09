@@ -103,17 +103,22 @@ const UnitMarkerLayer: React.FC = () => {
     };
 
     const canvas = markerCanvasRef.current;
-    if (!canvas) return
-    // console.log( markerCanvasRef.current)
-    if (isActive){
-      console.log("TURN ON")
-      canvas.addEventListener('mousedown', handleMouseDown);
-      canvas.addEventListener('dblclick', handleMarkerDoubleClick);
-    } else {
+    if (!canvas || !isActive) {
       // console.log("TURN OFF")
       canvas.addEventListener('mousedown', handleMouseDown);
       canvas.addEventListener('dblclick', handleMarkerDoubleClick);
+    } else {
+      console.log("TURN ON")
+      canvas.addEventListener('mousedown', handleMouseDown);
+      canvas.addEventListener('dblclick', handleMarkerDoubleClick);
     }
+    // if (isActive){
+      
+    // } else {
+    //   // console.log("TURN OFF")
+    //   canvas.addEventListener('mousedown', handleMouseDown);
+    //   canvas.addEventListener('dblclick', handleMarkerDoubleClick);
+    // }
   
 
     return () => {

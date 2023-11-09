@@ -5,7 +5,8 @@ import { useEffect, useState, ReactNode } from "react";
 
  
 export type PointProps = {
-    position: Vector2;
+    globalPosition: Vector2;
+    localPosition: Vector2
     topLeft?: Vector2;
     radius?: number;
     leftClk?: () => void|null;
@@ -20,7 +21,8 @@ export type PointProps = {
     acceptInput: boolean
 };
 const Point: React.FC <PointProps> = ({
-    position,
+    globalPosition,
+    localPosition,
     topLeft = {x:0,y:0},
     radius = 15,
     leftClk,
@@ -113,8 +115,8 @@ const Point: React.FC <PointProps> = ({
         <div
         style={{
           position: 'absolute',
-          left: `${position.x - radius}px`,
-          top: `${position.y - radius}px`,
+          left: `${globalPosition.x - radius}px`,
+          top: `${globalPosition.y - radius}px`,
           width: `${radius * 2}px`,
           height: `${radius * 2}px`,
           borderRadius: '50%',
@@ -126,7 +128,7 @@ const Point: React.FC <PointProps> = ({
         }}
         onMouseDown={handleMouseDown}
 
-      > {topLeft.x} </ div>
+      >  {globalPosition.x} {globalPosition.y} </ div>
     );
   };
   

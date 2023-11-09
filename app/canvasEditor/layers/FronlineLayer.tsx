@@ -50,9 +50,9 @@ const FrontlineLayer = () => {
           if (points[endPointIndex]) {
             ctx.lineTo(points[endPointIndex].x, points[endPointIndex].y);
           }
-          // else {
-          //   console.error('Endpoint index is null or invalid');
-          // }
+          else {
+            console.error('Endpoint index is null or invalid');
+          }
         }
 
         ctx.strokeStyle = "blue";
@@ -86,13 +86,13 @@ const FrontlineLayer = () => {
 
     if (e.button === 0) {
       const rect = frontlineCanvasRef.current?.getBoundingClientRect();
-      const x = e.clientX //- rect!.left;
-      const y = e.clientY - rect!.top;
+      const canvasRelativeX = e.clientX  - rect!.left;
+      const canvasRelativeY = e.clientY - rect!.top;
 
       // Check if an existing point is clicked
       const clickedPointIndex = points.findIndex((point) => {
         const isClicked =
-          Math.abs(point.x - x) < 5 && Math.abs(point.y - y) < 5;
+          Math.abs(point.x - canvasRelativeX) < 5 && Math.abs(point.y - canvasRelativeY) < 5;
         if (isClicked) {
           console.log("Clicked Point Position:", point);
         }
@@ -106,7 +106,7 @@ const FrontlineLayer = () => {
       } else {
         // Add a new point
         console.log("ADDING A POINT");
-        setPoints((prevPoints) => [...prevPoints, { x, y }]);
+        setPoints((prevPoints) => [...prevPoints, { x:canvasRelativeX, y:canvasRelativeY }]);
       }
 
       // Set up a timer to handle the duration of the right mouse button press
@@ -144,46 +144,44 @@ const FrontlineLayer = () => {
       return newPoints;
     });
   };
-
+      //{/* this topleft offset works in case the canvas editor has only vertical offset */}
   return (
-    < >
-      {frontlineCanvasRef && (
-       <>
-        <ReusableLayer
-          canvasRef={frontlineCanvasRef}
-          ref={frontlineCanvasRef}
-          style={{
-            opacity: isActive ? "1" : "0.4",
-          }}
-          layerName="frontLine"
-          onLeftClick={handleMouseDown}
-          onMouseUp={handleMouseUp}
-          onRightClick={(e) => handleMouseDown(e)}
-         
-        />
-          {/* this topleft offset works in case the canvas editor has only vertical offset */}
-         {points.map((point, index) => (
+    <>
+    {frontlineCanvasRef && (
+      <ReusableLayer
+        canvasRef={frontlineCanvasRef}
+        ref={frontlineCanvasRef}
+        style={{
+          opacity: isActive ? "1" : "0.4",
+        }}
+        layerName="frontLine"
+        onLeftClick={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onRightClick={(e) => handleMouseDown(e)}
+      >
+        {points.map((point, index) => (
           <Point
             key={index}
-            position={point}
-            topLeft={{x:0,y:topLeft.y}} 
+            globalPosition={point}
+            topLeft={{ x: topLeft.x, y: topLeft.y }}
             onDrag={(newPosition) => handlePointDrag(index, newPosition)}
             radius={5}
             mouseWheelClk={isActive ? () => handleDeletePoint(point) : null}
             rightClk={isActive ? () => findNewEndPointIndex(point) : null}
-            onDelete={() => handleDeletePoint(index)} // Pass the deletion callback
+            onDelete={() => handleDeletePoint(index)}
             styling={{
               background: index === points.length - 1 ? "white" : "red",
               border: "2px solid black",
-              pointerEvents: isActive? "auto" : "none",
-              zIndex: "30"
+              pointerEvents: isActive ? "auto" : "none",
+              zIndex: "30",
             }}
           />
         ))}
-       </>
-        
-      )}
-    </>
+      </ReusableLayer>
+ 
+    )}
+  </>
+  
   );
 };
 

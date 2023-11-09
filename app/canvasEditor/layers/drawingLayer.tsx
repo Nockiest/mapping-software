@@ -24,7 +24,7 @@ import drawLineWithShape, {
 } from "../../components/drawing/LineDrawer";
 import ReusableLayer from "@/app/components/utility/ResuableLayer";
 import fillCanvas from "@/app/components/utility/fillCanvas"; 
-import { drawDot } from "@/app/components/utility/canvas/CanvasUtils";
+import { drawDot } from "@/app/components/utility/CanvasUtils";
 export enum DrawingState {
   Idle,
   Drawing,
