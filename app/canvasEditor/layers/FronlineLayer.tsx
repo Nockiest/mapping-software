@@ -144,10 +144,7 @@ const FrontlineLayer = () => {
   };
 
   return (
-    <div
-      className={`frontLineLazer     ${isActive ? "z-20" : "z-10"}`}
-      onContextMenu={(e) => e.preventDefault()}
-    >
+    < >
       {frontlineCanvasRef && (
         <ReusableLayer
           canvasRef={frontlineCanvasRef}
@@ -180,7 +177,7 @@ const FrontlineLayer = () => {
           ))}
         </ReusableLayer>
       )}
-    </div>
+    </>
   );
 };
 

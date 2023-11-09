@@ -9,6 +9,7 @@ import { Color } from '@/public/types/OtherTypes';
 import LineComponent from '@/app/components/frontline/FrontLine2D';
 import { MousePositionContext } from '../page';
 import { followMouseComponent } from '@/public/utils';
+import ReusableLayer from '@/app/components/utility/ResuableLayer';
 enum MarkerLayerState {
   Idle,
   Dragging,
@@ -122,23 +123,32 @@ const UnitMarkerLayer: React.FC = () => {
   }, [markerCanvasRef, markers,mousePosition, settings, markerLayerState]);
   const isActive= settings.value.activeLayer === 'marker'
   return (
-    <div className={`  ${isActive ? 'z-20' : 'z-10'}`} onContextMenu={(e) => e.preventDefault()}>
-      <canvas
+    < >
+      <ReusableLayer
+      layerName='marker'
+      canvasRef={markerCanvasRef}
+      >
+        {markers.map((marker, index) => (
+        <Marker key={index} topLeftOffset={topLeftOffset} initialPosition={marker.position} canvasSize={{ x: 800, y: 600 }}  dragHandler={followMouseComponent} customSettings={settings.value.markerSettings} />
+      ))}
+      </ReusableLayer>
+      
+       
+      
+       
+    </>
+  );
+};
+
+export default UnitMarkerLayer;
+
+ {/* <canvas
         width={800}
         height={600}
         className="border-2 canvas-rectangle markerLayer  "
         ref={markerCanvasRef}
         // style={{ pointerEvents: isActive ? 'auto' : 'none' }}
-      />
-      {markers.map((marker, index) => (
-        <Marker key={index} topLeftOffset={topLeftOffset} initialPosition={marker.position} canvasSize={{ x: 800, y: 600 }}  dragHandler={followMouseComponent} customSettings={settings.value.markerSettings} />
-      ))}
-      {markerLayerState} 
-    </div>
-  );
-};
-
-export default UnitMarkerLayer;
+      /> */}
 
 // const handleMouseMove = (e: MouseEvent) => {
 //   // if (markerLayerState === MarkerLayerState.Dragging) {

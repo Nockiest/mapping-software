@@ -55,6 +55,7 @@ const Page: React.FC = () => {
       />
       <CanvasSettings  />  
       <DrawingCanvas   />
+      
       <Timeline />
     </>
   );

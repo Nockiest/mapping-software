@@ -1,6 +1,6 @@
 import { settings } from '@/app/canvasEditor/Signals';
 import { LayerNames, Settings } from '@/public/types/OtherTypes';
-import {useEffect} from 'react';
+import {ReactNode, useEffect} from 'react';
 
 interface ReusableLayerProps {
   canvasRef:  React.RefObject<HTMLCanvasElement | undefined>;
@@ -12,6 +12,7 @@ interface ReusableLayerProps {
 //   onContextMenu?:() => void;
   style?: {
     [key: string]: string; // Allow any CSS property
+  children?: ReactNode;
   };
 }
 
@@ -23,14 +24,14 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
   onRightClick,
   onMouseUp,
   style,
+  children, // Add the children prop
 }) => {
+  const canvas = canvasRef.current;
+  const isActive = layerName === settings.value.activeLayer;
 
-  const canvas = canvasRef.current
-  const isActive =  layerName === settings.value.activeLayer
   const handleMouseClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    // console.log("HANDLING CLICK", layerName, settings.value.activeLayer, layerName === settings.value.activeLayer);
-    console.log(isActive)
+    
     if (!isActive) {
       return;
     }
@@ -47,26 +48,24 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
     }
   };
 
- 
-  
-  
   return (
     <canvas
-      className={`canvas-rectangle absolute  top-0  ${isActive ? 'z-20 ' : `${settings.value.canvasZindexes[layerName] } `}`}
-      onClick={isActive? handleMouseClick: null}
-      onContextMenu={isActive? handleMouseClick: (e) => {e.preventDefault()}}
+      className={`canvas-rectangle absolute top-0 ${isActive ? 'z-20 ' : `${settings.value.canvasZindexes[layerName]} `}`}
+      onClick={isActive ? handleMouseClick : null}
+      onContextMenu={isActive ? handleMouseClick : (e) => { e.preventDefault(); }}
       // onMouseUp={handleMouseUp}
       ref={canvasRef}
       width={settings.value.canvasSize.x}
       height={settings.value.canvasSize.y}
       style={{
-        pointerEvents:isActive ? 'auto' : 'none',
+        pointerEvents: isActive ? 'auto' : 'none',
         ...style,
       }}
-    ></canvas>
+    >
+      {children} {/* Render children */}
+    </canvas>
   );
 };
 
 export default ReusableLayer;
 
- 

@@ -43,6 +43,10 @@ const DrawingLayer: React.FC = () => {
     dispatchState({ type: "MOUSE_LEAVE" });
   };
 
+  useEffect(() =>{
+    fillCanvas (canvasRef, 'rgba(211, 211, 211, 0.3)');  // Adjust the color as needed
+  }, [])
+
   const drawDot: (
     ctx: CanvasRenderingContext2D,
     x: number,
@@ -165,7 +169,7 @@ const DrawingLayer: React.FC = () => {
       canvas.addEventListener("mousemove", handleMouseMovement);
       canvas.addEventListener("mouseup", handleMouseUp);
       canvas.addEventListener("mouseleave", handleMouseLeave);
-      fillCanvas (canvasRef, 'rgba(211, 211, 211, 0.3)');  // Adjust the color as needed
+   
  
     // Remove event listeners on component unmount
     return () => {
@@ -176,9 +180,10 @@ const DrawingLayer: React.FC = () => {
     };
   }, [canvasRef, canvasState, mousePosition, lastMousePos, settings , dispatchState]);
  
-  // console.log(isActive)
+  // zjevně nemusím posílat input handling logiku do reusable canvas
   return (
     <>
+    
       {canvasRef && (
         <ReusableLayer 
             canvasRef={canvasRef}
