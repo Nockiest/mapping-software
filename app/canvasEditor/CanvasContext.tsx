@@ -18,6 +18,12 @@ export interface BackgroundContextType {
   backgroundCanvasRef: React.RefObject<HTMLCanvasElement | null>;
  
 }
+type UpdateGlobalDataType = (newData: Partial<GlobalDataType>) => void;
+
+export type GlobalDataContextType = {
+  GlobalData: GlobalDataType;
+  updateGlobalData: UpdateGlobalDataType;
+}
 
 export interface CanvasSettingsType {
   settings: Settings;
@@ -70,38 +76,72 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
   }
 };
 
+type GlobalDataType = {
+  mouseDownTime:number
+}
+
+ 
+
+ 
 export const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
 export const BackgroundContext = createContext<BackgroundContextType | undefined>(undefined);
- 
-export const CanvasProvider: React.FC<{ children: ReactNode}> = ({ children }) => {
+export const GlobalDataContext = createContext<GlobalDataContextType >({GlobalData}); 
+
+
+export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const canvasRef = useRef<HTMLCanvasElement | undefined>(null);
   const markerCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const frontlineCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const backgroundCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [canvasState, dispatchState] = useReducer<Reducer<DrawingState, Action>>(reducer, DrawingState.Idle);
+  const [globalData, setGlobalData] = useState<GlobalDataType>({ mouseDownTime: 0 });
 
   const canvasContextValue: CanvasContextType = {
     canvasRef,
     markerCanvasRef,
     canvasState,
     dispatchState,
-    frontlineCanvasRef
+    frontlineCanvasRef,
   };
 
   const backgroundContextValue: BackgroundContextType = {
     backgroundCanvasRef,
   };
 
+  const updateGlobalData = (newData: Partial<GlobalDataType>) => {
+    setGlobalData((prevData) => ({
+      ...prevData,
+      ...newData,
+    }));
+  };
+
+  const globalDataContextValue: GlobalDataContextType = {
+    GlobalData: globalData,
+    updateGlobalData,
+  };
+
   return (
     <CanvasContext.Provider value={canvasContextValue}>
       <BackgroundContext.Provider value={backgroundContextValue}>
-        {children}
+        <GlobalDataContext.Provider value={globalDataContextValue}>
+          {children}
+        </GlobalDataContext.Provider>
       </BackgroundContext.Provider>
     </CanvasContext.Provider>
   );
 };
 export const useCanvas = () => {
   const context = useContext(CanvasContext);
+
+  if (!context) {
+    throw new Error("useCanvas must be used within a CanvasProvider");
+  }
+
+  return context;
+};
+
+export const useGlobalValue = () => {
+  const context = useContext(GlobalDataContext);
 
   if (!context) {
     throw new Error("useCanvas must be used within a CanvasProvider");

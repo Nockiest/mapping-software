@@ -2,16 +2,17 @@ import { useContext, useState, useRef, useEffect, ReactNode } from "react";
 import { MousePositionContext } from "../page";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { settings } from "../Signals";
-import { useCanvas } from "../CanvasContext";
+import { useCanvas, useGlobalValue } from "../CanvasContext";
 import Point from "@/app/components/frontline/Point";
 import ReusableLayer from "@/app/components/utility/ResuableLayer";
 import fillCanvas from "@/app/components/utility/fillCanvas";
 import { Color } from "@/public/types/OtherTypes";
 import Frontline from "@/app/components/frontline/Frontline";
-
+ 
 const FrontlineLayer = () => {
   const mousePosition = useContext(MousePositionContext);
-  const { frontlineCanvasRef } = useCanvas();
+  const { frontlineCanvasRef,  } = useCanvas();
+  const { GlobalData } = useGlobalValue()
   const [frontLines, setFrontlines] = useState<ReactNode[]>([])
   const [activeFrontLine, setActiveFrontline] = useState<ReactNode|null>(null)
   const [topLeft, setTopLeft] = useState<Vector2>({ x: 0, y: 0 });
@@ -41,49 +42,6 @@ const FrontlineLayer = () => {
     // fillCanvas (frontlineCanvasRef, 'rgba(0,  0, 211, 0.3)'); 
   }, [frontlineCanvasRef, settings.value.activeLayer]);
 
-  // useEffect(() => {
-  //   const canvas = frontlineCanvasRef.current;
-  //   const ctx = canvas?.getContext("2d");
-  //   if (!ctx) {
-  //     return;
-  //   }
-  //   if (isActive && mousePosition) {
-  //     // const x = e.clientX //- rect!.left;
-  //     // const y = e.clientY - rect!.top;
-  //     // Clear the canvas
-  //     ctx.clearRect(0, 0, canvas?.width!, canvas?.height!);
-
-  //     // Draw lines
-  //     if (points.length >= 2) {
-  //       ctx.beginPath();
-  //       ctx.moveTo(points[0].x, points[0].y);
-  //       for (let i = 1; i < points.length; i++) {
-  //         ctx.lineTo(points[i].x, points[i].y);
-  //       }
-
-  //       if (endPointIndex !== null) {
-  //         // Draw a line from the last point to the endpoint
-  //         if (points[endPointIndex]) {
-  //           ctx.lineTo(points[endPointIndex].x, points[endPointIndex].y);
-  //         }
-  //         else {
-  //           console.error('Endpoint index is null or invalid');
-  //         }
-  //       }
-
-  //       ctx.strokeStyle = color;
-  //       ctx.lineWidth = 2;
-  //       ctx.stroke();
-  //       ctx.closePath();
-  //     }
-  //   }
-  // }, [
-  //   mousePosition,
-  //   settings.value.activeLayer,
-  //   frontlineCanvasRef,
-  //   endPointIndex,
-  // ]);
-
   const handleMouseUp = () => {
     // Clear the timer if the right mouse button is released before it expires
     clearTimeout(rightClickTimerRef.current);
@@ -97,13 +55,9 @@ const FrontlineLayer = () => {
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     e.preventDefault();
     // console.log(e.button)
-    if (!isActive) return;
-
-    
+    if (!isActive) return;    
   };
 
- 
-      //{/* this topleft offset works in case the canvas editor has only vertical offset */}
   return (
     <>
       {frontlineCanvasRef && (
