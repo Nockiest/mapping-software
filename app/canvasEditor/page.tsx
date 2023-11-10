@@ -37,31 +37,38 @@ const MousePositionProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   );
 };
 
+ 
 const Page: React.FC = () => {
   const { canvasState } = useCanvas();
   const mousePosition = useContext(MousePositionContext);
   const { GlobalData, updateGlobalData } = useGlobalValue();
-  const [rightMouseDownTime, setRightMouseDownTime] = useState<number | null>(null);
+  const [mouseDownTimeStamp, setMouseDownTimeStamp] = useState<number | null>(null);
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (e.button === 2) {
+    console.log("PRESSED");
+    // if (e.button === 2) {
       // Right mouse button is pressed
-      setRightMouseDownTime(Date.now());
-    }
+      setMouseDownTimeStamp(Date.now());
+    // }
   };
 
   const handleMouseUp = (e: React.MouseEvent) => {
-    if (e.button === 2 && rightMouseDownTime !== null) {
+    // if (e.button === 2 && rightMouseDownTime !== null) {
       // Right mouse button is released
-      const rightMouseUpTime = Date.now();
-      const timePressed = rightMouseUpTime - rightMouseDownTime;
+      // const rightMouseUpTime = Date.now();
+      // const timePressed = rightMouseUpTime - rightMouseDownTime;
 
       // Update GlobalData or perform any other action
-      updateGlobalData({ ...GlobalData, rightMouseDownTime: timePressed });
+      // updateGlobalData({ ...GlobalData, rightMouseDownTime: timePressed });
 
-      // Reset the rightMouseDownTime state
-      setRightMouseDownTime(null);
-    }
+      // Print the duration pressed
+      // console.log(`Right mouse button pressed for ${timePressed} milliseconds`);
+
+      // Reset the elapsed time state to 0
+      setElapsedTime(0);
+      setMouseDownTimeStamp(null);
+    // }
   };
 
   useEffect(() => {
@@ -75,6 +82,27 @@ const Page: React.FC = () => {
       document.removeEventListener('mouseup', handleMouseUp);
     };
   }, []);
+
+  useEffect(() => {
+    // Update elapsed time while the button is pressed
+    if (mouseDownTimeStamp !== null) {
+      const intervalId = setInterval(() => {
+        setElapsedTime((prevElapsedTime) => prevElapsedTime + 100);
+        updateGlobalData("mouseDownTime", elapsedTime + 100); // Use the current state value directly
+      }, 100);
+  
+      return () => clearInterval(intervalId);
+    }
+  }, [mouseDownTimeStamp, elapsedTime]);
+  
+  useEffect(() => {
+  
+        updateGlobalData("mouseDownTime", elapsedTime ); // Use the current state value directly
+      
+ 
+  }, [ elapsedTime]);
+  
+
   return (
     <>
       <DebugInfo
@@ -85,16 +113,21 @@ const Page: React.FC = () => {
           color: settings.value.color,
           layer: settings.value.activeLayer,
           mousePosition: mousePosition,
-          RIghtClkTime:rightMouseDownTime
+          rightClickElapsedTime: elapsedTime,
+          GlobalData:GlobalData.mouseDownTime
         }}
       />
-      <CanvasSettings  />  
-      <DrawingCanvas   />
       
+      <CanvasSettings />
+      <DrawingCanvas />
       <Timeline />
     </>
   );
 };
+
+ 
+
+ 
 
 const App: React.FC = () => {
   return (

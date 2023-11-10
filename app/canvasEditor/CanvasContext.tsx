@@ -18,7 +18,7 @@ export interface BackgroundContextType {
   backgroundCanvasRef: React.RefObject<HTMLCanvasElement | null>;
  
 }
-type UpdateGlobalDataType = (newData: Partial<GlobalDataType>) => void;
+type UpdateGlobalDataType = (paramName: keyof GlobalDataType, paramValue: any) => void;
 
 export type GlobalDataContextType = {
   GlobalData: GlobalDataType;
@@ -77,7 +77,7 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
 };
 
 type GlobalDataType = {
-  rightMouseDownTime:number
+  mouseDownTime:number
 }
 
  
@@ -108,10 +108,11 @@ export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     backgroundCanvasRef,
   };
 
-  const updateGlobalData = (newData: Partial<GlobalDataType>) => {
+  const updateGlobalData:UpdateGlobalDataType = (paramName , paramValue ) => {
+    console.log("SETTING DATA", paramName, globalData[paramName], paramValue )
     setGlobalData((prevData) => ({
       ...prevData,
-      ...newData,
+      [paramName]: paramValue,
     }));
   };
 
