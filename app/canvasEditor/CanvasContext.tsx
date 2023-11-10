@@ -77,7 +77,7 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
 };
 
 type GlobalDataType = {
-  mouseDownTime:number
+  rightMouseDownTime:number
 }
 
  
@@ -85,7 +85,7 @@ type GlobalDataType = {
  
 export const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
 export const BackgroundContext = createContext<BackgroundContextType | undefined>(undefined);
-export const GlobalDataContext = createContext<GlobalDataContextType >({GlobalData}); 
+export const GlobalDataContext = createContext<GlobalDataContextType| undefined >(undefined); 
 
 
 export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) => {

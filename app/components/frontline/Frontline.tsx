@@ -5,38 +5,31 @@ import Point from './Point';
 import { settings } from '@/app/canvasEditor/Signals';
 import { useCanvas } from '@/app/canvasEditor/CanvasContext';
 
-type FrontLineProps = {
-    activeFrontLine: ReactNode,
-    topLeftPoint: Vector2,
-    idNum: string
-}
+ 
 
-const Frontline: React.FC<FrontLineProps>= ({ idNum, activeFrontLine,  topLeftPoint  }) => {
+type FrontLineProps = {
+  topLeftPoint: Vector2;
+  idNum: string;
+  frontLineActive: boolean;
+};
+
+const Frontline: React.FC<FrontLineProps> = ({ idNum,   topLeftPoint, frontLineActive }) => {
     const [points, setPoints] = useState<Vector2[]>([]);
     const pointRadius:number = 5
     const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
     const mousePosition = useContext(MousePositionContext);// udělat z toho custom context
     const { frontlineCanvasRef } = useCanvas();
-    const isActive = activeFrontLine && activeFrontLine.idNum === idNum;
-    const handleClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
-        // Add your click event handling logic here
-        console.log("Canvas Clicked! ", isActive);
-        console.log(activeFrontLine.idNum , idNum)
-      };
-
     
     useEffect(() => {
     const canvas = frontlineCanvasRef.current;
-    console.log(activeFrontLine, this)
-    if (canvas) {
-        canvas.addEventListener('click', handleClick);
-
+    if (canvas && frontLineActive) {
+        canvas.addEventListener('click', handleMouseDown);
         return () => {
         // Cleanup the event listener when the component unmounts
-        canvas.removeEventListener('click', handleClick);
+        canvas.removeEventListener('click', handleMouseDown);
         };
     }
-    }, [frontlineCanvasRef]);
+    }, [frontlineCanvasRef,frontLineActive]);
     const addPoint = (position:Vector2) =>{
         setPoints( prevPoints => {
            return [...prevPoints, position]
@@ -44,30 +37,17 @@ const Frontline: React.FC<FrontLineProps>= ({ idNum, activeFrontLine,  topLeftPo
     }
 
     const updatePointPositions = (index, cllickPos) =>{
-        // const canvasRelativeX = e.clientX  - rect!.left;
-        // const canvasRelativeY = e.clientY - rect!.top;
         setPoints((prevPoints) => {
             const newPoints = [...prevPoints];
             newPoints[index] = cllickPos;
             return newPoints;
           });
-        // const clickedPointIndex = points.findIndex((point) => {
-        //     const isClicked =
-        //       Math.abs(point.x - canvasRelativeX) < pointRadius && Math.abs(point.y - canvasRelativeY) < pointRadius;
-        //     if (isClicked) {
-        //       console.log("Clicked Point Position:", point);
-        //     }
-        //     return isClicked;
-        //   });
-
-        // setPoints( prevPoints => {
-        //     [...prevPoints, cllickPos]
-        // })
+      
     }
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     e.preventDefault();
     // console.log(e.button)
-    if (!isActive) return;
+    if (!frontLineActive) return;
 
     if (e.button === 0) {
       const rect = frontlineCanvasRef.current?.getBoundingClientRect();
@@ -102,6 +82,7 @@ const Frontline: React.FC<FrontLineProps>= ({ idNum, activeFrontLine,  topLeftPo
     }
   };
     const findNewEndPointIndex = (clickedPoint: Vector2) => {
+ 
         console.log("Clicked Point Position:", clickedPoint);
         // Find the index of the clicked point in the points array
         const clickedPointIndex = points.findIndex(
@@ -115,15 +96,10 @@ const Frontline: React.FC<FrontLineProps>= ({ idNum, activeFrontLine,  topLeftPo
     useEffect(() => {
         const canvas = frontlineCanvasRef.current;
         const ctx = canvas?.getContext("2d");
-        if (!ctx) {
+        if (!ctx||!frontLineActive || !mousePosition) {
           return;
         }
-        if (isActive && mousePosition) {
-          // const x = e.clientX //- rect!.left;
-          // const y = e.clientY - rect!.top;
-          // Clear the canvas
           ctx.clearRect(0, 0, canvas?.width!, canvas?.height!);
-    
           // Draw lines
           if (points.length >= 2) {
             ctx.beginPath();
@@ -140,12 +116,10 @@ const Frontline: React.FC<FrontLineProps>= ({ idNum, activeFrontLine,  topLeftPo
                 console.error('Endpoint index is null or invalid');
               }
             }
-    
             ctx.strokeStyle = "blue";
             ctx.lineWidth = 2;
             ctx.stroke();
             ctx.closePath();
-          }
         }
       }, [
         mousePosition,
@@ -164,22 +138,20 @@ const Frontline: React.FC<FrontLineProps>= ({ idNum, activeFrontLine,  topLeftPo
 
   return (
     <div className='absolute top-0'>
-        Frontline
-
         {points.map((point, index) => (
           <Point
             key={index}
-            globalPosition={point}
+            position={point}
             topLeft={{ x: topLeftPoint.x, y: topLeftPoint.y }}
             onDrag={(newPosition) => updatePointPositions(index, newPosition)}
             radius={5}
-            mouseWheelClk={isActive ? () => handleDeletePoint(point) : null}
-            rightClk={isActive ? () => findNewEndPointIndex(point) : null}
+            mouseWheelClk={frontLineActive ? () => handleDeletePoint(point) : null}
+            rightClk={frontLineActive ? () => findNewEndPointIndex(point) : null}
             onDelete={() => handleDeletePoint(index)}
             styling={{
               background: index === points.length - 1 ? "white" : "red",
               border: "2px solid black",
-              pointerEvents: isActive ? "auto" : "none",
+              pointerEvents: frontLineActive ? "auto" : "none",
               zIndex: "30",
             }}
           />
@@ -189,3 +161,16 @@ const Frontline: React.FC<FrontLineProps>= ({ idNum, activeFrontLine,  topLeftPo
 }
 
 export default Frontline
+
+ // const clickedPointIndex = points.findIndex((point) => {
+        //     const isClicked =
+        //       Math.abs(point.x - canvasRelativeX) < pointRadius && Math.abs(point.y - canvasRelativeY) < pointRadius;
+        //     if (isClicked) {
+        //       console.log("Clicked Point Position:", point);
+        //     }
+        //     return isClicked;
+        //   });
+
+        // setPoints( prevPoints => {
+        //     [...prevPoints, cllickPos]
+        // })

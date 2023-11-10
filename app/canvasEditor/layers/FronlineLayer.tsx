@@ -9,37 +9,42 @@ import fillCanvas from "@/app/components/utility/fillCanvas";
 import { Color } from "@/public/types/OtherTypes";
 import Frontline from "@/app/components/frontline/Frontline";
  
+import { v4 as uuidv4 } from 'uuid';
+
+
+type FrontlineData = {
+  idNum: string;
+   
+};
+
 const FrontlineLayer = () => {
   const mousePosition = useContext(MousePositionContext);
-  const { frontlineCanvasRef,  } = useCanvas();
-  const { GlobalData } = useGlobalValue()
-  const [frontLines, setFrontlines] = useState<ReactNode[]>([])
-  const [activeFrontLine, setActiveFrontline] = useState<ReactNode|null>(null)
+  const { frontlineCanvasRef } = useCanvas();
+  const { GlobalData } = useGlobalValue();
+  const [frontlinesData, setFrontlinesData] = useState<FrontlineData[]>([]);
+  const [activeFrontLine, setActiveFrontLine] = useState<string | null>(null);
   const [topLeft, setTopLeft] = useState<Vector2>({ x: 0, y: 0 });
   const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
   const rightClickTimerRef = useRef<number | null>(null);
-  const isActive = settings.value.activeLayer === "frontLine";
-  useEffect(() => {
-    // Assuming you want to instantiate one Frontline component initially
-    const initialFrontline = (
-      <Frontline
-        idNum="frontline-1"
-        activeFrontLine
-        topLeftPoint={topLeft}
-      />
-    );
+  const isActive = settings.value.activeLayer === 'frontLine';
 
-    setFrontlines([initialFrontline]);
-    setActiveFrontline(initialFrontline)
+  useEffect(() => {
+    // Assuming you want to instantiate one Frontline initially
+    const initialFrontlineData: FrontlineData = {
+      idNum: uuidv4(),
+    };
+
+    setFrontlinesData([initialFrontlineData]);
+    setActiveFrontLine(initialFrontlineData.idNum);
   }, [isActive, frontlineCanvasRef, topLeft]);
+
   useEffect(() => {
     const canvas = frontlineCanvasRef.current;
     const rect = canvas?.getBoundingClientRect();
     if (rect) {
-      console.log("SETTING TOP LEFT POS", { x: rect.left, y: rect.top });
+      console.log('SETTING TOP LEFT POS', { x: rect.left, y: rect.top });
       setTopLeft({ x: rect.left, y: rect.top });
     }
-    // fillCanvas (frontlineCanvasRef, 'rgba(0,  0, 211, 0.3)'); 
   }, [frontlineCanvasRef, settings.value.activeLayer]);
 
   const handleMouseUp = () => {
@@ -55,7 +60,7 @@ const FrontlineLayer = () => {
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     e.preventDefault();
     // console.log(e.button)
-    if (!isActive) return;    
+    if (!isActive) return;
   };
 
   return (
@@ -63,26 +68,33 @@ const FrontlineLayer = () => {
       {frontlineCanvasRef && (
         <ReusableLayer
           canvasRef={frontlineCanvasRef}
-          ref={frontlineCanvasRef}
           style={{
-            opacity: isActive ? "1" : "0.4",
+            opacity: isActive ? '1' : '0.4',
           }}
           layerName="frontLine"
           onLeftClick={(e) => handleMouseDown(e)}
           onMouseUp={handleMouseUp}
           onRightClick={(e) => handleMouseDown(e)}
         >
-          {frontLines && frontLines.map((frontLine, idNum, index) => (
-            <Frontline key={index} idNum={idNum} activeFrontLine={activeFrontLine}   topLeftPoint={topLeft} />
+          {frontlinesData.map((frontlineData) => (
+           <Frontline
+              key={frontlineData.idNum}
+              idNum={frontlineData.idNum}
+             
+              topLeftPoint={topLeft}
+              frontLineActive={ activeFrontLine === frontlineData.idNum}
+              // ... other props
+            />
           ))}
         </ReusableLayer>
       )}
     </>
   );
-      
 };
 
 export default FrontlineLayer;
+
+   
 
  // const handlePointDrag = (index: number, newPosition: Vector2) => {
   //   console.log("HANDLING POINT DRAG", newPosition);

@@ -5,7 +5,7 @@ import DrawingCanvas from "./CanvasEditor";
 import CanvasSettings from "./settings/CanvasSettings";
 import DebugInfo from "../components/utility/Debugger";
 import Timeline from "./Timeline";
-import { CanvasContext, CanvasProvider, useCanvas,   } from "./CanvasContext";//CanvasSettingsContext
+import { CanvasContext, CanvasProvider, useCanvas, useGlobalValue,   } from "./CanvasContext";//CanvasSettingsContext
 import { settings } from "./Signals";
 // Create a context for mouse position
 export const MousePositionContext = createContext<{ x: number; y: number } | null>(null);
@@ -38,9 +38,43 @@ const MousePositionProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 };
 
 const Page: React.FC = () => {
-  const { canvasState } = useCanvas( );
+  const { canvasState } = useCanvas();
   const mousePosition = useContext(MousePositionContext);
+  const { GlobalData, updateGlobalData } = useGlobalValue();
+  const [rightMouseDownTime, setRightMouseDownTime] = useState<number | null>(null);
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.button === 2) {
+      // Right mouse button is pressed
+      setRightMouseDownTime(Date.now());
+    }
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    if (e.button === 2 && rightMouseDownTime !== null) {
+      // Right mouse button is released
+      const rightMouseUpTime = Date.now();
+      const timePressed = rightMouseUpTime - rightMouseDownTime;
+
+      // Update GlobalData or perform any other action
+      updateGlobalData({ ...GlobalData, rightMouseDownTime: timePressed });
+
+      // Reset the rightMouseDownTime state
+      setRightMouseDownTime(null);
+    }
+  };
+
+  useEffect(() => {
+    // Add event listeners when the component mounts
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    // Remove event listeners when the component unmounts
+    return () => {
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
   return (
     <>
       <DebugInfo
@@ -51,6 +85,7 @@ const Page: React.FC = () => {
           color: settings.value.color,
           layer: settings.value.activeLayer,
           mousePosition: mousePosition,
+          RIghtClkTime:rightMouseDownTime
         }}
       />
       <CanvasSettings  />  
