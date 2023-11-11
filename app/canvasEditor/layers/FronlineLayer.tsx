@@ -14,14 +14,15 @@ import { v4 as uuidv4 } from 'uuid';
 
 export type FrontlineData = {
   idNum: string;
-   
+  points: Array<Vector2>
 };
   // const [frontlinesData, setFrontlinesData] = useState<FrontlineData[]>([]);
   // const [activeFrontLineId, setActiveFrontLine] = useState<string | null>(null);
 const FrontlineLayer = () => {
   const mousePosition = useContext(MousePositionContext);
-  const { frontlineCanvasRef, frontLines, setFrontlines } = useCanvas();
+  const { frontlineCanvasRef  } = useCanvas();
   const { GlobalData } = useGlobalValue();
+  const frontLines =  settings.value.frontLineSettings.frontLines
  // DOUFÁM ŽE SE TO BUDE UPDATOVAT
   const activeFrontLineId = settings.value.frontLineSettings.activeFrontlineId
   const [topLeft, setTopLeft] = useState<Vector2>({ x: 0, y: 0 });
@@ -33,9 +34,11 @@ const FrontlineLayer = () => {
     // Assuming you want to instantiate one Frontline initially
     const initialFrontlineData: FrontlineData = {
       idNum: uuidv4(),
+      points: []
     };
 
-    setFrontlines([initialFrontlineData]);
+    // setFrontlines([initialFrontlineData]);
+    settings.value.frontLineSettings.frontLines = [initialFrontlineData]
     settings.value.frontLineSettings.activeFrontlineId = initialFrontlineData.idNum
     // setActiveFrontLine(initialFrontlineData.idNum);
   }, [isActive, frontlineCanvasRef, topLeft]);
@@ -67,9 +70,7 @@ const FrontlineLayer = () => {
            <Frontline
               key={frontlineData.idNum}
               idNum={frontlineData.idNum}
-             
               topLeftPoint={topLeft}
-              // frontLineActive={  activeFrontLineId === frontlineData.idNum}
             />
           ))}
         </ReusableLayer>

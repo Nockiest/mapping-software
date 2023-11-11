@@ -12,6 +12,16 @@ const FrontlineLayerSettings = () => {
     settings.value.frontLineSettings.frontLineColor = e.target.value
   };
 
+  const deleteCurrentFrontLine = (e) => {
+    const activeFrontlineId = settings.value.frontLineSettings.activeFrontlineId;
+  
+    if (activeFrontlineId) {
+      settings.value.frontLineSettings.frontLines = settings.value.frontLineSettings.frontLines.filter(
+        (frontline) => frontline.idNum !== activeFrontlineId
+      );
+    }
+  };
+  
   return (
     <div>
       <label>
@@ -37,7 +47,8 @@ const FrontlineLayerSettings = () => {
       </label>
       <br />
       <button >New FrontLine</button>
-      <button >Delete Current FrontLine</button>
+      { settings.value.frontLineSettings.activeFrontlineId
+      &&<button onClick={deleteCurrentFrontLine} >Delete Current FrontLine</button>}
     </div>
   );
 };

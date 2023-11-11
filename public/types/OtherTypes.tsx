@@ -2,6 +2,7 @@ import { Signal } from "@preact/signals";
 import { Vector2 } from "./GeometryTypes";
 import { EraseArgs } from "@/app/components/drawing/Eraser";
 import { DrawPayload } from "@/app/components/drawing/LineDrawer";
+import { FrontlineData } from "@/app/canvasEditor/layers/FronlineLayer";
 
 export type RGB = `rgb(${number}, ${number}, ${number})`;
 export type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
@@ -31,6 +32,7 @@ export type FrontLineSettings = {
   editedPointNum: number
   frontLineColor: Color
   activeFrontlineId: string
+  frontLines: Array<FrontlineData>
 }
 
 export type Settings = Signal<{
