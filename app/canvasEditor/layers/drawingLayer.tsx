@@ -1,21 +1,8 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useReducer,
-  useContext,
-} from "react";
+import { useState, useRef, useEffect, useReducer, useContext, Reducer } from "react";
 import eraseLine from "@/app/components/drawing/Eraser";
 import CanvasToImage from "@/app/components/utility/CanvasToImg";
 import { Vector2 } from "@/public/types/GeometryTypes";
-import {
-  CanvasContext,
-  CanvasContextType,
-  DrawAction,
-  ErasePayload,
-  useCanvas,
-} from "../CanvasContext";
-// import { DrawingState } from "@/public/types/ButtonEvents";
+import { CanvasContext, CanvasContextType, useCanvas } from "../CanvasContext";
 import bucketFill from "@/app/components/drawing/BucketFill";
 import { MousePositionContext } from "../page";
 import { settings } from "../Signals";
@@ -23,33 +10,63 @@ import drawLineWithShape, {
   DrawPayload,
 } from "../../components/drawing/LineDrawer";
 import ReusableLayer from "@/app/components/utility/ResuableLayer";
-import fillCanvas from "@/app/components/utility/fillCanvas"; 
+import fillCanvas from "@/app/components/utility/fillCanvas";
 import { drawDot } from "@/app/components/utility/CanvasUtils";
-export enum DrawingState {
-  Idle,
-  Drawing,
-  Erasing,
-  BucketFill,
-}
+import {
+  DrawingState,
+  DrawAction,
+  ErasePayload,
+} from "@/public/types/OtherTypes";
+
+const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
+  console.log("SWITCHING TO ", action.type);
+  switch (action.type) {
+    case "DRAW":
+      const drawPayload = action.payload as DrawPayload;
+      drawPayload.drawFunction(
+        drawPayload.drawArgs.ctx,
+        drawPayload.drawArgs.x,
+        drawPayload.drawArgs.y,
+        drawPayload.drawArgs.radius,
+        drawPayload.drawArgs.color
+      );
+      return DrawingState.Drawing;
+
+    case "ERASE":
+      const erasePayload = action.payload as ErasePayload;
+      erasePayload.eraseFunction(erasePayload.eraseArgs);
+      return DrawingState.Erasing;
+
+    case "MOUSE_UP":
+    case "MOUSE_LEAVE":
+      return DrawingState.Idle;
+
+    case "ENTER_BUCKET_MODE":
+      return DrawingState.BucketFill === state ? DrawingState.Idle : DrawingState.BucketFill;
+
+    default:
+      console.error("INVALID ACTION: "  );
+      return state;
+  }
+};
+
 const DrawingLayer: React.FC = () => {
-  const { canvasRef, canvasState, dispatchState } = useCanvas();
-  const mousePosition = useContext(MousePositionContext)
+  const { canvasRef } = useCanvas();
+  const mousePosition = useContext(MousePositionContext);
   const [lastMousePos, setLastMousePos] = useState<Vector2 | null>(null);
+  const [canvasState, dispatchState] = useReducer<Reducer<DrawingState, Action>>(reducer, DrawingState.Idle);
   const { color, radius } = settings.value;
   const isActive = settings.value.activeLayer === "draw";
+
   const handleMouseLeave = () => {
-    if (settings.value.activeLayer !== "draw") {
-      return;
+    if (isActive) {
+      dispatchState({ type: "MOUSE_LEAVE" });
     }
-    dispatchState({ type: "MOUSE_LEAVE" });
   };
 
   // useEffect(() =>{
   //   fillCanvas (canvasRef, 'rgba(211, 211, 211, 0.3)');  // Adjust the color as needed
   // }, [])
-
-   
-
 
   useEffect(() => {
     if (!canvasRef) {
@@ -62,12 +79,11 @@ const DrawingLayer: React.FC = () => {
     const ctx = canvas.getContext("2d");
 
     const handleMouseDown = (e: MouseEvent) => {
-      console.log("MOUSE DOWN")
+      console.log("MOUSE DOWN");
       if (settings.value.activeLayer !== "draw") {
         return;
       }
-      // const rect = canvas.getBoundingClientRect();
-      // const {x - ,y} = mousePosition
+
       const x = e.offsetX;
       const y = e.offsetY;
 
@@ -147,16 +163,11 @@ const DrawingLayer: React.FC = () => {
         ctx.closePath();
       }
     };
-
     // Add event listeners
- 
-     
-      canvas.addEventListener("mousedown", handleMouseDown);
-      canvas.addEventListener("mousemove", handleMouseMovement);
-      canvas.addEventListener("mouseup", handleMouseUp);
-      canvas.addEventListener("mouseleave", handleMouseLeave);
-   
- 
+    canvas.addEventListener("mousedown", handleMouseDown);
+    canvas.addEventListener("mousemove", handleMouseMovement);
+    canvas.addEventListener("mouseup", handleMouseUp);
+    canvas.addEventListener("mouseleave", handleMouseLeave);
     // Remove event listeners on component unmount
     return () => {
       canvas.removeEventListener("mousedown", handleMouseDown);
@@ -164,38 +175,29 @@ const DrawingLayer: React.FC = () => {
       canvas.removeEventListener("mouseup", handleMouseUp);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [canvasRef, canvasState, mousePosition, lastMousePos, settings , dispatchState]);
- 
+  }, [
+    canvasRef,
+    canvasState,
+    mousePosition,
+    lastMousePos,
+    settings,
+    dispatchState,
+  ]);
+
   // zjevně nemusím posílat input handling logiku do reusable canvas
   return (
     <>
-    
       {canvasRef && (
-        <ReusableLayer 
-            canvasRef={canvasRef}
-            layerName="draw"
-            style={{
+        <ReusableLayer
+          canvasRef={canvasRef}
+          layerName="draw"
+          style={{
             cursor:
               canvasState === DrawingState.BucketFill
                 ? "url('/cursor.cur'),auto"
                 : "auto",
           }}
         />
-
-        // <canvas
-        //   ref={canvasRef}
-        //   width={800}
-        //   height={600}
-        //   // onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
-        //   className={` canvas-rectangle draw-canvas       ${isActive ? 'z-20 ' : 'z-10'}`}
-        //   style={{
-        //     // opacity: isActive ? 1 : 0.5,
-        //     cursor:
-        //       canvasState === DrawingState.BucketFill
-        //         ? "url('/cursor.cur'),auto"
-        //         : "auto",
-        //   }}
-        // />
       )}
     </>
   );
@@ -203,28 +205,5 @@ const DrawingLayer: React.FC = () => {
 
 export default DrawingLayer;
 
-// <canvas
-//   ref={canvasRef}
-//   width={800}
-//   height={600}
-//   onContextMenu={(e) => e.preventDefault()} // Disable right-click context menu
-//   className="absolute canvas-rectangle draw-canvas top-0"
-//   style={{ pointerEvents: settings.value.activeLayer === "draw" ? "auto" : "none", opacity: settings.value.activeLayer === "draw" ? 1 : 0.5, cursor: canvasState === DrawingState.BucketFill?  "url('/cursor.cur'),auto": "auto" }}
-// />
-// useEffect(() => {
-//   const canvas = canvasRef?.current;
-
-//   if (canvas) {
-//     switch (canvasState) {
-//       case DrawingState.BucketFill:
-//         canvas.style.cursor = 'url(path-to-your-bucket-fill-cursor), auto'; // Set to your bucket fill cursor
-//         break;
-//       case DrawingState.Drawing:
-//         canvas.style.cursor = 'url(path-to-your-drawing-cursor), auto'; // Set to your drawing cursor
-//         break;
-//       // Add cases for other states as needed
-//       default:
-//         canvas.style.cursor = 'auto'; // Reset to the default cursor
-//     }
-//   }
-// }, [canvasState, canvasRef]);
+// const rect = canvas.getBoundingClientRect();
+// const {x - ,y} = mousePosition

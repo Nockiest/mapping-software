@@ -1,12 +1,15 @@
 import React from 'react';
+import { useCanvas } from '../CanvasContext';
+import { settings } from '../Signals';
 
 const FrontlineLayerSettings = () => {
+    const {activeFrontLine} = useCanvas()
   const handleEndFrontLineIndexChange = (e) => {
     // Handle endFrontLine index change
   };
 
   const handleCurFrontlineColorChange = (e) => {
-    // Handle curFrontline color change
+    settings.value.frontLineSettings.frontLineColor = e.target.value
   };
 
   return (
@@ -22,15 +25,19 @@ const FrontlineLayerSettings = () => {
           max="100"
         />
       </label>
+      <br />
       <label>
         Set curFrontline color
         <input
           type="color"
-          // value={/* value for curFrontline color */}
+          value={settings.value.frontLineSettings.frontLineColor}
           onChange={handleCurFrontlineColorChange}
           style={{ color: 'black' }}
         />
       </label>
+      <br />
+      <button >New FrontLine</button>
+      <button >Delete Current FrontLine</button>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import React, { ReactNode, useContext, useEffect, useState } from 'react'
 import Point from './Point';
 import { settings } from '@/app/canvasEditor/Signals';
 import { useCanvas } from '@/app/canvasEditor/CanvasContext';
+import { computed } from '@preact/signals';
 
  
 
@@ -18,6 +19,16 @@ const Frontline: React.FC<FrontLineProps> = ({ idNum,   topLeftPoint, frontLineA
     const pointRadius:number = 5
     const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
     const mousePosition = useContext(MousePositionContext);// udělat z toho custom context
+    const color =computed(() => {
+      // When `todos` changes, this re-runs automatically:
+      const prevColor = color
+      if (frontLineActive){
+        return settings.value.frontLineSettings.frontLineColor
+      } else {
+        return prevColor
+      }
+    
+    });
     const { frontlineCanvasRef } = useCanvas();
     
     useEffect(() => {
@@ -116,7 +127,7 @@ const Frontline: React.FC<FrontLineProps> = ({ idNum,   topLeftPoint, frontLineA
                 console.error('Endpoint index is null or invalid');
               }
             }
-            ctx.strokeStyle = "blue";
+            ctx.strokeStyle = color;
             ctx.lineWidth = 2;
             ctx.stroke();
             ctx.closePath();

@@ -1,5 +1,7 @@
 import { Signal } from "@preact/signals";
 import { Vector2 } from "./GeometryTypes";
+import { EraseArgs } from "@/app/components/drawing/Eraser";
+import { DrawPayload } from "@/app/components/drawing/LineDrawer";
 
 export type RGB = `rgb(${number}, ${number}, ${number})`;
 export type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
@@ -25,6 +27,12 @@ export type MarkerSettings = {
   popularMarkerColors: Array<Color> 
 }
 
+export type FrontLineSettings = {
+  editedPointNum: number
+  frontLineColor: Color
+  // activeFrontline:
+}
+
 export type Settings = Signal<{
     radius: number;
     color: Color;
@@ -33,8 +41,29 @@ export type Settings = Signal<{
     canvasSize: Vector2;
     markerSettings: MarkerSettings
     popularColors: Array<Color>;
-    canvasZindexes:{
-      [key:LayerNames]: number
-    },
-    editedFrontLinePoint: number
+    canvasZindexes: {
+      [key in LayerNames]: number;
+    };
+    frontLineSettings: FrontLineSettings
   }>;
+
+
+export type  ErasePayload = {
+  eraseFunction: (args: EraseArgs) => void;
+  eraseArgs: EraseArgs;
+}
+   
+  // Update the DrawAction type to include the "DRAW" payload
+export type DrawAction =
+  | { type: "DRAW"; payload: DrawPayload }
+  | { type: "ERASE"; payload: ErasePayload }
+  | { type: "MOUSE_UP" }
+  | { type: "MOUSE_LEAVE" }
+  | { type: "ENTER_BUCKET_MODE" };
+
+export enum DrawingState {
+  Idle,
+  Drawing,
+  Erasing,
+  BucketFill,
+}
