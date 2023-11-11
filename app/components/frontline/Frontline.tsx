@@ -75,10 +75,10 @@ const Frontline: React.FC<FrontLineProps> = ({ idNum,   topLeftPoint, frontLineA
       }
 
       // Set up a timer to handle the duration of the right mouse button press
-      rightClickTimerRef.current = window.setTimeout(() => {
-        // If the timer expires, trigger the function for long press
-        findNewEndPointIndex(points[clickedPointIndex]);
-      }, 1000); // Adjust the duration as needed
+      // rightClickTimerRef.current = window.setTimeout(() => {
+      //   // If the timer expires, trigger the function for long press
+      //   findNewEndPointIndex(points[clickedPointIndex]);
+      // }, 1000); // Adjust the duration as needed
     }
   };
     const findNewEndPointIndex = (clickedPoint: Vector2) => {
@@ -145,7 +145,7 @@ const Frontline: React.FC<FrontLineProps> = ({ idNum,   topLeftPoint, frontLineA
             topLeft={{ x: topLeftPoint.x, y: topLeftPoint.y }}
             onDrag={(newPosition) => updatePointPositions(index, newPosition)}
             radius={5}
-            mouseWheelClk={frontLineActive ? () => handleDeletePoint(point) : null}
+            mouseWheelClk={frontLineActive ? () => handleDeletePoint(index) : null}
             rightClk={frontLineActive ? () => findNewEndPointIndex(point) : null}
             onDelete={() => handleDeletePoint(index)}
             styling={{
@@ -154,7 +154,10 @@ const Frontline: React.FC<FrontLineProps> = ({ idNum,   topLeftPoint, frontLineA
               pointerEvents: frontLineActive ? "auto" : "none",
               zIndex: "30",
             }}
-          />
+            acceptInput={frontLineActive}
+          >
+            {index}
+          </Point>
         ))}
     </div >
   )

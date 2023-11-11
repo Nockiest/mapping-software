@@ -8,8 +8,9 @@ export const settings:Settings = signal({
     canvasSize: {x:800,y:600},
     markerSettings: { width: 10, color: `#000000`, textColor: `#ffffff`,topValue: "X", bottomValue: "Y" , imageURL:null, popularMarkerColors: []},
     popularColors: [],
-    canvasZindexes: {"marker": 10, "draw": 10, "background":0, "frontLine":10}
-    
+    canvasZindexes: {"marker": 10, "draw": 10, "background":0, "frontLine":10},
+    editedFrontLinePoint: 0
   });
   
 export const backgroundImage = signal<File | null>(null);
+ 

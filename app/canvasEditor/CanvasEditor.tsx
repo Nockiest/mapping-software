@@ -19,8 +19,7 @@ const DrawingCanvas: React.FC  = ( ) => {
  
   return (
     < >
- 
-   
+  
     <div className={`relative h-600  w-${settings.value.canvasSize}  flex items-center justify-center `}  > 
       <DrawingLayer    />
       <UnitMarkerLayer    />

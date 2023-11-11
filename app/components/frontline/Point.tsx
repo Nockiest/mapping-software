@@ -1,10 +1,9 @@
+import { useGlobalValue } from "@/app/canvasEditor/CanvasContext";
 import { Vector2, Shapes } from "@/public/types/GeometryTypes";
 import { LayerNames } from "@/public/types/OtherTypes";
 import { followMouseComponent } from "@/public/utils";
 import { useEffect, useState, ReactNode } from "react";
-
- 
-export type PointProps = {
+type PointProps = {
   position: Vector2;
 
   topLeft?: Vector2;
@@ -18,10 +17,9 @@ export type PointProps = {
   children?: React.ReactNode;
   shape?: Omit<Shapes, "triangle">;
   dragable?: boolean;
-  acceptInput: boolean;
-  label?: string;
+  acceptInput?: boolean;
 };
-
+ 
 const Point: React.FC<PointProps> = ({
   position,
   topLeft = { x: 0, y: 0 },
@@ -36,10 +34,10 @@ const Point: React.FC<PointProps> = ({
   shape,
   dragable = true,
   acceptInput = true,
-  label,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
-  const [rightMouseDownTime, setRightMouseDownTime] = useState<number | null>(null);
+  const { GlobalData } = useGlobalValue();
+  const { mouseDownTime } = GlobalData;
 
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -53,7 +51,6 @@ const Point: React.FC<PointProps> = ({
       mouseWheelClk();
     } else if (e.button === 2 && rightClk) {
       rightClk(e);
-      setRightMouseDownTime(Date.now());
     }
     setIsDragging(true);
   };
@@ -74,9 +71,13 @@ const Point: React.FC<PointProps> = ({
     onDrag?.(adjustedPosition);
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (e: React.MouseEvent) => {
     setIsDragging(false);
-    setRightMouseDownTime(null);
+    // Check if right mouse button was pressed and duration is more than 1500ms
+    if (mouseDownTime &&  e.button === 2 &&  mouseDownTime  > 1000) {
+      // Trigger onDelete method
+      onDelete?.();
+    }
   };
 
   useEffect(() => {
@@ -90,23 +91,6 @@ const Point: React.FC<PointProps> = ({
     };
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
-  useEffect(() => {
-    if (rightMouseDownTime) {
-      const checkHoldDuration = () => {
-        const currentTime = Date.now();
-        const holdDuration = currentTime - rightMouseDownTime;
-
-        if (holdDuration >= 1000) {
-          onDelete?.();
-          setRightMouseDownTime(null);
-        }
-      };
-
-      const intervalId = setInterval(checkHoldDuration, 100);
-      return () => clearInterval(intervalId);
-    }
-  }, [rightMouseDownTime, onDelete]);
-
   return (
     <div
       style={{
@@ -118,14 +102,16 @@ const Point: React.FC<PointProps> = ({
         borderRadius: '50%',
         background: 'blue',
         cursor: 'pointer',
-        opacity: acceptInput ? "0.4" : "1",
+        opacity: acceptInput ? "1" : "0.4",
         ...styling,
       }}
       onMouseDown={handleMouseDown}
     >
-      {label}
+      {children}
     </div>
   );
 };
 
+ 
 export default Point;
+ 

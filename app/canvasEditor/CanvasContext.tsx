@@ -5,6 +5,7 @@ import { Vector2 } from "@/public/types/GeometryTypes";
 import { EraseArgs } from "../components/drawing/Eraser";
 import { DrawPayload } from "../components/drawing/LineDrawer";
 import { DrawingState } from "./layers/DrawingLayer";
+import { FrontlineData } from "./layers/FronlineLayer";
 
 export interface CanvasContextType {
   canvasRef: React.RefObject<HTMLCanvasElement | undefined>;
@@ -12,12 +13,14 @@ export interface CanvasContextType {
   frontlineCanvasRef: React.RefObject<HTMLCanvasElement | null>;
   canvasState: DrawingState;
   dispatchState: Dispatch<DrawAction>;
+  frontLines: FrontlineData[], 
+  setFrontlines:  React.Dispatch<React.SetStateAction<FrontlineData[]>>
 }
 
 export interface BackgroundContextType {
   backgroundCanvasRef: React.RefObject<HTMLCanvasElement | null>;
- 
 }
+
 type UpdateGlobalDataType = (paramName: keyof GlobalDataType, paramValue: any) => void;
 
 export type GlobalDataContextType = {
@@ -79,9 +82,7 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
 type GlobalDataType = {
   mouseDownTime:number
 }
-
  
-
  
 export const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
 export const BackgroundContext = createContext<BackgroundContextType | undefined>(undefined);
@@ -92,6 +93,7 @@ export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const canvasRef = useRef<HTMLCanvasElement | undefined>(null);
   const markerCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const frontlineCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [frontLines, setFrontlines] = useState<FrontlineData[]>([])
   const backgroundCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [canvasState, dispatchState] = useReducer<Reducer<DrawingState, Action>>(reducer, DrawingState.Idle);
   const [globalData, setGlobalData] = useState<GlobalDataType>({ mouseDownTime: 0 });
@@ -102,6 +104,8 @@ export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     canvasState,
     dispatchState,
     frontlineCanvasRef,
+    frontLines, 
+    setFrontlines
   };
 
   const backgroundContextValue: BackgroundContextType = {

@@ -11,6 +11,7 @@ import { settings } from "../Signals";
 import { Color, Settings } from "@/public/types/OtherTypes";
 import DrawingLayerSettings from "./DrawingLayerSettings";
 import BackgroundLayerSettings from "./BackgroundLayerSettings";
+import FrontlineLayerSettings from "./FrontlineLayerSettings";
  
 const CanvasSettings = ( ) => {
  
@@ -43,8 +44,10 @@ const CanvasSettings = ( ) => {
         <DrawingLayerSettings />
       ) : settings.value.activeLayer === 'marker' ? (
         <MarkerEditorSettings changeSettings={changeSettings} />
-      ) : (
+      ) : settings.value.activeLayer === 'background' ?(
         <BackgroundLayerSettings />
+      ): (
+        <FrontlineLayerSettings />
       )}
       {/* <CanvasClear canvasRef={canvasRef} /> */}
 </div>

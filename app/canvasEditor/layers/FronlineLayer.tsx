@@ -12,20 +12,20 @@ import Frontline from "@/app/components/frontline/Frontline";
 import { v4 as uuidv4 } from 'uuid';
 
 
-type FrontlineData = {
+export type FrontlineData = {
   idNum: string;
    
 };
 
 const FrontlineLayer = () => {
   const mousePosition = useContext(MousePositionContext);
-  const { frontlineCanvasRef } = useCanvas();
+  const { frontlineCanvasRef, frontLines, setFrontlines } = useCanvas();
   const { GlobalData } = useGlobalValue();
-  const [frontlinesData, setFrontlinesData] = useState<FrontlineData[]>([]);
+  // const [frontlinesData, setFrontlinesData] = useState<FrontlineData[]>([]);
   const [activeFrontLine, setActiveFrontLine] = useState<string | null>(null);
   const [topLeft, setTopLeft] = useState<Vector2>({ x: 0, y: 0 });
   const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
-  const rightClickTimerRef = useRef<number | null>(null);
+  // const rightClickTimerRef = useRef<number | null>(null);
   const isActive = settings.value.activeLayer === 'frontLine';
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const FrontlineLayer = () => {
       idNum: uuidv4(),
     };
 
-    setFrontlinesData([initialFrontlineData]);
+    setFrontlines([initialFrontlineData]);
     setActiveFrontLine(initialFrontlineData.idNum);
   }, [isActive, frontlineCanvasRef, topLeft]);
 
@@ -49,8 +49,8 @@ const FrontlineLayer = () => {
 
   const handleMouseUp = () => {
     // Clear the timer if the right mouse button is released before it expires
-    clearTimeout(rightClickTimerRef.current);
-    rightClickTimerRef.current = null;
+    // clearTimeout(rightClickTimerRef.current);
+    // rightClickTimerRef.current = null;
   };
 
   const handleContextMenu = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -76,14 +76,13 @@ const FrontlineLayer = () => {
           onMouseUp={handleMouseUp}
           onRightClick={(e) => handleMouseDown(e)}
         >
-          {frontlinesData.map((frontlineData) => (
+          {frontLines.map((frontlineData) => (
            <Frontline
               key={frontlineData.idNum}
               idNum={frontlineData.idNum}
              
               topLeftPoint={topLeft}
               frontLineActive={ activeFrontLine === frontlineData.idNum}
-              // ... other props
             />
           ))}
         </ReusableLayer>

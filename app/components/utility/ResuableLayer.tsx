@@ -12,8 +12,9 @@ interface ReusableLayerProps {
 //   onContextMenu?:() => void;
   style?: {
     [key: string]: string; // Allow any CSS property
-  children?: ReactNode;
+   
   };
+  children?: ReactNode;
 }
 
 const ReusableLayer: React.FC<ReusableLayerProps> = ({

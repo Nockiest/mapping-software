@@ -46,8 +46,9 @@ const Page: React.FC = () => {
   const [elapsedTime, setElapsedTime] = useState<number>(0);
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    // e.preventDefault()
     console.log("PRESSED");
-    // if (e.button === 2) {
+    if (e.button === 2) {e.preventDefault() }
       // Right mouse button is pressed
       setMouseDownTimeStamp(Date.now());
     // }
@@ -113,7 +114,7 @@ const Page: React.FC = () => {
           color: settings.value.color,
           layer: settings.value.activeLayer,
           mousePosition: mousePosition,
-          rightClickElapsedTime: elapsedTime,
+          mousDownTime: elapsedTime,
           GlobalData:GlobalData.mouseDownTime
         }}
       />

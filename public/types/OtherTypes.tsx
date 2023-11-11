@@ -35,5 +35,6 @@ export type Settings = Signal<{
     popularColors: Array<Color>;
     canvasZindexes:{
       [key:LayerNames]: number
-    }
+    },
+    editedFrontLinePoint: number
   }>;
