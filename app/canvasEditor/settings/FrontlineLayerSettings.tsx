@@ -3,9 +3,9 @@ import { useCanvas } from '../CanvasContext';
 import { settings } from '../Signals';
 
 const FrontlineLayerSettings = () => {
-    const {activeFrontLine} = useCanvas()
   const handleEndFrontLineIndexChange = (e) => {
-    // Handle endFrontLine index change
+    console.log(e.target.value)
+    settings.value.frontLineSettings.editedPointNum = e.target.value
   };
 
   const handleCurFrontlineColorChange = (e) => {

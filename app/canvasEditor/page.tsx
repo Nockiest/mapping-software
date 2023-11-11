@@ -46,30 +46,16 @@ const Page: React.FC = () => {
   const [elapsedTime, setElapsedTime] = useState<number>(0);
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    // e.preventDefault()
     console.log("PRESSED");
     if (e.button === 2) {e.preventDefault() }
-      // Right mouse button is pressed
+ 
       setMouseDownTimeStamp(Date.now());
-    // }
+ 
   };
 
   const handleMouseUp = (e: React.MouseEvent) => {
-    // if (e.button === 2 && rightMouseDownTime !== null) {
-      // Right mouse button is released
-      // const rightMouseUpTime = Date.now();
-      // const timePressed = rightMouseUpTime - rightMouseDownTime;
-
-      // Update GlobalData or perform any other action
-      // updateGlobalData({ ...GlobalData, rightMouseDownTime: timePressed });
-
-      // Print the duration pressed
-      // console.log(`Right mouse button pressed for ${timePressed} milliseconds`);
-
-      // Reset the elapsed time state to 0
       setElapsedTime(0);
       setMouseDownTimeStamp(null);
-    // }
   };
 
   useEffect(() => {

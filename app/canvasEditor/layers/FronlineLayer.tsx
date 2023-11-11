@@ -82,7 +82,7 @@ const FrontlineLayer = () => {
               idNum={frontlineData.idNum}
              
               topLeftPoint={topLeft}
-              frontLineActive={ activeFrontLine === frontlineData.idNum}
+              frontLineActive={  activeFrontLine === frontlineData.idNum}
             />
           ))}
         </ReusableLayer>
