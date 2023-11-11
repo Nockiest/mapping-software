@@ -43,14 +43,12 @@ export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const frontlineCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [frontLines, setFrontlines] = useState<FrontlineData[]>([])
   const backgroundCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  // const [canvasState, dispatchState] = useReducer<Reducer<DrawingState, Action>>(reducer, DrawingState.Idle);
   const [globalData, setGlobalData] = useState<GlobalDataType>({ mouseDownTime: 0 });
 
   const canvasContextValue: CanvasContextType = {
     canvasRef,
     markerCanvasRef,
     frontlineCanvasRef,
-    // activeFrontline,
     frontLines, 
     setFrontlines
   };
