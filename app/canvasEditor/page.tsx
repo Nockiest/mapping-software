@@ -96,12 +96,12 @@ const Page: React.FC = () => {
         data={{
           radius: settings.value.radius,
           canvasState: canvasState,
-          lineType: settings.value.lineType,
           color: settings.value.color,
           layer: settings.value.activeLayer,
           mousePosition: mousePosition,
           mousDownTime: elapsedTime,
-          GlobalData:GlobalData.mouseDownTime
+          activeFrontLine: settings.value.frontLineSettings.activeFrontlineId
+          // GlobalData:GlobalData.mouseDownTime
         }}
       />
       

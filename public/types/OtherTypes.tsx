@@ -30,7 +30,7 @@ export type MarkerSettings = {
 export type FrontLineSettings = {
   editedPointNum: number
   frontLineColor: Color
-  // activeFrontline:
+  activeFrontlineId: string
 }
 
 export type Settings = Signal<{

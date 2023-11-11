@@ -10,18 +10,19 @@ import { Color } from "@/public/types/OtherTypes";
 type FrontLineProps = {
   topLeftPoint: Vector2;
   idNum: string;
-  frontLineActive: boolean;
+ 
 };
 
 const Frontline: React.FC<FrontLineProps> = ({
   idNum,
   topLeftPoint,
-  frontLineActive,
+ 
 }) => {
   const [points, setPoints] = useState<Vector2[]>([]);
   const pointRadius: number = 5;
   const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
   const mousePosition = useContext(MousePositionContext); // udělat z toho custom context
+  const frontLineActive = settings.value.frontLineSettings.activeFrontlineId === idNum
   const color: Color = computed(() => {
     const prevColor = color;
     if (frontLineActive) {
@@ -46,6 +47,14 @@ const Frontline: React.FC<FrontLineProps> = ({
       };
     }
   }, [frontlineCanvasRef, frontLineActive]);
+
+  useEffect(() => {
+    settings.value.frontLineSettings.activeFrontLineId  = idNum;
+    return () => {
+      // Cleanup when the component is unmounted (optional)
+      settings.value.frontLineSettings.activeFrontLineId = null;
+    };
+  }, [idNum]);
 
   const addPoint = (position: Vector2) => {
     setPoints((prevPoints) => {
@@ -154,6 +163,9 @@ const Frontline: React.FC<FrontLineProps> = ({
 
   return (
     <div className="absolute top-0">
+      {idNum}
+      <br />
+      {settings.value.frontLineSettings.activeFrontlineId}
       {points.map((point, index) => (
         <Point
           key={index}

@@ -60,7 +60,6 @@ export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   };
 
   const updateGlobalData:UpdateGlobalDataType = (paramName , paramValue ) => {
-    console.log("SETTING DATA", paramName, globalData[paramName], paramValue )
     setGlobalData((prevData) => ({
       ...prevData,
       [paramName]: paramValue,

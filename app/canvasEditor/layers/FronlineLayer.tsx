@@ -16,13 +16,14 @@ export type FrontlineData = {
   idNum: string;
    
 };
-
+  // const [frontlinesData, setFrontlinesData] = useState<FrontlineData[]>([]);
+  // const [activeFrontLineId, setActiveFrontLine] = useState<string | null>(null);
 const FrontlineLayer = () => {
   const mousePosition = useContext(MousePositionContext);
   const { frontlineCanvasRef, frontLines, setFrontlines } = useCanvas();
   const { GlobalData } = useGlobalValue();
-  // const [frontlinesData, setFrontlinesData] = useState<FrontlineData[]>([]);
-  const [activeFrontLine, setActiveFrontLine] = useState<string | null>(null);
+ // DOUFÁM ŽE SE TO BUDE UPDATOVAT
+  const activeFrontLineId = settings.value.frontLineSettings.activeFrontlineId
   const [topLeft, setTopLeft] = useState<Vector2>({ x: 0, y: 0 });
   const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
   // const rightClickTimerRef = useRef<number | null>(null);
@@ -35,7 +36,8 @@ const FrontlineLayer = () => {
     };
 
     setFrontlines([initialFrontlineData]);
-    setActiveFrontLine(initialFrontlineData.idNum);
+    settings.value.frontLineSettings.activeFrontlineId = initialFrontlineData.idNum
+    // setActiveFrontLine(initialFrontlineData.idNum);
   }, [isActive, frontlineCanvasRef, topLeft]);
 
   useEffect(() => {
@@ -47,20 +49,8 @@ const FrontlineLayer = () => {
     }
   }, [frontlineCanvasRef, settings.value.activeLayer]);
 
-  const handleMouseUp = () => {
-    // Clear the timer if the right mouse button is released before it expires
-    // clearTimeout(rightClickTimerRef.current);
-    // rightClickTimerRef.current = null;
-  };
-
   const handleContextMenu = (e: React.MouseEvent<HTMLCanvasElement>) => {
     e.preventDefault();
-  };
-
-  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    e.preventDefault();
-    // console.log(e.button)
-    if (!isActive) return;
   };
 
   return (
@@ -72,9 +62,6 @@ const FrontlineLayer = () => {
             opacity: isActive ? '1' : '0.4',
           }}
           layerName="frontLine"
-          onLeftClick={(e) => handleMouseDown(e)}
-          onMouseUp={handleMouseUp}
-          onRightClick={(e) => handleMouseDown(e)}
         >
           {frontLines.map((frontlineData) => (
            <Frontline
@@ -82,7 +69,7 @@ const FrontlineLayer = () => {
               idNum={frontlineData.idNum}
              
               topLeftPoint={topLeft}
-              frontLineActive={  activeFrontLine === frontlineData.idNum}
+              // frontLineActive={  activeFrontLineId === frontlineData.idNum}
             />
           ))}
         </ReusableLayer>
