@@ -32,6 +32,15 @@ const FrontlineLayerSettings = () => {
     }
   };
 
+  const handleThicknessChange = (e) => {
+    const newThickness = parseFloat(e.target.value);
+    const activeFrontline = findActiveFrontLine();
+
+    if (activeFrontline) {
+      activeFrontline.thickness = newThickness;
+    }
+  };
+
   const deleteCurrentFrontLine = () => {
     const activeFrontlineId = settings.value.frontLineSettings.activeFrontlineId;
 
@@ -47,7 +56,7 @@ const FrontlineLayerSettings = () => {
       idNum: uuidv4(),
       points: [],
       topLeftPoint: { x: 0, y: 0 },
-      radius: 2,
+      thickness: 4,
       color: settings.value.frontLineSettings.frontLineColor,
     };
 
@@ -86,6 +95,18 @@ const FrontlineLayerSettings = () => {
         />
       </label>
       <br />
+      <label>
+        Set line thickness:
+        <input
+          type="range"
+          min="0.1"
+          max="10"
+          step="0.1"
+          value={findActiveFrontLine()?.thickness || 0}
+          onChange={handleThicknessChange}
+        />
+      </label>
+      <br />
       <button onClick={handleNewFrontLine}>New FrontLine</button>
       <br />
       <label>
@@ -106,4 +127,5 @@ const FrontlineLayerSettings = () => {
   );
 };
 
+ 
 export default FrontlineLayerSettings;

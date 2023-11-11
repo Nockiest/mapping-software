@@ -63,8 +63,6 @@ onDrag ,//= followMouseComponent,
     const newX = e.clientX - topLeft.x + window.scrollX;
     const newY = e.clientY - topLeft.y + window.scrollY;
 
-   
-
     onDrag?.({x:newX,y:newY});
   };
 

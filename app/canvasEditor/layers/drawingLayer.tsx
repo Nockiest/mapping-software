@@ -187,7 +187,7 @@ const DrawingLayer: React.FC = () => {
 
   // zjevně nemusím posílat input handling logiku do reusable canvas
   return (
-    <>
+    <> 
       {canvasRef && (
         <ReusableLayer
           canvasRef={canvasRef}
@@ -200,7 +200,7 @@ const DrawingLayer: React.FC = () => {
           }}
         />
       )}
-    </>
+    </ >
   );
 };
 

@@ -17,7 +17,7 @@ export type FrontlineData = {
   idNum: string;
   topLeftPoint: Vector2;
   points: Array<Vector2>;
-  radius: number ;
+  thickness: number ;
   color: Color
 };
 // const [frontlinesData, setFrontlinesData] = useState<FrontlineData[]>([]);
@@ -39,7 +39,7 @@ const FrontlineLayer = () => {
       idNum: uuidv4(),
       points: [],
       topLeftPoint: {x:0,y:0},
-      radius: 2,
+      thickness: 4,
       color:  settings.value.frontLineSettings.frontLineColor
     };
     settings.value.frontLineSettings.frontLines = [initialFrontlineData];
@@ -60,7 +60,7 @@ const FrontlineLayer = () => {
         settings.value.frontLineSettings.editedPointNum,
         ctx,
         frontLines[line].color,
-        frontLines[line].radius
+        frontLines[line].thickness
       );
     }
   };
@@ -103,6 +103,7 @@ const FrontlineLayer = () => {
               key={frontlineData.idNum}
               idNum={frontlineData.idNum}
               topLeftPoint={topLeft}
+              thickness={frontlineData.thickness}
             />
           ))}
         </ReusableLayer>

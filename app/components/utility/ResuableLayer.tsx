@@ -50,7 +50,7 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
   };
 
   return (
-    <div  className={`canvas-rectangle absolute top-0 ${isActive ? 'z-20 ' : `${settings.value.canvasZindexes[layerName]} `}`}>
+    <div  className={`canvas-rectangle absolute top-0 ${isActive ? 'z-20 ' : `${settings.value.canvasZindexes[layerName]} opacity-40  `}`}>
       <canvas
         
         onClick={isActive ? handleMouseClick : null}
@@ -64,7 +64,6 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
           ...style,
         }}
       >
-        
       </canvas>
       {children}  
     </div>
