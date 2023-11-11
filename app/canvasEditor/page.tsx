@@ -46,14 +46,13 @@ const Page: React.FC = () => {
   const [elapsedTime, setElapsedTime] = useState<number>(0);
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    console.log("PRESSED");
     if (e.button === 2) {e.preventDefault() }
- 
       setMouseDownTimeStamp(Date.now());
  
   };
 
   const handleMouseUp = (e: React.MouseEvent) => {
+      e.preventDefault()
       setElapsedTime(0);
       setMouseDownTimeStamp(null);
   };

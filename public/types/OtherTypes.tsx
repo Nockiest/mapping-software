@@ -69,3 +69,5 @@ export enum DrawingState {
   Erasing,
   BucketFill,
 }
+
+export type CanvasRef = React.RefObject<HTMLCanvasElement>;

@@ -154,7 +154,8 @@ const DrawingLayer: React.FC = () => {
       setLastMousePos({ x, y });
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (e: React.MouseEvent) => {
+      e.preventDefault()
       if (settings.value.activeLayer !== "draw") {
         return;
       }

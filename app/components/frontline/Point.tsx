@@ -28,7 +28,7 @@ const Point: React.FC<PointProps> = ({
   rightClk,
   mouseWheelClk,
   styling = {},
-  onDrag = followMouseComponent,
+onDrag ,//= followMouseComponent,
   onDelete,
   children,
   shape,
@@ -63,15 +63,13 @@ const Point: React.FC<PointProps> = ({
     const newX = e.clientX - topLeft.x + window.scrollX;
     const newY = e.clientY - topLeft.y + window.scrollY;
 
-    const adjustedPosition = {
-      x: newX - radius,
-      y: newY - radius,
-    };
+   
 
-    onDrag?.(adjustedPosition);
+    onDrag?.({x:newX,y:newY});
   };
 
   const handleMouseUp = (e: React.MouseEvent) => {
+    e.preventDefault()
     setIsDragging(false);
     // Check if right mouse button was pressed and duration is more than 1500ms
     if (mouseDownTime &&  e.button === 2 &&  mouseDownTime  > 1000) {
@@ -89,7 +87,7 @@ const Point: React.FC<PointProps> = ({
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, handleMouseMove, handleMouseUp]);
+  }, [isDragging  ]);
 
   return (
     <div

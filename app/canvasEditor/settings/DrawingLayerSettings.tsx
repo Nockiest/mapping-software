@@ -6,10 +6,8 @@ import { LineEdge } from '@/public/types/GeometryTypes';
 import { CanvasContext, useCanvas } from '../CanvasContext';
 import FavoriteColorLister from '@/app/components/settings/FavoriteColorLister';
  
-
- 
 const DrawingLayerSettings = ( ) => {
-   const imageInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
   const {dispatchState,   }= useCanvas( )
   const changeSettings = <K extends keyof Settings['value']>(property: K, newValue: Settings['value'][K]) => {
     // Assuming settings is a mutable signal, otherwise, you might need to use `setSettings` if it's a state

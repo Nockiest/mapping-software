@@ -14,12 +14,12 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
   const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
   const frontLineActive = settings.value.frontLineSettings.activeFrontlineId === idNum;
   const frontLineInfo = findFrontLineObj(idNum); // Replace with your actual function
-  const color: Color = computed(() => (frontLineActive ? settings.value.frontLineSettings.frontLineColor : ''));
+  // const color: Color = computed(() => (frontLineActive ? settings.value.frontLineSettings.frontLineColor : ''));
   const insertPointPosition = computed(() => settings.value.frontLineSettings.editedPointNum);
   const { frontlineCanvasRef } = useCanvas();
 
   useEffect(() => {
-    const canvas = frontlineCanvasRef.current;
+  const canvas = frontlineCanvasRef.current;
     if (canvas && frontLineActive) {
       canvas.addEventListener('click', handleMouseDown);
       return () => {

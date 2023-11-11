@@ -33,8 +33,8 @@ export const drawLineAlongPoints = (
   color: Color,
   width: number
 )  => {
-  console.log("DRAW FUNCTION ", points)
-  if (points.length <= 2) {
+  
+  if (points.length <  2) {
     console.warn("Cannot draw a line with less than 2 points.");
     return;
   }

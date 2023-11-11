@@ -11,11 +11,14 @@ import Frontline from "@/app/components/frontline/Frontline";
 
 import { v4 as uuidv4 } from "uuid";
 import { drawLineAlongPoints } from "@/app/components/utility/CanvasUtils";
+import { assertCtxExists } from "@/app/components/utility/otherUtils";
 
 export type FrontlineData = {
   idNum: string;
   topLeftPoint: Vector2;
   points: Array<Vector2>;
+  radius: number ;
+  color: Color
 };
 // const [frontlinesData, setFrontlinesData] = useState<FrontlineData[]>([]);
 // const [activeFrontLineId, setActiveFrontLine] = useState<string | null>(null);
@@ -35,38 +38,34 @@ const FrontlineLayer = () => {
     const initialFrontlineData: FrontlineData = {
       idNum: uuidv4(),
       points: [],
-      topLeftPoint: {x:0,y:0}
+      topLeftPoint: {x:0,y:0},
+      radius: 2,
+      color:  settings.value.frontLineSettings.frontLineColor
     };
-
-    // setFrontlines([initialFrontlineData]);
     settings.value.frontLineSettings.frontLines = [initialFrontlineData];
     settings.value.frontLineSettings.activeFrontlineId =
       initialFrontlineData.idNum;
-    // setActiveFrontLine(initialFrontlineData.idNum);
   }, [isActive, frontlineCanvasRef, topLeft]);
 
   const renderFrontLines = () => {
     const frontLines = settings.value.frontLineSettings.frontLines;
+    if(!assertCtxExists(frontlineCanvasRef  )){return}
     const canvas = frontlineCanvasRef.current;
-    if (!canvas) return;
     const ctx = canvas.getContext("2d");
-    if (!ctx){return}
     ctx.clearRect(0, 0, canvas?.width!, canvas?.height!)
     for (const line in frontLines) {
-      console.log("DRAWING A LINE")
       if(frontLines[line].points.length < 2){return}
       drawLineAlongPoints(
         frontLines[line].points,
         settings.value.frontLineSettings.editedPointNum,
         ctx,
-        settings.value.frontLineSettings.frontLineColor,
-        5
+        frontLines[line].color,
+        frontLines[line].radius
       );
     }
   };
 
   useEffect(() => {
-    console.log("CALLED")
     renderFrontLines()
   }, [
     settings.value.activeLayer,
