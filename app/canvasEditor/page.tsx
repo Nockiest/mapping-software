@@ -47,28 +47,37 @@ const Page: React.FC = () => {
 
   const handleMouseDown = (e: React.MouseEvent) => {
     // e.preventDefault()
-    console.log("RESETING ELAPSED TIME")
-    setElapsedTime(0);
+    
+    
     if (e.button === 2) {e.preventDefault() }
     setMouseDownTimeStamp(Date.now());
  
   };
 
   const handleMouseUp = (e: React.MouseEvent) => {
-      e.preventDefault()
-      
+    e.preventDefault();
+  
+    
+  
+    // Using requestAnimationFrame to delay the execution until the next frame
+    requestAnimationFrame(() => {
+      console.log("RESETING ELAPSED TIME");
+  
+      setElapsedTime(0);
       setMouseDownTimeStamp(null);
+    });
   };
+  
 
   useEffect(() => {
     // Add event listeners when the component mounts
     document.addEventListener('mousedown', handleMouseDown);
-    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('mouseup', handleMouseUp, true);
 
     // Remove event listeners when the component unmounts
     return () => {
       document.removeEventListener('mousedown', handleMouseDown);
-      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('mouseup', handleMouseUp, true);
     };
   }, []);
 

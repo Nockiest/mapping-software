@@ -13,10 +13,15 @@ import { v4 as uuidv4 } from "uuid";
 import { drawLineAlongPoints } from "@/app/components/utility/CanvasUtils";
 import {   getCtxFromRef } from "@/app/components/utility/otherUtils";
 
+export type PointData= {
+  position: Vector2 
+  id: string
+}
+
 export type FrontlineData = {
   idNum: string;
   topLeftPoint: Vector2;
-  points: Array<Vector2>;
+  points: Array<PointData>;
   endPointIndex: number; 
   thickness: number ;
   color: Color
@@ -66,13 +71,7 @@ const FrontlineLayer = () => {
 
   useEffect(() => {
     renderFrontLines()
-  }, [
-    settings.value.activeLayer,
-    frontlineCanvasRef,
-    frontLines,
-    settings.value.frontLineSettings.insertionPointIndex,
-    mousePosition
-  ] )
+  },   )
 
   useEffect(() => {
     const canvas = frontlineCanvasRef.current;

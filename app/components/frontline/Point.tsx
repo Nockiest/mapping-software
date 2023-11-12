@@ -5,12 +5,12 @@ import { followMouseComponent } from "@/public/utils";
 import { useEffect, useState, ReactNode } from "react";
 type PointProps = {
   position: Vector2;
-
+  id: string,
   topLeft?: Vector2;
   radius?: number;
   leftClk?: (() => void) | null;
   rightClk?: ((e: React.MouseEvent) => void) | null;
-  mouseWheelClk?: (() => void) | null;
+  mouseWheelClk?: ((e:React.MouseEvent) => void) | null;
   styling?: React.CSSProperties;
   onDrag?: (position: Vector2) => void;
   onDelete?: (e: React.MouseEvent) => void;
@@ -22,6 +22,7 @@ type PointProps = {
  
 const Point: React.FC<PointProps> = ({
   position,
+  id,
   topLeft = { x: 0, y: 0 },
   radius = 15,
   leftClk,
@@ -53,7 +54,7 @@ const Point: React.FC<PointProps> = ({
     if (e.button === 0 && leftClk) {
       leftClk();
     } else if (e.button === 1 && mouseWheelClk) {
-      mouseWheelClk();
+      mouseWheelClk(e);
     } else if (e.button === 2 && rightClk) {
       console.log("HANDLING RIGHT CLK")
       rightClk(e);
@@ -77,7 +78,7 @@ const Point: React.FC<PointProps> = ({
     setIsDragging(false);
     console.log("HANDLING MOUSE UP", mouseDownTime ,  e.button === 2 ,  mouseDownTime  > 1000)
     // Check if right mouse button was pressed and duration is more than 1500ms
-    if (mouseDownTime &&  e.button === 2 &&  mouseDownTime  > 1000) {
+    if (mouseDownTime &&  e.button === 2 &&  mouseDownTime  > 500) {
       // Trigger onDelete method
       console.log("HANDLING DELETE")
       onDelete?.(e);
@@ -112,7 +113,6 @@ const Point: React.FC<PointProps> = ({
       onMouseDown={handleMouseDown}
       onContextMenu={handleContextMenu} 
     >
-      {mouseDownTime}
       {children}
     </div>
   );

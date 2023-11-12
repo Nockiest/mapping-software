@@ -1,4 +1,5 @@
 import { settings } from "@/app/canvasEditor/Signals";
+import { PointData } from "@/app/canvasEditor/layers/FronlineLayer";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { Color } from "@/public/types/OtherTypes";
 
@@ -22,12 +23,11 @@ export const drawDot: (
 export function calculateRelativePosition(position:Vector2, divTopLeft:Vector2) {
     const relativeX = position.x - divTopLeft.x;
     const relativeY = position.y - divTopLeft.y;
-  
     return { x: relativeX, y: relativeY };
   }
 
 export const drawLineAlongPoints = (
-  points: Array<Vector2>,
+  points: Array<PointData>,
   endPointIndex: number|null,
   ctx: CanvasRenderingContext2D,
   color: Color,
@@ -40,15 +40,15 @@ export const drawLineAlongPoints = (
   }
   
     ctx.beginPath();
-    ctx.moveTo(points[0].x, points[0].y);
+    ctx.moveTo(points[0].position.x, points[0].position.y);
     for (let i = 1; i < points.length; i++) {
-      ctx.lineTo(points[i].x, points[i].y);
+      ctx.lineTo(points[i].position.x, points[i].position.y);
     }
 
     if (endPointIndex !== null) {
       // Draw a line from the last point to the endpoint
       if (points[endPointIndex]) {
-        ctx.lineTo(points[endPointIndex].x, points[endPointIndex].y);
+        ctx.lineTo(points[endPointIndex].position.x, points[endPointIndex].position.y);
       } 
     }
     ctx.strokeStyle = color;
