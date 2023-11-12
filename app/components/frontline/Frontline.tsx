@@ -11,10 +11,8 @@ import { findFrontLineObj } from "../utility/otherUtils";
 import { v4 as uuidv4 } from "uuid";
 const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
   const pointRadius: number = 5;
-  // const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
   const frontLineActive = settings.value.frontLineSettings.activeFrontlineId === idNum;
   const frontLineInfo = findFrontLineObj(idNum); // Replace with your actual function
-  
   const { frontlineCanvasRef } = useCanvas();
 
   useEffect(() => {
@@ -34,9 +32,7 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
     };
   }, [idNum]);
 
-  // useEffect(() => {
-  //    console.trace(endPointIndex)
-  // }, [endPointIndex]);
+ 
 
   const addPoint = (position: Vector2) => {
     if (!frontLineInfo) return;
@@ -46,7 +42,6 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
   };
 
   const updatePointPositions = (id: string, clickPos: Vector2) => {
-    console.log("DRAGGING ", id, clickPos)
     if (!frontLineInfo) return;
   
     // Find the index of the point with the specified id
@@ -58,7 +53,8 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
       newPoints[pointIndex] = { ...newPoints[pointIndex], position:clickPos};
       frontLineInfo.points = newPoints;
     } else {
-      console.error(`Point with id ${id} not found.`);
+
+      console.error(`Point with id ${id} ${frontLineInfo.points.length } not found.`);
     }
   };
   
@@ -77,7 +73,7 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
       });
 
       if (clickedPointIndex !== -1) {
-       return // setEndPointIndex(clickedPointIndex);
+       return  
       } else {
         addPoint({ x: canvasRelativeX, y: canvasRelativeY });
       }
@@ -94,23 +90,29 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
     // setEndPointIndex(clickedPointIndex);
   };
 
-  const handleDeletePoint = (e: React.MouseEvent, id: string) => {
-    e.preventDefault();
+  const handleDeletePoint = (id: string) => {
     console.log("DELETING A POINT");
+  
     if (frontLineInfo) {
-      // Find the index of the point with the specified id
+      console.log("Point Id to Delete:", id);
+      console.log("Points Before Deletion:", frontLineInfo.points);
+  
       const pointIndex = frontLineInfo.points.findIndex((point) => point.id === id);
   
+      console.log("Index to Delete:", pointIndex);
+  
       if (pointIndex !== -1) {
-        // If the point is found, remove it from the array
         const newPoints = [...frontLineInfo.points];
         newPoints.splice(pointIndex, 1);
         frontLineInfo.points = newPoints;
+  
+        console.log("Points After Deletion:", frontLineInfo.points);
       } else {
         console.error(`Point with id ${id} not found.`);
       }
     }
   };
+  
   return (
     <div className="absolute top-0">
       {idNum}
@@ -124,9 +126,9 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
           topLeft={{ x: topLeftPoint.x, y: topLeftPoint.y }}
           onDrag={(newPosition) => updatePointPositions(point.id, newPosition)}
           radius={5}
-          mouseWheelClk={frontLineActive ? (e) => handleDeletePoint(e,point.id) : null}
+          mouseWheelClk={frontLineActive ? (e) => handleDeletePoint(point.id) : null}
           rightClk={frontLineActive ? (e) => findNewEndPointIndex(e,point.position) : null}
-          onDelete={(e:React.MouseEvent) => handleDeletePoint(e,point.id)}
+          onDelete={(e:React.MouseEvent) => handleDeletePoint( point.id)}
           styling={{
             background: index === frontLineInfo.endPointIndex ? 'white' : 'red',
             border: '2px solid black',

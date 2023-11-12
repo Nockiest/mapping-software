@@ -42,7 +42,7 @@ const Point: React.FC<PointProps> = ({
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
-    handleMouseDown(e)
+    handleMouseUp(e)
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -59,6 +59,7 @@ const Point: React.FC<PointProps> = ({
       console.log("HANDLING RIGHT CLK")
       rightClk(e);
     }
+    console.log("SET IS DRAGGING")
     setIsDragging(true);
   };
 
@@ -74,14 +75,15 @@ const Point: React.FC<PointProps> = ({
   };
 
   const handleMouseUp = (e: React.MouseEvent) => {
-    e.preventDefault()
+    console.log("UNSET IS DRAGGING")
     setIsDragging(false);
     console.log("HANDLING MOUSE UP", mouseDownTime ,  e.button === 2 ,  mouseDownTime  > 1000)
-    // Check if right mouse button was pressed and duration is more than 1500ms
+    // Check if right mouse button was pressed and duration is more than  500ms
     if (mouseDownTime &&  e.button === 2 &&  mouseDownTime  > 500) {
       // Trigger onDelete method
       console.log("HANDLING DELETE")
       onDelete?.(e);
+      setIsDragging(false);
     }
   };
 
