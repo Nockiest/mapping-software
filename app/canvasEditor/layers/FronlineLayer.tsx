@@ -32,7 +32,7 @@ const FrontlineLayer = () => {
   const { frontlineCanvasRef } = useCanvas();
   const frontLines = settings.value.frontLineSettings.frontLines;
   // DOUFÁM ŽE SE TO BUDE UPDATOVAT
-  const activeFrontLineId = settings.value.frontLineSettings.activeFrontlineId;
+  const activeFrontline = settings.value.frontLineSettings.activeFrontline;
   const [topLeft, setTopLeft] = useState<Vector2>({ x: 0, y: 0 });
   const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
   const isActive = settings.value.activeLayer === "frontLine";
@@ -49,8 +49,7 @@ const FrontlineLayer = () => {
       color:  settings.value.frontLineSettings.frontLineColor
     };
     settings.value.frontLineSettings.frontLines = [initialFrontlineData];
-    settings.value.frontLineSettings.activeFrontlineId =
-      initialFrontlineData.idNum;
+    settings.value.frontLineSettings.activeFrontline=initialFrontlineData 
   }, [ ]);
 
   const renderFrontLines = () => {

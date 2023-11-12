@@ -11,7 +11,7 @@ import { findFrontLineObj } from "../utility/otherUtils";
 import { v4 as uuidv4 } from "uuid";
 const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
   const frontLineActive =
-    settings.value.frontLineSettings.activeFrontlineId === idNum;
+    settings.value.frontLineSettings.activeFrontline.idNum === idNum;
   const frontLineInfo = findFrontLineObj(idNum)  
   const { frontlineCanvasRef } = useCanvas();
 
@@ -26,11 +26,12 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
   }, [frontlineCanvasRef, frontLineActive]);
 
   useEffect(() => {
-    settings.value.frontLineSettings.activeFrontlineId = idNum;
+    if (!frontLineInfo){return}
+    settings.value.frontLineSettings.activeFrontline  = frontLineInfo;
     return () => {
-      settings.value.frontLineSettings.activeFrontlineId = null;
+      settings.value.frontLineSettings.activeFrontline  = null;
     };
-  }, [idNum]);
+  }, [idNum, frontLineInfo]);
 
   const addPoint = (position: Vector2) => {
     if (!frontLineInfo) return;
@@ -154,10 +155,10 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
           }
           rightClk={
             frontLineActive
-              ? (e) => findNewEndPointIndex(e, point.position)
+              ? (e) => updateEndPointIndex(point.id)
               : null
           }
-          leftClk={(e) => updateEndPointIndex(point.id)}
+          // leftClk={(e) => updateEndPointIndex(point.id)}
           onDelete={(e: React.MouseEvent) => handleDeletePoint(point.id)}
           styling={{
             background: index === frontLineInfo.endPointIndex ? "white" : "red",

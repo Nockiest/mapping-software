@@ -2,17 +2,14 @@ import React, {useState, useEffect} from "react";
 import { useCanvas } from "../CanvasContext";
 import { settings } from "../Signals";
 import { computed,   } from "@preact/signals";
-import { findActiveFrontLine } from "@/app/components/utility/otherUtils";
+import { findActiveFrontLine, findFrontLineObj } from "@/app/components/utility/otherUtils";
 import { v4 as uuidv4 } from 'uuid';
 import { FrontlineData } from "../layers/FronlineLayer";
  
 const FrontlineLayerSettings = () => {
   const [insertionPointIndex, setEditedPointNum] = useState(settings.value.frontLineSettings.insertionPointIndex);
   const [maxEndPointNumValue, setMaxEndPointNumValue] = useState(0)
-  //  computed(() =>  {
-  //   const activeFrontLine =findActiveFrontLine()
-  //   return activeFrontLine?.points.length
-  // })
+   
   useEffect(() => {
     const activeFrontLine =findActiveFrontLine()
     setMaxEndPointNumValue(activeFrontLine?.points.length|| 0)
@@ -67,11 +64,11 @@ const FrontlineLayerSettings = () => {
   };
 
   const deleteCurrentFrontLine = () => {
-    const activeFrontlineId = settings.value.frontLineSettings.activeFrontlineId;
+    const activeFrontline = settings.value.frontLineSettings.activeFrontline ;
 
-    if (activeFrontlineId) {
+    if (activeFrontline) {
       settings.value.frontLineSettings.frontLines = settings.value.frontLineSettings.frontLines.filter(
-        (frontline) => frontline.idNum !== activeFrontlineId
+        (frontline) => frontline.idNum !== activeFrontline.idNum
       );
     }
   };
@@ -82,6 +79,7 @@ const FrontlineLayerSettings = () => {
       points: [],
       topLeftPoint: { x: 0, y: 0 },
       thickness: 4,
+      endPointIndex: 0,
       color: settings.value.frontLineSettings.frontLineColor,
     };
 
@@ -89,22 +87,23 @@ const FrontlineLayerSettings = () => {
     settings.value.frontLineSettings.frontLines.push(newFrontlineData);
 
     // Set the new frontline as active
-    settings.value.frontLineSettings.activeFrontlineId = newFrontlineData.idNum;
+    settings.value.frontLineSettings.activeFrontline  = newFrontlineData ;
   };
 
   const handleLayerChange = (e) => {
     const selectedLayerId = e.target.value;
-    settings.value.frontLineSettings.activeFrontlineId = selectedLayerId;
+    const newFrontline = findFrontLineObj(selectedLayerId);
+    settings.value.frontLineSettings.activeFrontline = newFrontline;
   };
 
   return (
     <div>
-      {maxEndPointNumValue}
       <label>
         Set insertion index {settings.value.frontLineSettings.insertionPointIndex}
         <input
           type="range"
           min="-1"
+          defaultValue={-1}
           max={maxEndPointNumValue-1 }
           onChange={handleEndFrontLineIndexChange}
           style={{ color: 'black' }}
@@ -137,16 +136,28 @@ const FrontlineLayerSettings = () => {
       <br />
       <label>
         Choose Active Layer:
-        <select style={{ color: 'black' }} onChange={handleLayerChange} value={settings.value.frontLineSettings.activeFrontlineId}>
-          {settings.value.frontLineSettings.frontLines.map((frontline) => (
-            <option key={frontline.idNum} value={frontline.idNum}>
-              {`ID: ${frontline.idNum}, Color: ${frontline.color}, Index: ${settings.value.frontLineSettings.frontLines.indexOf(frontline)}`}
-            </option>
-          ))}
+        <select style={{ color: 'black' }} onChange={handleLayerChange} value={settings.value.frontLineSettings.activeFrontline.idNum}>
+        {settings.value.frontLineSettings.frontLines.map((frontline, index) => (
+          <option key={frontline.idNum} value={frontline.idNum} style={{backgroundColor: frontline.color, opacity:0.5, cursor:"pointer"}}>
+            {`Index: ${index}, Color: `}
+            <span
+              style={{
+                display: 'inline-block',
+                width: '15px',
+                height: '15px',
+                marginLeft: '2em',
+                backgroundColor: frontline.color,
+                border: '1px solid #000',
+              }}
+            />
+            {`, Index: ${settings.value.frontLineSettings.frontLines.indexOf(frontline)}`}
+          </option>
+        ))}
+
         </select>
       </label>
       <br />
-      {settings.value.frontLineSettings.activeFrontlineId && (
+      {settings.value.frontLineSettings.activeFrontline && (
         <button onClick={deleteCurrentFrontLine}>Delete Current FrontLine</button>
       )}
     </div>

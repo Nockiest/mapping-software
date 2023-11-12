@@ -31,7 +31,7 @@ export type MarkerSettings = {
 export type FrontLineSettings = {
   insertionPointIndex: number
   frontLineColor: Color
-  activeFrontlineId: string
+  activeFrontline : FrontlineData
   frontLines: Array<FrontlineData>
 }
 

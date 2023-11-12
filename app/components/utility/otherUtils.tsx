@@ -3,13 +3,14 @@ import { FrontlineData } from "@/app/canvasEditor/layers/FronlineLayer";
 import { CanvasRef } from "@/public/types/OtherTypes";
 
 export const findActiveFrontLine = (): FrontlineData | null => {
-  const activeFrontlineId = settings.value.frontLineSettings.activeFrontlineId;
+  const activeFrontline = settings.value.frontLineSettings.activeFrontline 
  ;
-  if (activeFrontlineId) {
-    const activeFrontline = settings.value.frontLineSettings.frontLines.find(
-      (frontline) => frontline.idNum === activeFrontlineId
-    );
-    return activeFrontline|| null;
+  if (activeFrontline) {
+    return activeFrontline
+    // const activeFrontline = settings.value.frontLineSettings.frontLines.find(
+    //   (frontline) => frontline.idNum === activeFrontlineId
+    // );
+    // return activeFrontline|| null;
   } else {
     return null;
   }
