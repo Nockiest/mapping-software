@@ -1,5 +1,5 @@
 import { Signal, signal } from "@preact/signals";
-import { FrontLineSettings, Settings } from "@/public/types/OtherTypes";
+import { FrontLineSettings, MarkerArraySignal, Settings } from "@/public/types/OtherTypes";
 export const settings: Settings = signal({
   radius: 5,
   color: `#000000`,
@@ -26,4 +26,8 @@ export const frontLineSettings: FrontLineSettings = signal({
   activeFrontLine: null,
   frontLines: [],
 });
+
+export const markers:MarkerArraySignal = signal([])
+
+
 export const backgroundImage = signal<File | null>(null);

@@ -7,65 +7,14 @@ import { Vector2 } from "@/public/types/GeometryTypes";
 import { settings } from "../Signals";
 import { Color, MarkerSettings, MarkerType } from "@/public/types/OtherTypes";
 // import LineComponent from '@/app/components/frontline/FrontLine2D';
-
+import { markers } from "../Signals";
 import { MousePositionContext } from "../page";
 import { followMouseComponent } from "@/public/utils";
 import ReusableLayer from "@/app/components/utility/ResuableLayer";
+import { Signal } from "@preact/signals";
+import { getCtxFromRef } from "@/app/components/utility/otherUtils";
 
-const drawMarkersOnCanvas = (
-  ctx: CanvasRenderingContext2D,
-  markers: Marker[],
-  topLeftOffset: Vector2
-) => {
-  markers.forEach((marker) => {
-    const { position, usedSettings } = marker;
-
-    const markerStyle: React.CSSProperties = {
-      left: `${position.x}px`,
-      top: `${position.y}px`,
-      width: `${usedSettings.width}px`,
-      color: `${usedSettings.textColor} `,
-      height: `${usedSettings.width}px`,
-      fontSize: `${usedSettings.width / 4}px`,
-      backgroundColor: usedSettings.color,
-      zIndex: 1, // You can set zIndex as needed for drawing on the canvas
-    };
-
-    // Create a temporary div element
-    const tempDiv = document.createElement("div");
-    tempDiv.style.position = "absolute";
-    tempDiv.style.left = markerStyle.left!;
-    tempDiv.style.top = markerStyle.top!;
-    tempDiv.style.width = markerStyle.width!;
-    tempDiv.style.height = markerStyle.height!;
-    tempDiv.style.color = markerStyle.color!;
-    tempDiv.style.fontSize = markerStyle.fontSize!;
-    tempDiv.style.backgroundColor = markerStyle.backgroundColor!;
-    tempDiv.innerHTML = "Marker"; // You can customize the content based on your Marker component
-
-    // Append the temporary div to the body
-    document.body.appendChild(tempDiv);
-
-    // Use the browser's layout engine to calculate the styles
-    const computedStyles = window.getComputedStyle(tempDiv);
-
-    // Set the canvas font based on the computed styles
-    ctx.font = `${computedStyles.fontSize} ${computedStyles.fontFamily}`;
-    ctx.fillStyle = computedStyles.color!;
-    ctx.textAlign = "center";
-
-    // Draw text on the canvas
-    ctx.fillText(
-      "Marker",
-      position.x + topLeftOffset.x,
-      position.y + topLeftOffset.y
-    );
-
-    // Remove the temporary div from the body
-    document.body.removeChild(tempDiv);
-  });
-};
-
+ 
 enum MarkerLayerState {
   Idle,
   Dragging,
@@ -104,7 +53,7 @@ const markerLayerStateMachine: React.Reducer<
 };
 
 const UnitMarkerLayer: React.FC = () => {
-  const [markers, setMarkers] = useState<MarkerType[]>([]);
+  // const [markers, setMarkers] = useState<MarkerType[]>([]);
   const { markerCanvasRef } = useCanvas(); /// useContext(CanvasContext);
   const [markerLayerState, dispatchState] = useReducer(
     markerLayerStateMachine,
@@ -114,6 +63,7 @@ const UnitMarkerLayer: React.FC = () => {
   const mousePosition = useContext(MousePositionContext);
   const isActive = settings.value.activeLayer === "marker";
 
+  
   useEffect(() => {
     const handleResize = () => {
       if (!markerCanvasRef.current) return;
@@ -125,6 +75,16 @@ const UnitMarkerLayer: React.FC = () => {
   }, [settings.value.activeLayer]);
 
   useEffect(() => {
+    console.log("NEW CALL")
+    const ctx = getCtxFromRef(markerCanvasRef)
+    if(!ctx){return}
+      drawMarkersOnCanvas   (
+        ctx ,
+        markers,
+        topLeftOffset 
+      )
+   
+  
     const handleMouseDown = (e: MouseEvent) => {
       if (!isActive) {
         return;
@@ -134,7 +94,7 @@ const UnitMarkerLayer: React.FC = () => {
       const y = e.clientY - rect!.top;
 
       if (e.button === 2) {
-        const clickedMarkerIndex = markers.findIndex(
+        const clickedMarkerIndex = markers.value.findIndex(
           (marker) =>
             Math.abs(marker.position.x - x) < 10 &&
             Math.abs(marker.position.y - y) < 10
@@ -150,8 +110,10 @@ const UnitMarkerLayer: React.FC = () => {
             topLeftOffset,
             topText: "",
             bottomText: "",
+            customStyling: {...settings.value.markerSettings}
           };
-          setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
+          markers.value.push(newMarker)
+          // setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
         }
       }
     };
@@ -164,12 +126,12 @@ const UnitMarkerLayer: React.FC = () => {
       canvas.removeEventListener("mousedown", handleMouseDown);
       // canvas.removeEventListener('dblclick', handleMarkerDoubleClick);
     };
-  }, [markerCanvasRef, markers, mousePosition, settings, markerLayerState]);
+  }, [markerCanvasRef, markers.value, mousePosition, settings, markerLayerState]);
 
   return (
     <>
       <ReusableLayer layerName="marker" canvasRef={markerCanvasRef}>
-        {markers.map((marker, index) => (
+        {markers.value.map((marker, index) => (
           <Marker
             key={index}
             topLeftOffset={marker.topLeftOffset}
@@ -188,33 +150,101 @@ const UnitMarkerLayer: React.FC = () => {
 
 export default UnitMarkerLayer;
 
-// const handleMarkerDoubleClick = (e: MouseEvent) => {
-//   const rect = markerCanvasRef.current?.getBoundingClientRect();
-//   const x = e.clientX - rect!.left;
-//   const y = e.clientY - rect!.top;
-//   console.log('Marker double-clicked!');
-//   dispatchState({ type: 'MAKING_LINE' });
-// };
-{
-  /* <canvas
-        width={800}
-        height={600}
-        className="border-2 canvas-rectangle markerLayer  "
-        ref={markerCanvasRef}
-        // style={{ pointerEvents: isActive ? 'auto' : 'none' }}
-      /> */
-}
+ 
 
-// const handleMouseMove = (e: MouseEvent) => {
-//   // if (markerLayerState === MarkerLayerState.Dragging) {
-//   //   const rect = canvas.getBoundingClientRect();
-//   //   const x = e.clientX - rect.left;
-//   //   const y = e.clientY - rect.top;
+export const drawMarkersOnCanvas = (
+  ctx: CanvasRenderingContext2D,
+  markers: Signal<MarkerType[]>,
+ 
+  topLeftOffset: Vector2
+) => {
+  ctx.clearRect(0,0,settings.value.canvasSize.x,settings.value.canvasSize.y)
+  markers.value.forEach((marker, index) => {
+    // const imageUrl =
+    //   settings.value.imageURL instanceof File
+    //     ? URL.createObjectURL(settings.value.imageURL)
+    //     : settings.value.imageURL;
+    const usedWidth = marker.customStyling?.width|| 10
+    const usedTextColor = marker.customStyling?.textColor|| "black"
 
-//   //   setMarkers((prevMarkers) =>
-//   //     prevMarkers.map((marker, index) =>
-//   //       index === draggingMarkerIndex ? { ...marker, position: { x, y } } : marker
-//   //     )
-//   //   );
-//   // }
-// };
+    const markerStyle: React.CSSProperties = {
+      left: `${marker.position.x}px`,
+      top: `${marker.position.y}px`,
+      width: `${usedWidth}px`,
+      color: `${marker.customStyling?.textColor|| "black"} `,
+      height: `${usedWidth}px`,
+      fontSize: `${usedWidth }px`,
+      backgroundColor: marker.customStyling?.color,
+      // backgroundImage: settings.value.imageURL ? `url(${imageUrl})` : 'none',
+      zIndex: marker.isDragging ? 10 : 1,
+    };
+
+    const textBackgroundStyle: React.CSSProperties = {
+      position: 'absolute',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      backgroundColor: 'rgba(255, 255, 255, 0.7)',
+      padding: '5px',
+      borderRadius: '5px',
+      userSelect: 'none',
+    };
+
+    const imageStyle: React.CSSProperties = {
+      width: '10px',
+      height: '10px',
+      borderRadius: '50%',
+    };
+
+    ctx.save();
+
+    ctx.beginPath();
+    ctx.arc(
+      marker.position.x, //- topLeftOffset.x,
+      marker.position.y, //- topLeftOffset.y,
+      usedWidth / 2,
+      0,
+      2 * Math.PI
+    );
+    ctx.fillStyle = settings.value.color;
+    ctx.fill();
+    ctx.closePath();
+
+    // if (settings.value.imageURL) {
+    //   const img = new Image();
+    //   // img.src = imageUrl!;
+    //   ctx.drawImage(
+    //     img,
+    //     marker.position.x - topLeftOffset.x - usedWidth/ 2,
+    //     marker.position.y - topLeftOffset.y - usedWidth / 2,
+    //     usedWidth,
+    //     usedWidth
+    //   );
+    // }
+
+    if (marker.topText) {
+      ctx.font = `${usedWidth/ 4}px Arial`;
+      ctx.fillStyle = usedTextColor;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(
+        marker.topText,
+        marker.position.x , - topLeftOffset.x,
+        marker.position.y  - usedWidth/ 2 - 10//- topLeftOffset.y - usedWidth/ 2 - 10
+      );
+    }
+
+    if (marker.bottomText && usedWidth > 20) {
+      ctx.font = `${usedWidth / 4}px Arial`;
+      ctx.fillStyle = usedTextColor;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(
+        marker.bottomText,
+        marker.position.x - topLeftOffset.x,
+        marker.position.y //- topLeftOffset.y + usedWidth / 2 + 10
+      );
+    }
+
+    ctx.restore();
+  });
+};

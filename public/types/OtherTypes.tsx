@@ -31,12 +31,13 @@ export type MarkerSettings = {
   popularMarkerColors: Array<Color> 
 }
 
-export type FrontLineSettings =Signal< {
-  insertionPointIndex: number
-  frontLineColor: Color
-  activeFrontline : FrontlineData
-  frontLines: Array<FrontlineData>
-}>
+export type FrontLineSettings = Signal<{
+  insertionPointIndex: number;
+  frontLineColor: Color;
+  activeFrontline: FrontlineData | null;
+  frontLines: FrontlineData[];
+}>;
+export type MarkerArraySignal = Signal<MarkerType[]>;
 
 export type Settings = Signal<{
     radius: number;
