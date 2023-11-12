@@ -11,11 +11,10 @@ import { findFrontLineObj } from "../utility/otherUtils";
 
 const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
   const pointRadius: number = 5;
-  const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
+  // const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
   const frontLineActive = settings.value.frontLineSettings.activeFrontlineId === idNum;
   const frontLineInfo = findFrontLineObj(idNum); // Replace with your actual function
-  // const color: Color = computed(() => (frontLineActive ? settings.value.frontLineSettings.frontLineColor : ''));
-  const insertPointPosition = computed(() => settings.value.frontLineSettings.editedPointNum);
+  const insertPointPosition = computed(() => settings.value.frontLineSettings.insertionPointIndex);
   const { frontlineCanvasRef } = useCanvas();
 
   useEffect(() => {
@@ -34,6 +33,10 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
       settings.value.frontLineSettings.activeFrontLineId = null;
     };
   }, [idNum]);
+
+  // useEffect(() => {
+  //    console.trace(endPointIndex)
+  // }, [endPointIndex]);
 
   const addPoint = (position: Vector2) => {
     if (!frontLineInfo) return;
@@ -64,7 +67,7 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
       });
 
       if (clickedPointIndex !== -1) {
-        setEndPointIndex(clickedPointIndex);
+       return // setEndPointIndex(clickedPointIndex);
       } else {
         addPoint({ x: canvasRelativeX, y: canvasRelativeY });
       }
@@ -75,7 +78,7 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
     const clickedPointIndex = frontLineInfo?.points.findIndex(
       (point) => point.x === clickedPoint.x && point.y === clickedPoint.y
     );
-    setEndPointIndex(clickedPointIndex);
+    // setEndPointIndex(clickedPointIndex);
   };
 
   const handleDeletePoint = (index: number) => {
@@ -102,7 +105,7 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
           rightClk={frontLineActive ? () => findNewEndPointIndex(point) : null}
           onDelete={() => handleDeletePoint(index)}
           styling={{
-            background: index === endPointIndex ? 'white' : 'red',
+            background: index === frontLineInfo.endPointIndex ? 'white' : 'red',
             border: '2px solid black',
             pointerEvents: frontLineActive ? 'auto' : 'none',
             zIndex: '30',

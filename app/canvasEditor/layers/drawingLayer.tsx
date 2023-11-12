@@ -17,6 +17,7 @@ import {
   DrawAction,
   ErasePayload,
 } from "@/public/types/OtherTypes";
+import { getCtxFromRef } from "@/app/components/utility/otherUtils";
 
 const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
   console.log("SWITCHING TO ", action.type);
@@ -69,15 +70,10 @@ const DrawingLayer: React.FC = () => {
   // }, [])
 
   useEffect(() => {
-    if (!canvasRef) {
-      return;
-    }
-
+    if (!canvasRef) {return}
     const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-
+    const ctx = getCtxFromRef( canvasRef )
+    if(!ctx){return}
     const handleMouseDown = (e: MouseEvent) => {
       console.log("MOUSE DOWN");
       if (settings.value.activeLayer !== "draw") {
@@ -91,7 +87,7 @@ const DrawingLayer: React.FC = () => {
         const erasePayload: ErasePayload = {
           eraseFunction: eraseLine,
           eraseArgs: {
-            canvasRef,
+            canvasRefnull,
             start: lastMousePos || { x, y },
             end: { x, y },
             radius,

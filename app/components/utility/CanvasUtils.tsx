@@ -49,9 +49,7 @@ export const drawLineAlongPoints = (
       // Draw a line from the last point to the endpoint
       if (points[endPointIndex]) {
         ctx.lineTo(points[endPointIndex].x, points[endPointIndex].y);
-      } else {
-        console.error("Endpoint index is null or invalid");
-      }
+      } 
     }
     ctx.strokeStyle = color;
     ctx.lineWidth = width;

@@ -11,12 +11,13 @@ import Frontline from "@/app/components/frontline/Frontline";
 
 import { v4 as uuidv4 } from "uuid";
 import { drawLineAlongPoints } from "@/app/components/utility/CanvasUtils";
-import { assertCtxExists } from "@/app/components/utility/otherUtils";
+import {   getCtxFromRef } from "@/app/components/utility/otherUtils";
 
 export type FrontlineData = {
   idNum: string;
   topLeftPoint: Vector2;
   points: Array<Vector2>;
+  endPointIndex: number; 
   thickness: number ;
   color: Color
 };
@@ -39,6 +40,7 @@ const FrontlineLayer = () => {
       idNum: uuidv4(),
       points: [],
       topLeftPoint: {x:0,y:0},
+      endPointIndex:0,
       thickness: 4,
       color:  settings.value.frontLineSettings.frontLineColor
     };
@@ -49,15 +51,14 @@ const FrontlineLayer = () => {
 
   const renderFrontLines = () => {
     const frontLines = settings.value.frontLineSettings.frontLines;
-    if(!assertCtxExists(frontlineCanvasRef  )){return}
-    const canvas = frontlineCanvasRef.current;
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas?.width!, canvas?.height!)
+    const ctx = getCtxFromRef(frontlineCanvasRef)
+    if(!ctx){return}
+    ctx.clearRect(0, 0, settings.value.canvasSize.x!, settings.value.canvasSize.y!)
     for (const line in frontLines) {
       if(frontLines[line].points.length < 2){return}
       drawLineAlongPoints(
         frontLines[line].points,
-        settings.value.frontLineSettings.editedPointNum,
+        frontLines[line].endPointIndex,
         ctx,
         frontLines[line].color,
         frontLines[line].thickness
@@ -71,7 +72,7 @@ const FrontlineLayer = () => {
     settings.value.activeLayer,
     frontlineCanvasRef,
     frontLines,
-    settings.value.frontLineSettings.editedPointNum,
+    settings.value.frontLineSettings.insertionPointIndex,
     mousePosition
   ] )
 

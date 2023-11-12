@@ -25,28 +25,28 @@ export const findFrontLineObj = (id: string) => {
   return frontline;
 };
 
-export const assertCtxExists = (
-  canvasRef: React.RefObject<HTMLCanvasElement | null>
-): boolean => {
+export const getCtxFromRef = (
+  canvasRef: React.RefObject<HTMLCanvasElement | null|undefined>
+): CanvasRenderingContext2D | null => {
   if (!canvasRef || !canvasRef.current) {
     console.error("Canvas reference is missing.");
-    return false;
+    return null;
   }
-  if (canvasRef.current === null) {
-    return false;
-  }
+
   const canvas = canvasRef.current;
+
   if (!canvas) {
-    return false;
+    console.error("Canvas element is missing.");
+    return null;
   }
+
   const ctx = canvas.getContext("2d");
 
   if (!ctx) {
     console.error("2D context cannot be obtained from the canvas.");
-    return false;
+    return null;
   } else {
-    return true;
+    return ctx;
   }
-
- 
 };
+

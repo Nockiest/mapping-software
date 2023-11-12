@@ -1,18 +1,27 @@
 import React, {useState, useEffect} from "react";
 import { useCanvas } from "../CanvasContext";
 import { settings } from "../Signals";
-import { computed } from "@preact/signals";
+import { computed,   } from "@preact/signals";
 import { findActiveFrontLine } from "@/app/components/utility/otherUtils";
 import { v4 as uuidv4 } from 'uuid';
 import { FrontlineData } from "../layers/FronlineLayer";
  
 const FrontlineLayerSettings = () => {
-  const [editedPointNum, setEditedPointNum] = useState(settings.value.frontLineSettings.editedPointNum);
-
-  // useEffect(() => {
-  //   // Update local state when settings change
-  //   setEditedPointNum(settings.value.frontLineSettings.editedPointNum);
-  // }, [settings.value.frontLineSettings.editedPointNum]);
+  const [insertionPointIndex, setEditedPointNum] = useState(settings.value.frontLineSettings.insertionPointIndex);
+  const [maxEndPointNumValue, setMaxEndPointNumValue] = useState(0)
+  //  computed(() =>  {
+  //   const activeFrontLine =findActiveFrontLine()
+  //   return activeFrontLine?.points.length
+  // })
+  useEffect(() => {
+    const activeFrontLine =findActiveFrontLine()
+    setMaxEndPointNumValue(activeFrontLine?.points.length|| 0)
+     
+  }, )
+  useEffect(() => {
+    // Update local state when settings change
+    setEditedPointNum(settings.value.frontLineSettings.insertionPointIndex);
+  }, [settings.value.frontLineSettings.insertionPointIndex]);
 
   const handleEndFrontLineIndexChange = (e) => {
     console.log("CHANGING VALUE");
@@ -21,12 +30,12 @@ const FrontlineLayerSettings = () => {
     const newValue = parseInt(e.target.value, 10);
   
     if (!isNaN(newValue)) {
-      // Update the editedPointNum in settings and local state
-      settings.value.frontLineSettings.editedPointNum = newValue;
+      // Update the insertionPointIndex in settings and local state
+      settings.value.frontLineSettings.insertionPointIndex = newValue;
       setEditedPointNum(newValue);
     } else {
       // If the value is NaN, set it to -1
-      settings.value.frontLineSettings.editedPointNum = -1;
+      settings.value.frontLineSettings.insertionPointIndex = -1;
       setEditedPointNum(-1);
     }
   
@@ -90,16 +99,14 @@ const FrontlineLayerSettings = () => {
 
   return (
     <div>
+      {maxEndPointNumValue}
       <label>
-        Set endFrontLine index {settings.value.frontLineSettings.editedPointNum}
+        Set insertion index {settings.value.frontLineSettings.insertionPointIndex}
         <input
-          type="number"
-          // type="text"
-          // inputMode="numeric"
-          // pattern="[0-9]*"
-          // value={editedPointNum}
-          // onChange={handleEndFrontLineIndexChange}
-          // // onWheel={(e) => e.preventDefault()}
+          type="range"
+          min="-1"
+          max={maxEndPointNumValue-1 }
+          onChange={handleEndFrontLineIndexChange}
           style={{ color: 'black' }}
         />
       </label>
