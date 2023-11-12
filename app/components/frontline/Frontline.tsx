@@ -46,6 +46,7 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
   };
 
   const updatePointPositions = (id: string, clickPos: Vector2) => {
+    console.log("DRAGGING ", id, clickPos)
     if (!frontLineInfo) return;
   
     // Find the index of the point with the specified id
@@ -54,7 +55,7 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
     if (pointIndex !== -1) {
       // If the point is found, update its position
       const newPoints = [...frontLineInfo.points];
-      newPoints[pointIndex] = { ...newPoints[pointIndex], ...clickPos };
+      newPoints[pointIndex] = { ...newPoints[pointIndex], position:clickPos};
       frontLineInfo.points = newPoints;
     } else {
       console.error(`Point with id ${id} not found.`);
