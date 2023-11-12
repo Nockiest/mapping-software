@@ -2,7 +2,7 @@ import { MousePositionContext } from "@/app/canvasEditor/page";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import Point from "./Point";
-import { settings } from "@/app/canvasEditor/Signals";
+import { frontLineSettings, settings } from "@/app/canvasEditor/Signals";
 import { useCanvas } from "@/app/canvasEditor/CanvasContext";
 import { computed } from "@preact/signals";
 import { Color } from "@/public/types/OtherTypes";
@@ -11,7 +11,7 @@ import { findFrontLineObj } from "../utility/otherUtils";
 import { v4 as uuidv4 } from "uuid";
 const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
   const frontLineActive =
-    settings.value.frontLineSettings.activeFrontline.idNum === idNum;
+    frontLineSettings.value.activeFrontline.idNum === idNum;
   const frontLineInfo = findFrontLineObj(idNum)  
   const { frontlineCanvasRef } = useCanvas();
 
@@ -27,9 +27,9 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
 
   useEffect(() => {
     if (!frontLineInfo){return}
-    settings.value.frontLineSettings.activeFrontline  = frontLineInfo;
+    frontLineSettings.value.activeFrontline  = frontLineInfo;
     return () => {
-      settings.value.frontLineSettings.activeFrontline  = null;
+      frontLineSettings.value.activeFrontline  = null;
     };
   }, [idNum, frontLineInfo]);
 
@@ -38,9 +38,9 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
   
     const newPoints = [...frontLineInfo.points];
   
-    if (settings.value.frontLineSettings.insertionPointIndex !== null && settings.value.frontLineSettings.insertionPointIndex !== -1) {
+    if (frontLineSettings.value.insertionPointIndex !== null && frontLineSettings.value.insertionPointIndex !== -1) {
       // Insert the new point at the specified index
-      newPoints.splice(settings.value.frontLineSettings.insertionPointIndex, 0, {
+      newPoints.splice(frontLineSettings.value.insertionPointIndex, 0, {
         position: position,
         id: uuidv4(),
       });

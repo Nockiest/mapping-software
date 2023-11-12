@@ -125,7 +125,7 @@ const Page: React.FC = () => {
           layer: settings.value.activeLayer,
           mousePosition: mousePosition,
           mousDownTime: elapsedTime,
-          // activeFrontLine: settings.value.frontLineSettings.activeFrontline?.idNum,
+          // activeFrontLine: frontLineSettings.value.activeFrontline?.idNum,
           // GlobalData: GlobalData.mouseDownTime,
         }}
       />

@@ -31,12 +31,12 @@ export type MarkerSettings = {
   popularMarkerColors: Array<Color> 
 }
 
-export type FrontLineSettings = {
+export type FrontLineSettings =Signal< {
   insertionPointIndex: number
   frontLineColor: Color
   activeFrontline : FrontlineData
   frontLines: Array<FrontlineData>
-}
+}>
 
 export type Settings = Signal<{
     radius: number;
@@ -49,7 +49,7 @@ export type Settings = Signal<{
     canvasZindexes: {
       [key in LayerNames]: number;
     };
-    frontLineSettings: FrontLineSettings
+    // frontLineSettings: FrontLineSettings
   }>;
 
 

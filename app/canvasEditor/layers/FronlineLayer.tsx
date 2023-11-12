@@ -1,7 +1,7 @@
 import { useContext, useState, useRef, useEffect, ReactNode } from "react";
 import { MousePositionContext } from "../page";
 import { Vector2 } from "@/public/types/GeometryTypes";
-import { settings } from "../Signals";
+import { frontLineSettings, settings } from "../Signals";
 import { useCanvas, useGlobalValue } from "../CanvasContext";
 import Point from "@/app/components/frontline/Point";
 import ReusableLayer from "@/app/components/utility/ResuableLayer";
@@ -30,9 +30,9 @@ export type FrontlineData = {
 const FrontlineLayer = () => {
   const mousePosition = useContext(MousePositionContext);
   const { frontlineCanvasRef } = useCanvas();
-  const frontLines = settings.value.frontLineSettings.frontLines;
+  const frontLines = frontLineSettings.value.frontLines;
   // DOUFÁM ŽE SE TO BUDE UPDATOVAT
-  const activeFrontline = settings.value.frontLineSettings.activeFrontline;
+  const activeFrontline = frontLineSettings.value.activeFrontline;
   const [topLeft, setTopLeft] = useState<Vector2>({ x: 0, y: 0 });
   const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
   const isActive = settings.value.activeLayer === "frontLine";
@@ -46,14 +46,14 @@ const FrontlineLayer = () => {
       topLeftPoint: {x:0,y:0},
       endPointIndex:0,
       thickness: 4,
-      color:  settings.value.frontLineSettings.frontLineColor
+      color:  frontLineSettings.value.frontLineColor
     };
-    settings.value.frontLineSettings.frontLines = [initialFrontlineData];
-    settings.value.frontLineSettings.activeFrontline=initialFrontlineData 
+    frontLineSettings.value.frontLines = [initialFrontlineData];
+    frontLineSettings.value.activeFrontline=initialFrontlineData 
   }, [ ]);
 
   const renderFrontLines = () => {
-    const frontLines = settings.value.frontLineSettings.frontLines;
+    const frontLines = frontLineSettings.value.frontLines;
     const ctx = getCtxFromRef(frontlineCanvasRef)
     if(!ctx){return}
     ctx.clearRect(0, 0, settings.value.canvasSize.x!, settings.value.canvasSize.y!)

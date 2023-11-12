@@ -5,7 +5,7 @@ import { CanvasContext, useCanvas } from "../CanvasContext";
 // import { Color } from '@/public/types/OtherTypes';
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { settings } from "../Signals";
-import { Color, MarkerSettings } from "@/public/types/OtherTypes";
+import { Color, MarkerSettings, MarkerType } from "@/public/types/OtherTypes";
 // import LineComponent from '@/app/components/frontline/FrontLine2D';
 
 import { MousePositionContext } from "../page";
@@ -72,16 +72,6 @@ enum MarkerLayerState {
   EditingMarker,
   MakingLine,
 }
-
-export type MarkerType = {
-  color: Color;
-  position: Vector2;
-  isDragging: boolean;
-  topLeftOffset: Vector2;
-  topText: string;
-  bottomText:string;
-  customStyling?:MarkerSettings;
-};
 
 type MarkerLayerAction =
   | { type: "DRAG"; markerIndex: number }
