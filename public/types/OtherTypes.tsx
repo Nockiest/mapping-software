@@ -11,11 +11,14 @@ export type HEX = `#${string}`;
 export type Color =  HEX//[number, number, number, number];RGB|RGBA|
 
 export type MarkerType = {
-    color: string;
-    position: { x: number; y: number };
-    isDragging: boolean;
-  };
-  
+  color: Color;
+  position: Vector2;
+  isDragging: boolean;
+  topLeftOffset: Vector2;
+  topText: string;
+  bottomText:string;
+  customStyling?:MarkerSettings;
+};
 export type LayerNames =  "draw" | "marker" | "background"| "frontLine"
 
 export type MarkerSettings = {
