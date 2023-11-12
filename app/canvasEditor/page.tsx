@@ -15,10 +15,12 @@ import Timeline from "./Timeline";
 import {
   CanvasContext,
   CanvasProvider,
+  useBackground,
   useCanvas,
   useGlobalValue,
 } from "./CanvasContext"; //CanvasSettingsContext
 import { settings } from "./Signals";
+import LayerSplicer from "../components/utility/LayerSplicer";
 // Create a context for mouse position
 export const MousePositionContext = createContext<{
   x: number;
@@ -58,7 +60,9 @@ const MousePositionProvider: React.FC<{ children: ReactNode }> = ({
 };
 
 const Page: React.FC = () => {
-  const { canvasState } = useCanvas();
+  const { canvasState, canvasRef, frontlineCanvasRef, markerCanvasRef   } = useCanvas();
+  const {backgroundCanvasRef}= useBackground()
+  // const { backgroundcanvasRef} = useBack
   const mousePosition = useContext(MousePositionContext);
   const { GlobalData, updateGlobalData } = useGlobalValue();
   const [mouseDownTimeStamp, setMouseDownTimeStamp] = useState<number | null>(
@@ -122,12 +126,19 @@ const Page: React.FC = () => {
           mousePosition: mousePosition,
           mousDownTime: elapsedTime,
           // activeFrontLine: settings.value.frontLineSettings.activeFrontline?.idNum,
-          GlobalData: GlobalData.mouseDownTime,
+          // GlobalData: GlobalData.mouseDownTime,
         }}
       />
 
       <CanvasSettings />
       <DrawingCanvas />
+      <LayerSplicer  layers={
+        [{canvasRef:canvasRef, zIndex:20},
+         {canvasRef:backgroundCanvasRef, zIndex:10},
+         {canvasRef:frontlineCanvasRef, zIndex:30},
+         {canvasRef:markerCanvasRef, zIndex:40},
+        ]
+      } />
       <Timeline />
     </>
   );

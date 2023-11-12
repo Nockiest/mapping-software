@@ -89,6 +89,16 @@ export const useCanvas = () => {
   return context;
 };
 
+export const useBackground = () => {
+  const context = useContext(BackgroundContext);
+
+  if (!context) {
+    throw new Error("useCanvas must be used within a CanvasProvider");
+  }
+
+  return context;
+};
+
 export const useGlobalValue = () => {
   const context = useContext(GlobalDataContext);
 
