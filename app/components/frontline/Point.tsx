@@ -28,7 +28,7 @@ const Point: React.FC<PointProps> = ({
   rightClk,
   mouseWheelClk,
   styling = {},
-onDrag ,//= followMouseComponent,
+  onDrag , 
   onDelete,
   children,
   shape,
@@ -38,6 +38,11 @@ onDrag ,//= followMouseComponent,
   const [isDragging, setIsDragging] = useState(false);
   const { GlobalData } = useGlobalValue();
   const { mouseDownTime } = GlobalData;
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    handleMouseDown(e)
+  };
 
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -50,6 +55,7 @@ onDrag ,//= followMouseComponent,
     } else if (e.button === 1 && mouseWheelClk) {
       mouseWheelClk();
     } else if (e.button === 2 && rightClk) {
+      console.log("HANDLING RIGHT CLK")
       rightClk(e);
     }
     setIsDragging(true);
@@ -69,9 +75,11 @@ onDrag ,//= followMouseComponent,
   const handleMouseUp = (e: React.MouseEvent) => {
     e.preventDefault()
     setIsDragging(false);
+    console.log("HANDLING MOUSE UP", mouseDownTime ,  e.button === 2 ,  mouseDownTime  > 1000)
     // Check if right mouse button was pressed and duration is more than 1500ms
     if (mouseDownTime &&  e.button === 2 &&  mouseDownTime  > 1000) {
       // Trigger onDelete method
+      console.log("HANDLING DELETE")
       onDelete?.(e);
     }
   };
@@ -102,7 +110,9 @@ onDrag ,//= followMouseComponent,
         ...styling,
       }}
       onMouseDown={handleMouseDown}
+      onContextMenu={handleContextMenu} 
     >
+      {mouseDownTime}
       {children}
     </div>
   );

@@ -75,6 +75,7 @@ const UnitMarkerLayer: React.FC = () => {
       const y = e.clientY - rect!.top;
 
       if (e.button === 2) {
+        e.preventDefault()
         const clickedMarkerIndex = markers.findIndex(
           (marker) => Math.abs(marker.position.x - x) < 10 && Math.abs(marker.position.y - y) < 10
         );

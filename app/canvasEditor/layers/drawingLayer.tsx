@@ -82,12 +82,12 @@ const DrawingLayer: React.FC = () => {
 
       const x = e.offsetX;
       const y = e.offsetY;
-
+      e.preventDefault()
       if (e.button === 2) {
         const erasePayload: ErasePayload = {
           eraseFunction: eraseLine,
           eraseArgs: {
-            canvasRefnull,
+            canvasRef,
             start: lastMousePos || { x, y },
             end: { x, y },
             radius,

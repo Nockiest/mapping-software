@@ -76,6 +76,7 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
 
   const findNewEndPointIndex = (e:React.MouseEvent, clickedPoint: Vector2) => {
     e.preventDefault()
+    if(!frontLineInfo){return}
     const clickedPointIndex = frontLineInfo?.points.findIndex(
       (point) => point.x === clickedPoint.x && point.y === clickedPoint.y
     );
@@ -83,7 +84,7 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
     // setEndPointIndex(clickedPointIndex);
   };
 
-  const handleDeletePoint = (e:MouseEvent,index: number) => {
+  const handleDeletePoint = (e:React.MouseEvent,index: number) => {
     e.preventDefault()
     console.log("DELETING A POINT")
     if (frontLineInfo) {
@@ -107,7 +108,7 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
           radius={5}
           mouseWheelClk={frontLineActive ? () => handleDeletePoint(index) : null}
           rightClk={frontLineActive ? (e) => findNewEndPointIndex(e,point) : null}
-          onDelete={(e:MouseEvent) => handleDeletePoint(e,index)}
+          onDelete={(e:React.MouseEvent) => handleDeletePoint(e,index)}
           styling={{
             background: index === frontLineInfo.endPointIndex ? 'white' : 'red',
             border: '2px solid black',

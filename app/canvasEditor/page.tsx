@@ -46,14 +46,17 @@ const Page: React.FC = () => {
   const [elapsedTime, setElapsedTime] = useState<number>(0);
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    // e.preventDefault()
+    console.log("RESETING ELAPSED TIME")
+    setElapsedTime(0);
     if (e.button === 2) {e.preventDefault() }
-      setMouseDownTimeStamp(Date.now());
+    setMouseDownTimeStamp(Date.now());
  
   };
 
   const handleMouseUp = (e: React.MouseEvent) => {
       e.preventDefault()
-      setElapsedTime(0);
+      
       setMouseDownTimeStamp(null);
   };
 
@@ -100,7 +103,7 @@ const Page: React.FC = () => {
           mousePosition: mousePosition,
           mousDownTime: elapsedTime,
           // activeFrontLine: settings.value.frontLineSettings.activeFrontlineId
-          // GlobalData:GlobalData.mouseDownTime
+          GlobalData:GlobalData.mouseDownTime
         }}
       />
       
