@@ -14,7 +14,7 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
   // const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
   const frontLineActive = settings.value.frontLineSettings.activeFrontlineId === idNum;
   const frontLineInfo = findFrontLineObj(idNum); // Replace with your actual function
-  const insertPointPosition = computed(() => settings.value.frontLineSettings.insertionPointIndex);
+  
   const { frontlineCanvasRef } = useCanvas();
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
   const addPoint = (position: Vector2) => {
     if (!frontLineInfo) return;
     const newPoints = [...frontLineInfo.points];
-    newPoints.splice(insertPointPosition, 0, position);
+    newPoints.splice(settings.value.frontLineSettings.insertionPointIndex, 0, position);
     frontLineInfo.points = newPoints;
   };
 
@@ -74,14 +74,18 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
     }
   };
 
-  const findNewEndPointIndex = (clickedPoint: Vector2) => {
+  const findNewEndPointIndex = (e:React.MouseEvent, clickedPoint: Vector2) => {
+    e.preventDefault()
     const clickedPointIndex = frontLineInfo?.points.findIndex(
       (point) => point.x === clickedPoint.x && point.y === clickedPoint.y
     );
+    frontLineInfo.endPointIndex = clickedPointIndex || -1
     // setEndPointIndex(clickedPointIndex);
   };
 
-  const handleDeletePoint = (index: number) => {
+  const handleDeletePoint = (e:MouseEvent,index: number) => {
+    e.preventDefault()
+    console.log("DELETING A POINT")
     if (frontLineInfo) {
       const newPoints = [...frontLineInfo.points];
       newPoints.splice(index, 1);
@@ -93,7 +97,7 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
     <div className="absolute top-0">
       {idNum}
       <br />
-      {settings.value.frontLineSettings.activeFrontlineId}
+      {frontLineInfo?.idNum}
       {frontLineInfo?.points.map((point, index) => (
         <Point
           key={index}
@@ -102,8 +106,8 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
           onDrag={(newPosition) => updatePointPositions(index, newPosition)}
           radius={5}
           mouseWheelClk={frontLineActive ? () => handleDeletePoint(index) : null}
-          rightClk={frontLineActive ? () => findNewEndPointIndex(point) : null}
-          onDelete={() => handleDeletePoint(index)}
+          rightClk={frontLineActive ? (e) => findNewEndPointIndex(e,point) : null}
+          onDelete={(e:MouseEvent) => handleDeletePoint(e,index)}
           styling={{
             background: index === frontLineInfo.endPointIndex ? 'white' : 'red',
             border: '2px solid black',

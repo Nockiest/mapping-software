@@ -13,7 +13,7 @@ type PointProps = {
   mouseWheelClk?: (() => void) | null;
   styling?: React.CSSProperties;
   onDrag?: (position: Vector2) => void;
-  onDelete?: () => void;
+  onDelete?: (e: React.MouseEvent) => void;
   children?: React.ReactNode;
   shape?: Omit<Shapes, "triangle">;
   dragable?: boolean;
@@ -72,7 +72,7 @@ onDrag ,//= followMouseComponent,
     // Check if right mouse button was pressed and duration is more than 1500ms
     if (mouseDownTime &&  e.button === 2 &&  mouseDownTime  > 1000) {
       // Trigger onDelete method
-      onDelete?.();
+      onDelete?.(e);
     }
   };
 

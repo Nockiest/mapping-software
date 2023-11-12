@@ -21,12 +21,10 @@ export type FrontlineData = {
   thickness: number ;
   color: Color
 };
-// const [frontlinesData, setFrontlinesData] = useState<FrontlineData[]>([]);
-// const [activeFrontLineId, setActiveFrontLine] = useState<string | null>(null);
+ 
 const FrontlineLayer = () => {
   const mousePosition = useContext(MousePositionContext);
   const { frontlineCanvasRef } = useCanvas();
-  const { GlobalData } = useGlobalValue();
   const frontLines = settings.value.frontLineSettings.frontLines;
   // DOUFÁM ŽE SE TO BUDE UPDATOVAT
   const activeFrontLineId = settings.value.frontLineSettings.activeFrontlineId;
