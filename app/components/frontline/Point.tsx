@@ -5,12 +5,12 @@ import { followMouseComponent } from "@/public/utils";
 import { useEffect, useState, ReactNode } from "react";
 type PointProps = {
   position: Vector2;
-  id: string,
+  id: string;
   topLeft?: Vector2;
   radius?: number;
   leftClk?: (() => void) | null;
   rightClk?: ((e: React.MouseEvent) => void) | null;
-  mouseWheelClk?: ((e:React.MouseEvent) => void) | null;
+  mouseWheelClk?: ((e: React.MouseEvent) => void) | null;
   styling?: React.CSSProperties;
   onDrag?: (position: Vector2) => void;
   onDelete?: (e: React.MouseEvent) => void;
@@ -19,7 +19,7 @@ type PointProps = {
   dragable?: boolean;
   acceptInput?: boolean;
 };
- 
+
 const Point: React.FC<PointProps> = ({
   position,
   id,
@@ -29,7 +29,7 @@ const Point: React.FC<PointProps> = ({
   rightClk,
   mouseWheelClk,
   styling = {},
-  onDrag , 
+  onDrag,
   onDelete,
   children,
   shape,
@@ -42,13 +42,12 @@ const Point: React.FC<PointProps> = ({
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
-    handleMouseUp(e)
+    handleMouseUp(e);
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     if (!acceptInput) {
-      console.log("NOT ACCEPTING INPUT");
       return;
     }
     if (e.button === 0 && leftClk) {
@@ -56,10 +55,9 @@ const Point: React.FC<PointProps> = ({
     } else if (e.button === 1 && mouseWheelClk) {
       mouseWheelClk(e);
     } else if (e.button === 2 && rightClk) {
-      console.log("HANDLING RIGHT CLK")
       rightClk(e);
     }
-    console.log("SET IS DRAGGING")
+    console.log("SET IS DRAGGING");
     setIsDragging(true);
   };
 
@@ -71,17 +69,22 @@ const Point: React.FC<PointProps> = ({
     const newX = e.clientX - topLeft.x + window.scrollX;
     const newY = e.clientY - topLeft.y + window.scrollY;
 
-    onDrag?.({x:newX,y:newY});
+    onDrag?.({ x: newX, y: newY });
   };
 
   const handleMouseUp = (e: React.MouseEvent) => {
-    console.log("UNSET IS DRAGGING")
+
     setIsDragging(false);
-    console.log("HANDLING MOUSE UP", mouseDownTime ,  e.button === 2 ,  mouseDownTime  > 1000)
+    console.log(
+      "HANDLING MOUSE UP",
+      mouseDownTime,
+      e.button === 2,
+      mouseDownTime > 1000
+    );
     // Check if right mouse button was pressed and duration is more than  500ms
-    if (mouseDownTime &&  e.button === 2 &&  mouseDownTime  > 500) {
+    if (mouseDownTime && e.button === 2 && mouseDownTime > 500) {
       // Trigger onDelete method
-      console.log("HANDLING DELETE")
+      console.log("HANDLING DELETE");
       onDelete?.(e);
       setIsDragging(false);
     }
@@ -89,37 +92,35 @@ const Point: React.FC<PointProps> = ({
 
   useEffect(() => {
     if (isDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
     }
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging  ]);
+  }, [isDragging]);
 
   return (
     <div
       style={{
-        position: 'absolute',
+        position: "absolute",
         left: `${position.x - radius}px`,
         top: `${position.y - radius}px`,
         width: `${radius * 2}px`,
         height: `${radius * 2}px`,
-        borderRadius: '50%',
-        background: 'blue',
-        cursor: 'pointer',
+        borderRadius: "50%",
+        background: "blue",
+        cursor: "pointer",
         opacity: acceptInput ? "1" : "0.4",
         ...styling,
       }}
       onMouseDown={handleMouseDown}
-      onContextMenu={handleContextMenu} 
+      onContextMenu={handleContextMenu}
     >
       {children}
     </div>
   );
 };
 
- 
 export default Point;
- 

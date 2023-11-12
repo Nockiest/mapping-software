@@ -39,6 +39,7 @@ const FrontlineLayer = () => {
 
   useEffect(() => {
     // Assuming you want to instantiate one Frontline initially
+    
     const initialFrontlineData: FrontlineData = {
       idNum: uuidv4(),
       points: [],
@@ -50,7 +51,7 @@ const FrontlineLayer = () => {
     settings.value.frontLineSettings.frontLines = [initialFrontlineData];
     settings.value.frontLineSettings.activeFrontlineId =
       initialFrontlineData.idNum;
-  }, [isActive, frontlineCanvasRef, topLeft]);
+  }, [ ]);
 
   const renderFrontLines = () => {
     const frontLines = settings.value.frontLineSettings.frontLines;
