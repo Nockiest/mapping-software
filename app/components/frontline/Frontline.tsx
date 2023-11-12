@@ -35,13 +35,26 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
 
   const addPoint = (position: Vector2) => {
     if (!frontLineInfo) return;
+  
     const newPoints = [...frontLineInfo.points];
-    newPoints.splice(settings.value.frontLineSettings.insertionPointIndex, 0, {
-      position: position,
-      id: uuidv4(),
-    });
+  
+    if (settings.value.frontLineSettings.insertionPointIndex !== null && settings.value.frontLineSettings.insertionPointIndex !== -1) {
+      // Insert the new point at the specified index
+      newPoints.splice(settings.value.frontLineSettings.insertionPointIndex, 0, {
+        position: position,
+        id: uuidv4(),
+      });
+    } else {
+      // Append the new point
+      newPoints.push({
+        position: position,
+        id: uuidv4(),
+      });
+    }
+  
     frontLineInfo.points = newPoints;
   };
+  
 
   const updatePointPositions = (id: string, clickPos: Vector2) => {
     if (!frontLineInfo) return;

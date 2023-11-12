@@ -2,19 +2,14 @@ import { settings } from "@/app/canvasEditor/Signals";
 import { FrontlineData } from "@/app/canvasEditor/layers/FronlineLayer";
 import { CanvasRef } from "@/public/types/OtherTypes";
 
-export const findActiveFrontLine = (): FrontlineData | null => {
-  const activeFrontline = settings.value.frontLineSettings.activeFrontline 
- ;
-  if (activeFrontline) {
-    return activeFrontline
-    // const activeFrontline = settings.value.frontLineSettings.frontLines.find(
-    //   (frontline) => frontline.idNum === activeFrontlineId
-    // );
-    // return activeFrontline|| null;
-  } else {
-    return null;
-  }
-};
+// export const  settings.value.frontLineSettings.activeFrontline = (): FrontlineData | null => {
+//   const activeFrontline = settings.value.frontLineSettings.activeFrontline 
+//   if (activeFrontline) {
+//     return activeFrontline
+//   } else {
+//     return null;
+//   }
+// };
 
 export const findFrontLineObj = (id: string) => {
   const frontline = settings.value.frontLineSettings.frontLines.find(

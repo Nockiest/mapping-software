@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import { useCanvas } from "../CanvasContext";
 import { settings } from "../Signals";
 import { computed,   } from "@preact/signals";
-import { findActiveFrontLine, findFrontLineObj } from "@/app/components/utility/otherUtils";
+import {  findFrontLineObj } from "@/app/components/utility/otherUtils";
 import { v4 as uuidv4 } from 'uuid';
 import { FrontlineData } from "../layers/FronlineLayer";
  
@@ -11,7 +11,7 @@ const FrontlineLayerSettings = () => {
   const [maxEndPointNumValue, setMaxEndPointNumValue] = useState(0)
    
   useEffect(() => {
-    const activeFrontLine =findActiveFrontLine()
+    const activeFrontLine = settings.value.frontLineSettings.activeFrontline
     setMaxEndPointNumValue(activeFrontLine?.points.length|| 0)
      
   }, )
@@ -22,7 +22,7 @@ const FrontlineLayerSettings = () => {
 
   const handleEndFrontLineIndexChange = (e) => {
     console.log("CHANGING VALUE");
-    const activeFrontline = findActiveFrontLine();
+    const activeFrontline = settings.value.frontLineSettings.activeFrontline
   
     const newValue = parseInt(e.target.value, 10);
   
@@ -47,7 +47,7 @@ const FrontlineLayerSettings = () => {
 
   const handleCurFrontlineColorChange = (e) => {
     settings.value.frontLineSettings.frontLineColor = e.target.value;
-    const changedFrontline = findActiveFrontLine();
+    const changedFrontline =  settings.value.frontLineSettings.activeFrontline ;
 
     if (changedFrontline) {
       changedFrontline.color = e.target.value;
@@ -56,7 +56,7 @@ const FrontlineLayerSettings = () => {
 
   const handleThicknessChange = (e) => {
     const newThickness = parseFloat(e.target.value);
-    const activeFrontline = findActiveFrontLine();
+    const activeFrontline =  settings.value.frontLineSettings.activeFrontline ;
 
     if (activeFrontline) {
       activeFrontline.thickness = newThickness;
@@ -127,7 +127,7 @@ const FrontlineLayerSettings = () => {
           min="0.1"
           max="10"
           step="0.1"
-          value={findActiveFrontLine()?.thickness || 0}
+          value={ settings.value.frontLineSettings.activeFrontline ?.thickness || 0}
           onChange={handleThicknessChange}
         />
       </label>
