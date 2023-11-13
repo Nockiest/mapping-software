@@ -1,11 +1,11 @@
 "use client";
 import { useState, useEffect, useContext, useReducer } from "react";
-import Marker from "@/app/components/markerLayer/Marker"; // Adjust the import path as needed
+import Marker, { MarkerDefaultSettings } from "@/app/components/markerLayer/Marker"; // Adjust the import path as needed
 import { CanvasContext, useCanvas } from "../CanvasContext";
 // import { Color } from '@/public/types/OtherTypes';
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { settings } from "../Signals";
-import { Color, MarkerSettings, MarkerType } from "@/public/types/OtherTypes";
+import { Color, MarkerArraySignal, MarkerSettings, MarkerType } from "@/public/types/OtherTypes";
 // import LineComponent from '@/app/components/frontline/FrontLine2D';
 import { markers } from "../Signals";
 import { MousePositionContext } from "../page";
@@ -13,6 +13,7 @@ import { followMouseComponent } from "@/public/utils";
 import ReusableLayer from "@/app/components/utility/ResuableLayer";
 import { Signal } from "@preact/signals";
 import { getCtxFromRef } from "@/app/components/utility/otherUtils";
+import { uuid } from "uuidv4";
 
  
 enum MarkerLayerState {
@@ -110,7 +111,8 @@ const UnitMarkerLayer: React.FC = () => {
             topLeftOffset,
             topText: "",
             bottomText: "",
-            customStyling: {...settings.value.markerSettings}
+            customStyling: {...settings.value.markerSettings},
+            id:uuid()
           };
           markers.value.push(newMarker)
           // setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
@@ -138,7 +140,7 @@ const UnitMarkerLayer: React.FC = () => {
             topText={marker.topText}
             bottomText={marker.bottomText}
             initialPosition={marker.position}
-            // canvasSize={{ x: 800, y: 600 }}
+ 
             dragHandler={followMouseComponent}
             customStyling={settings.value.markerSettings}
           />
@@ -154,27 +156,28 @@ export default UnitMarkerLayer;
 
 export const drawMarkersOnCanvas = (
   ctx: CanvasRenderingContext2D,
-  markers: Signal<MarkerType[]>,
- 
+  markers: MarkerArraySignal,
   topLeftOffset: Vector2
 ) => {
+  console.log('printin markerlazeer')
   ctx.clearRect(0,0,settings.value.canvasSize.x,settings.value.canvasSize.y)
   markers.value.forEach((marker, index) => {
-    // const imageUrl =
-    //   settings.value.imageURL instanceof File
-    //     ? URL.createObjectURL(settings.value.imageURL)
-    //     : settings.value.imageURL;
-    const usedWidth = marker.customStyling?.width|| 10
-    const usedTextColor = marker.customStyling?.textColor|| "black"
+    const imageUrl =
+  marker?.customStyling?.imageURL !== null && marker?.customStyling?.imageURL !== undefined
+    ? URL.createObjectURL(marker.customStyling.imageURL)
+    : null;
+
+    const usedWidth = marker.customStyling?.width|| MarkerDefaultSettings.width
+    const usedTextColor = marker.customStyling?.textColor||  MarkerDefaultSettings.textColor
 
     const markerStyle: React.CSSProperties = {
       left: `${marker.position.x}px`,
       top: `${marker.position.y}px`,
       width: `${usedWidth}px`,
-      color: `${marker.customStyling?.textColor|| "black"} `,
+      color: `${marker.customStyling?.textColor|| MarkerDefaultSettings.textColor} `,
       height: `${usedWidth}px`,
       fontSize: `${usedWidth }px`,
-      backgroundColor: marker.customStyling?.color,
+      backgroundColor: marker.customStyling?.color|| MarkerDefaultSettings.color,
       // backgroundImage: settings.value.imageURL ? `url(${imageUrl})` : 'none',
       zIndex: marker.isDragging ? 10 : 1,
     };
@@ -209,17 +212,17 @@ export const drawMarkersOnCanvas = (
     ctx.fill();
     ctx.closePath();
 
-    // if (settings.value.imageURL) {
-    //   const img = new Image();
-    //   // img.src = imageUrl!;
-    //   ctx.drawImage(
-    //     img,
-    //     marker.position.x - topLeftOffset.x - usedWidth/ 2,
-    //     marker.position.y - topLeftOffset.y - usedWidth / 2,
-    //     usedWidth,
-    //     usedWidth
-    //   );
-    // }
+    if (imageUrl) {
+      const img = new Image();
+      // img.src = imageUrl!;
+      ctx.drawImage(
+        img,
+        marker.position.x - topLeftOffset.x - usedWidth/ 2,
+        marker.position.y - topLeftOffset.y - usedWidth / 2,
+        usedWidth,
+        usedWidth
+      );
+    }
 
     if (marker.topText) {
       ctx.font = `${usedWidth/ 4}px Arial`;

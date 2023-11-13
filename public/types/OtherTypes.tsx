@@ -18,6 +18,7 @@ export type MarkerType = {
   topText: string;
   bottomText:string;
   customStyling?:MarkerSettings;
+  id:string
 };
 export type LayerNames =  "draw" | "marker" | "background"| "frontLine"
 

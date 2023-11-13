@@ -3,7 +3,7 @@ import { MousePositionContext } from "@/app/canvasEditor/page";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { Color, MarkerSettings, MarkerType } from "@/public/types/OtherTypes";
 import { useState, useContext, useEffect,useRef } from "react";
-import { settings } from "@/app/canvasEditor/Signals";
+import { markers, settings } from "@/app/canvasEditor/Signals";
 import Image from "next/image";
 import { signal } from "@preact/signals";
 import { newMarkerSettings } from "@/app/canvasEditor/settings/MarkerEditorSettings";
@@ -14,11 +14,19 @@ type MarkerProps = MarkerType & {
   initialPosition: Vector2;
   shouldUpdateOnSettingsChange?: boolean;
   dragHandler?: (
-    event: MouseEvent,
+    position:Vector2,
     isDragging: boolean,
     currentPosition: Vector2,
     dragStartPosition: Vector2
   ) => Vector2;
+};
+export  const MarkerDefaultSettings: Omit<MarkerSettings, `popularMarkerColors`> = {
+  width: 5,
+  color: `#000000`,
+  textColor: `#000000`,
+  topValue: '',
+  bottomValue: '',
+  imageURL: null,
 };
 
 const Marker: React.FC<MarkerProps> = ({
@@ -29,38 +37,43 @@ const Marker: React.FC<MarkerProps> = ({
   shouldUpdateOnSettingsChange = false,
   dragHandler,
   customStyling,
+  id
 }) => {
   const [currentPosition, setCurrentPosition] = useState<Vector2>(initialPosition);
   const [canRemove, setCanRemove] = useState<boolean>(false);
   const [initialMarkerSettings] = useState<MarkerSettings>({ ...customStyling });
   const usedSettings = shouldUpdateOnSettingsChange ? newMarkerSettings.value : initialMarkerSettings;
 
-  const defaultSettings: Omit<MarkerSettings, `popularMarkerColors`> = {
-    width: 5,
-    color: `#000000`,
-    textColor: `#000000`,
-    topValue: '',
-    bottomValue: '',
-    imageURL: null,
-  };
- 
+  
   const imageUrl =
   usedSettings.imageURL? usedSettings.imageURL instanceof File
     ? URL.createObjectURL(usedSettings.imageURL)
-    : usedSettings.imageURL : defaultSettings.imageURL;
+    : usedSettings.imageURL : MarkerDefaultSettings.imageURL;
 
 
-  const mergedSettings = { ...defaultSettings, ...usedSettings };
+  const mergedSettings = { ...MarkerDefaultSettings, ...usedSettings };
 
   const handleMouseMove = (position: Vector2) => {
     if (dragHandler) {
-      const updatedPosition = {
+      const updatedPosition:Vector2 = {
         x: position.x - topLeftOffset.x + mergedSettings.width,
         y: position.y - topLeftOffset.y + mergedSettings.width,
       };
       setCurrentPosition(updatedPosition);
+  
+      // Call dragHandler with the updated position
+      dragHandler(updatedPosition, true, topLeftOffset, settings.value.canvasSize );
+  
+      // Update the position of the marker in markers.value
+      const updatedMarkers = markers.value.map((marker) =>
+        marker.id === id ? { ...marker, position: updatedPosition } : marker
+      );
+  
+      // Set the updated markers array
+      markers.value = updatedMarkers;
     }
   };
+  
 
   const handleContextMenu = (e: React.MouseEvent ) => {
     e.preventDefault();
