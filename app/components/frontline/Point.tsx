@@ -101,8 +101,8 @@ const Point: React.FC<PointProps> = ({
       className={className}
       style={{
         position: "absolute",
-        left: `${position.x - radius}px`,
-        top: `${position.y - radius}px`,
+        left: `${position.x - 0}px`,
+        top: `${position.y - 0}px`,
         width: `${radius * 2}px`,
         height: `${radius * 2}px`,
         borderRadius: "50%",
