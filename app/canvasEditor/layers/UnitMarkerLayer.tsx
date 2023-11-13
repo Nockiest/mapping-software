@@ -105,7 +105,7 @@ const UnitMarkerLayer: React.FC = () => {
           dispatchState({ type: "DRAG", markerIndex: clickedMarkerIndex });
         } else {
           const newMarker: MarkerType = {
-            color: settings.value.color,
+            color: settings.value.markerSettings.color,
             position: { x, y },
             isDragging: false,
             topLeftOffset,
@@ -159,26 +159,25 @@ export const drawMarkersOnCanvas = (
   markers: MarkerArraySignal,
   topLeftOffset: Vector2
 ) => {
-  
-  ctx.clearRect(0,0,settings.value.canvasSize.x,settings.value.canvasSize.y)
+  ctx.clearRect(0, 0, settings.value.canvasSize.x, settings.value.canvasSize.y);
+
   markers.value.forEach((marker, index) => {
     const imageUrl =
-  marker?.customStyling?.imageURL !== null && marker?.customStyling?.imageURL !== undefined
-    ? URL.createObjectURL(marker.customStyling.imageURL)
-    : null;
+      marker?.customStyling?.imageURL !== null && marker?.customStyling?.imageURL !== undefined
+        ? URL.createObjectURL(marker.customStyling.imageURL)
+        : null;
 
-    const usedWidth = marker.customStyling?.width|| MarkerDefaultSettings.width
-    const usedTextColor = marker.customStyling?.textColor||  MarkerDefaultSettings.textColor
+    const usedWidth = marker.customStyling?.width || MarkerDefaultSettings.width;
+    const usedTextColor = marker.customStyling?.textColor || MarkerDefaultSettings.textColor;
 
     const markerStyle: React.CSSProperties = {
       left: `${marker.position.x}px`,
       top: `${marker.position.y}px`,
       width: `${usedWidth}px`,
-      color: `${marker.customStyling?.textColor|| MarkerDefaultSettings.textColor} `,
+      color: `${marker.customStyling?.textColor || MarkerDefaultSettings.textColor} `,
       height: `${usedWidth}px`,
-      fontSize: `${usedWidth }px`,
-      backgroundColor: marker.customStyling?.color|| MarkerDefaultSettings.color,
-      // backgroundImage: settings.value.imageURL ? `url(${imageUrl})` : 'none',
+      fontSize: `${usedWidth}px`,
+      backgroundColor: marker.customStyling?.color || MarkerDefaultSettings.color,
       zIndex: marker.isDragging ? 10 : 1,
     };
 
@@ -202,13 +201,15 @@ export const drawMarkersOnCanvas = (
 
     ctx.beginPath();
     ctx.arc(
-      marker.position.x, //- topLeftOffset.x,
-      marker.position.y, //- topLeftOffset.y,
+      marker.position.x,
+      marker.position.y,
       usedWidth / 2,
       0,
       2 * Math.PI
     );
-    ctx.fillStyle = settings.value.color;
+
+    // Set the fill color to the marker color
+    ctx.fillStyle = marker.customStyling?.color || MarkerDefaultSettings.color;
     ctx.fill();
     ctx.closePath();
 
@@ -217,7 +218,7 @@ export const drawMarkersOnCanvas = (
       // img.src = imageUrl!;
       ctx.drawImage(
         img,
-        marker.position.x - topLeftOffset.x - usedWidth/ 2,
+        marker.position.x - topLeftOffset.x - usedWidth / 2,
         marker.position.y - topLeftOffset.y - usedWidth / 2,
         usedWidth,
         usedWidth
@@ -225,14 +226,14 @@ export const drawMarkersOnCanvas = (
     }
 
     if (marker.topText) {
-      ctx.font = `${usedWidth/ 4}px Arial`;
+      ctx.font = `${usedWidth / 4}px Arial`;
       ctx.fillStyle = usedTextColor;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(
         marker.topText,
-        marker.position.x , - topLeftOffset.x,
-        marker.position.y  - usedWidth/ 2 - 10//- topLeftOffset.y - usedWidth/ 2 - 10
+        marker.position.x,
+        marker.position.y - usedWidth / 2 - 10
       );
     }
 
@@ -243,8 +244,8 @@ export const drawMarkersOnCanvas = (
       ctx.textBaseline = 'middle';
       ctx.fillText(
         marker.bottomText,
-        marker.position.x - topLeftOffset.x,
-        marker.position.y //- topLeftOffset.y + usedWidth / 2 + 10
+        marker.position.x,
+        marker.position.y + usedWidth / 2 + 10
       );
     }
 
