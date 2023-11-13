@@ -6,27 +6,27 @@ import FavoriteColorLister from "@/app/components/settings/FavoriteColorLister";
 import { Color } from "@/public/types/OtherTypes";
 import { signal } from "@preact/signals";
 import Marker from "@/app/components/markerLayer/Marker";
+import { theme } from "../theme/theme";
+import SpeedButton from "../theme/Button";
+import { Box, Typography, TextField, Button, Slider, InputAdornment, Input, Paper, useTheme } from '@mui/material';
  
 type UpdateMarkerSettingsCallback = (value: any) => void;
 export const newMarkerSettings = signal({ ...settings.value.markerSettings })
-
+ 
 const MarkerEditorSettings = ({ changeSettings }) => {
   const [isDirty, setIsDirty] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement | null>(null); // Create a ref for the file input
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const updateMarkerSettings = (  
+  const updateMarkerSettings = (
     value: any,
     property: string,
-    callback?: UpdateMarkerSettingsCallback) => {
-    // Update temporary marker settings
+    callback?: UpdateMarkerSettingsCallback|null  ,
+ 
+  ): void => {
     newMarkerSettings.value = { ...newMarkerSettings.value, [property]: value };
-
-    // Call the provided callback
     if (callback) {
       callback(value);
     }
-
-    // Set the dirty flag
     setIsDirty(true);
   };
 
@@ -35,64 +35,107 @@ const MarkerEditorSettings = ({ changeSettings }) => {
     setIsDirty(false);
   };
 
-  // Validation message
   const validationMessage = isDirty ? "Changes not applied. Click 'Apply Changes' to save." : "";
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
-      {/* First Column - Input Controls */}
-      <div>
-        <p style={{ color: 'black' }}>
+    <Box display="flex">
+      {/* First Column */}
+      <Box
+        width="30%"
+        marginRight="2%"
+        backgroundColor={theme.palette.primary.main}
+        padding="10px"
+        borderRadius="4px"
+      >
+        <Typography color="white">
           Marker Width: {newMarkerSettings.value.width}
-          <input type="range" value={newMarkerSettings.value.width} onChange={(e) => updateMarkerSettings(Math.max(1, parseInt(e.target.value, 10)), 'width')} min="10" max="60" />
-        </p>
-        <p style={{ color: 'black' }}>
+        </Typography>
+        <Slider
+          value={newMarkerSettings.value.width}
+          min={10}
+          max={60}
+          onChange={(e, value) => updateMarkerSettings(Math.max(1, value), 'width')}
+        />
+        <Typography color="white">
           Marker Color:
-          <input type="color" value={newMarkerSettings.value.color} onChange={(e) => updateMarkerSettings(e.target.value, 'color')} />
-        </p>
-        <p style={{ color: 'black' }}>
-          Marker Text Color:
-          <input type="color" value={newMarkerSettings.value.textColor} onChange={(e) => updateMarkerSettings(e.target.value, 'textColor')} />
-        </p>
-        <p style={{ color: 'black' }}>
+        </Typography>
+        <Input
+          type="color"
+          value={newMarkerSettings.value.color}
+          onChange={(e) => updateMarkerSettings(e.target.value, 'color')}
+          endAdornment={<InputAdornment position="end"><span>{newMarkerSettings.value.color}</span></InputAdornment>}
+        />
+        {/* Additional settings for the first column */}
+        <SpeedButton onClick={() => updateMarkerSettings(null, 'imageURL', () => fileInputRef.current && (fileInputRef.current.value = ''))}>
+          Reset Image
+        </SpeedButton>
+      </Box>
+
+      {/* Second Column */}
+      <Box
+        width="30%"
+        marginRight="2%"
+        backgroundColor={theme.palette.primary.main}
+        padding="10px"
+        borderRadius="4px"
+      >
+        <Typography color="white">
           Marker TopValue:
-          <input type="text" value={newMarkerSettings.value.topValue} onChange={(e) => updateMarkerSettings(e.target.value, 'topValue')} />
-        </p>
+        </Typography>
+        <TextField
+          type="text"
+          value={newMarkerSettings.value.topValue}
+          onChange={(e) => updateMarkerSettings(e.target.value, 'topValue')}
+        />
         {newMarkerSettings.value.width >= 20 && (
-          <p style={{ color: 'black' }}>
-            Marker BottomValue:
-            <input type="text" value={newMarkerSettings.value.bottomValue} onChange={(e) => updateMarkerSettings(e.target.value, 'bottomValue')} />
-          </p>
+          <>
+            <Typography color="white">
+              Marker BottomValue:
+            </Typography>
+            <TextField
+              type="text"
+              value={newMarkerSettings.value.bottomValue}
+              onChange={(e) => updateMarkerSettings(e.target.value, 'bottomValue')}
+            />
+          </>
         )}
-        <input type="file" ref={fileInputRef} onChange={(e) => updateMarkerSettings(URL.createObjectURL(e.target.files?.[0]), 'imageURL')} />
-        <button onClick={() => updateMarkerSettings(null, 'imageURL', () => fileInputRef.current && (fileInputRef.current.value = ''))}>Undo Image</button>
-        <button onClick={applyChanges}>Apply Changes</button>
-      </div>
+        {/* Additional settings for the second column */}
+        <SpeedButton onClick={applyChanges}>
+          Apply Changes
+        </SpeedButton>
+      </Box>
 
-      {/* Second Column - Display Current Values */}
-      <div style={{ marginLeft: '20px' }}>
-        <p style={{ color: 'black' }}>
+      {/* Third Column */}
+      <Box
+        width="30%"
+        backgroundColor={theme.palette.primary.main}
+        padding="10px"
+        borderRadius="4px"
+      >
+        <Typography color="white">
           Current Marker Width: {settings.value.markerSettings.width}
-        </p>
-        <p style={{ color: 'black' }}>
+        </Typography>
+        <Typography color="white">
           Current Marker Color: {settings.value.markerSettings.color}
-        </p>
-        <p style={{ color: 'black' }}>
+        </Typography>
+        <Typography color="white">
           Current Marker TopValue: {settings.value.markerSettings.topValue}
-        </p>
+        </Typography>
         {settings.value.markerSettings.width >= 20 && (
-          <p style={{ color: 'black' }}>
+          <Typography color="white">
             Current Marker BottomValue: {settings.value.markerSettings.bottomValue}
-          </p>
+          </Typography>
         )}
-        <p style={{ color: 'red' }}>{validationMessage}</p>
-      </div>
+        <Typography style={{ color: 'red' }}>{validationMessage}</Typography>
+      </Box>
 
-      <div style={{ marginLeft: '20px' }}>
-      <Marker topLeftOffset={{x:500,y:100}}initialPosition={{x:900,y:75}} canvasSize={{x:1000, y:1000}} shouldUpdateOnSettingsChange={true} />
-      </div>
-    </div>
+      {/* Marker Display */}
+      <Box marginLeft="20px" width="100%">
+        <Marker topLeftOffset={{ x: 500, y: 100 }} initialPosition={{ x: 900, y: 75 }} shouldUpdateOnSettingsChange={true} />
+      </Box>
+    </Box>
   );
 };
 
 export default MarkerEditorSettings;
+ 

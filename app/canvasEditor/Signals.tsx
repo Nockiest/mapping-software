@@ -7,7 +7,7 @@ export const settings: Settings = signal({
   activeLayer: "draw",
   canvasSize: { x: 800, y: 600 },
   markerSettings: {
-    width: 10,
+    width: 40,
     color: `#000000`,
     textColor: `#ffffff`,
     topValue: "X",
@@ -17,7 +17,6 @@ export const settings: Settings = signal({
   },
   popularColors: [],
   canvasZindexes: { marker: 10, draw: 10, background: 0, frontLine: 10 },
-  // frontLineSettings: {insertionPointIndex: -1, frontLineColor: "#0000ff", activeFrontLine :null, frontLines: []}
 });
 
 export const frontLineSettings: FrontLineSettings = signal({

@@ -21,20 +21,18 @@ import {
 } from "./CanvasContext"; //CanvasSettingsContext
 import { settings } from "./Signals";
 import LayerSplicer from "../components/utility/LayerSplicer";
+import { Button, Typography, Paper } from '@mui/material';
+import { Vector2 } from "@/public/types/GeometryTypes";
+import { theme } from "./theme/theme";
+import { ThemeProvider, createTheme} from "@mui/material"
 // Create a context for mouse position
-export const MousePositionContext = createContext<{
-  x: number;
-  y: number;
-} | null>(null);
+export const MousePositionContext = createContext< Vector2| null>(null);
 
 // Create a provider for mouse position
 const MousePositionProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [mousePosition, setMousePosition] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
+  const [mousePosition, setMousePosition] = useState<Vector2| null>(null);
 
   const updateMousePosition = (x: number, y: number) => {
     setMousePosition({ x, y });
@@ -60,8 +58,9 @@ const MousePositionProvider: React.FC<{ children: ReactNode }> = ({
 };
 
 const Page: React.FC = () => {
-  const { canvasState, canvasRef, frontlineCanvasRef, markerCanvasRef   } = useCanvas();
-  const {backgroundCanvasRef}= useBackground()
+  const { canvasState, canvasRef, frontlineCanvasRef, markerCanvasRef } =
+    useCanvas();
+  const { backgroundCanvasRef } = useBackground();
   // const { backgroundcanvasRef} = useBack
   const mousePosition = useContext(MousePositionContext);
   const { GlobalData, updateGlobalData } = useGlobalValue();
@@ -116,7 +115,7 @@ const Page: React.FC = () => {
   }, [elapsedTime]);
 
   return (
-    <>
+    <  >
       <DebugInfo
         data={{
           radius: settings.value.radius,
@@ -132,13 +131,14 @@ const Page: React.FC = () => {
 
       <CanvasSettings />
       <DrawingCanvas />
-      <LayerSplicer  layers={
-        [{canvasRef:canvasRef, zIndex:20},
-         {canvasRef:backgroundCanvasRef, zIndex:10},
-         {canvasRef:frontlineCanvasRef, zIndex:30},
-         {canvasRef:markerCanvasRef, zIndex:40},
-        ]
-      } />
+      <LayerSplicer
+        layers={[
+          { canvasRef: canvasRef, zIndex: 20 },
+          { canvasRef: backgroundCanvasRef, zIndex: 10 },
+          { canvasRef: frontlineCanvasRef, zIndex: 30 },
+          { canvasRef: markerCanvasRef, zIndex: 40 },
+        ]}
+      />
       <Timeline />
     </>
   );
@@ -148,7 +148,10 @@ const App: React.FC = () => {
   return (
     <CanvasProvider>
       <MousePositionProvider>
-        <Page />
+        <ThemeProvider theme = {theme}>
+            <Page />
+        </ThemeProvider>
+        
       </MousePositionProvider>
     </CanvasProvider>
   );
