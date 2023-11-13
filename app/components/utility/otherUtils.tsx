@@ -2,14 +2,7 @@ import { frontLineSettings, settings } from "@/app/canvasEditor/Signals";
 import { FrontlineData } from "@/app/canvasEditor/layers/FronlineLayer";
 import { CanvasRef } from "@/public/types/OtherTypes";
 
-// export const  frontLineSettings.value.activeFrontline = (): FrontlineData | null => {
-//   const activeFrontline = frontLineSettings.value.activeFrontline 
-//   if (activeFrontline) {
-//     return activeFrontline
-//   } else {
-//     return null;
-//   }
-// };
+ 
 
 export const findFrontLineObj = (id: string) => {
   const frontline = frontLineSettings.value.frontLines.find(

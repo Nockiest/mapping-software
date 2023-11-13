@@ -75,8 +75,8 @@ type FollowMouseFunction = (
 export const followMouseComponent: FollowMouseFunction = (position,withscroll, topLeftOffset, maxPosition) => {
   // Calculate updated position without subtracting topLeftOffset.y and window.scrollY
   const updatedPosition: Vector2 = {
-    x: Math.min(Math.max(position.x - topLeftOffset.x + (withscroll ? window.scrollX : 0), 0), maxPosition.x),
-    y: Math.min(Math.max(position.y - topLeftOffset.y + (withscroll ? window.scrollY : 0), 0), maxPosition.y),
+    x: Math.min(Math.max(position.x - topLeftOffset.x - (withscroll ? window.scrollX : 0), 0), maxPosition.x),
+    y: Math.min(Math.max(position.y - topLeftOffset.y - (withscroll ? window.scrollY : 0), 0), maxPosition.y),
   };
   // console.log(e.clientY, topLeftOffset.y, window.scrollY, updatedPosition);
   return updatedPosition;

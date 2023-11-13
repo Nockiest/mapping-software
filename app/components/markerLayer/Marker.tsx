@@ -55,15 +55,15 @@ const Marker: React.FC<MarkerProps> = ({
 
   const handleMouseMove = (position: Vector2) => {
     if (dragHandler) {
-      const updatedPosition:Vector2 = {
-        x: position.x - topLeftOffset.x + mergedSettings.width,
-        y: position.y - topLeftOffset.y + mergedSettings.width,
-      };
-      setCurrentPosition(updatedPosition);
+      // const updatedPosition:Vector2 = {
+      //   x: position.x - topLeftOffset.x + mergedSettings.width,
+      //   y: position.y - topLeftOffset.y + mergedSettings.width,
+      // };
+        
   
       // Call dragHandler with the updated position
-      dragHandler(updatedPosition, true, topLeftOffset, settings.value.canvasSize );
-  
+      const updatedPosition = dragHandler(position, false, topLeftOffset, settings.value.canvasSize );
+      setCurrentPosition(updatedPosition);
       // Update the position of the marker in markers.value
       const updatedMarkers = markers.value.map((marker) =>
         marker.id === id ? { ...marker, position: updatedPosition } : marker

@@ -140,7 +140,7 @@ const UnitMarkerLayer: React.FC = () => {
             topText={marker.topText}
             bottomText={marker.bottomText}
             initialPosition={marker.position}
- 
+            id={marker.id}
             dragHandler={followMouseComponent}
             customStyling={settings.value.markerSettings}
           />
@@ -159,7 +159,7 @@ export const drawMarkersOnCanvas = (
   markers: MarkerArraySignal,
   topLeftOffset: Vector2
 ) => {
-  console.log('printin markerlazeer')
+  
   ctx.clearRect(0,0,settings.value.canvasSize.x,settings.value.canvasSize.y)
   markers.value.forEach((marker, index) => {
     const imageUrl =
