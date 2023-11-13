@@ -31,31 +31,38 @@ const Marker: React.FC<MarkerProps> = ({
   customStyling,
 }) => {
   const [currentPosition, setCurrentPosition] = useState<Vector2>(initialPosition);
-// const [isDragged, setIsDragged] = useState<boolean>(false);
   const [canRemove, setCanRemove] = useState<boolean>(false);
   const [initialMarkerSettings] = useState<MarkerSettings>({ ...customStyling });
   const usedSettings = shouldUpdateOnSettingsChange ? newMarkerSettings.value : initialMarkerSettings;
 
+  const defaultSettings: Omit<MarkerSettings, `popularMarkerColors`> = {
+    width: 5,
+    color: `#000000`,
+    textColor: `#000000`,
+    topValue: '',
+    bottomValue: '',
+    imageURL: null,
+  };
+ 
   const imageUrl =
-    usedSettings.imageURL instanceof File ? URL.createObjectURL(usedSettings.imageURL) : usedSettings.imageURL;
+  usedSettings.imageURL? usedSettings.imageURL instanceof File
+    ? URL.createObjectURL(usedSettings.imageURL)
+    : usedSettings.imageURL : defaultSettings.imageURL;
 
-  // const handleMouseDown = () => {
-  //   setIsDragged(true);
-  // };
 
-  const handleMouseMove = (position:Vector2) => {
-    if ( dragHandler) {
-      const updatedPosition = {x:position.x -topLeftOffset.x,y:position.y-topLeftOffset.y} //dragHandler(e, true, topLeftOffset, settings.value.canvasSize);
+  const mergedSettings = { ...defaultSettings, ...usedSettings };
+
+  const handleMouseMove = (position: Vector2) => {
+    if (dragHandler) {
+      const updatedPosition = {
+        x: position.x - topLeftOffset.x + mergedSettings.width,
+        y: position.y - topLeftOffset.y + mergedSettings.width,
+      };
       setCurrentPosition(updatedPosition);
     }
   };
 
-  // const handleMouseUp = () => {
-  //   console.log('handle mouse up');
-  //   // setIsDragged(false);
-  // };
-
-  const handleContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleContextMenu = (e: React.MouseEvent ) => {
     e.preventDefault();
     if (settings.value.activeLayer !== 'marker') {
       return;
@@ -68,67 +75,38 @@ const Marker: React.FC<MarkerProps> = ({
     setCanRemove(true);
   };
 
-  useEffect(() => {
-    // window.addEventListener('mousemove', handleMouseMove);
-    // window.addEventListener('mouseup', handleMouseUp);
-
-    return () => {
-      // window.removeEventListener('mousemove', handleMouseMove);
-      // window.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [ ]);
-
   const markerStyle: React.CSSProperties = {
-    // left: `${currentPosition.x}px`,
-    // top: `${currentPosition.y}px`,
-    width: `${usedSettings.width}px`,
-    color: `${usedSettings.textColor} `,
-    height: `${usedSettings.width}px`,
-    fontSize: `${usedSettings.width / 4}px`,
-    backgroundColor: usedSettings.color,
-    backgroundImage: usedSettings.imageURL ? `url(${imageUrl})` : 'none',
-    // zIndex: isDragged ? 10 : 1,
+    width: `${mergedSettings.width}px`,
+    color: mergedSettings.textColor,
+    height: `${mergedSettings.width}px`,
+    fontSize: `${mergedSettings.width / 4}px`,
+    backgroundColor: mergedSettings.color,
+    backgroundImage: mergedSettings.imageURL ? `url(${imageUrl})` : 'none',
   };
 
   const textBackgroundStyle: React.CSSProperties = {
-    // position: 'absolute',
-    // left: '50%',
-    // transform: 'translateX(-50%)',
-    // backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    textAlign:"center",
+    textAlign: 'center',
     padding: '5px',
     borderRadius: '5px',
     userSelect: 'none',
   };
 
-  const imageStyle: React.CSSProperties = {
-    width: '10px',
-    height: '10px',
-    borderRadius: '50%',
-  };
-
   return (
     <Point
-      radius={usedSettings?.width|| 5} 
+      radius={mergedSettings.width}
       styling={markerStyle}
       position={currentPosition}
-      onContextMenu={handleContextMenu}
+      rightClk={(e) => handleContextMenu(e)}
       onDrag={(position) => handleMouseMove(position)}
       className="marker"
     >
-      <p style={{ ...textBackgroundStyle, top: '-5px' }}>{usedSettings.topValue}</p>
-      {usedSettings.width > 20 && (
-        <p style={{ ...textBackgroundStyle, bottom: '-5px' }}>{usedSettings.bottomValue}</p>
+      <p style={{ ...textBackgroundStyle, top: '-5px' }}>{mergedSettings.topValue}</p>
+      {mergedSettings.width > 20 && (
+        <p style={{ ...textBackgroundStyle, bottom: '-5px' }}>{mergedSettings.bottomValue}</p>
       )}
     </Point>
   );
 };
 
 export default Marker;
-{/* <Point 
-        radius={usedSettings?.width}      
-        position={currentPosition}
-        leftClk={handleMouseDown}
-        rightClk={(e) => handleContextMenu(e)}
-        styling={markerStyle}
-      /> */}
+ 

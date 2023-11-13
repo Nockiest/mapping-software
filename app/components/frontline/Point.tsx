@@ -18,8 +18,8 @@ type PointProps = {
   shape?: Omit<Shapes, "triangle">;
   dragable?: boolean;
   acceptInput?: boolean;
+  className?: string
 };
-
 const Point: React.FC<PointProps> = ({
   position,
   id,
@@ -35,6 +35,7 @@ const Point: React.FC<PointProps> = ({
   shape,
   dragable = true,
   acceptInput = true,
+  className,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const { GlobalData } = useGlobalValue();
@@ -68,19 +69,13 @@ const Point: React.FC<PointProps> = ({
     }
     const newX = e.clientX - topLeft.x + window.scrollX;
     const newY = e.clientY - topLeft.y + window.scrollY;
-    
+
     onDrag?.({ x: newX, y: newY });
   };
 
   const handleMouseUp = (e: React.MouseEvent) => {
-
     setIsDragging(false);
-    console.log(
-      "HANDLING MOUSE UP",
-      mouseDownTime,
-      e.button === 2,
-      mouseDownTime > 1000
-    );
+    console.log("HANDLING MOUSE UP", mouseDownTime, e.button === 2, mouseDownTime > 1000);
     // Check if right mouse button was pressed and duration is more than  500ms
     if (mouseDownTime && e.button === 2 && mouseDownTime > 500) {
       // Trigger onDelete method
@@ -103,6 +98,7 @@ const Point: React.FC<PointProps> = ({
 
   return (
     <div
+      className={className}
       style={{
         position: "absolute",
         left: `${position.x - radius}px`,
@@ -124,3 +120,4 @@ const Point: React.FC<PointProps> = ({
 };
 
 export default Point;
+
