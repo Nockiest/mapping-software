@@ -1,6 +1,7 @@
  
 import React, { useEffect, useRef } from 'react';
 import ReusableLayer from './ResuableLayer';
+import { settings } from '@/app/canvasEditor/Signals';
 
 interface CanvasLayer {
   canvasRef: React.RefObject<HTMLCanvasElement>;
@@ -36,7 +37,7 @@ const LayerSplicer: React.FC<LayerSplicerProps> = ({ layers }) => {
   }, [layers]);
 
   return  <div className='relative h-600 flex justify-center'>
-  <ReusableLayer canvasRef={canvasRef} layerName='end_result' />
+  <ReusableLayer canvasRef={canvasRef} layerName={settings.value.activeLayer} />
   </div> 
 };
 

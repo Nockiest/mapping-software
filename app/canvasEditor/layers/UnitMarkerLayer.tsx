@@ -75,7 +75,7 @@ const UnitMarkerLayer: React.FC = () => {
   }, [settings.value.activeLayer]);
 
   useEffect(() => {
-    console.log("NEW CALL")
+    // console.log("NEW CALL")
     const ctx = getCtxFromRef(markerCanvasRef)
     if(!ctx){return}
       drawMarkersOnCanvas   (

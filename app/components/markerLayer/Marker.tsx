@@ -8,6 +8,7 @@ import Image from "next/image";
 import { signal } from "@preact/signals";
 import { newMarkerSettings } from "@/app/canvasEditor/settings/MarkerEditorSettings";
 import Point from "../frontline/Point";
+import { position } from "html2canvas/dist/types/css/property-descriptors/position";
 
 type MarkerProps = MarkerType & {
   initialPosition: Vector2;
@@ -30,7 +31,7 @@ const Marker: React.FC<MarkerProps> = ({
   customStyling,
 }) => {
   const [currentPosition, setCurrentPosition] = useState<Vector2>(initialPosition);
-  const [isDragged, setIsDragged] = useState<boolean>(false);
+// const [isDragged, setIsDragged] = useState<boolean>(false);
   const [canRemove, setCanRemove] = useState<boolean>(false);
   const [initialMarkerSettings] = useState<MarkerSettings>({ ...customStyling });
   const usedSettings = shouldUpdateOnSettingsChange ? newMarkerSettings.value : initialMarkerSettings;
@@ -38,21 +39,21 @@ const Marker: React.FC<MarkerProps> = ({
   const imageUrl =
     usedSettings.imageURL instanceof File ? URL.createObjectURL(usedSettings.imageURL) : usedSettings.imageURL;
 
-  const handleMouseDown = () => {
-    setIsDragged(true);
-  };
+  // const handleMouseDown = () => {
+  //   setIsDragged(true);
+  // };
 
-  const handleMouseMove = (e: MouseEvent) => {
-    if (isDragged && dragHandler) {
-      const updatedPosition = dragHandler(e, true, topLeftOffset, settings.value.canvasSize);
+  const handleMouseMove = (position:Vector2) => {
+    if ( dragHandler) {
+      const updatedPosition = {x:position.x -topLeftOffset.x,y:position.y-topLeftOffset.y} //dragHandler(e, true, topLeftOffset, settings.value.canvasSize);
       setCurrentPosition(updatedPosition);
     }
   };
 
-  const handleMouseUp = () => {
-    console.log('handle mouse up');
-    setIsDragged(false);
-  };
+  // const handleMouseUp = () => {
+  //   console.log('handle mouse up');
+  //   // setIsDragged(false);
+  // };
 
   const handleContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -68,32 +69,33 @@ const Marker: React.FC<MarkerProps> = ({
   };
 
   useEffect(() => {
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    // window.addEventListener('mousemove', handleMouseMove);
+    // window.addEventListener('mouseup', handleMouseUp);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      // window.removeEventListener('mousemove', handleMouseMove);
+      // window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragged]);
+  }, [ ]);
 
   const markerStyle: React.CSSProperties = {
-    left: `${currentPosition.x}px`,
-    top: `${currentPosition.y}px`,
+    // left: `${currentPosition.x}px`,
+    // top: `${currentPosition.y}px`,
     width: `${usedSettings.width}px`,
     color: `${usedSettings.textColor} `,
     height: `${usedSettings.width}px`,
     fontSize: `${usedSettings.width / 4}px`,
     backgroundColor: usedSettings.color,
     backgroundImage: usedSettings.imageURL ? `url(${imageUrl})` : 'none',
-    zIndex: isDragged ? 10 : 1,
+    // zIndex: isDragged ? 10 : 1,
   };
 
   const textBackgroundStyle: React.CSSProperties = {
-    position: 'absolute',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    // position: 'absolute',
+    // left: '50%',
+    // transform: 'translateX(-50%)',
+    // backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    textAlign:"center",
     padding: '5px',
     borderRadius: '5px',
     userSelect: 'none',
@@ -106,17 +108,19 @@ const Marker: React.FC<MarkerProps> = ({
   };
 
   return (
-    <div
-      style={markerStyle}
-      onMouseDown={handleMouseDown}
+    <Point
+      radius={usedSettings?.width|| 5} 
+      styling={markerStyle}
+      position={currentPosition}
       onContextMenu={handleContextMenu}
+      onDrag={(position) => handleMouseMove(position)}
       className="marker"
     >
       <p style={{ ...textBackgroundStyle, top: '-5px' }}>{usedSettings.topValue}</p>
       {usedSettings.width > 20 && (
         <p style={{ ...textBackgroundStyle, bottom: '-5px' }}>{usedSettings.bottomValue}</p>
       )}
-    </div>
+    </Point>
   );
 };
 

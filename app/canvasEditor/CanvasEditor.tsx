@@ -27,21 +27,7 @@ const DrawingCanvas: React.FC  = ( ) => {
       <BackgroundImageLayer   />
     </div>
    
-
-      {/* Splicer to combine layers */}
-      {/* {canvasRef && (  
-        <>
-        <LayerSplicer
-          layers={[
-            // { type: "image" ,  imageUrl: image },
-            // { type: "canvas", canvasRef },
-          ]}
-        />
-         <CanvasToImage canvasRef={canvasRef} />
-         </>
-        )} */}
-
-      {/* Convert canvas to image */}
+ 
       
     </>
   );
