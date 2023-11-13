@@ -81,9 +81,11 @@ const Marker: React.FC<MarkerProps> = ({
       return;
     }
     if (canRemove) {
-      const markerElement = e.currentTarget as HTMLDivElement;
-      markerElement.remove();
-      console.log('Marker destroyed!');
+      const updatedMarkers = markers.value.filter((marker) => marker.id !== id);
+      markers.value = updatedMarkers;
+      // const markerElement = e.currentTarget as HTMLDivElement;
+      // markerElement.remove();
+      // console.log('Marker destroyed!');
     }
     setCanRemove(true);
   };
@@ -107,11 +109,10 @@ const Marker: React.FC<MarkerProps> = ({
   };
 
   const handleDelete = () => {
-    // const updatedMarkers = markers.value.filter((marker) =>
-    // marker.id === id ?  null : marker
-    //   );
-    //   markers.value = updatedMarkers;
-      }
+    console.log('callled', id)
+    const updatedMarkers = markers.value.filter((marker) => marker.id !== id);
+    markers.value = updatedMarkers;
+  };
   return (
     <Point
       radius={mergedSettings.width}

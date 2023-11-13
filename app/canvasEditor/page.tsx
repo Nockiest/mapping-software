@@ -19,7 +19,7 @@ import {
   useCanvas,
   useGlobalValue,
 } from "./CanvasContext"; //CanvasSettingsContext
-import { settings } from "./Signals";
+import { markers, settings } from "./Signals";
 import LayerSplicer from "../components/utility/LayerSplicer";
 import { Button, Typography, Paper } from '@mui/material';
 import { Vector2 } from "@/public/types/GeometryTypes";
@@ -124,6 +124,7 @@ const Page: React.FC = () => {
           layer: settings.value.activeLayer,
           mousePosition: mousePosition,
           mousDownTime: elapsedTime,
+          numMarkers:markers.value.length
           // activeFrontLine: frontLineSettings.value.activeFrontline?.idNum,
           // GlobalData: GlobalData.mouseDownTime,
         }}

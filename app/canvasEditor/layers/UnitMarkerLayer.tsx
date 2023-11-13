@@ -133,6 +133,8 @@ const UnitMarkerLayer: React.FC = () => {
   return (
     <>
       <ReusableLayer layerName="marker" canvasRef={markerCanvasRef}>
+        {markers.value.length}
+        {'Xxxxxxxxxxxxx'}
         {markers.value.map((marker, index) => (
           <Marker
             key={index}
