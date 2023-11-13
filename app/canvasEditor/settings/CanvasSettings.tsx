@@ -39,7 +39,7 @@ const CanvasSettings = () => {
           }}
         >
           <Typography variant="h1">MAP MAKER ONLINE</Typography>
-          <ActiveLayerSettings />
+          <ActiveLayerSettings  />
         </Paper>
       </Grid>
 

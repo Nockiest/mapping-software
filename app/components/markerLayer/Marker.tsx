@@ -106,6 +106,12 @@ const Marker: React.FC<MarkerProps> = ({
     userSelect: 'none',
   };
 
+  const handleDelete = () => {
+    // const updatedMarkers = markers.value.filter((marker) =>
+    // marker.id === id ?  null : marker
+    //   );
+    //   markers.value = updatedMarkers;
+      }
   return (
     <Point
       radius={mergedSettings.width}
@@ -114,6 +120,7 @@ const Marker: React.FC<MarkerProps> = ({
       rightClk={(e) => handleContextMenu(e)}
       onDrag={(position) => handleMouseMove(position)}
       className="marker"
+      onDelete={handleDelete}
     >
       <p style={{ ...textBackgroundStyle, top: '-5px' }}>{mergedSettings.topValue}</p>
       {mergedSettings.width > 20 && (

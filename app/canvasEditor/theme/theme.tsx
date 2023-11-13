@@ -4,6 +4,7 @@ export const theme = createTheme({
   palette: {
     primary: {
       main: "#4CAF50", // Speed and efficiency green
+      darker: "#388E3C",
     },
     secondary: {
       main: "#FFC107", // Amber for highlights and warnings
