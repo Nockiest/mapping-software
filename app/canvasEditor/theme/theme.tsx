@@ -1,7 +1,5 @@
-import { ThemeProvider, createTheme} from "@mui/material"
-
+import { createTheme } from '@mui/material/styles';
  
-
 export const theme = createTheme({
   palette: {
     primary: {
@@ -17,8 +15,17 @@ export const theme = createTheme({
       default: "#FFFFFF", // White background for clarity
     },
     text: {
-      primary: "#212121", // Dark grey text for good contrast
+      primary: "#FFFFFF", // White text color
     },
   },
   spacing: 5,
+  typography: {
+    h1: {
+      fontWeight: 'bold',
+      fontSize: '1.7rem', // You can adjust the font size as needed
+      fontFamily: 'Open Sans, sans-serif', // Replace 'Your Custom Font' with the actual font name
+      color: '#FFFFFF', // White color for h1
+      textAlign: 'center'
+    },
+  },
 });
