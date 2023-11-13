@@ -99,7 +99,7 @@ const Point: React.FC<PointProps> = ({
 
   return (
     <div
-      className={className}
+      
       style={{
         position: "absolute",
         left: `${position.x}px`,
@@ -110,9 +110,9 @@ const Point: React.FC<PointProps> = ({
         background: "blue",
         cursor: "pointer",
         opacity: acceptInput ? "1" : "0.4",
-        // background: backgroundImage ? `url(${backgroundImage}) center/cover` : "blue", // Apply the background image
         ...styling,
       }}
+      className={className}
       onMouseDown={handleMouseDown}
       onContextMenu={handleContextMenu}
     >

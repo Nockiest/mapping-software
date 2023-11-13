@@ -25,6 +25,7 @@ export const frontLineSettings: FrontLineSettings = signal({
   frontLineColor: "#0000ff",
   activeFrontLine: null,
   frontLines: [],
+  controlPointRadius: 5
 });
 
 export const markers:MarkerArraySignal = signal([])

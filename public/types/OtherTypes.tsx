@@ -36,6 +36,7 @@ export type FrontLineSettings = Signal<{
   frontLineColor: Color;
   activeFrontline: FrontlineData | null;
   frontLines: FrontlineData[];
+  controlPointRadius:number
 }>;
 export type MarkerArraySignal = Signal<MarkerType[]>;
 

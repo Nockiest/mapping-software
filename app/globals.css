@@ -16,8 +16,6 @@
   position: absolute;
   border-radius: 50%;
   border: 1px solid black;
-  background-size: cover;
-  background-position: center;
   transform: translate(-50%, -50%);
   cursor: grab;
   user-select: none;
@@ -28,7 +26,6 @@
   color: white; /* White text color */
   padding: 8px 6px;  
   font-size: 12px; /* Font size */
-  /*border: none; /*  No border */
   margin: 0px 4px;
   cursor: pointer; /* Pointer cursor on hover */
   border-radius: 5px; /* Rounded corners */

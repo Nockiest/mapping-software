@@ -14,6 +14,7 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
     frontLineSettings.value.activeFrontline.idNum === idNum;
   const frontLineInfo = findFrontLineObj(idNum)  
   const { frontlineCanvasRef } = useCanvas();
+  const controlPointRadius = frontLineSettings.value.controlPointRadius
 
   useEffect(() => {
     const canvas = frontlineCanvasRef.current;
@@ -43,12 +44,14 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
       newPoints.splice(frontLineSettings.value.insertionPointIndex, 0, {
         position: position,
         id: uuidv4(),
+        radius:controlPointRadius
       });
     } else {
       // Append the new point
       newPoints.push({
         position: position,
         id: uuidv4(),
+        radius:controlPointRadius
       });
     }
   
@@ -86,8 +89,8 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
 
       const clickedPointIndex = frontLineInfo?.points.findIndex((point) => {
         const isClicked =
-          Math.abs(point.position.x - canvasRelativeX) < 5 &&
-          Math.abs(point.position.y - canvasRelativeY) < 5;
+          Math.abs(point.position.x - canvasRelativeX) < controlPointRadius &&
+          Math.abs(point.position.y - canvasRelativeY) < controlPointRadius;
         return isClicked;
       });
       console.log(clickedPointIndex)
@@ -162,7 +165,7 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
           id={point.id}
           topLeft={{ x: topLeftPoint.x, y: topLeftPoint.y }}
           onDrag={(newPosition) => updatePointPositions(point.id, newPosition)}
-          radius={5}
+          radius={controlPointRadius}
           mouseWheelClk={
             frontLineActive ? (e) => handleDeletePoint(point.id) : null
           }

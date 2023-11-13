@@ -15,6 +15,7 @@ import {   getCtxFromRef } from "@/app/components/utility/otherUtils";
 
 export type PointData= {
   position: Vector2 
+  radius: number
   id: string
 }
 
@@ -112,30 +113,4 @@ const FrontlineLayer = () => {
 
 export default FrontlineLayer;
 
-// const handlePointDrag = (index: number, newPosition: Vector2) => {
-//   console.log("HANDLING POINT DRAG", newPosition);
-//   setPoints((prevPoints) => {
-//     const newPoints = [...prevPoints];
-//     newPoints[index] = newPosition;
-//     return newPoints;
-//   });
-// };
-
-// const findNewEndPointIndex = (clickedPoint: Vector2) => {
-//   console.log("Clicked Point Position:", clickedPoint);
-//   // Find the index of the clicked point in the points array
-//   const clickedPointIndex = points.findIndex(
-//     (point) => point.x === clickedPoint.x && point.y === clickedPoint.y
-//   );
-//   console.log(clickedPointIndex);
-//   // Set the clicked point as the endpoint
-//   setEndPointIndex(clickedPointIndex);
-// };
-
-// const handleDeletePoint = (index: number) => {
-//   setPoints((prevPoints) => {
-//     const newPoints = [...prevPoints];
-//     newPoints.splice(index, 1); // Remove the point at the specified index
-//     return newPoints;
-//   });
-// };
+ 

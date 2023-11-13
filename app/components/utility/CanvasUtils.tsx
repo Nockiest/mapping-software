@@ -26,34 +26,53 @@ export function calculateRelativePosition(position:Vector2, divTopLeft:Vector2) 
     return { x: relativeX, y: relativeY };
   }
 
-export const drawLineAlongPoints = (
-  points: Array<PointData>,
-  endPointIndex: number|null,
-  ctx: CanvasRenderingContext2D,
-  color: Color,
-  width: number
-)  => {
-  
-  if (points.length <  2) {
-    console.warn("Cannot draw a line with less than 2 points.");
-    return;
-  }
+  export const drawLineAlongPoints = (
+    points: Array<PointData>,
+    endPointIndex: number | null,
+    ctx: CanvasRenderingContext2D,
+    color: Color,
+    width: number,
+    pointsCentered: boolean = false
+  ) => {
+    if (points.length < 2) {
+      console.warn("Cannot draw a line with less than 2 points.");
+      return;
+    }
   
     ctx.beginPath();
-    ctx.moveTo(points[0].position.x, points[0].position.y);
-    for (let i = 1; i < points.length; i++) {
-      ctx.lineTo(points[i].position.x, points[i].position.y);
+    const adjustedPoints = pointsCentered
+      ? points.map((point) => point.position)
+      : points.map((point) => movePosByOffset(point.position, point.radius));
+  
+    const startPos = adjustedPoints[0];
+    ctx.moveTo(startPos.x, startPos.y);
+  
+    for (let i = 1; i < adjustedPoints.length; i++) {
+      ctx.lineTo(adjustedPoints[i].x, adjustedPoints[i].y);
     }
-
+  
     if (endPointIndex !== null) {
       // Draw a line from the last point to the endpoint
-      if (points[endPointIndex]) {
-        ctx.lineTo(points[endPointIndex].position.x, points[endPointIndex].position.y);
-      } 
+      if (adjustedPoints[endPointIndex]) {
+        ctx.lineTo(
+          adjustedPoints[endPointIndex].x,
+          adjustedPoints[endPointIndex].y
+        );
+      }
     }
+  
     ctx.strokeStyle = color;
     ctx.lineWidth = width;
     ctx.stroke();
     ctx.closePath();
-   
-}
+  };
+
+export const movePosByOffset = (position: Vector2, offset: number | Vector2): Vector2 => {
+  if (typeof offset === 'number') {
+    // If offset is a number, apply it to both x and y values
+    return { x: position.x + offset, y: position.y + offset };
+  } else {
+    // If offset is a Vector2, apply its x and y values separately
+    return { x: position.x + offset.x, y: position.y + offset.y };
+  }
+};
