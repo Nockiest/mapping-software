@@ -82,6 +82,8 @@ const Marker: React.FC<MarkerProps> = ({
     fontSize: `${mergedSettings.width / 4}px`,
     backgroundColor: mergedSettings.color,
     backgroundImage: mergedSettings.imageURL ? `url(${imageUrl})` : 'none',
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
   };
 
   const textBackgroundStyle: React.CSSProperties = {

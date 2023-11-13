@@ -36,6 +36,7 @@ const Point: React.FC<PointProps> = ({
   dragable = true,
   acceptInput = true,
   className,
+  // backgroundImage
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const { GlobalData } = useGlobalValue();
@@ -101,14 +102,15 @@ const Point: React.FC<PointProps> = ({
       className={className}
       style={{
         position: "absolute",
-        left: `${position.x - 0}px`,
-        top: `${position.y - 0}px`,
+        left: `${position.x}px`,
+        top: `${position.y}px`,
         width: `${radius * 2}px`,
         height: `${radius * 2}px`,
         borderRadius: "50%",
         background: "blue",
         cursor: "pointer",
         opacity: acceptInput ? "1" : "0.4",
+        // background: backgroundImage ? `url(${backgroundImage}) center/cover` : "blue", // Apply the background image
         ...styling,
       }}
       onMouseDown={handleMouseDown}
