@@ -9,7 +9,7 @@ import { Color, MarkerArraySignal, MarkerSettings, MarkerType } from "@/public/t
 // import LineComponent from '@/app/components/frontline/FrontLine2D';
 import { markers } from "../Signals";
 import { MousePositionContext } from "../page";
-import { followMouseComponent } from "@/public/utils";
+import { followMouseComponent } from "@/app/components/utility/utils";
 import ReusableLayer from "@/app/components/utility/ResuableLayer";
 import { Signal } from "@preact/signals";
 import { getCtxFromRef } from "@/app/components/utility/otherUtils";
@@ -133,8 +133,8 @@ const UnitMarkerLayer: React.FC = () => {
   return (
     <>
       <ReusableLayer layerName="marker" canvasRef={markerCanvasRef}>
-        {markers.value.length}
-        {'Xxxxxxxxxxxxx'}
+        
+        
         {markers.value.map((marker, index) => (
           <Marker
             key={index}

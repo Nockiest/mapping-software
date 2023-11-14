@@ -16,7 +16,7 @@ export const theme = createTheme({
       default: "#FFFFFF", // White background for clarity
     },
     text: {
-      primary: "#FFFFFF", // White text color
+      primary: "#ffffff", // White text color
     },
   },
   spacing: 5,

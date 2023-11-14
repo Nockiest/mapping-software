@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { LineEdge, Vector2 } from '@/public/types/GeometryTypes';
+import { getCtxFromRef } from '../utility/otherUtils';
 
 export type EraseArgs = {
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
@@ -10,11 +11,11 @@ export type EraseArgs = {
 }
 
 const eraseLine = ({ canvasRef, start, end, radius, eraseShape }: EraseArgs) => {
-  const canvas = canvasRef.current;
-  if (!canvas) return;
+// const canvas = canvasRef.current; 
+// if (!canvas) return;
 
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
+  const {ctx,canvas} =  getCtxFromRef(canvasRef)
+  if (!ctx||!canvas) return;
 
   // Get the current global composite operation
   const originalCompositeOperation = ctx.globalCompositeOperation;
@@ -76,50 +77,4 @@ const eraseLine = ({ canvasRef, start, end, radius, eraseShape }: EraseArgs) => 
 };
 
 export default eraseLine;
-// const eraseInRadius = ({ canvasRef, position, diameter }: EraseRadiusProps) => {
-//   const canvas = canvasRef.current;
-//   const radius = Math.ceil(diameter / 2);
-//   if (!canvas) return;
-
-//   const ctx = canvas.getContext('2d');
-//   if (!ctx) return;
-
-//   // Get the current global composite operation
-//   const originalCompositeOperation = ctx.globalCompositeOperation;
-
-//   // Set the global composite operation to 'destination-out' for erasing
-//   ctx.globalCompositeOperation = 'destination-out';
-
-//   // Get the image data from the canvas
-//   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-//   const data = imageData.data;
-
-//   // Calculate the pixel position based on the canvas size
-//   const pixelX = Math.floor((position.x / canvas.width) * imageData.width);
-//   const pixelY = Math.floor((position.y / canvas.height) * imageData.height);
-
-//   // Loop through the pixels in the specified radius
-//   for (let y = pixelY - radius; y <= pixelY + radius; y++) {
-//     for (let x = pixelX - radius; x <= pixelX + radius; x++) {
-//       // Check if the current pixel is within the canvas bounds
-//       if (x >= 0 && x < imageData.width && y >= 0 && y < imageData.height) {
-//         // Calculate the index of the current pixel in the image data array
-//         const index = (y * imageData.width + x) * 4;
-
-//         // Set the color of the current pixel to a blank color (transparent black)
-//         data[index] = 0;      // Red channel
-//         data[index + 1] = 0;  // Green channel
-//         data[index + 2] = 0;  // Blue channel
-//         data[index + 3] = 0;  // Alpha channel (transparency)
-//       }
-//     }
-//   }
-
-//   // Put the modified image data back onto the canvas
-//   ctx.putImageData(imageData, 0, 0);
-
-//   // Restore the original composite operation
-//   ctx.globalCompositeOperation = originalCompositeOperation;
-// };
-
-// export default eraseInRadius;
+ 

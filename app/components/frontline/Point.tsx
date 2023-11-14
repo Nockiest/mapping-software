@@ -1,7 +1,7 @@
 import { useGlobalValue } from "@/app/canvasEditor/CanvasContext";
 import { Vector2, Shapes } from "@/public/types/GeometryTypes";
 import { LayerNames } from "@/public/types/OtherTypes";
-import { followMouseComponent } from "@/public/utils";
+import { followMouseComponent } from "@/app/components/utility/utils";
 import { useEffect, useState, ReactNode } from "react";
 type PointProps = {
   position: Vector2;

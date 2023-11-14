@@ -1,4 +1,4 @@
-import { Vector2 } from "./types/GeometryTypes";
+import { Vector2 } from "../../../public/types/GeometryTypes";
 
 function zoomIn(scale: number, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
     scale *= 1.1; // Increase the scale factor (you can adjust this value)

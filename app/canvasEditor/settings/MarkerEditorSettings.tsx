@@ -1,6 +1,6 @@
 import { useContext, useState, useRef } from "react";
 import { CanvasSettingsType } from "../CanvasContext"; // CanvasSettingsContext,
-import { hexToRgb } from "@/public/utils";
+import { hexToRgb } from "@/app/components/utility/utils";
 import { settings } from "../Signals";
 import FavoriteColorLister from "@/app/components/settings/FavoriteColorLister";
 import { Color } from "@/public/types/OtherTypes";

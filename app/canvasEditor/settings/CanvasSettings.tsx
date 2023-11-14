@@ -2,7 +2,7 @@
 import MarkerEditorSettings from "./MarkerEditorSettings";
 import LineTypeSettings from "@/app/components/settings/LineTypeSettings";
 import ActiveLayerSettings from "@/app/components/settings/ActiveLayerSettings";
-import { hexToRgb } from "@/public/utils";
+import { hexToRgb } from "@/app/components/utility/utils";
 import { settings } from "../Signals";
 import { Color, Settings } from "@/public/types/OtherTypes";
 import DrawingLayerSettings from "./DrawingLayerSettings";

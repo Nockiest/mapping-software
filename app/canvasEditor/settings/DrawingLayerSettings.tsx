@@ -6,19 +6,33 @@ import { LineEdge } from '@/public/types/GeometryTypes';
 import { CanvasContext, useCanvas } from '../CanvasContext';
 import FavoriteColorLister from '@/app/components/settings/FavoriteColorLister';
  
-const DrawingLayerSettings = ( ) => {
+import {
+  InputLabel,
+  Input,
+  Slider,
+  Button,
+  Box,
+  Select,
+  MenuItem,
+  Grid,
+} from '@mui/material'; // Import Material-UI components
+import { theme } from '../theme/theme';
+
+const DrawingLayerSettings = () => {
   const imageInputRef = useRef<HTMLInputElement>(null);
-  const {dispatchState,   }= useCanvas( )
-  const changeSettings = <K extends keyof Settings['value']>(property: K, newValue: Settings['value'][K]) => {
+  const { dispatchState } = useCanvas();
+
+  const changeSettings = <K extends keyof Settings['value']>(
+    property: K,
+    newValue: Settings['value'][K]
+  ) => {
     // Assuming settings is a mutable signal, otherwise, you might need to use `setSettings` if it's a state
     settings.value = { ...settings.value, [property]: newValue };
   };
-  
- 
+
   // Handle color change
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const hexColor = e.target.value as Color;
-    // const rgbColor = hexToRgb(hexColor);
     changeSettings('color', hexColor);
   };
 
@@ -26,76 +40,101 @@ const DrawingLayerSettings = ( ) => {
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newRadius = parseInt(e.target.value, 10);
     const sanitizedRadius = newRadius < 0 ? 0 : newRadius;
-    
+
     changeSettings('radius', sanitizedRadius);
   };
 
   // Handle line type change
-  const handleLineTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newLineType = e.target.value as LineEdge// "rounded" | "squared";
+  const handleLineTypeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+    const newLineType = e.target.value as LineEdge;
     changeSettings('lineType', newLineType);
   };
 
   // Handle bucket fill
   const handleBucketFill = () => {
-   if(dispatchState){dispatchState({ type: 'ENTER_BUCKET_MODE' })}
-   
+    if (dispatchState) {
+      dispatchState({ type: 'ENTER_BUCKET_MODE' });
+    }
   };
+
   const handleSaveToFavorites = () => {
     const currentColor = settings.value.color;
     if (!settings.value.popularColors.includes(currentColor)) {
-      // Save the color to favorites if it's not already in the list
       settings.value.popularColors.push(currentColor);
- 
     }
   };
+
   const handleColorClick = (color: Color) => {
-    // Set the settings color on click
     changeSettings('color', color);
   };
-  return (
-    <>
-      <label>
-        Color:
-        <input type="color" value={settings.value.color} onChange={handleColorChange} />
-       
-        <FavoriteColorLister handleColorClick={handleColorClick} colorList={ settings.value.popularColors} newColor={settings.value.color} />
-        {/* <div style={{ display: 'flex', gap: '5px' }}>
-        {settings.value.popularColors.map((color, index) => (
-          <ColorRectangle key={index} color={color} onClick={() => handleColorClick(color)} />
-          ))}
-        </div> */}
-        
-    
-      </label>
-          <br />
-          <label>
-            Radius: {settings.value.radius}
-            <input
-                type="range"
-                value={settings.value.radius}
-                onChange={handleRadiusChange}
-                style={{ color: 'black' }}
-                min="1"
-                max="100"
-            />
-          </label>
-          <br />
-          {/* Dropdown for line type */}
-          <LineTypeSettings lineType={settings.value.lineType} handleLineTypeChange={handleLineTypeChange} />
-          <br />
- 
-          <br />
-          {/* Add the bucket fill button */}
-          <button   onClick={handleBucketFill}>
-            {/* style={{ backgroundColor: state === DrawingState.BucketFill ? 'red' : 'initial' }} */}
-            Bucket Fill
-          </button>
-        </>
-  )
-}
 
-export default DrawingLayerSettings
+  return (
+    <Grid container spacing={2}>
+      {/* First Column - Color Settings and Bucket Fill */}
+      <Grid item xs={2}>
+        <Box>
+          <InputLabel htmlFor="color"   sx={{ color: theme.palette.text.primary,}}>Color:</InputLabel>
+          <Input
+            id="color"
+            type="color"
+            value={settings.value.color}
+
+            onChange={handleColorChange}
+          />
+          <FavoriteColorLister
+            handleColorClick={handleColorClick}
+            colorList={settings.value.popularColors}
+            newColor={settings.value.color}
+          />
+
+          <br />
+
+          <Button variant="contained" onClick={handleBucketFill}>
+            Bucket Fill
+          </Button>
+        </Box>
+      </Grid>
+
+      {/* Second Column - Other Settings */}
+      <Grid item xs={2}>
+        <Box>
+        <InputLabel
+          htmlFor="radius"
+          sx={{ color: theme.palette.text.primary, borderBottom: `2px solid ${theme.palette.text.primary}` }}
+        >
+          Radius: {settings.value.radius}
+        </InputLabel>
+          <Slider
+            id="radius"
+            value={settings.value.radius}
+            onChange={(e, value) =>
+              handleRadiusChange(e as React.ChangeEvent<HTMLInputElement>)
+            }
+            min={1}
+            max={100}
+          />
+
+          <br />
+
+          {/* Dropdown for line type */}
+          <InputLabel htmlFor="line-type" sx={{color:theme.palette.text.primary}}>Line Type:</InputLabel>
+          <Select
+            id="line-type"
+            value={settings.value.lineType}
+            onChange={handleLineTypeChange}
+            sx={{ backgroundColor: 'white', color:'black', borderRadius: '4px' }}
+          >
+            <MenuItem value="rounded" style={{ color: 'rgba(0, 0, 0, 0.9)' }}>Rounded</MenuItem>
+            <MenuItem value="squared" style={{ color: 'rgba(0, 0, 0, 0.9)' }}>Squared</MenuItem>
+          </Select>
+
+        </Box>
+      </Grid>
+    </Grid>
+  );
+};
+
+export default DrawingLayerSettings;
 
   // const {backgroundImage, setBackgroundImage} = useContext(BackgroundContext)
           {/* <br />

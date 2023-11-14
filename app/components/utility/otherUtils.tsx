@@ -15,27 +15,26 @@ export const findFrontLineObj = (id: string) => {
 };
 
 export const getCtxFromRef = (
-  canvasRef: React.RefObject<HTMLCanvasElement | null|undefined>
-): CanvasRenderingContext2D | null => {
+  canvasRef: React.RefObject<HTMLCanvasElement | null | undefined>
+): { ctx: CanvasRenderingContext2D | null, canvas: HTMLCanvasElement | null } => {
   if (!canvasRef || !canvasRef.current) {
     console.error("Canvas reference is missing.");
-    return null;
+    return { ctx: null, canvas: null };
   }
 
   const canvas = canvasRef.current;
 
   if (!canvas) {
     console.error("Canvas element is missing.");
-    return null;
+    return { ctx: null, canvas: null };
   }
 
   const ctx = canvas.getContext("2d");
 
   if (!ctx) {
     console.error("2D context cannot be obtained from the canvas.");
-    return null;
+    return { ctx: null, canvas };
   } else {
-    return ctx;
+    return { ctx, canvas };
   }
 };
-
