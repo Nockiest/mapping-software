@@ -35,7 +35,7 @@ export type MarkerSettings = {
 export type FrontLineSettings = Signal<{
   insertionPointIndex: number;
   frontLineColor: Color;
-  activeFrontline: FrontlineData | null;
+  activeFrontline: FrontlineData | null|undefined;
   frontLines: FrontlineData[];
   controlPointRadius:number
 }>;

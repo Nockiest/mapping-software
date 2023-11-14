@@ -15,21 +15,26 @@ import FronlineLayer from "./layers/FronlineLayer";
 import { settings } from "./Signals";
  
 const DrawingCanvas: React.FC  = ( ) => {
-  const canvasRef = useCanvas( );
- 
+  const{ canvasRef, frontlineCanvasRef, markerCanvasRef, backgroundCanvasRef } = useCanvas( );
+  // const { backgroundCanvasRef   } = useContext(BackgroundContext);
   return (
-    < >
-  
+   
     <div className={`relative h-600  w-${settings.value.canvasSize}  flex items-center justify-center `}  > 
       <DrawingLayer    />
       <UnitMarkerLayer    />
       <FronlineLayer  />
       <BackgroundImageLayer   />
+      <LayerSplicer
+        layers={[
+          { canvasRef: canvasRef, zIndex: 20 },
+          { canvasRef: backgroundCanvasRef, zIndex: 10 },
+          { canvasRef: frontlineCanvasRef, zIndex: 30 },
+          { canvasRef: markerCanvasRef, zIndex: 40 },
+        ]}
+      />
     </div>
    
- 
-      
-    </>
+  
   );
 };
 

@@ -15,7 +15,7 @@ import Timeline from "./Timeline";
 import {
   CanvasContext,
   CanvasProvider,
-  useBackground,
+ 
   useCanvas,
   useGlobalValue,
 } from "./CanvasContext"; //CanvasSettingsContext
@@ -58,9 +58,9 @@ const MousePositionProvider: React.FC<{ children: ReactNode }> = ({
 };
 
 const Page: React.FC = () => {
-  const { canvasState, canvasRef, frontlineCanvasRef, markerCanvasRef } =
+  const {   canvasRef, frontlineCanvasRef, markerCanvasRef,backgroundCanvasRef } =
     useCanvas();
-  const { backgroundCanvasRef } = useBackground();
+  // const { backgroundCanvasRef } = useBackground();
   // const { backgroundcanvasRef} = useBack
   const mousePosition = useContext(MousePositionContext);
   const { GlobalData, updateGlobalData } = useGlobalValue();
@@ -119,7 +119,7 @@ const Page: React.FC = () => {
       <DebugInfo
         data={{
           radius: settings.value.radius,
-          canvasState: canvasState,
+          // canvasState: canvasState,
           color: settings.value.color,
           layer: settings.value.activeLayer,
           mousePosition: mousePosition,
@@ -132,14 +132,14 @@ const Page: React.FC = () => {
 
       <CanvasSettings />
       <DrawingCanvas />
-      <LayerSplicer
+      {/* <LayerSplicer
         layers={[
           { canvasRef: canvasRef, zIndex: 20 },
           { canvasRef: backgroundCanvasRef, zIndex: 10 },
           { canvasRef: frontlineCanvasRef, zIndex: 30 },
           { canvasRef: markerCanvasRef, zIndex: 40 },
         ]}
-      />
+      /> */}
       <Timeline />
     </>
   );

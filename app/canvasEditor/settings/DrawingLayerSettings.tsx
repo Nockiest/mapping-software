@@ -5,7 +5,6 @@ import { Color, Settings } from '@/public/types/OtherTypes';
 import { LineEdge } from '@/public/types/GeometryTypes';
 import { CanvasContext, useCanvas } from '../CanvasContext';
 import FavoriteColorLister from '@/app/components/settings/FavoriteColorLister';
- 
 import {
   InputLabel,
   Input,
@@ -21,7 +20,7 @@ import ColorPicker from './settingsComponents/ColorPicker';
 
 const DrawingLayerSettings = () => {
   const imageInputRef = useRef<HTMLInputElement>(null);
-  const { dispatchState } = useCanvas();
+  // const { dispatchState } = useCanvas();
 
   const changeSettings = <K extends keyof Settings['value']>(
     property: K,
@@ -52,11 +51,11 @@ const DrawingLayerSettings = () => {
   };
 
   // Handle bucket fill
-  const handleBucketFill = () => {
-    if (dispatchState) {
-      dispatchState({ type: 'ENTER_BUCKET_MODE' });
-    }
-  };
+  // const handleBucketFill = () => {
+  //   if (dispatchState) {
+  //     dispatchState({ type: 'ENTER_BUCKET_MODE' });
+  //   }
+  // };
 
   const handleSaveToFavorites = () => {
     const currentColor = settings.value.color;
@@ -74,20 +73,9 @@ const DrawingLayerSettings = () => {
       {/* First Column - Color Settings and Bucket Fill */}
       <Grid item xs={2}>
         <Box>
-      {/* <InputLabel htmlFor="color"   sx={{ color: theme.palette.text.primary,}}>Color:</InputLabel> */}
+     
           <ColorPicker value={settings.value.color} handleColorChange={handleColorChange} customText='Color:'/>
-          {/* <Input
-            type="color"
-            value={settings.value.color}
-            onChange={handleColorChange}
-            sx={{
-              appearance: 'none',
-              width: '32px',
-              height: '24px',
-            
-              marginRight: '8px', // Adjust spacing as needed
-            }}
-          /> */}
+           
           <FavoriteColorLister
             handleColorClick={handleColorClick}
             colorList={settings.value.popularColors}
@@ -96,9 +84,9 @@ const DrawingLayerSettings = () => {
 
           <br />
 
-          <Button variant="contained" onClick={handleBucketFill}>
+          {/* <Button variant="contained" onClick={handleBucketFill}>
             Bucket Fill
-          </Button>
+          </Button> */}
         </Box>
       </Grid>
 
@@ -143,17 +131,4 @@ const DrawingLayerSettings = () => {
 
 export default DrawingLayerSettings;
 
-  // const {backgroundImage, setBackgroundImage} = useContext(BackgroundContext)
-          {/* <br />
-          <input
-            type="file"
-            ref={imageInputRef}
-            onChange={(e) => {
-              const selectedFile = e.target.files?.[0];
-              if (selectedFile) {
-                setBackgroundImage(selectedFile);
-              }
-            }}
-          />
-          <br /> */}
-          {/* {backgroundImage && <button onClick={handleImageRevert}>Revert Background Image</button>} */}
+ 

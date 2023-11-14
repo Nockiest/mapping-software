@@ -70,8 +70,6 @@ const DrawingLayer: React.FC = () => {
   // }, [])
 
   useEffect(() => {
-    //if (!canvasRef) {return}
-    //const canvas = canvasRef.current;
     const {ctx, canvas} = getCtxFromRef( canvasRef )
     if(!ctx||!canvas||!canvasRef){return}
     const handleMouseDown = (e: MouseEvent) => {
@@ -136,7 +134,7 @@ const DrawingLayer: React.FC = () => {
       } else if (canvasState === DrawingState.Drawing) {
         // Left mouse button is pressed, draw
         if (ctx && lastMousePos) {
-          // console.log(settings.value.lineType )
+          console.log('draw')
           drawLineWithShape(
             ctx,
             lastMousePos,
