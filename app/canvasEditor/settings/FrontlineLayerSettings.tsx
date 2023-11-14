@@ -1,31 +1,41 @@
-import React, {useState, useEffect} from "react";
-import { useCanvas } from "../CanvasContext";
-import { frontLineSettings, settings } from "../Signals";
-import { computed,   } from "@preact/signals";
-import {  findFrontLineObj } from "@/app/components/utility/otherUtils";
-import { v4 as uuidv4 } from 'uuid';
-import { FrontlineData } from "../layers/FronlineLayer";
  
+ import React, { useState, useEffect } from 'react';
+import { useCanvas } from '../CanvasContext';
+import { frontLineSettings, settings } from '../Signals';
+import { computed } from '@preact/signals';
+import { findFrontLineObj } from '@/app/components/utility/otherUtils';
+import { v4 as uuidv4 } from 'uuid';
+import { FrontlineData } from '../layers/FronlineLayer';
+import {
+  Slider,
+  Input,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@mui/material'; // Import MUI components
+
 const FrontlineLayerSettings = () => {
   const [insertionPointIndex, setEditedPointNum] = useState(frontLineSettings.value.insertionPointIndex);
-  const [maxEndPointNumValue, setMaxEndPointNumValue] = useState(0)
-   
+  const [maxEndPointNumValue, setMaxEndPointNumValue] = useState(0);
+
   useEffect(() => {
-    const activeFrontLine = frontLineSettings.value.activeFrontline
-    setMaxEndPointNumValue(activeFrontLine?.points.length|| 0)
-     
-  }, )
+    const activeFrontLine = frontLineSettings.value.activeFrontline;
+    setMaxEndPointNumValue(activeFrontLine?.points.length || 0);
+  }, []);
+
   useEffect(() => {
     // Update local state when settings change
     setEditedPointNum(frontLineSettings.value.insertionPointIndex);
   }, [frontLineSettings.value.insertionPointIndex]);
 
   const handleEndFrontLineIndexChange = (e) => {
-    console.log("CHANGING VALUE");
-    const activeFrontline = frontLineSettings.value.activeFrontline
-  
+    console.log('CHANGING VALUE');
+    const activeFrontline = frontLineSettings.value.activeFrontline;
+
     const newValue = parseInt(e.target.value, 10);
-  
+
     if (!isNaN(newValue)) {
       // Update the insertionPointIndex in settings and local state
       frontLineSettings.value.insertionPointIndex = newValue;
@@ -35,19 +45,18 @@ const FrontlineLayerSettings = () => {
       frontLineSettings.value.insertionPointIndex = -1;
       setEditedPointNum(-1);
     }
-  
+
     if (activeFrontline) {
       const maxPoints = activeFrontline.points.length;
-  
+
       // Update the max attribute of the input
       e.target.max = maxPoints.toString();
     }
   };
- 
 
   const handleCurFrontlineColorChange = (e) => {
     frontLineSettings.value.frontLineColor = e.target.value;
-    const changedFrontline =  frontLineSettings.value.activeFrontline ;
+    const changedFrontline = frontLineSettings.value.activeFrontline;
 
     if (changedFrontline) {
       changedFrontline.color = e.target.value;
@@ -56,7 +65,7 @@ const FrontlineLayerSettings = () => {
 
   const handleThicknessChange = (e) => {
     const newThickness = parseFloat(e.target.value);
-    const activeFrontline =  frontLineSettings.value.activeFrontline ;
+    const activeFrontline = frontLineSettings.value.activeFrontline;
 
     if (activeFrontline) {
       activeFrontline.thickness = newThickness;
@@ -64,7 +73,7 @@ const FrontlineLayerSettings = () => {
   };
 
   const deleteCurrentFrontLine = () => {
-    const activeFrontline = frontLineSettings.value.activeFrontline ;
+    const activeFrontline = frontLineSettings.value.activeFrontline;
 
     if (activeFrontline) {
       frontLineSettings.value.frontLines = frontLineSettings.value.frontLines.filter(
@@ -87,7 +96,7 @@ const FrontlineLayerSettings = () => {
     frontLineSettings.value.frontLines.push(newFrontlineData);
 
     // Set the new frontline as active
-    frontLineSettings.value.activeFrontline  = newFrontlineData ;
+    frontLineSettings.value.activeFrontline = newFrontlineData;
   };
 
   const handleLayerChange = (e) => {
@@ -98,67 +107,77 @@ const FrontlineLayerSettings = () => {
 
   return (
     <div>
-      <label>
-        Set insertion index {frontLineSettings.value.insertionPointIndex}
-        <input
-          type="range"
-          min="-1"
+      <FormControl>
+        <InputLabel>
+          Set insertion index {frontLineSettings.value.insertionPointIndex}
+        </InputLabel>
+        <Slider
+          min={-1}
           defaultValue={-1}
-          max={maxEndPointNumValue-1 }
+          max={maxEndPointNumValue - 1}
           onChange={handleEndFrontLineIndexChange}
-          style={{ color: 'black' }}
+          valueLabelDisplay="auto"
         />
-      </label>
+      </FormControl>
       <br />
-      <label>
-        Set curFrontline color
-        <input
+      <FormControl>
+        <InputLabel>Set curFrontline color</InputLabel>
+        <Input
           type="color"
           value={frontLineSettings.value.frontLineColor}
           onChange={handleCurFrontlineColorChange}
-          style={{ color: 'black' }}
         />
-      </label>
+      </FormControl>
       <br />
-      <label>
-        Set line thickness:
-        <input
-          type="range"
-          min="0.1"
-          max="10"
-          step="0.1"
-          value={ frontLineSettings.value.activeFrontline ?.thickness || 0}
+      <FormControl>
+        <InputLabel>Set line thickness:</InputLabel>
+        <Slider
+          min={0.1}
+          max={10}
+          step={0.1}
+          value={frontLineSettings.value.activeFrontline?.thickness || 0}
           onChange={handleThicknessChange}
+          valueLabelDisplay="auto"
         />
-      </label>
+      </FormControl>
       <br />
-      <button onClick={handleNewFrontLine}>New FrontLine</button>
+      <Button onClick={handleNewFrontLine}>New FrontLine</Button>
       <br />
-      <label>
-        Choose Active Layer:
-        <select style={{ color: 'black' }} onChange={handleLayerChange} value={frontLineSettings.value.activeFrontline.idNum}>
-        {frontLineSettings.value.frontLines.map((frontline, index) => (
-          <option key={frontline.idNum} value={frontline.idNum} style={{backgroundColor: frontline.color, opacity:0.5, cursor:"pointer"}}>
-            {`Index: ${index}, Color: `}
-            <span
+      <FormControl>
+        <InputLabel>Choose Active Layer:</InputLabel>
+        <Select
+          onChange={handleLayerChange}
+          value={frontLineSettings.value.activeFrontline?.idNum}
+        >
+          {frontLineSettings.value.frontLines.map((frontline, index) => (
+            <MenuItem
+              key={frontline.idNum}
+              value={frontline.idNum}
               style={{
-                display: 'inline-block',
-                width: '15px',
-                height: '15px',
-                marginLeft: '2em',
                 backgroundColor: frontline.color,
-                border: '1px solid #000',
+                opacity: 0.5,
+                cursor: 'pointer',
               }}
-            />
-            {`, Index: ${frontLineSettings.value.frontLines.indexOf(frontline)}`}
-          </option>
-        ))}
-
-        </select>
-      </label>
+            >
+              {`Index: ${index}, Color: `}
+              <span
+                style={{
+                  display: 'inline-block',
+                  width: '15px',
+                  height: '15px',
+                  marginLeft: '2em',
+                  backgroundColor: frontline.color,
+                  border: '1px solid #000',
+                }}
+              />
+              {`, Index: ${frontLineSettings.value.frontLines.indexOf(frontline)}`}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
       <br />
       {frontLineSettings.value.activeFrontline && (
-        <button onClick={deleteCurrentFrontLine}>Delete Current FrontLine</button>
+        <Button onClick={deleteCurrentFrontLine}>Delete Current FrontLine</Button>
       )}
     </div>
   );

@@ -11,9 +11,6 @@ export type EraseArgs = {
 }
 
 const eraseLine = ({ canvasRef, start, end, radius, eraseShape }: EraseArgs) => {
-// const canvas = canvasRef.current; 
-// if (!canvas) return;
-
   const {ctx,canvas} =  getCtxFromRef(canvasRef)
   if (!ctx||!canvas) return;
 

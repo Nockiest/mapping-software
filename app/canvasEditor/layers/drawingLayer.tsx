@@ -70,10 +70,10 @@ const DrawingLayer: React.FC = () => {
   // }, [])
 
   useEffect(() => {
-    if (!canvasRef) {return}
-    const canvas = canvasRef.current;
-    const ctx = getCtxFromRef( canvasRef )
-    if(!ctx){return}
+    //if (!canvasRef) {return}
+    //const canvas = canvasRef.current;
+    const {ctx, canvas} = getCtxFromRef( canvasRef )
+    if(!ctx||!canvas||!canvasRef){return}
     const handleMouseDown = (e: MouseEvent) => {
       console.log("MOUSE DOWN");
       if (settings.value.activeLayer !== "draw") {

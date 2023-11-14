@@ -55,7 +55,7 @@ const FrontlineLayer = () => {
 
   const renderFrontLines = () => {
     const frontLines = frontLineSettings.value.frontLines;
-    const ctx = getCtxFromRef(frontlineCanvasRef)
+    const {ctx, canvas} = getCtxFromRef(frontlineCanvasRef)
     if(!ctx){return}
     ctx.clearRect(0, 0, settings.value.canvasSize.x!, settings.value.canvasSize.y!)
     for (const line in frontLines) {

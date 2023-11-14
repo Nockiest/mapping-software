@@ -2,6 +2,7 @@ import BackgroundImageSetter from '@/app/components/settings/BackgroundImageSett
 import {useRef, useContext} from 'react'
 import { BackgroundContext } from '../CanvasContext';
 import { backgroundImage } from '../Signals';
+import { Button } from '@mui/material';
 const BackgroundLayerSettings = () => {
   //   const imageInputRef = useRef<HTMLInputElement>(null);
   //   // const {backgroundImage, setBackgroundImage} = useContext(BackgroundContext)
@@ -16,7 +17,10 @@ const BackgroundLayerSettings = () => {
     <>
         <BackgroundImageSetter  />
         {/* setBackgroundImage={setBackgroundImage} backgroundImage={backgroundImage.value} */}
-        {backgroundImage && <button onClick={handleImageRevert}>Revert Background Image</button>}
+        {backgroundImage &&  
+        <Button variant="contained" color="primary" onClick={handleImageRevert}>
+        Revert Background Image
+      </Button>}
     </ >
   )
 }
