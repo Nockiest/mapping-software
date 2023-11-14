@@ -14,7 +14,10 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Box,
+  Grid
 } from '@mui/material'; // Import MUI components
+import { theme } from '../theme/theme';
 
 const FrontlineLayerSettings = () => {
   const [insertionPointIndex, setEditedPointNum] = useState(frontLineSettings.value.insertionPointIndex);
@@ -23,7 +26,7 @@ const FrontlineLayerSettings = () => {
   useEffect(() => {
     const activeFrontLine = frontLineSettings.value.activeFrontline;
     setMaxEndPointNumValue(activeFrontLine?.points.length || 0);
-  }, []);
+  } );
 
   useEffect(() => {
     // Update local state when settings change
@@ -106,80 +109,124 @@ const FrontlineLayerSettings = () => {
   };
 
   return (
-    <div>
+    <Grid container spacing={1}>
+    <Grid item xs={3}>
       <FormControl>
-        <InputLabel>
-          Set insertion index {frontLineSettings.value.insertionPointIndex}
+        <InputLabel style={{ color: 'white' }}>
+          Set insertion index{' '}
+          {frontLineSettings.value.insertionPointIndex}
+        </InputLabel>
+          <Slider
+            min={-1}
+            defaultValue={-1}
+            max={maxEndPointNumValue - 1}
+            onChange={handleEndFrontLineIndexChange}
+            valueLabelDisplay="auto"
+            marks
+          />
+      </FormControl>
+      <br />
+      <br />
+      <FormControl>
+        <InputLabel style={{ color: 'white' }}>
+          Set line thickness:
         </InputLabel>
         <Slider
-          min={-1}
-          defaultValue={-1}
-          max={maxEndPointNumValue - 1}
-          onChange={handleEndFrontLineIndexChange}
+          min={0.1}
+          max={10}
+          step={0.1}
+          value={
+            frontLineSettings.value.activeFrontline?.thickness || 0
+          }
+          onChange={handleThicknessChange}
           valueLabelDisplay="auto"
         />
       </FormControl>
-      <br />
       <FormControl>
-        <InputLabel>Set curFrontline color</InputLabel>
+        <InputLabel style={{ color: 'white' }}>
+          Set curFrontline color
+        </InputLabel>
         <Input
           type="color"
           value={frontLineSettings.value.frontLineColor}
           onChange={handleCurFrontlineColorChange}
         />
       </FormControl>
-      <br />
-      <FormControl>
-        <InputLabel>Set line thickness:</InputLabel>
-        <Slider
-          min={0.1}
-          max={10}
-          step={0.1}
-          value={frontLineSettings.value.activeFrontline?.thickness || 0}
-          onChange={handleThicknessChange}
-          valueLabelDisplay="auto"
-        />
-      </FormControl>
-      <br />
-      <Button onClick={handleNewFrontLine}>New FrontLine</Button>
-      <br />
-      <FormControl>
-        <InputLabel>Choose Active Layer:</InputLabel>
+    </Grid>
+
+    <Grid item xs={3}>
+    <InputLabel style={{ color: 'white' }}>
+          Choose Active Layer:
+        </InputLabel>
         <Select
           onChange={handleLayerChange}
-          value={frontLineSettings.value.activeFrontline?.idNum}
+          value={
+            frontLineSettings.value.activeFrontline?.idNum
+          }
         >
-          {frontLineSettings.value.frontLines.map((frontline, index) => (
-            <MenuItem
-              key={frontline.idNum}
-              value={frontline.idNum}
-              style={{
-                backgroundColor: frontline.color,
-                opacity: 0.5,
-                cursor: 'pointer',
-              }}
-            >
-              {`Index: ${index}, Color: `}
-              <span
+          {frontLineSettings.value.frontLines.map(
+            (frontline, index) => (
+              <MenuItem
+                key={frontline.idNum}
+                value={frontline.idNum}
                 style={{
-                  display: 'inline-block',
-                  width: '15px',
-                  height: '15px',
-                  marginLeft: '2em',
                   backgroundColor: frontline.color,
-                  border: '1px solid #000',
+                  opacity: 0.5,
+                  cursor: 'pointer',
                 }}
-              />
-              {`, Index: ${frontLineSettings.value.frontLines.indexOf(frontline)}`}
-            </MenuItem>
-          ))}
+              >
+                {`Index: ${index}, Color: `}
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: '15px',
+                    height: '15px',
+                    marginLeft: '2em',
+                    backgroundColor: frontline.color,
+                    border: '1px solid #000',
+                  }}
+                />
+                {`, Index: ${frontLineSettings.value.frontLines.indexOf(
+                  frontline
+                )}`}
+              </MenuItem>
+            )
+          )}
         </Select>
-      </FormControl>
+    </Grid>
+    
+    <Grid item xs={6}>
+      
+      <br />
+      <Button
+        onClick={handleNewFrontLine}
+        sx={{
+          color: theme.palette.text.primary,
+          backgroundColor: theme.palette.secondary.main,
+        }}
+      >
+        New FrontLine
+      </Button>
       <br />
       {frontLineSettings.value.activeFrontline && (
-        <Button onClick={deleteCurrentFrontLine}>Delete Current FrontLine</Button>
+        <Button
+          onClick={deleteCurrentFrontLine}
+          sx={{
+            color: theme.palette.text.primary,
+            backgroundColor: theme.palette.secondary.main,
+          }}
+        >
+          Delete Current FrontLine
+        </Button>
       )}
-    </div>
+      <br />
+      <FormControl>
+        
+      </FormControl>
+      <br />
+   
+    G</Grid>
+  </Grid>
   );
 };
 

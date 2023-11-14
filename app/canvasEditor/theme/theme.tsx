@@ -29,4 +29,22 @@ export const theme = createTheme({
       textAlign: 'center'
     },
   },
+  components: {
+    MuiSlider: {
+      styleOverrides: {
+        root: {
+          minWidth: '200px', // Set the minimum width to 300px
+        },
+        thumb: {
+          color: "#FFFFFF", // White color for the thumb
+        },
+        track: {
+          color: "#FFFFFF", // White color for the track
+        },
+        rail: {
+          color: "#FFFFFF", // White color for the rail
+        }
+      }
+    }
+  }
 });
