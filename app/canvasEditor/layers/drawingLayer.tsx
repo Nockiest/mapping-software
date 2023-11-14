@@ -20,17 +20,18 @@ import {
 import { getCtxFromRef } from "@/app/components/utility/otherUtils";
 
 const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
-  console.log("SWITCHING TO ", action.type);
+  // console.log("SWITCHING TO ", action.type,  action?.payload);
   switch (action.type) {
     case "DRAW":
       const drawPayload = action.payload as DrawPayload;
-      drawPayload.drawFunction(
-        drawPayload.drawArgs.ctx,
-        drawPayload.drawArgs.x,
-        drawPayload.drawArgs.y,
-        drawPayload.drawArgs.radius,
-        drawPayload.drawArgs.color
-      );
+      console.log(drawPayload)
+    drawPayload.drawFunction(
+      drawPayload.drawArgs?.ctx,
+      drawPayload.drawArgs.x,
+      drawPayload.drawArgs.y,
+      drawPayload.drawArgs.radius,
+      drawPayload.drawArgs.color
+    );
       return DrawingState.Drawing;
 
     case "ERASE":
@@ -107,7 +108,7 @@ const DrawingLayer: React.FC = () => {
           dispatchState({ type: "DRAW", payload: drawPayload });
           if (ctx) {
             ctx.beginPath();
-            console.log("DRAWING AN ARC");
+ 
 
             ctx.closePath(); //draw a dot
             setLastMousePos({ x, y });
@@ -134,7 +135,7 @@ const DrawingLayer: React.FC = () => {
       } else if (canvasState === DrawingState.Drawing) {
         // Left mouse button is pressed, draw
         if (ctx && lastMousePos) {
-          console.log('draw')
+          
           drawLineWithShape(
             ctx,
             lastMousePos,
@@ -179,7 +180,7 @@ const DrawingLayer: React.FC = () => {
     dispatchState,
   ]);
 
-  // zjevně nemusím posílat input handling logiku do reusable canvas
+ 
   return (
     <> 
       {canvasRef && (

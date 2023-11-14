@@ -14,9 +14,9 @@ export interface CanvasContextType {
   setFrontlines:  React.Dispatch<React.SetStateAction<FrontlineData[]>>
 }
 
-// export interface BackgroundContextType {
-//   backgroundCanvasRef: React.RefObject<HTMLCanvasElement | null>;
-// }
+export interface BackgroundContextType {
+  backgroundCanvasRef: React.RefObject<HTMLCanvasElement | null>;
+}
 
 type UpdateGlobalDataType = (paramName: keyof GlobalDataType, paramValue: any) => void;
 
@@ -34,7 +34,7 @@ type GlobalDataType = {
 }
  
 export const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
-// export const BackgroundContext = createContext<BackgroundContextType | undefined>(undefined);
+export const BackgroundContext = createContext<BackgroundContextType | undefined>(undefined);
 export const GlobalDataContext = createContext<GlobalDataContextType| undefined >(undefined); 
 
 
@@ -55,9 +55,9 @@ export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     setFrontlines
   };
 
-  // const backgroundContextValue: BackgroundContextType = {
-  //   backgroundCanvasRef,
-  // };
+  const backgroundContextValue: BackgroundContextType = {
+    backgroundCanvasRef,
+  };
 
   const updateGlobalData:UpdateGlobalDataType = (paramName , paramValue ) => {
     setGlobalData((prevData) => ({
@@ -73,11 +73,11 @@ export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
   return (
     <CanvasContext.Provider value={canvasContextValue}>
-      {/* <BackgroundContext.Provider value={backgroundContextValue}> */}
+      <BackgroundContext.Provider value={backgroundContextValue}>
         <GlobalDataContext.Provider value={globalDataContextValue}>
           {children}
         </GlobalDataContext.Provider>
-      {/* </BackgroundContext.Provider> */}
+      </BackgroundContext.Provider>
     </CanvasContext.Provider>
   );
 };
@@ -91,15 +91,15 @@ export const useCanvas = () => {
   return context;
 };
 
-// export const useBackground = () => {
-//   const context = useContext(BackgroundContext);
+export const useBackground = () => {
+  const context = useContext(BackgroundContext);
 
-//   if (!context) {
-//     throw new Error("useCanvas must be used within a CanvasProvider");
-//   }
+  if (!context) {
+    throw new Error("useCanvas must be used within a CanvasProvider");
+  }
 
-//   return context;
-// };
+  return context;
+};
 
 export const useGlobalValue = () => {
   const context = useContext(GlobalDataContext);

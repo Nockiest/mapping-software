@@ -10,8 +10,15 @@ export const drawDot: (
     radius: number,
     color: string
   ) => void = (ctx, x, y, radius, color) => {
+    if (!ctx){
+      console.trace()
+      throw new Error('ctx not defined')
+      return
+    }
+    // console.trace(ctx, ctx.rect)
     // Draw based on lineType
     if (settings.value.lineType === "rounded") {
+       
       ctx.arc(x, y, radius / 2, 0, 2 * Math.PI);
     } else if (settings.value.lineType === "squared") {
       ctx.rect(x - radius / 2, y - radius / 2, radius, radius);
