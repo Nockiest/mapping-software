@@ -17,6 +17,7 @@ import {
   Grid,
 } from '@mui/material'; // Import Material-UI components
 import { theme } from '../theme/theme';
+import ColorPicker from './settingsComponents/ColorPicker';
 
 const DrawingLayerSettings = () => {
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -73,14 +74,20 @@ const DrawingLayerSettings = () => {
       {/* First Column - Color Settings and Bucket Fill */}
       <Grid item xs={2}>
         <Box>
-          <InputLabel htmlFor="color"   sx={{ color: theme.palette.text.primary,}}>Color:</InputLabel>
-          <Input
-            id="color"
+      {/* <InputLabel htmlFor="color"   sx={{ color: theme.palette.text.primary,}}>Color:</InputLabel> */}
+          <ColorPicker value={settings.value.color} handleColorChange={handleColorChange} customText='Color:'/>
+          {/* <Input
             type="color"
             value={settings.value.color}
-
             onChange={handleColorChange}
-          />
+            sx={{
+              appearance: 'none',
+              width: '32px',
+              height: '24px',
+            
+              marginRight: '8px', // Adjust spacing as needed
+            }}
+          /> */}
           <FavoriteColorLister
             handleColorClick={handleColorClick}
             colorList={settings.value.popularColors}

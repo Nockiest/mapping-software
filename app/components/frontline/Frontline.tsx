@@ -155,9 +155,7 @@ const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
 
   return (
     <div className="absolute top-0">
-      {idNum}
-      <br />
-      {frontLineInfo?.idNum}
+       
       {frontLineInfo?.points.map((point, index) => (
         <Point
           key={index}

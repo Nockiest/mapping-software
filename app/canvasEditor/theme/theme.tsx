@@ -45,6 +45,43 @@ export const theme = createTheme({
           color: "#FFFFFF", // White color for the rail
         }
       }
-    }
-  }
+    },
+    MuiInput: {
+      styleOverrides: {
+        color: {
+          appearance: 'none',
+          width: '24px',
+          height: '24px',
+          borderRadius: '50%',
+          //border: '1px solid #ccc',
+          //boxShadow: '0 0 5px rgba(0, 0, 0, 0.1)',
+          marginRight: '8px', // Adjust spacing as needed
+        },
+      },
+    },
+  },
+  MuiButton: {
+    styleOverrides: {
+      root: {
+        margin: '16px', // Adjust the margin as needed
+      },
+    },
+  },
+  MuiSelect: {
+    styleOverrides: {
+      icon: {
+        color: 'black', // Set the color of the dropdown icon
+      },
+    },
+  },
+  MuiMenuItem: {
+    styleOverrides: {
+      root: {
+        '&$selected': {
+          color: 'black', // Set the color of the selected (active) item text
+        },
+      },
+    },
+  },
+ 
 });

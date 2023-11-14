@@ -1,6 +1,8 @@
 import React from 'react'
 import { settings } from '@/app/canvasEditor/Signals'
 import { Color } from '@/public/types/OtherTypes'
+import { Button } from '@mui/material';
+import { theme } from '@/app/canvasEditor/theme/theme';
 
 interface ColorRectangleProps {
     color: Color;
@@ -44,7 +46,7 @@ const FavoriteColorLister: React.FC<FavoriteColorProps> = ({ handleColorClick, c
     return (
       <div style={{ display: 'flex', gap: '5px' }}>
           {  !colorList.includes(newColor) &&
-        <button className="border-black-1 bg-black text-white"onClick={()=> {colorList.push(newColor)}}>Save Color to Favorites</button>}  
+        <Button className="border-black-1 " sx={{color:theme.palette.text.primary, backgroundColor:theme.palette.secondary.main}} onClick={()=> {colorList.push(newColor)}}>Save Color to Favorites</Button>}  
 
         {colorList.map((color, index) => (
           <ColorRectangle key={index} color={color} colorList={colorList} onClick={() => handleColorClick(color)} />

@@ -18,6 +18,7 @@ import {
   Grid
 } from '@mui/material'; // Import MUI components
 import { theme } from '../theme/theme';
+import ColorPicker from './settingsComponents/ColorPicker';
 
 const FrontlineLayerSettings = () => {
   const [insertionPointIndex, setEditedPointNum] = useState(frontLineSettings.value.insertionPointIndex);
@@ -111,19 +112,21 @@ const FrontlineLayerSettings = () => {
   return (
     <Grid container spacing={1}>
     <Grid item xs={3}>
+    <ColorPicker value={frontLineSettings.value.frontLineColor} handleColorChange={handleCurFrontlineColorChange} customText={'front line color'} />
       <FormControl>
+        
         <InputLabel style={{ color: 'white' }}>
           Set insertion index{' '}
           {frontLineSettings.value.insertionPointIndex}
         </InputLabel>
-          <Slider
-            min={-1}
-            defaultValue={-1}
-            max={maxEndPointNumValue - 1}
-            onChange={handleEndFrontLineIndexChange}
-            valueLabelDisplay="auto"
-            marks
-          />
+        <Slider
+          min={-1}
+          defaultValue={-1}
+          max={maxEndPointNumValue - 1}
+          onChange={handleEndFrontLineIndexChange}
+          valueLabelDisplay="auto"
+          marks
+        />
       </FormControl>
       <br />
       <br />
@@ -142,22 +145,15 @@ const FrontlineLayerSettings = () => {
           valueLabelDisplay="auto"
         />
       </FormControl>
-      <FormControl>
-        <InputLabel style={{ color: 'white' }}>
-          Set curFrontline color
-        </InputLabel>
-        <Input
-          type="color"
-          value={frontLineSettings.value.frontLineColor}
-          onChange={handleCurFrontlineColorChange}
-        />
-      </FormControl>
+      <br />
+    
+       
     </Grid>
 
     <Grid item xs={3}>
-    <InputLabel style={{ color: 'white' }}>
-          Choose Active Layer:
-        </InputLabel>
+      <InputLabel style={{ color: 'white' }}>
+            Choose Active Layer:
+      </InputLabel>
         <Select
           onChange={handleLayerChange}
           value={
@@ -207,7 +203,8 @@ const FrontlineLayerSettings = () => {
       >
         New FrontLine
       </Button>
-      <br />
+      <br  />
+      <br  />
       {frontLineSettings.value.activeFrontline && (
         <Button
           onClick={deleteCurrentFrontLine}
@@ -219,15 +216,13 @@ const FrontlineLayerSettings = () => {
           Delete Current FrontLine
         </Button>
       )}
-      <br />
-      <FormControl>
-        
-      </FormControl>
-      <br />
    
-    G</Grid>
+   
+    </Grid>
   </Grid>
   );
 };
 
 export default FrontlineLayerSettings;
+ 
+ 
