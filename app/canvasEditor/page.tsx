@@ -132,14 +132,14 @@ const Page: React.FC = () => {
 
       <CanvasSettings />
       <DrawingCanvas />
-      <LayerSplicer
+      {/* <LayerSplicer
         layers={[
           { canvasRef: canvasRef, zIndex: 20 },
           { canvasRef: backgroundCanvasRef, zIndex: 10 },
           { canvasRef: frontlineCanvasRef, zIndex: 30 },
           { canvasRef: markerCanvasRef, zIndex: 40 },
         ]}
-      />
+      /> */}
       <Timeline />
     </>
   );

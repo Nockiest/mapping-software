@@ -20,7 +20,7 @@ export type MarkerType = {
   customStyling?:MarkerSettings;
   id:string
 };
-export type LayerNames =  "draw" | "marker" | "background"| "frontLine"
+export type LayerNames =  "draw" | "marker" | "background"| "frontLine"| 'compiled'
 
 export type MarkerSettings = {
   width:number,  

@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import ReusableLayer from './ResuableLayer';
 import { settings } from '@/app/canvasEditor/Signals';
+import { useCanvas } from '@/app/canvasEditor/CanvasContext';
 
 interface CanvasLayer {
   canvasRef: React.RefObject<HTMLCanvasElement>;
@@ -13,10 +14,10 @@ interface LayerSplicerProps {
 }
 
 const LayerSplicer: React.FC<LayerSplicerProps> = ({ layers }) => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
+  // const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const {compiledCanvasRef} = useCanvas()
   useEffect(() => {
-    const canvas = canvasRef.current;
+    const canvas = compiledCanvasRef.current;
     const ctx = canvas?.getContext('2d');
 
     if (!canvas || !ctx) return;
@@ -37,7 +38,7 @@ const LayerSplicer: React.FC<LayerSplicerProps> = ({ layers }) => {
   }, [layers]);
 
   return  <div className='relative h-600 flex justify-center'>
-  <ReusableLayer canvasRef={canvasRef} layerName={settings.value.activeLayer} />
+  <ReusableLayer canvasRef={compiledCanvasRef} layerName= 'compiled'  />
   </div> 
 };
 

@@ -53,7 +53,7 @@ const ActiveLayerSettings: React.FC = () => {
           MenuItem: CustomMenuItem, // Use the custom MenuItem to override styles
         }}
       >
-        {['draw', 'marker', 'background', 'frontLine'].map((option) => (
+        {['draw', 'marker', 'background', 'frontLine', 'compiled'].map((option) => (
           <MenuItem
             key={option}
             value={option}

@@ -63,9 +63,9 @@ const CanvasSettings = () => {
             <MarkerEditorSettings changeSettings={changeSettings} />
           ) : settings.value.activeLayer === 'background' ? (
             <BackgroundLayerSettings />
-          ) : (
+          ) :  settings.value.activeLayer === 'frontLine' ?(
             <FrontlineLayerSettings />
-          )}
+          ): <></>}
         </Paper>
       </Grid>
     </Grid>

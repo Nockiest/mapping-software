@@ -15,7 +15,15 @@ import FronlineLayer from "./layers/FronlineLayer";
 import { settings } from "./Signals";
  
 const DrawingCanvas: React.FC  = ( ) => {
-  const{ canvasRef, frontlineCanvasRef, markerCanvasRef,   } = useCanvas( );
+  const{ canvasRef, frontlineCanvasRef, markerCanvasRef, backgroundCanvasRef  } = useCanvas( );
+  const layers = [
+    { canvasRef: canvasRef, zIndex: 20 },
+    { canvasRef: backgroundCanvasRef, zIndex: 10 },
+    { canvasRef: frontlineCanvasRef, zIndex: 30 },
+    { canvasRef: markerCanvasRef, zIndex: 40 },
+    // Add more objects as needed
+  ];
+  const filteredLayers = layers.filter((layer) => layer.canvasRef)
   // const { backgroundCanvasRef   } = useContext(BackgroundContext);
   return (
    
@@ -24,14 +32,7 @@ const DrawingCanvas: React.FC  = ( ) => {
       <UnitMarkerLayer    />
       <FronlineLayer  />
       <BackgroundImageLayer   />
-      {/* <LayerSplicer
-        layers={[
-          { canvasRef: canvasRef, zIndex: 20 },
-          { canvasRef: backgroundCanvasRef, zIndex: 10 },
-          { canvasRef: frontlineCanvasRef, zIndex: 30 },
-          { canvasRef: markerCanvasRef, zIndex: 40 },
-        ]}
-      /> */}
+      <LayerSplicer layers={filteredLayers} />
     </div>
    
   

@@ -1,4 +1,11 @@
-import { useState, useRef, useEffect, useReducer, useContext, Reducer } from "react";
+import {
+  useState,
+  useRef,
+  useEffect,
+  useReducer,
+  useContext,
+  Reducer,
+} from "react";
 import eraseLine from "@/app/components/drawing/Eraser";
 import CanvasToImage from "@/app/components/utility/CanvasToImg";
 import { Vector2 } from "@/public/types/GeometryTypes";
@@ -24,14 +31,14 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
   switch (action.type) {
     case "DRAW":
       const drawPayload = action.payload as DrawPayload;
-      console.log(drawPayload)
-    drawPayload.drawFunction(
-      drawPayload.drawArgs?.ctx,
-      drawPayload.drawArgs.x,
-      drawPayload.drawArgs.y,
-      drawPayload.drawArgs.radius,
-      drawPayload.drawArgs.color
-    );
+      console.log(drawPayload);
+      drawPayload.drawFunction(
+        drawPayload.drawArgs?.ctx,
+        drawPayload.drawArgs.x,
+        drawPayload.drawArgs.y,
+        drawPayload.drawArgs.radius,
+        drawPayload.drawArgs.color
+      );
       return DrawingState.Drawing;
 
     case "ERASE":
@@ -44,10 +51,12 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
       return DrawingState.Idle;
 
     case "ENTER_BUCKET_MODE":
-      return DrawingState.BucketFill === state ? DrawingState.Idle : DrawingState.BucketFill;
+      return DrawingState.BucketFill === state
+        ? DrawingState.Idle
+        : DrawingState.BucketFill;
 
     default:
-      console.error("INVALID ACTION: "  );
+      console.error("INVALID ACTION: ");
       return state;
   }
 };
@@ -56,7 +65,9 @@ const DrawingLayer: React.FC = () => {
   const { canvasRef } = useCanvas();
   const mousePosition = useContext(MousePositionContext);
   const [lastMousePos, setLastMousePos] = useState<Vector2 | null>(null);
-  const [canvasState, dispatchState] = useReducer<Reducer<DrawingState, Action>>(reducer, DrawingState.Idle);
+  const [canvasState, dispatchState] = useReducer<
+    Reducer<DrawingState, Action>
+  >(reducer, DrawingState.Idle);
   const { color, radius } = settings.value;
   const isActive = settings.value.activeLayer === "draw";
 
@@ -71,8 +82,10 @@ const DrawingLayer: React.FC = () => {
   // }, [])
 
   useEffect(() => {
-    const {ctx, canvas} = getCtxFromRef( canvasRef )
-    if(!ctx||!canvas||!canvasRef){return}
+    const { ctx, canvas } = getCtxFromRef(canvasRef);
+    if (!ctx || !canvas || !canvasRef) {
+      return;
+    }
     const handleMouseDown = (e: MouseEvent) => {
       console.log("MOUSE DOWN");
       if (settings.value.activeLayer !== "draw") {
@@ -81,7 +94,7 @@ const DrawingLayer: React.FC = () => {
 
       const x = e.offsetX;
       const y = e.offsetY;
-      e.preventDefault()
+      e.preventDefault();
       if (e.button === 2) {
         const erasePayload: ErasePayload = {
           eraseFunction: eraseLine,
@@ -108,7 +121,6 @@ const DrawingLayer: React.FC = () => {
           dispatchState({ type: "DRAW", payload: drawPayload });
           if (ctx) {
             ctx.beginPath();
- 
 
             ctx.closePath(); //draw a dot
             setLastMousePos({ x, y });
@@ -135,7 +147,6 @@ const DrawingLayer: React.FC = () => {
       } else if (canvasState === DrawingState.Drawing) {
         // Left mouse button is pressed, draw
         if (ctx && lastMousePos) {
-          
           drawLineWithShape(
             ctx,
             lastMousePos,
@@ -150,7 +161,7 @@ const DrawingLayer: React.FC = () => {
     };
 
     const handleMouseUp = (e: React.MouseEvent) => {
-      e.preventDefault()
+      e.preventDefault();
       if (settings.value.activeLayer !== "draw") {
         return;
       }
@@ -180,9 +191,8 @@ const DrawingLayer: React.FC = () => {
     dispatchState,
   ]);
 
- 
   return (
-    <> 
+    <>
       {canvasRef && (
         <ReusableLayer
           canvasRef={canvasRef}
@@ -195,7 +205,7 @@ const DrawingLayer: React.FC = () => {
           }}
         />
       )}
-    </ >
+    </>
   );
 };
 

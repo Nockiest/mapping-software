@@ -16,7 +16,7 @@ export const settings: Settings = signal({
     popularMarkerColors: [],
   },
   popularColors: [],
-  canvasZindexes: { marker: 10, draw: 10, background: 0, frontLine: 10 },
+  canvasZindexes: { marker: 10, draw: 10, background: 0, frontLine: 10, compiled:0 },
 });
 
 export const frontLineSettings: FrontLineSettings = signal({

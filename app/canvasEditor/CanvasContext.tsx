@@ -10,6 +10,7 @@ export interface CanvasContextType {
   markerCanvasRef: React.RefObject<HTMLCanvasElement | null>;
   frontlineCanvasRef: React.RefObject<HTMLCanvasElement | null>;
   backgroundCanvasRef:  React.RefObject<HTMLCanvasElement | null>;
+  compiledCanvasRef:React.RefObject<HTMLCanvasElement | null>;
   frontLines: FrontlineData[], 
   setFrontlines:  React.Dispatch<React.SetStateAction<FrontlineData[]>>
 }
@@ -42,6 +43,7 @@ export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const canvasRef = useRef<HTMLCanvasElement | undefined>(null);
   const markerCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const frontlineCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const compiledCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [frontLines, setFrontlines] = useState<FrontlineData[]>([])
   const backgroundCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [globalData, setGlobalData] = useState<GlobalDataType>({ mouseDownTime: 0 });
@@ -51,6 +53,7 @@ export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     markerCanvasRef,
     frontlineCanvasRef,
     backgroundCanvasRef,
+    compiledCanvasRef,
     frontLines, 
     setFrontlines
   };
