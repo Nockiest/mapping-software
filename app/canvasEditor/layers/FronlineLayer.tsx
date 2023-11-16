@@ -72,7 +72,7 @@ const FrontlineLayer = () => {
 
   useEffect(() => {
     renderFrontLines()
-  },   )
+  },    [frontlineCanvasRef, mousePosition] )
 
   useEffect(() => {
     const canvas = frontlineCanvasRef.current;
