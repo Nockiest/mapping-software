@@ -6,9 +6,9 @@ import CanvasToImage from "../components/utility/CanvasToImg";
 import drawLineOnCanvas from "@/app/components/drawing/LineDrawer";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import drawImageToBackground from "@/app/components/utility/DrawBackgroundCanvasImg";
-import BackgroundImageLayer from "./layers/BackgroundImageLayer";
+import BackgroundImageLayer from "./layers/backgroundImageLayer";
 import {   useCanvas } from "./CanvasContext";
-import DrawingLayer from "./layers/DrawingLayer";
+import DrawingLayer from "./layers/drawingLayer";
 import LayerSplicer from "../components/utility/LayerSplicer";
 import UnitMarkerLayer from "./layers/UnitMarkerLayer";
 import FronlineLayer from "./layers/FronlineLayer";
@@ -28,10 +28,10 @@ const DrawingCanvas: React.FC  = ( ) => {
   return (
    
     <div className={`relative h-600  w-${settings.value.canvasSize}  flex items-center justify-center `}  > 
-      <DrawingLayer    />
+      {/* <DrawingLayer    /> */}
       <UnitMarkerLayer    />
       <FronlineLayer  />
-      <BackgroundImageLayer   />
+      {/* <BackgroundImageLayer   /> */}
       <LayerSplicer layers={filteredLayers} />
     </div>
    

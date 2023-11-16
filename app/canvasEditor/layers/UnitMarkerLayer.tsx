@@ -14,7 +14,7 @@ import ReusableLayer from "@/app/components/utility/ResuableLayer";
 import { Signal } from "@preact/signals";
 import { getCtxFromRef } from "@/app/components/utility/otherUtils";
 import { uuid } from "uuidv4";
-
+ 
  
 enum MarkerLayerState {
   Idle,
@@ -134,7 +134,6 @@ const UnitMarkerLayer: React.FC = () => {
     <>
       <ReusableLayer layerName="marker" canvasRef={markerCanvasRef}>
         
-        
         {markers.value.map((marker, index) => (
           <Marker
             key={index}
@@ -164,10 +163,16 @@ export const drawMarkersOnCanvas = (
   ctx.clearRect(0, 0, settings.value.canvasSize.x, settings.value.canvasSize.y);
 
   markers.value.forEach((marker, index) => {
-    const imageUrl =
-      marker?.customStyling?.imageURL !== null && marker?.customStyling?.imageURL !== undefined
-        ? URL.createObjectURL(marker.customStyling.imageURL)
-        : null;
+    console.log(marker?.customStyling?.imageURL);
+
+      const imageUrl =
+          marker?.customStyling?.imageURL
+              ? marker.customStyling.imageURL instanceof File
+                  ? URL.createObjectURL(marker.customStyling.imageURL)
+                  : marker.customStyling.imageURL
+              : null;
+   
+   
 
     const usedWidth = marker.customStyling?.width || MarkerDefaultSettings.width;
     const usedTextColor = marker.customStyling?.textColor || MarkerDefaultSettings.textColor;

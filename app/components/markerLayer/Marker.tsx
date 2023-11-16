@@ -2,7 +2,7 @@
 import { MousePositionContext } from "@/app/canvasEditor/page";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { Color, MarkerSettings, MarkerType } from "@/public/types/OtherTypes";
-import { useState, useContext, useEffect,useRef } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { markers, settings } from "@/app/canvasEditor/Signals";
 import Image from "next/image";
 import { signal } from "@preact/signals";
@@ -14,18 +14,21 @@ type MarkerProps = MarkerType & {
   initialPosition: Vector2;
   shouldUpdateOnSettingsChange?: boolean;
   dragHandler?: (
-    position:Vector2,
+    position: Vector2,
     isDragging: boolean,
     currentPosition: Vector2,
     dragStartPosition: Vector2
   ) => Vector2;
 };
-export  const MarkerDefaultSettings: Omit<MarkerSettings, `popularMarkerColors`> = {
+export const MarkerDefaultSettings: Omit<
+  MarkerSettings,
+  `popularMarkerColors`
+> = {
   width: 5,
   color: `#000000`,
   textColor: `#000000`,
-  topValue: '',
-  bottomValue: '',
+  topValue: "",
+  bottomValue: "",
   imageURL: null,
 };
 
@@ -37,19 +40,23 @@ const Marker: React.FC<MarkerProps> = ({
   shouldUpdateOnSettingsChange = false,
   dragHandler,
   customStyling,
-  id
+  id,
 }) => {
-  const [currentPosition, setCurrentPosition] = useState<Vector2>(initialPosition);
+  const [currentPosition, setCurrentPosition] =
+    useState<Vector2>(initialPosition);
   const [canRemove, setCanRemove] = useState<boolean>(false);
-  const [initialMarkerSettings] = useState<MarkerSettings>({ ...customStyling });
-  const usedSettings = shouldUpdateOnSettingsChange ? newMarkerSettings.value : initialMarkerSettings;
-
-  
-  const imageUrl =
-  usedSettings.imageURL? usedSettings.imageURL instanceof File
-    ? URL.createObjectURL(usedSettings.imageURL)
-    : usedSettings.imageURL : MarkerDefaultSettings.imageURL;
-
+  const [initialMarkerSettings] = useState<MarkerSettings>({
+    ...customStyling,
+  });
+  const usedSettings = shouldUpdateOnSettingsChange
+    ? newMarkerSettings.value
+    : initialMarkerSettings;
+ 
+  const imageUrl = usedSettings.imageURL
+    ? usedSettings.imageURL instanceof File
+      ? URL.createObjectURL(usedSettings.imageURL)
+      : usedSettings.imageURL
+    : MarkerDefaultSettings.imageURL;
 
   const mergedSettings = { ...MarkerDefaultSettings, ...usedSettings };
 
@@ -59,25 +66,28 @@ const Marker: React.FC<MarkerProps> = ({
       //   x: position.x - topLeftOffset.x + mergedSettings.width,
       //   y: position.y - topLeftOffset.y + mergedSettings.width,
       // };
-        
-  
+
       // Call dragHandler with the updated position
-      const updatedPosition = dragHandler(position, false, topLeftOffset, settings.value.canvasSize );
+      const updatedPosition = dragHandler(
+        position,
+        false,
+        topLeftOffset,
+        settings.value.canvasSize
+      );
       setCurrentPosition(updatedPosition);
       // Update the position of the marker in markers.value
       const updatedMarkers = markers.value.map((marker) =>
         marker.id === id ? { ...marker, position: updatedPosition } : marker
       );
-  
+
       // Set the updated markers array
       markers.value = updatedMarkers;
     }
   };
-  
 
-  const handleContextMenu = (e: React.MouseEvent ) => {
+  const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (settings.value.activeLayer !== 'marker') {
+    if (settings.value.activeLayer !== "marker") {
       return;
     }
     if (canRemove) {
@@ -96,20 +106,20 @@ const Marker: React.FC<MarkerProps> = ({
     height: `${mergedSettings.width}px`,
     fontSize: `${mergedSettings.width / 4}px`,
     backgroundColor: mergedSettings.color,
-    backgroundImage: mergedSettings.imageURL ? `url(${imageUrl})` : 'none',
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
+    backgroundImage: mergedSettings.imageURL ? `url(${imageUrl})` : "none",
+    backgroundPosition: "center",
+    backgroundSize: "cover",
   };
 
   const textBackgroundStyle: React.CSSProperties = {
-    textAlign: 'center',
-    padding: '5px',
-    borderRadius: '5px',
-    userSelect: 'none',
+    textAlign: "center",
+    padding: "5px",
+    borderRadius: "5px",
+    userSelect: "none",
   };
 
   const handleDelete = () => {
-    console.log('callled', id)
+    console.log("callled", id);
     const updatedMarkers = markers.value.filter((marker) => marker.id !== id);
     markers.value = updatedMarkers;
   };
@@ -123,13 +133,16 @@ const Marker: React.FC<MarkerProps> = ({
       className="marker"
       onDelete={handleDelete}
     >
-      <p style={{ ...textBackgroundStyle, top: '-5px' }}>{mergedSettings.topValue}</p>
+      <p style={{ ...textBackgroundStyle, top: "-5px" }}>
+        {mergedSettings.topValue}
+      </p>
       {mergedSettings.width > 20 && (
-        <p style={{ ...textBackgroundStyle, bottom: '-5px' }}>{mergedSettings.bottomValue}</p>
+        <p style={{ ...textBackgroundStyle, bottom: "-5px" }}>
+          {mergedSettings.bottomValue}
+        </p>
       )}
     </Point>
   );
 };
 
 export default Marker;
- 

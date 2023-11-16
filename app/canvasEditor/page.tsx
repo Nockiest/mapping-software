@@ -124,22 +124,13 @@ const Page: React.FC = () => {
           layer: settings.value.activeLayer,
           mousePosition: mousePosition,
           mousDownTime: elapsedTime,
-          numMarkers:markers.value.length
+          // numMarkers:markers.value.length
           // activeFrontLine: frontLineSettings.value.activeFrontline?.idNum,
           // GlobalData: GlobalData.mouseDownTime,
         }}
       />
-
       <CanvasSettings />
       <DrawingCanvas />
-      {/* <LayerSplicer
-        layers={[
-          { canvasRef: canvasRef, zIndex: 20 },
-          { canvasRef: backgroundCanvasRef, zIndex: 10 },
-          { canvasRef: frontlineCanvasRef, zIndex: 30 },
-          { canvasRef: markerCanvasRef, zIndex: 40 },
-        ]}
-      /> */}
       <Timeline />
     </>
   );
@@ -159,3 +150,11 @@ const App: React.FC = () => {
 };
 
 export default App;
+   {/* <LayerSplicer
+        layers={[
+          { canvasRef: canvasRef, zIndex: 20 },
+          { canvasRef: backgroundCanvasRef, zIndex: 10 },
+          { canvasRef: frontlineCanvasRef, zIndex: 30 },
+          { canvasRef: markerCanvasRef, zIndex: 40 },
+        ]}
+      /> */}
