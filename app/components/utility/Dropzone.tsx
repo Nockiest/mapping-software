@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { DropzoneOptions, useDropzone } from "react-dropzone";
 import Downloader from "./Downloader";
-import getExtension from "../utils/ExtensionExtractor";
+// import getExtension from "../utils/ExtensionExtractor";
 // Define the types for the styles
 interface ImageUploaderProps {
   dropzoneStyles: React.CSSProperties;
@@ -14,16 +14,16 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ dropzoneStyles, imageStyl
   const [fileExtension, setFileExtension] = useState<string | null>(null);
 
   const onDrop = (acceptedFiles: File[]) => {
-    const file = acceptedFiles[0];
-  
-    if (file) {
-      setImage(file);
-  
-      // Extract the file extension
-      const extension = getExtension(file)// file.name.split('.').pop() ?? null;
-      console.log("EXTENSION ", extension)
-      setFileExtension(extension);
-    }
+  // const file = acceptedFiles[0];
+
+  // if (file) {
+  //   setImage(file);
+
+  //   // Extract the file extension
+  //   const extension = getExtension(file)// file.name.split('.').pop() ?? null;
+  //   console.log("EXTENSION ", extension)
+  //   setFileExtension(extension);
+  // }
   };
   
   const dropzoneOptions: DropzoneOptions = {
