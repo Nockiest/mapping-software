@@ -9,9 +9,14 @@ import { Color } from "@/public/types/OtherTypes";
 import { FrontlineData } from "@/app/canvasEditor/layers/FronlineLayer";
 import { findFrontLineObj } from "../utility/otherUtils";
 import { v4 as uuidv4 } from "uuid";
-const Frontline: React.FC<FrontlineData> = ({ idNum, topLeftPoint }) => {
-  const frontLineActive =
-    frontLineSettings.value.activeFrontline.idNum === idNum;
+
+export type FrontlineProps = {
+  idNum: string;
+  topLeftPoint: Vector2
+}
+const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
+ 
+  const frontLineActive = frontLineSettings.value.activeFrontline?.idNum? frontLineSettings.value.activeFrontline.idNum === idNum: false;
   const frontLineInfo = findFrontLineObj(idNum)  
   const { frontlineCanvasRef } = useCanvas();
   const controlPointRadius = frontLineSettings.value.controlPointRadius

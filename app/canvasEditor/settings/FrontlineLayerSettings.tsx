@@ -25,8 +25,8 @@ const FrontlineLayerSettings = () => {
   const [maxEndPointNumValue, setMaxEndPointNumValue] = useState(0);
 
   useEffect(() => {
-    const activeFrontLine = frontLineSettings.value.activeFrontline;
-    setMaxEndPointNumValue(activeFrontLine?.points.length || 0);
+    const activeFrontline = frontLineSettings.value.activeFrontline;
+    setMaxEndPointNumValue(activeFrontline?.points.length || 0);
   } );
 
   useEffect(() => {

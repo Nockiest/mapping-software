@@ -68,12 +68,20 @@ function hexToRGBA(hex: string): Array<number> {
   return [red, green, blue, 255];
 }
 
-function getColorAtPixel(ctx: CanvasRenderingContext2D,data: Uint8ClampedArray, x: number, y: number,  ): Array<Number> {
+function getColorAtPixel(ctx: CanvasRenderingContext2D, data: Uint8ClampedArray, x: number, y: number): string {
   const pixelIndex = (y * ctx.canvas.width + x) * 4;
-  return [data[pixelIndex], data[pixelIndex + 1], data[pixelIndex + 2], data[pixelIndex + 3]];
+  const r = data[pixelIndex];
+  const g = data[pixelIndex + 1];
+  const b = data[pixelIndex + 2];
+  const a = data[pixelIndex + 3];
+
+  // Convert RGBA values to hex color
+  const hexColor = `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+
+  return hexColor;
 }
 
-function areColorsEqual(color1: Color, color2: Color): boolean {
+function areColorsEqual(color1: any, color2: any): boolean {
   return color1[0] === color2[0] && color1[1] === color2[1] && color1[2] === color2[2] && color1[3] === color2[3];
 }
 

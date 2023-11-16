@@ -39,14 +39,14 @@ const Page: React.FC = () => {
   );
   const [elapsedTime, setElapsedTime] = useState<number>(0);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleMouseDown = (e:  MouseEvent) => {
     if (e.button === 2) {
       e.preventDefault();
     }
     setMouseDownTimeStamp(Date.now());
   };
 
-  const handleMouseUp = (e: React.MouseEvent) => {
+  const handleMouseUp = (e:  MouseEvent) => {
     e.preventDefault();
 
     // Using requestAnimationFrame to delay the execution until the next frame

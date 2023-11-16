@@ -89,11 +89,11 @@ const Point: React.FC<PointProps> = ({
   useEffect(() => {
     if (isDragging) {
       window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mouseup", handleMouseUp);
+      // window.addEventListener("mouseup", handleMouseUp);
     }
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
+      // window.removeEventListener("mouseup", handleMouseUp);
     };
   }, [isDragging]);
 
@@ -114,6 +114,7 @@ const Point: React.FC<PointProps> = ({
       }}
       className={className}
       onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
       onContextMenu={handleContextMenu}
     >
       {children}

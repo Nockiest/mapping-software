@@ -19,10 +19,10 @@ export const settings: Settings = signal({
   canvasZindexes: { marker: 10, draw: 10, background: 0, frontLine: 10, compiled:0 },
 });
 
-export const frontLineSettings: FrontLineSettings = signal({
+export const frontLineSettings:  FrontLineSettings  = signal({
   insertionPointIndex: -1,
   frontLineColor: "#0000ff",
-  activeFrontLine: null,
+  activeFrontline: null,
   frontLines: [],
   controlPointRadius: 5
 });

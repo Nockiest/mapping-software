@@ -125,7 +125,7 @@ const UnitMarkerLayer: React.FC = () => {
       canvas.addEventListener("mousedown", handleMouseDown);
     }
     return () => {
-      canvas.removeEventListener("mousedown", handleMouseDown);
+      canvas?.removeEventListener("mousedown", handleMouseDown);
       // canvas.removeEventListener('dblclick', handleMarkerDoubleClick);
     };
   }, [markerCanvasRef, markers.value, mousePosition, settings, markerLayerState]);
@@ -165,12 +165,17 @@ export const drawMarkersOnCanvas = (
   markers.value.forEach((marker, index) => {
      
 
-      const imageUrl =
-          marker?.customStyling?.imageURL
-              ? marker.customStyling.imageURL instanceof File
-                  ? URL.createObjectURL(marker.customStyling.imageURL)
-                  : marker.customStyling.imageURL
-              : null;
+    const imageUrl =
+
+    marker?.customStyling?.imageURL
+    ? typeof marker.customStyling.imageURL === 'object'?  marker.customStyling.imageURL : null:
+      null;
+    // marker?.customStyling?.imageURL
+    //     ? typeof marker.customStyling.imageURL === 'object' && marker.customStyling.imageURL instanceof File
+    //         ? URL.createObjectURL(marker.customStyling.imageURL)
+    //         : marker.customStyling.imageURL
+    //     : null;
+
    
    
 

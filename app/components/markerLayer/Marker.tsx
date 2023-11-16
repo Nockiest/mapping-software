@@ -1,7 +1,7 @@
 // import { CanvasSettingsContext } from "@/app/canvasEditor/CanvasContext";
-import { MousePositionContext } from "@/app/canvasEditor/page";
+import { MousePositionContext } from "@/app/canvasEditor/MouseContext";
 import { Vector2 } from "@/public/types/GeometryTypes";
-import { Color, MarkerSettings, MarkerType } from "@/public/types/OtherTypes";
+import { Color, MarkerSettings, MarkerType, PositionedText } from "@/public/types/OtherTypes";
 import { useState, useContext, useEffect, useRef } from "react";
 import { markers, settings } from "@/app/canvasEditor/Signals";
 import Image from "next/image";
@@ -10,9 +10,12 @@ import { newMarkerSettings } from "@/app/canvasEditor/settings/MarkerEditorSetti
 import Point from "../frontline/Point";
 import { position } from "html2canvas/dist/types/css/property-descriptors/position";
 
-type MarkerProps = MarkerType & {
+type MarkerProps = PositionedText &   {
+  topLeftOffset: Vector2;
   initialPosition: Vector2;
   shouldUpdateOnSettingsChange?: boolean;
+  customStyling?: MarkerSettings;
+  id: string;
   dragHandler?: (
     position: Vector2,
     isDragging: boolean,
@@ -45,18 +48,23 @@ const Marker: React.FC<MarkerProps> = ({
   const [currentPosition, setCurrentPosition] =
     useState<Vector2>(initialPosition);
   const [canRemove, setCanRemove] = useState<boolean>(false);
-  const [initialMarkerSettings] = useState<MarkerSettings>({
-    ...customStyling,
-  });
-  const usedSettings = shouldUpdateOnSettingsChange
-    ? newMarkerSettings.value
-    : initialMarkerSettings;
+  const [initialMarkerSettings] = useState(null)
+  // = useState<MarkerSettings>({
+  //   ...customStyling,
+  // });
+  const usedSettings = newMarkerSettings.value
+  // shouldUpdateOnSettingsChange
+  //   ? newMarkerSettings.value
+  //   : initialMarkerSettings;
  
   const imageUrl = usedSettings.imageURL
-    ? usedSettings.imageURL instanceof File
-      ? URL.createObjectURL(usedSettings.imageURL)
-      : usedSettings.imageURL
-    : MarkerDefaultSettings.imageURL;
+  ? typeof usedSettings.imageURL === 'object'?  usedSettings.imageURL : null:
+    null;
+  // usedSettings.imageURL
+    // ? usedSettings.imageURL instanceof File
+    //   ? URL.createObjectURL(usedSettings.imageURL)
+    //   : usedSettings.imageURL
+    // : MarkerDefaultSettings.imageURL;
 
   const mergedSettings = { ...MarkerDefaultSettings, ...usedSettings };
 
@@ -132,6 +140,7 @@ const Marker: React.FC<MarkerProps> = ({
       onDrag={(position) => handleMouseMove(position)}
       className="marker"
       onDelete={handleDelete}
+      id={id}
     >
       <p style={{ ...textBackgroundStyle, top: "-5px" }}>
         {mergedSettings.topValue}

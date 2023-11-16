@@ -3,7 +3,7 @@ import { LineEdge, Vector2 } from '@/public/types/GeometryTypes';
 import { getCtxFromRef } from '../utility/otherUtils';
 
 export type EraseArgs = {
-  canvasRef: React.RefObject<HTMLCanvasElement | null>;
+  canvasRef: React.RefObject<HTMLCanvasElement | null|undefined>;
   start: Vector2;
   end: Vector2;
   radius: number;

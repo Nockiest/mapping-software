@@ -3,7 +3,7 @@ import { LayerNames, Settings } from '@/public/types/OtherTypes';
 import {ReactNode, useEffect} from 'react';
 
 interface ReusableLayerProps {
-  canvasRef:  React.RefObject<HTMLCanvasElement | null>;
+  canvasRef:  React.RefObject<HTMLCanvasElement | null|undefined>;
   layerName: LayerNames  ;
   onLeftClick?: (e:React.MouseEvent) => void;
   onRightClick?: (e:React.MouseEvent) => void;
