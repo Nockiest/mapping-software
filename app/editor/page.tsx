@@ -1,7 +1,7 @@
 "use client"
  
 import React, { useState, useRef } from 'react';
-import getExtension from '../utils/ExtensionExtractor';
+// import getExtension from '../utils/ExtensionExtractor';
 import createDotOnImage from '../components/drawing/CanvasDotCreator';
 
 const ImageEditor = () => {
@@ -23,12 +23,12 @@ const ImageEditor = () => {
     };
   
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const selectedFile = e.target.files?.[0];
-      if (selectedFile) {
-        setImage(selectedFile);
-        loadImage(selectedFile);
-        setFileExtension(getExtension(selectedFile))
-      }
+      // const selectedFile = e.target.files?.[0];
+      // if (selectedFile) {
+      //   setImage(selectedFile);
+      //   loadImage(selectedFile);
+      //   setFileExtension(getExtension(selectedFile))
+      // }
     };
   
     const handleEdit = async (e: React.MouseEvent<HTMLCanvasElement>) => {
