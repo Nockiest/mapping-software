@@ -4,7 +4,7 @@ export const theme = createTheme({
   palette: {
     primary: {
       main: "#4CAF50", // Speed and efficiency green
-      darker: "#388E3C",
+      dark: "#388E3C",
     },
     secondary: {
       main: "#FFC107", // Amber for highlights and warnings
@@ -46,20 +46,19 @@ export const theme = createTheme({
         }
       }
     },
-    MuiInput: {
+  MuiInput: {
       styleOverrides: {
-        color: {
-          appearance: 'none',
-          width: '24px',
-          height: '24px',
-          borderRadius: '50%',
-          //border: '1px solid #ccc',
-          //boxShadow: '0 0 5px rgba(0, 0, 0, 0.1)',
-          marginRight: '8px', // Adjust spacing as needed
-        },
+        // color: 'red',
+        // appearance: 'none',
+        // width: '24px',
+        // height: '24px',
+        // borderRadius: '50%',
+        // //border: '1px solid #ccc',
+        // //boxShadow: '0 0 5px rgba(0, 0, 0, 0.1)',
+        // marginRight: '8px', // Adjust spacing as needed
       },
     },
-  },
+  
   MuiButton: {
     styleOverrides: {
       root: {
@@ -83,5 +82,5 @@ export const theme = createTheme({
       },
     },
   },
- 
+},
 });

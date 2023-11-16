@@ -3,7 +3,7 @@ import { CanvasSettingsType } from "../CanvasContext"; // CanvasSettingsContext,
 import { hexToRgb } from "@/app/components/utility/utils";
 import { settings } from "../Signals";
 import FavoriteColorLister from "@/app/components/settings/FavoriteColorLister";
-import { Color } from "@/public/types/OtherTypes";
+import { Color, Settings } from "@/public/types/OtherTypes";
 import { signal } from "@preact/signals";
 import Marker from "@/app/components/markerLayer/Marker";
 import { theme } from "../theme/theme";
@@ -12,8 +12,14 @@ import { Box, Typography, TextField, Button, Slider, InputAdornment, Input, Pape
  
 type UpdateMarkerSettingsCallback = (value: any) => void;
 export const newMarkerSettings = signal({ ...settings.value.markerSettings })
- 
-const MarkerEditorSettings = ({ changeSettings }) => {
+interface MarkerEditorSettingsProps {
+  changeSettings: <K extends keyof Settings['value']>(
+    property: K,
+    newValue: Settings['value'][K]
+  ) => void;
+}
+
+const MarkerEditorSettings: React.FC<MarkerEditorSettingsProps> = ({ changeSettings }) => {
   const [isDirty, setIsDirty] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -41,41 +47,56 @@ const MarkerEditorSettings = ({ changeSettings }) => {
     <Box display="flex">
       {/* First Column */}
       <Box
-       width="30%"
-       marginRight="2%"
-       backgroundColor={theme.palette.primary.darker}
-       padding="10px"
-       borderRadius="4px"
-      >
+          width="30%"
+          marginRight="2%"
+          bgcolor={theme.palette.primary.dark}
+          padding="10px"
+          borderRadius="4px"
+        >
         <Typography color="white">
           Marker Width: {newMarkerSettings.value.width}
         </Typography>
-         <Slider
-          value={newMarkerSettings.value.width}
+        <Slider
+          value={Array.isArray(newMarkerSettings.value.width) ? newMarkerSettings.value.width[0] : newMarkerSettings.value.width}
           min={10}
           max={60}
-          onChange={(e, value) => updateMarkerSettings(Math.max(1, value), 'width')}
+          onChange={(e, value) => {
+            const widthValue = Array.isArray(value) ? value[0] : value;
+            updateMarkerSettings(Math.max(1, widthValue), 'width');
+          }}
           sx={{
             color: theme.palette.secondary.main, // Set the color of the Slider
           }}
         />
 
+
         <Typography color="white">
           Marker Color: {newMarkerSettings.value.color}
         </Typography>
         <input type="color" value={newMarkerSettings.value.color} onChange={(e) => updateMarkerSettings(e.target.value, 'color')} />
-         
-        {/* <Input
-          type="color"
-          value={newMarkerSettings.value.color}
-          onChange={(e) => updateMarkerSettings(e.target.value, 'color')}
-          endAdornment={<InputAdornment position="end"><span>{newMarkerSettings.value.color}</span></InputAdornment>}
-          sx={{
-            color: theme.palette.secondary.main, // Set the color of the Slider
-          }}
-       /> */}
+      
         {/* Additional settings for the first column */}
-        <input type="file" ref={fileInputRef} onChange={(e) => updateMarkerSettings(URL.createObjectURL(e.target.files?.[0]), 'imageURL')} />
+        <Input
+          type="file"
+          inputProps={{
+            accept: 'image/*', // Specify the accepted file types
+          }}
+          ref={fileInputRef}
+          onChange={(e) => {
+            const inputElement = e.target as HTMLInputElement;
+            const files = inputElement.files;
+
+            if (files && files.length > 0) {
+              updateMarkerSettings(URL.createObjectURL(files[0]), 'imageURL');
+            }
+          }}
+          sx={{
+            display: 'none', // Hide the actual input
+          }}
+          color="secondary" // Set the color of the input
+        />
+
+        {/* <input type="file" ref={fileInputRef} onChange={(e) => updateMarkerSettings(URL.createObjectURL(e.target.files?.[0]), 'imageURL')} /> */}
         <SpeedButton onClick={() => updateMarkerSettings(null, 'imageURL', () => fileInputRef.current && (fileInputRef.current.value = ''))}>
           Reset Image
         </SpeedButton>
@@ -83,12 +104,12 @@ const MarkerEditorSettings = ({ changeSettings }) => {
 
       {/* Second Column */}
       <Box
-        width="30%"
-        marginRight="2%"
-        backgroundColor={theme.palette.primary.darker}
-        padding="10px"
-        borderRadius="4px"
-      >
+          width="30%"
+          marginRight="2%"
+          bgcolor={theme.palette.primary.dark}
+          padding="10px"
+          borderRadius="4px"
+        >
         <Typography color="white">
           Marker TopValue:
         </Typography>
@@ -110,9 +131,7 @@ const MarkerEditorSettings = ({ changeSettings }) => {
           </>
         )}
         {/* Additional settings for the second column */}
-       
       </Box>
-
       {/* Third Column */}
        
         {/* Marker Values */}
@@ -153,6 +172,7 @@ const MarkerEditorSettings = ({ changeSettings }) => {
             topLeftOffset={{ x: 500, y: 100 }}
             initialPosition={{ x: 1100, y: 75 }}
             shouldUpdateOnSettingsChange={true}
+            id={'x'}
           />
           
         </Box>

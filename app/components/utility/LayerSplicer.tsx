@@ -5,12 +5,12 @@ import { settings } from '@/app/canvasEditor/Signals';
 import { useCanvas } from '@/app/canvasEditor/CanvasContext';
 
 interface CanvasLayer {
-  canvasRef: React.RefObject<HTMLCanvasElement>;
-  zIndex?: number;
+  canvasRef: React.RefObject<HTMLCanvasElement|null |undefined>;
+  zIndex?: number ;
 }
 
 interface LayerSplicerProps {
-  layers: Array<CanvasLayer & { zIndex?: number }>;
+  layers: Array<CanvasLayer>;
 }
 
 const LayerSplicer: React.FC<LayerSplicerProps> = ({ layers }) => {

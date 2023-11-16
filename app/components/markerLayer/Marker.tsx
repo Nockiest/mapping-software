@@ -10,7 +10,7 @@ import { newMarkerSettings } from "@/app/canvasEditor/settings/MarkerEditorSetti
 import Point from "../frontline/Point";
 import { position } from "html2canvas/dist/types/css/property-descriptors/position";
 
-type MarkerProps = PositionedText &   {
+type MarkerProps =   {
   topLeftOffset: Vector2;
   initialPosition: Vector2;
   shouldUpdateOnSettingsChange?: boolean;
@@ -22,7 +22,7 @@ type MarkerProps = PositionedText &   {
     currentPosition: Vector2,
     dragStartPosition: Vector2
   ) => Vector2;
-};
+}& Partial<PositionedText>   ;
 export const MarkerDefaultSettings: Omit<
   MarkerSettings,
   `popularMarkerColors`

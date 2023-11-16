@@ -60,13 +60,17 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
       return state;
   }
 };
+// type Action = {
+//   type:string;
+//   payload?:DrawAction
+// }
 
 const DrawingLayer: React.FC = () => {
   const { canvasRef } = useCanvas();
   const mousePosition = useContext(MousePositionContext);
   const [lastMousePos, setLastMousePos] = useState<Vector2 | null>(null);
   const [canvasState, dispatchState] = useReducer<
-    Reducer<DrawingState, Action>
+    Reducer<DrawingState, DrawAction>
   >(reducer, DrawingState.Idle);
   const { color, radius } = settings.value;
   const isActive = settings.value.activeLayer === "draw";
