@@ -19,6 +19,7 @@ import {
 } from '@mui/material'; // Import MUI components
 import { theme } from '../theme/theme';
 import ColorPicker from './settingsComponents/ColorPicker';
+import tinycolor from 'tinycolor2';
 
 const FrontlineLayerSettings = () => {
   const [insertionPointIndex, setEditedPointNum] = useState(frontLineSettings.value.insertionPointIndex);
@@ -34,7 +35,7 @@ const FrontlineLayerSettings = () => {
     setEditedPointNum(frontLineSettings.value.insertionPointIndex);
   }, [frontLineSettings.value.insertionPointIndex]);
 
-  const handleEndFrontLineIndexChange = (e) => {
+  const handleEndFrontLineIndexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log('CHANGING VALUE');
     const activeFrontline = frontLineSettings.value.activeFrontline;
 
@@ -58,16 +59,27 @@ const FrontlineLayerSettings = () => {
     }
   };
 
-  const handleCurFrontlineColorChange = (e) => {
-    frontLineSettings.value.frontLineColor = e.target.value;
-    const changedFrontline = frontLineSettings.value.activeFrontline;
-
-    if (changedFrontline) {
-      changedFrontline.color = e.target.value;
-    }
+  const handleCurFrontlineColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Convert the input color to a tinycolor object
+    // const color = tinycolor(e.target.value);
+  
+    // // Get the hexadecimal string of the color
+    // const hexColor = color.toHexString();
+  
+    // // Check if the color is a valid hexadecimal color
+    // if (tinycolor(hexColor).isValid()) {
+    //   frontLineSettings.value.frontLineColor = hexColor;
+    //   const changedFrontline = frontLineSettings.value.activeFrontline;
+  
+    //   if (changedFrontline) {
+    //     changedFrontline.color = hexColor;
+    //   }
+    // } else {
+    //   return null;
+    // }
   };
 
-  const handleThicknessChange = (e) => {
+  const handleThicknessChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newThickness = parseFloat(e.target.value);
     const activeFrontline = frontLineSettings.value.activeFrontline;
 
@@ -103,7 +115,7 @@ const FrontlineLayerSettings = () => {
     frontLineSettings.value.activeFrontline = newFrontlineData;
   };
 
-  const handleLayerChange = (e) => {
+  const handleLayerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedLayerId = e.target.value;
     const newFrontline = findFrontLineObj(selectedLayerId);
     frontLineSettings.value.activeFrontline = newFrontline;
@@ -123,7 +135,7 @@ const FrontlineLayerSettings = () => {
           min={-1}
           defaultValue={-1}
           max={maxEndPointNumValue - 1}
-          onChange={handleEndFrontLineIndexChange}
+          onChange={(e) => handleEndFrontLineIndexChange }
           valueLabelDisplay="auto"
           marks
         />
@@ -141,7 +153,7 @@ const FrontlineLayerSettings = () => {
           value={
             frontLineSettings.value.activeFrontline?.thickness || 0
           }
-          onChange={handleThicknessChange}
+          onChange={(e) =>handleThicknessChange }
           valueLabelDisplay="auto"
         />
       </FormControl>
@@ -155,7 +167,7 @@ const FrontlineLayerSettings = () => {
             Choose Active Layer:
       </InputLabel>
         <Select
-          onChange={handleLayerChange}
+          onChange={(e) => handleLayerChange}
           value={
             frontLineSettings.value.activeFrontline?.idNum
           }
