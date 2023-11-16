@@ -8,7 +8,7 @@ import { settings } from "../Signals";
 import { Color, MarkerArraySignal, MarkerSettings, MarkerType } from "@/public/types/OtherTypes";
 // import LineComponent from '@/app/components/frontline/FrontLine2D';
 import { markers } from "../Signals";
-import { MousePositionContext } from "../page";
+import { MousePositionContext } from "../MouseContext";
 import { followMouseComponent } from "@/app/components/utility/utils";
 import ReusableLayer from "@/app/components/utility/ResuableLayer";
 import { Signal } from "@preact/signals";
@@ -163,7 +163,7 @@ export const drawMarkersOnCanvas = (
   ctx.clearRect(0, 0, settings.value.canvasSize.x, settings.value.canvasSize.y);
 
   markers.value.forEach((marker, index) => {
-    console.log(marker?.customStyling?.imageURL);
+     
 
       const imageUrl =
           marker?.customStyling?.imageURL

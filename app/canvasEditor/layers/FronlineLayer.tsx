@@ -1,5 +1,5 @@
 import { useContext, useState, useRef, useEffect, ReactNode } from "react";
-import { MousePositionContext } from "../page";
+import { MousePositionContext } from "../MouseContext";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { frontLineSettings, settings } from "../Signals";
 import { useCanvas, useGlobalValue } from "../CanvasContext";

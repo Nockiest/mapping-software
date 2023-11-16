@@ -11,7 +11,7 @@ import CanvasToImage from "@/app/components/utility/CanvasToImg";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { CanvasContext, CanvasContextType, useCanvas } from "../CanvasContext";
 import bucketFill from "@/app/components/drawing/BucketFill";
-import { MousePositionContext } from "../page";
+import { MousePositionContext } from "../MouseContext";
 import { settings } from "../Signals";
 import drawLineWithShape, {
   DrawPayload,

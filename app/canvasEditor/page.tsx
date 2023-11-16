@@ -25,43 +25,13 @@ import { Button, Typography, Paper } from '@mui/material';
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { theme } from "./theme/theme";
 import { ThemeProvider, createTheme} from "@mui/material"
-// Create a context for mouse position
-export const MousePositionContext = createContext< Vector2| null>(null);
-
-// Create a provider for mouse position
-const MousePositionProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const [mousePosition, setMousePosition] = useState<Vector2| null>(null);
-
-  const updateMousePosition = (x: number, y: number) => {
-    setMousePosition({ x, y });
-  };
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      updateMousePosition(e.clientX, e.clientY);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, []); // Empty dependency array ensures the effect runs once on mount
-
-  return (
-    <MousePositionContext.Provider value={mousePosition}>
-      {children}
-    </MousePositionContext.Provider>
-  );
-};
+import { MousePositionContext, MousePositionProvider } from "./MouseContext";
+ 
 
 const Page: React.FC = () => {
   const {   canvasRef, frontlineCanvasRef, markerCanvasRef,backgroundCanvasRef } =
     useCanvas();
-  // const { backgroundCanvasRef } = useBackground();
-  // const { backgroundcanvasRef} = useBack
+ 
   const mousePosition = useContext(MousePositionContext);
   const { GlobalData, updateGlobalData } = useGlobalValue();
   const [mouseDownTimeStamp, setMouseDownTimeStamp] = useState<number | null>(

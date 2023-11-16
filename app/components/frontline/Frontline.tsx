@@ -1,4 +1,4 @@
-import { MousePositionContext } from "@/app/canvasEditor/page";
+import { MousePositionContext } from "@/app/canvasEditor/MouseContext";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import Point from "./Point";
