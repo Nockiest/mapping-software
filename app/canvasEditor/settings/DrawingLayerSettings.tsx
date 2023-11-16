@@ -14,6 +14,7 @@ import {
   Select,
   MenuItem,
   Grid,
+  SelectChangeEvent,
 } from '@mui/material'; // Import Material-UI components
 import { theme } from '../theme/theme';
 import ColorPicker from './settingsComponents/ColorPicker';
@@ -37,15 +38,19 @@ const DrawingLayerSettings = () => {
   };
 
   // Handle radius change
-  const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRadiusChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    value: number | number[],
+ 
+  ) => {
     const newRadius = parseInt(e.target.value, 10);
     const sanitizedRadius = newRadius < 0 ? 0 : newRadius;
-
+  
     changeSettings('radius', sanitizedRadius);
   };
 
   // Handle line type change
-  const handleLineTypeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+  const handleLineTypeChange = (e: SelectChangeEvent<"rounded" | "squared">) => {
     const newLineType = e.target.value as LineEdge;
     changeSettings('lineType', newLineType);
   };
@@ -99,29 +104,32 @@ const DrawingLayerSettings = () => {
         >
           Radius: {settings.value.radius}
         </InputLabel>
-          <Slider
-            id="radius"
-            value={settings.value.radius}
-            onChange={(e, value) =>
-              handleRadiusChange(e as React.ChangeEvent<HTMLInputElement>)
-            }
-            min={1}
-            max={100}
-          />
+        {/* <Slider
+          id="radius"
+          value={settings.value.radius}
+          onChange={(e   , value) => handleRadiusChange(e, value)}
+          min={1}
+          max={100}
+        /> */}
+
 
           <br />
 
           {/* Dropdown for line type */}
           <InputLabel htmlFor="line-type" sx={{color:theme.palette.text.primary}}>Line Type:</InputLabel>
           <Select
-            id="line-type"
-            value={settings.value.lineType}
-            onChange={handleLineTypeChange}
-            sx={{ backgroundColor: 'white', color:'black', borderRadius: '4px' }}
-          >
-            <MenuItem value="rounded" style={{ color: 'rgba(0, 0, 0, 0.9)' }}>Rounded</MenuItem>
-            <MenuItem value="squared" style={{ color: 'rgba(0, 0, 0, 0.9)' }}>Squared</MenuItem>
-          </Select>
+              id="line-type"
+              value={settings.value.lineType}
+              onChange={(e: SelectChangeEvent<"rounded" | "squared">) => handleLineTypeChange(e)}
+              sx={{ backgroundColor: 'white', color: 'black', borderRadius: '4px' }}
+            >
+              <MenuItem value="rounded" style={{ color: 'rgba(0, 0, 0, 0.9)' }}>
+                Rounded
+              </MenuItem>
+              <MenuItem value="squared" style={{ color: 'rgba(0, 0, 0, 0.9)' }}>
+                Squared
+              </MenuItem>
+            </Select>
 
         </Box>
       </Grid>

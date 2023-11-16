@@ -50,13 +50,12 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
   };
 
   return (
-    <div  className={`canvas-rectangle absolute top-0 ${isActive ? 'z-20 ' : `${settings.value.canvasZindexes[layerName]} opacity-40  `}`}>
+    <div className={`canvas-rectangle absolute top-0 ${isActive ? 'z-20 ' : `${settings.value.canvasZindexes[layerName]} opacity-40  `}`}>
+    {canvasRef && (
       <canvas
-        
-        onClick={isActive ? handleMouseClick : null}
+        onClick={handleMouseClick}
         onContextMenu={isActive ? handleMouseClick : (e) => { e.preventDefault(); }}
-        // onMouseUp={handleMouseUp}
-        ref={canvasRef}
+        ref={canvasRef as React.RefObject<HTMLCanvasElement>} // Use the assertion here
         width={settings.value.canvasSize.x}
         height={settings.value.canvasSize.y}
         style={{
@@ -64,9 +63,11 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
           ...style,
         }}
       >
+        {children}
       </canvas>
-      {children}  
-    </div>
+    )}
+  </div>
+  
     
   );
 };

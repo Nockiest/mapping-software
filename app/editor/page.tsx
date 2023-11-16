@@ -32,40 +32,40 @@ const ImageEditor = () => {
     };
   
     const handleEdit = async (e: React.MouseEvent<HTMLCanvasElement>) => {
-      const x = e.nativeEvent.offsetX;
-      const y = e.nativeEvent.offsetY;
+    //   const x = e.nativeEvent.offsetX;
+    //   const y = e.nativeEvent.offsetY;
   
-      // Add color at the clicked position
-      const dotCanvas = createDotOnImage(image, x, y, 1);
-      setAddedColors((prevColors) => [...prevColors, { x, y, color: '#000000' }]);
-      // Redraw the canvas with the added color
-      drawCanvas();
+    //   // Add color at the clicked position
+    // // const dotCanvas = createDotOnImage(image, x, y, 1);
+    //   setAddedColors((prevColors) => [...prevColors, { x, y, color: '#000000' }]);
+    //   // Redraw the canvas with the added color
+    //   drawCanvas();
   
-      // Create a dot on the image using DotMaker
-      const dotImage = await createDotOnImage(image,   x, y  , 1);
-      console.log(dotImage); // This is the base64 representation of the image with the dot
+    //   // Create a dot on the image using DotMaker
+    //   const dotImage = await createDotOnImage(image,   x, y  , 1);
+    //   console.log(dotImage); // This is the base64 representation of the image with the dot
     };
   
     const drawCanvas = () => {
-        const canvas = canvasRef.current;
-        if (canvas) {
-          const ctx = canvas.getContext('2d');
-          ctx?.clearRect(0, 0, canvas.width, canvas.height);
+        // const canvas = canvasRef.current;
+        // if (canvas) {
+        //   const ctx = canvas.getContext('2d');
+        //   ctx?.clearRect(0, 0, canvas.width, canvas.height);
       
-          // Draw the image, stretching it to fill the canvas
-          if (image) {
-            const img = new Image();
-            img.onload = () => {
-              ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
-              // Draw added colors
-              addedColors.forEach((addedColor) => {
-                ctx.fillStyle = addedColor.color;
-                ctx.fillRect(addedColor.x, addedColor.y, 1, 1);
-              });
-            };
-            img.src = URL.createObjectURL(image);
-          }
-        }
+        //   // Draw the image, stretching it to fill the canvas
+        //   if (image) {
+        //     const img = new Image();
+        //     img.onload = () => {
+        //       ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+        //       // Draw added colors
+        //       addedColors.forEach((addedColor) => {
+        //         ctx.fillStyle = addedColor.color;
+        //         ctx.fillRect(addedColor.x, addedColor.y, 1, 1);
+        //       });
+        //     };
+        //     img.src = URL.createObjectURL(image);
+        //   }
+        // }
       };
   
     return (

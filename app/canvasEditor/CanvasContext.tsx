@@ -40,7 +40,7 @@ export const GlobalDataContext = createContext<GlobalDataContextType| undefined 
 
 
 export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const canvasRef = useRef<HTMLCanvasElement | undefined>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const markerCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const frontlineCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const compiledCanvasRef = useRef<HTMLCanvasElement | null>(null);
