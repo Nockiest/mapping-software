@@ -6,13 +6,14 @@ import { theme } from '@/app/canvasEditor/theme/theme';
 
 interface ColorRectangleProps {
     color: Color;
-    // onClick: () => void;
+    onClickFc: (color:Color) => void;
     colorList: Array<Color>
   }
-  const ColorRectangle: React.FC<ColorRectangleProps> = ({ color,colorList  }) => {
+  const ColorRectangle: React.FC<ColorRectangleProps> = ({ color,onClickFc,colorList  }) => {
     const handleColorClick = () => {
       // changeSettings('color', color);
       settings.value.color = color
+      onClickFc(color)
     };
   
     const handleRightClick = (e: React.MouseEvent) => {
@@ -38,7 +39,7 @@ interface ColorRectangleProps {
     };
     
 type FavoriteColorProps = {
-    handleColorClick: (color: Color) => void;
+    handleColorClick: ( color:Color) => void;
     colorList: Array<Color>
     newColor: Color
 }
@@ -49,7 +50,7 @@ const FavoriteColorLister: React.FC<FavoriteColorProps> = ({ handleColorClick, c
         <Button className="border-black-1 " sx={{color:theme.palette.text.primary, backgroundColor:theme.palette.secondary.main}} onClick={()=> {colorList.push(newColor)}}>Save Color to Favorites</Button>}  
 
         {colorList.map((color, index) => (
-          <ColorRectangle key={index} color={color} colorList={colorList} onClick={() => handleColorClick(color)} />
+          <ColorRectangle key={index} color={color} colorList={colorList} onClickFc= { handleColorClick  } />
         ))}
       </div>
     );

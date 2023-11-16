@@ -1,5 +1,5 @@
-import React from 'react';
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import React, { ReactNode } from 'react';
+import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import { settings } from '@/app/canvasEditor/Signals';
 import { theme } from '@/app/canvasEditor/theme/theme';
 import { styled } from '@mui/system';
@@ -11,7 +11,7 @@ const CustomMenuItem = styled(MenuItem)({
 });
 
 const ActiveLayerSettings: React.FC = () => {
-  const handleActiveLayerChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleActiveLayerChange = (event: SelectChangeEvent<"marker" | "background" | "draw" | "frontLine" | "compiled">, child: ReactNode) => {
     const newActiveLayer = event.target.value as "draw" | "marker" | "background" | "frontLine";
     settings.value = { ...settings.value, activeLayer: newActiveLayer };
   };
@@ -34,25 +34,26 @@ const ActiveLayerSettings: React.FC = () => {
       </InputLabel>
 
       <Select
-        value={settings.value.activeLayer}
-        onChange={handleActiveLayerChange}
-        style={{
-          backgroundColor: theme.palette.background.default,
-          color: 'black',
-          borderRadius: '4px',
-          marginTop: '16px',
-        }}
-        MenuProps={{
-          PaperProps: {
-            style: {
-              backgroundColor: theme.palette.background.default,
+          value={settings.value.activeLayer}
+          onChange={handleActiveLayerChange}
+          style={{
+            backgroundColor: theme.palette.background.default,
+            color: 'black',
+            borderRadius: '4px',
+            marginTop: '16px',
+          }}
+          MenuProps={{
+            PaperProps: {
+              style: {
+                backgroundColor: theme.palette.background.default,
+              },
             },
-          },
-        }}
-        components={{
-          MenuItem: CustomMenuItem, // Use the custom MenuItem to override styles
-        }}
-      >
+          }}
+          // components={{
+          //   MenuItem, // Use MenuItem from Material-UI
+          // }}
+        >
+ 
         {['draw', 'marker', 'background', 'frontLine', 'compiled'].map((option) => (
           <MenuItem
             key={option}

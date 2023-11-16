@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 
 type LineTypeSettingsProps = {
     lineType: "rounded" | "squared";

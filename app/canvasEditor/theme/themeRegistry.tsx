@@ -7,7 +7,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import {theme} from './theme';
 interface ThemeRegistryProps {
-  options: any; // Replace 'any' with the appropriate type for options
+  options: any;  
   children: ReactNode
 }
 
