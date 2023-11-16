@@ -5,7 +5,7 @@ type DebugInfoProps = {
 };
 
 const DebugInfo: React.FC<DebugInfoProps> = ({ data }) => (
-  <div style={{ position: 'absolute', top: 0, right: 0, padding: '10px', background: 'rgba(255, 255, 255, 0.7)' }}>
+  <div style={{ position: 'fixed', top: '10px', right: '10px', padding: '10px', background: 'rgba(255, 255, 255, 0.7)', zIndex:"1000" }}>
     <p>Debug Information:</p>
     {Object.entries(data).map(([key, value]) => (
       <p key={key}>{`${key}: ${JSON.stringify(value)}`}</p>

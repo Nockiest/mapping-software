@@ -5,36 +5,36 @@
   dotSize: number
 ): HTMLCanvasElement {
   const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
+  // const ctx = canvas.getContext('2d');
 
-  const loadImage = () => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        drawDot(img);
-      };
-      img.src = e.target?.result as string;
-    };
-    reader.readAsDataURL(file);
-  };
+  // const loadImage = () => {
+  //   const reader = new FileReader();
+  //   reader.onload = (e) => {
+  //     const img = new Image();
+  //     img.onload = () => {
+  //       drawDot(img);
+  //     };
+  //     img.src = e.target?.result as string;
+  //   };
+  //   reader.readAsDataURL(file);
+  // };
 
-  const drawDot = (image: HTMLImageElement) => {
-    canvas.width = image.width;
-    canvas.height = image.height;
+  // const drawDot = (image: HTMLImageElement) => {
+  //   canvas.width = image.width;
+  //   canvas.height = image.height;
   
-    // Draw the image
-    ctx.drawImage(image, 0, 0);
+  //   // Draw the image
+  //   ctx.drawImage(image, 0, 0);
   
-    // Calculate normalized dot size based on canvas dimensions
-    const normalizedDotSize = dotSize * (canvas.width / image.width);
+  //   // Calculate normalized dot size based on canvas dimensions
+  //   const normalizedDotSize = dotSize * (canvas.width / image.width);
   
-    // Draw a dot at the specified position
-    ctx.fillStyle = 'red'; // You can customize the color
-    ctx.fillRect(positionX - normalizedDotSize / 2, positionY - normalizedDotSize / 2, normalizedDotSize, normalizedDotSize);
-  };
+  //   // Draw a dot at the specified position
+  //   ctx.fillStyle = 'red'; // You can customize the color
+  //   ctx.fillRect(positionX - normalizedDotSize / 2, positionY - normalizedDotSize / 2, normalizedDotSize, normalizedDotSize);
+  // };
 
-  loadImage();
+  // loadImage();
 
   return canvas;
 }

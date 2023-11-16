@@ -11,13 +11,28 @@
   border: 1px solid #000; /* Set your desired border style */
   /* Add any other styles you need */
 }
- .draw-canvas{
-  z-index: 100;
- }
+ 
+ .marker {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid black;
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  user-select: none;
+}
+  
+ button {
+  background-color: #937474; /* Green background */
+  color: white; /* White text color */
+  padding: 8px 6px;  
+  font-size: 12px; /* Font size */
+  margin: 0px 4px;
+  cursor: pointer; /* Pointer cursor on hover */
+  border-radius: 5px; /* Rounded corners */
+}
 
- .background-layer{
-  z-index:   0;
- }
+ 
+
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

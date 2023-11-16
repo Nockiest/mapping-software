@@ -1,106 +1,76 @@
-import { useContext, useRef } from "react";
-import CanvasClear from "@/app/components/ClearCanvas";
-import { BackgroundContext, CanvasContext, CanvasSettingsContext, CanvasContextType, CanvasSettingsType } from "../CanvasContext";
-import { DrawingState } from "@/public/types/ButtonEvents";
+ import { useContext } from "react";
 import MarkerEditorSettings from "./MarkerEditorSettings";
-import { CanvasSettingsProps } from "../layers/CanvasSettings";
 import LineTypeSettings from "@/app/components/settings/LineTypeSettings";
 import ActiveLayerSettings from "@/app/components/settings/ActiveLayerSettings";
-import { hexToRgb } from "@/public/utils";
- const CanvasSettings: React.FC<CanvasSettingsProps> = ({ onSettingsChange }) => {
-  const { settings, setSettings } = useContext<CanvasSettingsType>(CanvasSettingsContext);
-  const { canvasRef, dispatch, state } = useContext<CanvasContextType>(CanvasContext);
-  const { setBackgroundImage, backgroundImage } = useContext<CanvasContextType>(BackgroundContext);
-  const imageInputRef = useRef<HTMLInputElement>(null);
+import { hexToRgb } from "@/app/components/utility/utils";
+import { settings } from "../Signals";
+import { Color, Settings } from "@/public/types/OtherTypes";
+import DrawingLayerSettings from "./DrawingLayerSettings";
+import BackgroundLayerSettings from "./BackgroundLayerSettings";
+import FrontlineLayerSettings from "./FrontlineLayerSettings";
+import { theme } from "../theme/theme";
+import { Grid, Paper, useTheme, Typography } from '@mui/material';
 
-  // Handle color change, radius change, and additional logic for active layer change
-  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const hexColor = e.target.value;
-    const rgbColor = hexToRgb(hexColor);
-  
-    setSettings((prevSettings) => ({ ...prevSettings, color: rgbColor }));
-  };
+const CanvasSettings = () => {
+  const theme = useTheme();
 
-  const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newRadius = parseInt(e.target.value, 10);
-    const sanitizedRadius = newRadius < 0 ? 0 : newRadius;
-    setSettings((prevSettings) => ({ ...prevSettings, radius: sanitizedRadius }));
-  };
-
-  const handleImageRevert = () => {
-    setBackgroundImage(null);
-
-    if (imageInputRef.current) {
-      imageInputRef.current.value = '';
-    }
-  };
-
-  const handleBucketFill = () => {
-    dispatch({ type: "ENTER_BUCKET_MODE" });
-  };
-
-  // Handle active layer change
-  const handleActiveLayerChange = (newActiveLayer: "draw" | "marker" | "background") => {
-    setSettings((prevSettings) => ({ ...prevSettings, activeLayer: newActiveLayer }));
-  };
-
-  // Handle line type change
-  const handleLineTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newLineType = e.target.value as "rounded" | "squared";
-    setSettings((prevSettings) => ({ ...prevSettings, lineType: newLineType }));
+  const changeSettings = <K extends keyof Settings['value']>(
+    property: K,
+    newValue: Settings['value'][K]
+  ) => {
+    // Assuming settings is a mutable signal, otherwise, you might need to use `setSettings` if it's a state
+    settings.value = { ...settings.value, [property]: newValue };
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: '#4CAF50',
-        color: 'white',
-        padding: '10px',
-        border: 'black 1px solid',
-        borderRadius: '4px',
-      }}
-    >
-       <ActiveLayerSettings activeLayer={settings.activeLayer} handleActiveLayerChange={handleActiveLayerChange} /><br/>
-      {settings.activeLayer === "draw" ? (
-        <>
-          <label>
-            Color:
-            <input type="color" value={settings.color} onChange={handleColorChange} />
-          </label>
-          <br />
-          <label>
-            Radius:
-            <input type="number" value={settings.radius} onChange={handleRadiusChange} style={{ color: 'black' }} />
-          </label>
-          <br />
-          {/* Dropdown for line type */}
-          <LineTypeSettings lineType={settings.lineType} handleLineTypeChange={handleLineTypeChange} />
-          <br />
-          
-          <br />
-          <input
-            type="file"
-            ref={imageInputRef}
-            onChange={(e) => {
-              const selectedFile = e.target.files?.[0];
-              if (selectedFile) {
-                setBackgroundImage(selectedFile);
-              }
-            }} />
-          <br />
-          {backgroundImage && <button onClick={handleImageRevert}>Revert Background Image</button>}
-          <br />
-          {/* Add the bucket fill button */}
-          <button style={{ backgroundColor: state === DrawingState.BucketFill ? 'red' : 'initial' }} onClick={handleBucketFill}>
-            Bucket Fill
-          </button>
-        </>
-      ) : (
-        <MarkerEditorSettings />
-      )}
+    <Grid container spacing={2}>
+      {/* First Column - ActiveLayerSettings */}
+      <Grid item xs={3} style={{ maxWidth: '200px' }}>
+        <Paper
+          sx={{
+            backgroundColor: theme.palette.info.main,
+            color: 'white',
+            padding: '10px',
+            border: 'black 1px solid',
+            borderRadius: '4px',
+            height: '100%',
+            overflow: 'auto',
+            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+          }}
+        >
+          <Typography variant="h1">MAP MAKER ONLINE</Typography>
+          <ActiveLayerSettings  />
+        </Paper>
+      </Grid>
 
-      <CanvasClear canvasRef={canvasRef} />
-    </div>
+      {/* Second Column - Other Settings */}
+      <Grid item xs>
+        <Paper
+          sx={{
+            backgroundColor: theme.palette.info.main,
+            color: 'white',
+            padding: '10px',
+            border: 'black 1px solid',
+            borderRadius: '4px',
+            height: '100%',
+            overflow: 'auto',
+            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+          }}
+        >
+          {settings.value.activeLayer === 'draw' ? (
+            <DrawingLayerSettings />
+          ) : settings.value.activeLayer === 'marker' ? (
+            <MarkerEditorSettings changeSettings={changeSettings} />
+          ) : settings.value.activeLayer === 'background' ? (
+            <BackgroundLayerSettings />
+          ) :  settings.value.activeLayer === 'frontLine' ?(
+            <FrontlineLayerSettings />
+          ): <></>}
+        </Paper>
+      </Grid>
+    </Grid>
+
   );
 };
-export default CanvasSettings
+
+export default CanvasSettings;

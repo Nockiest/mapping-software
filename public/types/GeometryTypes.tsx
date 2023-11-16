@@ -8,3 +8,6 @@ export type Vector3 = {
     y:number
     z:number
   }
+
+export type LineEdge =  "rounded" | "squared"
+export type Shapes = "circle" | "square" | "triangle";

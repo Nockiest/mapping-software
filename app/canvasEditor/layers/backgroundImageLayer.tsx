@@ -1,13 +1,21 @@
  
 import React, { useState, useContext, useEffect } from 'react';
-import { BackgroundContext, CanvasSettingsContext } from '../CanvasContext';
+import {   useCanvas } from '../CanvasContext';
+import { settings } from '../Signals';
+import { backgroundImage } from '../Signals';
+import ReusableLayer from '@/app/components/utility/ResuableLayer';
+import fillCanvas from '@/app/components/utility/fillCanvas';
+const BackgroundImageLayer: React.FC  = ( ) => {
+  const { backgroundCanvasRef   } = useCanvas();
  
-const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }> = ({ onImageLoad }) => {
-  const { backgroundCanvasRef, backgroundImage } = useContext(BackgroundContext);
-  const { settings } = useContext(CanvasSettingsContext);
   useEffect(() => {
-    handleFileChange(backgroundImage);
-  }, [backgroundImage]);
+    handleFileChange( );
+    
+  }, [backgroundImage.value]);
+
+  // useEffect(() => {
+  //   fillCanvas(backgroundCanvasRef, "rgba(0,255,0,0.2)")
+  // }, [])
 
   const loadImage = (file: File) => {
     return new Promise<string>((resolve) => {
@@ -19,16 +27,16 @@ const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }
     });
   };
 
-  const handleFileChange = async (backgroundImage: File | null) => {
-    if (!backgroundImage) {
+  const handleFileChange = async ( ) => {
+    if (!backgroundImage.value) {
       clearCanvas();
       return;
     }
 
-    if (backgroundImage instanceof File) {
-      const imageUrl = await loadImage(backgroundImage);
+    if (backgroundImage.value instanceof File) {
+      const imageUrl = await loadImage(backgroundImage.value);
       drawImageOnCanvas(imageUrl);
-      onImageLoad(imageUrl);
+      // onImageLoad(imageUrl);
     } else {
       console.error('Invalid file type');
     }
@@ -56,18 +64,19 @@ const BackgroundImageLayer: React.FC<{ onImageLoad: (imageUrl: string) => void }
   };
 
   return (
-    <   >
+    < >
       {(  backgroundCanvasRef) && (
-          <canvas
-            ref={backgroundCanvasRef}
-            width={800}
-            height={600}
-            className={`absolute background-layer top-0 ${settings.activeLayer === "background" ? 'opacity-100' : 'opacity-40'}`}
-            style={{ pointerEvents: 'none', objectFit: 'contain', border: '0px', padding: '0', margin: '0'  }}
+
+          <ReusableLayer
+          canvasRef={backgroundCanvasRef}
+          layerName="background" 
           />
+         
       )}
     </>
   );
 };
 
 export default BackgroundImageLayer;
+
+ 
