@@ -48,6 +48,7 @@ const Point: React.FC<PointProps> = ({
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    console.log('handle mouse down')
     e.preventDefault();
     if (!acceptInput) {
       return;
@@ -89,17 +90,16 @@ const Point: React.FC<PointProps> = ({
   useEffect(() => {
     if (isDragging) {
       window.addEventListener("mousemove", handleMouseMove);
-      // window.addEventListener("mouseup", handleMouseUp);
     }
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      // window.removeEventListener("mouseup", handleMouseUp);
+      
     };
   }, [isDragging]);
-
+ 
   return (
     <div
-      
+  
       style={{
         position: "absolute",
         left: `${position.x}px`,

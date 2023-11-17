@@ -12,7 +12,10 @@ import {   useCanvas } from "./CanvasContext";
 import LayerSplicer from "../components/utility/LayerSplicer";
 import UnitMarkerLayer from "./layers/UnitMarkerLayer";
 import FronlineLayer from "./layers/FronlineLayer";
-import { settings } from "./Signals";
+import { markers, settings } from "./Signals";
+import DrawingLayer from "./layers/DrawingLayer";
+import BackgroundImageLayer from "./layers/BackgroundImageLayer";
+import Marker from "../components/markerLayer/Marker";
  
 const DrawingCanvas: React.FC  = ( ) => {
   const{ canvasRef, frontlineCanvasRef, markerCanvasRef, backgroundCanvasRef  } = useCanvas( );
@@ -24,17 +27,16 @@ const DrawingCanvas: React.FC  = ( ) => {
     // Add more objects as needed
   ];
   const filteredLayers = layers.filter((layer) => layer.canvasRef)
-  // const { backgroundCanvasRef   } = useContext(BackgroundContext);
   return (
-   
+    
     <div className={`relative h-600  w-${settings.value.canvasSize}  flex items-center justify-center `}  > 
-      {/* <DrawingLayer    /> */}
+      <DrawingLayer    />
       <UnitMarkerLayer    />
       <FronlineLayer  />
-      {/* <BackgroundImageLayer   /> */}
+      <BackgroundImageLayer   />
       <LayerSplicer layers={filteredLayers} />
     </div>
-   
+  
   
   );
 };

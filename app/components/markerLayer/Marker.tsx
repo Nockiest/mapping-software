@@ -23,15 +23,12 @@ type MarkerProps =   {
     dragStartPosition: Vector2
   ) => Vector2;
 }& Partial<PositionedText>   ;
-export const MarkerDefaultSettings: Omit<
-  MarkerSettings,
-  `popularMarkerColors`
-> = {
+export  const MarkerDefaultSettings: Omit<MarkerSettings, 'popularMarkerColors'> = {
   width: 5,
   color: `#000000`,
   textColor: `#000000`,
-  topValue: "",
-  bottomValue: "",
+  topText: '',
+  bottomText: '',
   imageURL: null,
 };
 
@@ -48,14 +45,12 @@ const Marker: React.FC<MarkerProps> = ({
   const [currentPosition, setCurrentPosition] =
     useState<Vector2>(initialPosition);
   const [canRemove, setCanRemove] = useState<boolean>(false);
-  const [initialMarkerSettings] = useState(null)
-  // = useState<MarkerSettings>({
-  //   ...customStyling,
-  // });
-  const usedSettings = newMarkerSettings.value
-  // shouldUpdateOnSettingsChange
-  //   ? newMarkerSettings.value
-  //   : initialMarkerSettings;
+  const [initialMarkerSettings] = useState<Partial<MarkerSettings>>({
+    ...customStyling,
+  });
+  const usedSettings = shouldUpdateOnSettingsChange
+    ? newMarkerSettings.value
+    : initialMarkerSettings;
  
   const imageUrl = usedSettings.imageURL
   ? typeof usedSettings.imageURL === 'object'?  usedSettings.imageURL : null:
@@ -131,10 +126,11 @@ const Marker: React.FC<MarkerProps> = ({
     const updatedMarkers = markers.value.filter((marker) => marker.id !== id);
     markers.value = updatedMarkers;
   };
+  // console.log('i exist')
   return (
     <Point
       radius={mergedSettings.width}
-      styling={markerStyle}
+      styling={{...markerStyle }}
       position={currentPosition}
       rightClk={(e) => handleContextMenu(e)}
       onDrag={(position) => handleMouseMove(position)}
@@ -143,11 +139,11 @@ const Marker: React.FC<MarkerProps> = ({
       id={id}
     >
       <p style={{ ...textBackgroundStyle, top: "-5px" }}>
-        {mergedSettings.topValue}
+        {mergedSettings.topText}
       </p>
       {mergedSettings.width > 20 && (
         <p style={{ ...textBackgroundStyle, bottom: "-5px" }}>
-          {mergedSettings.bottomValue}
+          {mergedSettings.bottomText}
         </p>
       )}
     </Point>

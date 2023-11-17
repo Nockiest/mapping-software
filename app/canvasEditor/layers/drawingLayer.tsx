@@ -92,7 +92,7 @@ const DrawingLayer: React.FC = () => {
     }
     const handleMouseDown = (e: MouseEvent) => {
       console.log("MOUSE DOWN");
-      if (settings.value.activeLayer !== "draw") {
+      if (!isActive) {
         return;
       }
 
@@ -136,9 +136,7 @@ const DrawingLayer: React.FC = () => {
     const handleMouseMovement = (e: MouseEvent) => {
       const x = e.offsetX;
       const y = e.offsetY;
-      if (settings.value.activeLayer !== "draw") {
-        return;
-      }
+      if (!isActive) {return;}
       // console.log(canvasState === DrawingState.Drawing)
       if (canvasState === DrawingState.Erasing) {
         eraseLine({
@@ -207,7 +205,7 @@ const DrawingLayer: React.FC = () => {
                 ? "url('/cursor.cur'),auto"
                 : "auto",
           }}
-        />
+        >x</ReusableLayer>
       )}
     </>
   );

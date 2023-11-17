@@ -79,11 +79,11 @@ const UnitMarkerLayer: React.FC = () => {
     // console.log("NEW CALL")
     const {ctx, } = getCtxFromRef(markerCanvasRef)
     if(!ctx){return}
-      drawMarkersOnCanvas   (
-        ctx ,
-        markers,
-        topLeftOffset 
-      )
+      // drawMarkersOnCanvas   (
+      //   ctx ,
+      //   markers,
+      //   topLeftOffset 
+      // )
    
   
     const handleMouseDown = (e: MouseEvent) => {
@@ -133,8 +133,7 @@ const UnitMarkerLayer: React.FC = () => {
   return (
     <>
       <ReusableLayer layerName="marker" canvasRef={markerCanvasRef}>
-        
-        {markers.value.map((marker, index) => (
+      {markers.value.map((marker, index) => (
           <Marker
             key={index}
             topLeftOffset={marker.topLeftOffset}
@@ -147,6 +146,7 @@ const UnitMarkerLayer: React.FC = () => {
           />
         ))}
       </ReusableLayer>
+       
     </>
   );
 };

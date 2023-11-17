@@ -8,7 +8,7 @@ export type RGB = `rgb(${number}, ${number}, ${number})`;
 export type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
 export type HEX = `#${string}`;
 
-export type Color = HEX; //[number, number, number, number];RGB|RGBA|
+export type Color = HEX;  
 
 export type PositionedText = {
   topText: string;
@@ -30,15 +30,15 @@ export type LayerNames =
   | "frontLine"
   | "compiled";
 
-export type MarkerSettings = {
+export type MarkerSettings =  PositionedText & {
   width: number 
-  color: Color;
+  color: Color ;
   textColor: Color;
-  topValue: string;
-  bottomValue: string;
   imageURL: string | null;
   popularMarkerColors: Array<Color>;
 };
+
+
 
 export type FrontLineSettings = Signal<{
   insertionPointIndex: number;
@@ -60,7 +60,6 @@ export type Settings = Signal<{
   canvasZindexes: {
     [key in LayerNames]: number;
   };
-  // frontLineSettings: FrontLineSettings
 }>;
 
 export type ErasePayload = {

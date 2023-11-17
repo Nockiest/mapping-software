@@ -2,14 +2,13 @@ import { settings } from '@/app/canvasEditor/Signals';
 import { LayerNames, Settings } from '@/public/types/OtherTypes';
 import {ReactNode, useEffect} from 'react';
 
-interface ReusableLayerProps {
+type ReusableLayerProps = {
   canvasRef:  React.RefObject<HTMLCanvasElement | null|undefined>;
   layerName: LayerNames  ;
   onLeftClick?: (e:React.MouseEvent) => void;
   onRightClick?: (e:React.MouseEvent) => void;
   onMouseUp?: ( ) => void;
   onMouseWheel?: (e:React.MouseEvent) => void;
-//   onContextMenu?:() => void;
   style?: {
     [key: string]: string; // Allow any CSS property
    
@@ -51,23 +50,23 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
 
   return (
     <div className={`canvas-rectangle absolute top-0 ${isActive ? 'z-20 ' : `${settings.value.canvasZindexes[layerName]} opacity-40  `}`}>
-    {canvasRef && (
-      <canvas
-        onClick={handleMouseClick}
-        onContextMenu={isActive ? handleMouseClick : (e) => { e.preventDefault(); }}
-        ref={canvasRef as React.RefObject<HTMLCanvasElement>} // Use the assertion here
-        width={settings.value.canvasSize.x}
-        height={settings.value.canvasSize.y}
-        style={{
-          pointerEvents: isActive ? 'auto' : 'none',
-          ...style,
-        }}
-      >
-        {children}
-      </canvas>
-    )}
-  </div>
-  
+      {canvasRef && (
+        <>
+          <canvas
+            onClick={handleMouseClick}
+            onContextMenu={isActive ? handleMouseClick : (e) => { e.preventDefault(); }}
+            ref={canvasRef as React.RefObject<HTMLCanvasElement>}
+            width={settings.value.canvasSize.x}
+            height={settings.value.canvasSize.y}
+            style={{
+              pointerEvents: isActive ? 'auto' : 'none',
+              ...style,
+            }}
+          />
+          {children}
+        </>
+      )}
+    </div>
     
   );
 };

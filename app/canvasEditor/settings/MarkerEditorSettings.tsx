@@ -111,22 +111,22 @@ const MarkerEditorSettings: React.FC<MarkerEditorSettingsProps> = ({ changeSetti
           borderRadius="4px"
         >
         <Typography color="white">
-          Marker TopValue:
+          Marker TopText:
         </Typography>
         <TextField
           type="text"
-          value={newMarkerSettings.value.topValue}
-          onChange={(e) => updateMarkerSettings(e.target.value, 'topValue')}
+          value={newMarkerSettings.value.topText}
+          onChange={(e) => updateMarkerSettings(e.target.value, 'topText')}
         />
         {newMarkerSettings.value.width >= 20 && (
           <>
             <Typography color="white">
-              Marker BottomValue:
+              Marker BottomText:
             </Typography>
             <TextField
               type="text"
-              value={newMarkerSettings.value.bottomValue}
-              onChange={(e) => updateMarkerSettings(e.target.value, 'bottomValue')}
+              value={newMarkerSettings.value.bottomText}
+              onChange={(e) => updateMarkerSettings(e.target.value, 'bottomText')}
             />
           </>
         )}
@@ -146,11 +146,11 @@ const MarkerEditorSettings: React.FC<MarkerEditorSettingsProps> = ({ changeSetti
             Current Marker Color: {settings.value.markerSettings.color}
           </Typography>
           <Typography>
-            Current Marker TopValue: {settings.value.markerSettings.topValue}
+            Current Marker TopText: {settings.value.markerSettings.topText}
           </Typography>
           {settings.value.markerSettings.width >= 20 && (
             <Typography>
-              Current Marker BottomValue: {settings.value.markerSettings.bottomValue}
+              Current Marker BottomText: {settings.value.markerSettings.bottomText}
             </Typography>
           )}
           

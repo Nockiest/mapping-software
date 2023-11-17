@@ -19,7 +19,7 @@ import {
 } from '@mui/material'; // Import MUI components
 import { theme } from '../theme/theme';
 import ColorPicker from './settingsComponents/ColorPicker';
-import tinycolor from 'tinycolor2';
+import { Color } from '@/public/types/OtherTypes';
 
 const FrontlineLayerSettings = () => {
   const [insertionPointIndex, setEditedPointNum] = useState(frontLineSettings.value.insertionPointIndex);
@@ -60,23 +60,13 @@ const FrontlineLayerSettings = () => {
   };
 
   const handleCurFrontlineColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Convert the input color to a tinycolor object
-    // const color = tinycolor(e.target.value);
-  
-    // // Get the hexadecimal string of the color
-    // const hexColor = color.toHexString();
-  
-    // // Check if the color is a valid hexadecimal color
-    // if (tinycolor(hexColor).isValid()) {
-    //   frontLineSettings.value.frontLineColor = hexColor;
-    //   const changedFrontline = frontLineSettings.value.activeFrontline;
-  
-    //   if (changedFrontline) {
-    //     changedFrontline.color = hexColor;
-    //   }
-    // } else {
-    //   return null;
-    // }
+    const hexColor =  e.target.value as Color;
+    frontLineSettings.value.frontLineColor = hexColor;
+    const changedFrontline = frontLineSettings.value.activeFrontline;
+    if (changedFrontline) {
+        changedFrontline.color = hexColor;
+      }
+        
   };
 
   const handleThicknessChange = (e: React.ChangeEvent<HTMLInputElement>) => {

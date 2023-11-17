@@ -23,7 +23,7 @@ const CanvasSettings = () => {
   };
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} sx={  {userSelect: 'none'}}>
       {/* First Column - ActiveLayerSettings */}
       <Grid item xs={3} style={{ maxWidth: '200px' }}>
         <Paper
