@@ -1,7 +1,12 @@
 // import { CanvasSettingsContext } from "@/app/canvasEditor/CanvasContext";
 import { MousePositionContext } from "@/app/canvasEditor/MouseContext";
 import { Vector2 } from "@/public/types/GeometryTypes";
-import { Color, MarkerSettings, MarkerType, PositionedText } from "@/public/types/OtherTypes";
+import {
+  Color,
+  MarkerSettings,
+  MarkerType,
+  PositionedText,
+} from "@/public/types/OtherTypes";
 import { useState, useContext, useEffect, useRef } from "react";
 import { markers, settings } from "@/app/canvasEditor/Signals";
 import Image from "next/image";
@@ -10,7 +15,7 @@ import { newMarkerSettings } from "@/app/canvasEditor/settings/MarkerEditorSetti
 import Point from "../frontline/Point";
 import { position } from "html2canvas/dist/types/css/property-descriptors/position";
 
-type MarkerProps =   {
+type MarkerProps = {
   topLeftOffset: Vector2;
   initialPosition: Vector2;
   shouldUpdateOnSettingsChange?: boolean;
@@ -22,13 +27,16 @@ type MarkerProps =   {
     currentPosition: Vector2,
     dragStartPosition: Vector2
   ) => Vector2;
-}& Partial<PositionedText>   ;
-export  const MarkerDefaultSettings: Omit<MarkerSettings, 'popularMarkerColors'> = {
+} & Partial<PositionedText>;
+export const MarkerDefaultSettings: Omit<
+  MarkerSettings,
+  "popularMarkerColors"
+> = {
   width: 5,
   color: `#000000`,
   textColor: `#000000`,
-  topText: '',
-  bottomText: '',
+  topText: "",
+  bottomText: "",
   imageURL: null,
 };
 
@@ -51,27 +59,17 @@ const Marker: React.FC<MarkerProps> = ({
   const usedSettings = shouldUpdateOnSettingsChange
     ? newMarkerSettings.value
     : initialMarkerSettings;
- 
-  const imageUrl = 
-  usedSettings.imageURL
-? usedSettings.imageURL instanceof File
-  ? URL.createObjectURL(usedSettings.imageURL)
-  : usedSettings.imageURL
-: MarkerDefaultSettings.imageURL;
 
-  // usedSettings.imageURL
-  // ? typeof usedSettings.imageURL === 'object'?  usedSettings.imageURL : null:
-  //   null;
-  
+  const imageUrl = usedSettings.imageURL
+    ? usedSettings.imageURL instanceof File
+      ? URL.createObjectURL(usedSettings.imageURL)
+      : usedSettings.imageURL
+    : MarkerDefaultSettings.imageURL;
+
   const mergedSettings = { ...MarkerDefaultSettings, ...usedSettings };
 
   const handleMouseMove = (position: Vector2) => {
     if (dragHandler) {
-      // const updatedPosition:Vector2 = {
-      //   x: position.x - topLeftOffset.x + mergedSettings.width,
-      //   y: position.y - topLeftOffset.y + mergedSettings.width,
-      // };
-
       // Call dragHandler with the updated position
       const updatedPosition = dragHandler(
         position,
@@ -88,21 +86,6 @@ const Marker: React.FC<MarkerProps> = ({
       // Set the updated markers array
       markers.value = updatedMarkers;
     }
-  };
-
-  const handleContextMenu = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (settings.value.activeLayer !== "marker") {
-      return;
-    }
-    if (canRemove) {
-      const updatedMarkers = markers.value.filter((marker) => marker.id !== id);
-      markers.value = updatedMarkers;
-      // const markerElement = e.currentTarget as HTMLDivElement;
-      // markerElement.remove();
-      // console.log('Marker destroyed!');
-    }
-    setCanRemove(true);
   };
 
   const markerStyle: React.CSSProperties = {
@@ -123,18 +106,32 @@ const Marker: React.FC<MarkerProps> = ({
     userSelect: "none",
   };
 
+  // const handleDelete = () => {
+  //   if (canRemove) {
+  //     console.log("callled", id);
+  //     console.log(markers.value);
+  //     const updatedMarkers = markers.value.filter((marker) => marker.id !== id);
+  //     console.log(updatedMarkers);
+  //     markers.value = updatedMarkers;
+  //   } else {
+  //     setCanRemove(true);
+  //   }
+  // };
   const handleDelete = () => {
-    console.log("callled", id);
-    const updatedMarkers = markers.value.filter((marker) => marker.id !== id);
-    markers.value = updatedMarkers;
+    if (canRemove) {
+      // Remove the marker with the specified id
+      markers.value = markers.value.filter((marker) => marker.id !== id);
+    } else {
+      setCanRemove(true);
+    }
   };
-
+  
   return (
     <Point
       radius={mergedSettings.width}
-      styling={{...markerStyle }}
+      styling={{ ...markerStyle }}
       position={currentPosition}
-      rightClk={(e) => handleContextMenu(e)}
+      rightClk={handleDelete}
       onDrag={(position) => handleMouseMove(position)}
       className="marker"
       onDelete={handleDelete}
@@ -148,8 +145,16 @@ const Marker: React.FC<MarkerProps> = ({
           {mergedSettings.bottomText}
         </p>
       )}
+      <p className="text-black">{id}</p>
+      <p className="text-black">
+        {Math.round(currentPosition.x)} {Math.round(currentPosition.y)}
+      </p>
     </Point>
   );
 };
 
 export default Marker;
+// const updatedPosition:Vector2 = {
+//   x: position.x - topLeftOffset.x + mergedSettings.width,
+//   y: position.y - topLeftOffset.y + mergedSettings.width,
+// };

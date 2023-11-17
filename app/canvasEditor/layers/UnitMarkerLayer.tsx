@@ -79,11 +79,11 @@ const UnitMarkerLayer: React.FC = () => {
     // console.log("NEW CALL")
     const {ctx, } = getCtxFromRef(markerCanvasRef)
     if(!ctx){return}
-      // drawMarkersOnCanvas   (
-      //   ctx ,
-      //   markers,
-      //   topLeftOffset 
-      // )
+      drawMarkersOnCanvas   (
+        ctx ,
+        markers,
+        topLeftOffset 
+      )
    
   
     const handleMouseDown = (e: MouseEvent) => {
@@ -133,9 +133,9 @@ const UnitMarkerLayer: React.FC = () => {
   return (
     <>
       <ReusableLayer layerName="marker" canvasRef={markerCanvasRef}>
-      {markers.value.map((marker, index) => (
+      {markers.value.map((marker) => (
           <Marker
-            key={index}
+            key={marker.id}
             topLeftOffset={marker.topLeftOffset}
             topText={marker.topText}
             bottomText={marker.bottomText}
@@ -166,15 +166,11 @@ export const drawMarkersOnCanvas = (
      
 
     const imageUrl =
-
     marker?.customStyling?.imageURL
-    ? typeof marker.customStyling.imageURL === 'object'?  marker.customStyling.imageURL : null:
-      null;
-    // marker?.customStyling?.imageURL
-    //     ? typeof marker.customStyling.imageURL === 'object' && marker.customStyling.imageURL instanceof File
-    //         ? URL.createObjectURL(marker.customStyling.imageURL)
-    //         : marker.customStyling.imageURL
-    //     : null;
+        ? typeof marker.customStyling.imageURL === 'object' && marker.customStyling.imageURL instanceof File
+            ? URL.createObjectURL(marker.customStyling.imageURL)
+            : marker.customStyling.imageURL
+        : null;
 
    
    
