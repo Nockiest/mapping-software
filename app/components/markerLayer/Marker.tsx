@@ -52,15 +52,17 @@ const Marker: React.FC<MarkerProps> = ({
     ? newMarkerSettings.value
     : initialMarkerSettings;
  
-  const imageUrl = usedSettings.imageURL
-  ? typeof usedSettings.imageURL === 'object'?  usedSettings.imageURL : null:
-    null;
-  // usedSettings.imageURL
-    // ? usedSettings.imageURL instanceof File
-    //   ? URL.createObjectURL(usedSettings.imageURL)
-    //   : usedSettings.imageURL
-    // : MarkerDefaultSettings.imageURL;
+  const imageUrl = 
+  usedSettings.imageURL
+? usedSettings.imageURL instanceof File
+  ? URL.createObjectURL(usedSettings.imageURL)
+  : usedSettings.imageURL
+: MarkerDefaultSettings.imageURL;
 
+  // usedSettings.imageURL
+  // ? typeof usedSettings.imageURL === 'object'?  usedSettings.imageURL : null:
+  //   null;
+  
   const mergedSettings = { ...MarkerDefaultSettings, ...usedSettings };
 
   const handleMouseMove = (position: Vector2) => {
@@ -126,7 +128,7 @@ const Marker: React.FC<MarkerProps> = ({
     const updatedMarkers = markers.value.filter((marker) => marker.id !== id);
     markers.value = updatedMarkers;
   };
-  // console.log('i exist')
+
   return (
     <Point
       radius={mergedSettings.width}

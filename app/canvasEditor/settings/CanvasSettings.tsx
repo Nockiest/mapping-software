@@ -11,16 +11,20 @@ import FrontlineLayerSettings from "./FrontlineLayerSettings";
 import { theme } from "../theme/theme";
 import { Grid, Paper, useTheme, Typography } from '@mui/material';
 
+ 
+export type ChangeSettingsFunctionType = <K extends keyof Settings['value']>(
+  property: K,
+  newValue: Settings['value'][K]
+) => void;
+
+
 const CanvasSettings = () => {
   const theme = useTheme();
 
-  const changeSettings = <K extends keyof Settings['value']>(
-    property: K,
-    newValue: Settings['value'][K]
-  ) => {
+  const changeSettings: ChangeSettingsFunctionType = (property, newValue) => {
     // Assuming settings is a mutable signal, otherwise, you might need to use `setSettings` if it's a state
     settings.value = { ...settings.value, [property]: newValue };
-  };
+  } 
 
   return (
     <Grid container spacing={2} sx={  {userSelect: 'none'}}>

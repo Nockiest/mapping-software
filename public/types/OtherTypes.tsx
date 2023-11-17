@@ -34,7 +34,7 @@ export type MarkerSettings =  PositionedText & {
   width: number 
   color: Color ;
   textColor: Color;
-  imageURL: string | null;
+  imageURL: string |File | null;
   popularMarkerColors: Array<Color>;
 };
 

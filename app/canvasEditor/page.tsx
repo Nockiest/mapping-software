@@ -94,7 +94,8 @@ const Page: React.FC = () => {
           layer: settings.value.activeLayer,
           mousePosition: mousePosition,
           mousDownTime: elapsedTime,
-          numMarkers:markers.value.length
+          // numMarkers:markers.value.length
+          markerImage: settings.value.markerSettings.imageURL
           // activeFrontLine: frontLineSettings.value.activeFrontline?.idNum,
           // GlobalData: GlobalData.mouseDownTime,
         }}
