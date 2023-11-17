@@ -1,5 +1,5 @@
  
- import React, { useState, useEffect } from 'react';
+ import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useCanvas } from '../CanvasContext';
 import { frontLineSettings, settings } from '../Signals';
 import { computed } from '@preact/signals';
@@ -36,11 +36,11 @@ const FrontlineLayerSettings = () => {
     setEditedPointNum(frontLineSettings.value.insertionPointIndex);
   },  );
 
-  const handleEndFrontLineIndexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEndFrontLineIndexChange = (e: Event, value: number | number[] ) => {
     console.log('CHANGING VALUE');
     const activeFrontline = frontLineSettings.value.activeFrontline;
 
-    const newValue = parseInt(e.target.value, 10);
+    const newValue = typeof value === 'number' ? value : -1;
 
     if (!isNaN(newValue)) {
       // Update the insertionPointIndex in settings and local state
@@ -54,9 +54,6 @@ const FrontlineLayerSettings = () => {
 
     if (activeFrontline) {
       const maxPoints = activeFrontline.points.length;
-
-      // Update the max attribute of the input
-      e.target.max = maxPoints.toString();
     }
   };
 
@@ -70,14 +67,15 @@ const FrontlineLayerSettings = () => {
         
   };
 
-  const handleThicknessChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newThickness = parseFloat(e.target.value);
+  const handleThicknessChange = (e: Event, value: number | number[]) => {
+    const newThickness = Array.isArray(value) ? value[0] : value;
     const activeFrontline = frontLineSettings.value.activeFrontline;
-
+  
     if (activeFrontline) {
       activeFrontline.thickness = newThickness;
     }
   };
+  
 
   const deleteCurrentFrontLine = () => {
     const activeFrontline = frontLineSettings.value.activeFrontline;
@@ -126,7 +124,7 @@ const FrontlineLayerSettings = () => {
           min={-1}
           defaultValue={-1}
           max={maxEndPointNumValue - 1}
-          onChange={(e) => handleEndFrontLineIndexChange }
+          onChange={  handleEndFrontLineIndexChange  }
           valueLabelDisplay="auto"
           marks
         />
@@ -144,7 +142,7 @@ const FrontlineLayerSettings = () => {
           value={
             frontLineSettings.value.activeFrontline?.thickness || 0
           }
-          onChange={(e) =>handleThicknessChange }
+          onChange={handleThicknessChange }
           valueLabelDisplay="auto"
         />
       </FormControl>
