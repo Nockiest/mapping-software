@@ -14,7 +14,7 @@ import { signal } from "@preact/signals";
 import { newMarkerSettings } from "@/app/canvasEditor/settings/MarkerEditorSettings";
 import Point from "../frontline/Point";
 import { position } from "html2canvas/dist/types/css/property-descriptors/position";
-
+import { extractImageUrl } from "../utility/utils";
 type MarkerProps = {
   topLeftOffset: Vector2;
   initialPosition: Vector2;
@@ -60,11 +60,7 @@ const Marker: React.FC<MarkerProps> = ({
     ? newMarkerSettings.value
     : initialMarkerSettings;
 
-  const imageUrl = usedSettings.imageURL
-    ? usedSettings.imageURL instanceof File
-      ? URL.createObjectURL(usedSettings.imageURL)
-      : usedSettings.imageURL
-    : MarkerDefaultSettings.imageURL;
+  const imageUrl = extractImageUrl(usedSettings?.imageURL, MarkerDefaultSettings.imageURL);
 
   const mergedSettings = { ...MarkerDefaultSettings, ...usedSettings };
 
@@ -79,12 +75,9 @@ const Marker: React.FC<MarkerProps> = ({
       );
       setCurrentPosition(updatedPosition);
       // Update the position of the marker in markers.value
-      const updatedMarkers = markers.value.map((marker) =>
+      markers.value = markers.value.map((marker) =>
         marker.id === id ? { ...marker, position: updatedPosition } : marker
       );
-
-      // Set the updated markers array
-      markers.value = updatedMarkers;
     }
   };
 
@@ -106,17 +99,6 @@ const Marker: React.FC<MarkerProps> = ({
     userSelect: "none",
   };
 
-  // const handleDelete = () => {
-  //   if (canRemove) {
-  //     console.log("callled", id);
-  //     console.log(markers.value);
-  //     const updatedMarkers = markers.value.filter((marker) => marker.id !== id);
-  //     console.log(updatedMarkers);
-  //     markers.value = updatedMarkers;
-  //   } else {
-  //     setCanRemove(true);
-  //   }
-  // };
   const handleDelete = () => {
     if (canRemove) {
       // Remove the marker with the specified id
@@ -125,7 +107,7 @@ const Marker: React.FC<MarkerProps> = ({
       setCanRemove(true);
     }
   };
-  
+
   return (
     <Point
       radius={mergedSettings.width}
@@ -151,6 +133,8 @@ const Marker: React.FC<MarkerProps> = ({
       </p>
     </Point>
   );
+
+ 
 };
 
 export default Marker;

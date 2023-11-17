@@ -38,7 +38,13 @@ export type MarkerSettings =  PositionedText & {
   popularMarkerColors: Array<Color>;
 };
 
-
+export type FollowMouseFunction = (
+  position:Vector2,
+  withscroll: boolean,
+  topLeftOffset: Vector2,
+  maxPosition: Vector2,
+  
+) => Vector2;
 
 export type FrontLineSettings = Signal<{
   insertionPointIndex: number;

@@ -9,7 +9,7 @@ import { Color, MarkerArraySignal, MarkerSettings, MarkerType } from "@/public/t
 // import LineComponent from '@/app/components/frontline/FrontLine2D';
 import { markers } from "../Signals";
 import { MousePositionContext } from "../MouseContext";
-import { followMouseComponent } from "@/app/components/utility/utils";
+import { extractImageUrl, followMouseComponent } from "@/app/components/utility/utils";
 import ReusableLayer from "@/app/components/utility/ResuableLayer";
 import { Signal } from "@preact/signals";
 import { getCtxFromRef } from "@/app/components/utility/otherUtils";
@@ -163,20 +163,14 @@ export const drawMarkersOnCanvas = (
   ctx.clearRect(0, 0, settings.value.canvasSize.x, settings.value.canvasSize.y);
 
   markers.value.forEach((marker, index) => {
-     
-
-    const imageUrl =
-    marker?.customStyling?.imageURL
-        ? typeof marker.customStyling.imageURL === 'object' && marker.customStyling.imageURL instanceof File
-            ? URL.createObjectURL(marker.customStyling.imageURL)
-            : marker.customStyling.imageURL
-        : null;
-
-   
-   
+    const imageUrl = extractImageUrl(
+      marker?.customStyling?.imageURL,
+      null
+    );
 
     const usedWidth = marker.customStyling?.width || MarkerDefaultSettings.width;
-    const usedTextColor = marker.customStyling?.textColor || MarkerDefaultSettings.textColor;
+    const usedTextColor =
+      marker.customStyling?.textColor || MarkerDefaultSettings.textColor;
 
     const markerStyle: React.CSSProperties = {
       left: `${marker.position.x}px`,
@@ -185,7 +179,8 @@ export const drawMarkersOnCanvas = (
       color: `${marker.customStyling?.textColor || MarkerDefaultSettings.textColor} `,
       height: `${usedWidth}px`,
       fontSize: `${usedWidth}px`,
-      backgroundColor: marker.customStyling?.color || MarkerDefaultSettings.color,
+      backgroundColor:
+        marker.customStyling?.color || MarkerDefaultSettings.color,
       zIndex: marker.isDragging ? 10 : 1,
     };
 
@@ -217,20 +212,23 @@ export const drawMarkersOnCanvas = (
     );
 
     // Set the fill color to the marker color
-    ctx.fillStyle = marker.customStyling?.color || MarkerDefaultSettings.color;
+    ctx.fillStyle =
+      marker.customStyling?.color || MarkerDefaultSettings.color;
     ctx.fill();
     ctx.closePath();
 
     if (imageUrl) {
       const img = new Image();
-      // img.src = imageUrl!;
-      ctx.drawImage(
-        img,
-        marker.position.x - topLeftOffset.x - usedWidth / 2,
-        marker.position.y - topLeftOffset.y - usedWidth / 2,
-        usedWidth,
-        usedWidth
-      );
+      img.onload = () => {
+        ctx.drawImage(
+          img,
+          marker.position.x - topLeftOffset.x - usedWidth / 2,
+          marker.position.y - topLeftOffset.y - usedWidth / 2,
+          usedWidth,
+          usedWidth
+        );
+      };
+      img.src = imageUrl!;
     }
 
     if (marker.topText) {

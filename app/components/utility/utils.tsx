@@ -1,3 +1,4 @@
+import { FollowMouseFunction } from "@/public/types/OtherTypes";
 import { Vector2 } from "../../../public/types/GeometryTypes";
 
 function zoomIn(scale: number, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
@@ -64,13 +65,7 @@ export const hexToRGBA = (hex: string): [number, number, number, number] => {
   return [r, g, b, 255];
 }
 
-type FollowMouseFunction = (
-  position:Vector2,
-  withscroll: boolean,
-  topLeftOffset: Vector2,
-  maxPosition: Vector2,
-  
-) => Vector2;
+ 
 
 export const followMouseComponent: FollowMouseFunction = (position,withscroll, topLeftOffset, maxPosition) => {
   // Calculate updated position without subtracting topLeftOffset.y and window.scrollY
@@ -81,3 +76,11 @@ export const followMouseComponent: FollowMouseFunction = (position,withscroll, t
   // console.log(e.clientY, topLeftOffset.y, window.scrollY, updatedPosition);
   return updatedPosition;
 };
+
+export function extractImageUrl(url:string|File|null|undefined, fallbackURL:string|File|null):string|null {
+  // should take a blob url find out wheter it can use it as url and then run the conditions
+  return url? url instanceof File
+        ? URL.createObjectURL(url)
+        : url
+      : fallbackURL instanceof File? URL.createObjectURL(fallbackURL) : null;
+  }
