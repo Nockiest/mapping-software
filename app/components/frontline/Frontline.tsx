@@ -137,9 +137,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
     console.log("DELETING A POINT");
 
     if (frontLineInfo) {
-      console.log("Point Id to Delete:", id);
-      console.log("Points Before Deletion:", frontLineInfo.points);
-
+     
       const pointIndex = frontLineInfo.points.findIndex(
         (point) => point.id === id
       );
@@ -163,7 +161,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
        
       {frontLineInfo?.points.map((point, index) => (
         <Point
-          key={index}
+          key={point.id}
           position={point.position}
           id={point.id}
           topLeft={{ x: topLeftPoint.x, y: topLeftPoint.y }}
@@ -178,7 +176,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
               : null
           }
           // leftClk={(e) => updateEndPointIndex(point.id)}
-          onDelete={(e: React.MouseEvent) => handleDeletePoint(point.id)}
+          onDelete={(e:  MouseEvent|React.MouseEvent) => handleDeletePoint(point.id)}
           styling={{
             background: index === frontLineInfo.endPointIndex ? "white" : "red",
             border: "2px solid black",
@@ -187,7 +185,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
           }}
           acceptInput={frontLineActive}
         >
-          {index}
+          <p className="text-black mt-2"> {index} </p> 
         </Point>
       ))}
     </div>

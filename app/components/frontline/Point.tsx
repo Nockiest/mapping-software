@@ -13,7 +13,7 @@ type PointProps = {
   mouseWheelClk?: ((e: React.MouseEvent) => void) | null;
   styling?: React.CSSProperties;
   onDrag?: (position: Vector2) => void;
-  onDelete?: (e: React.MouseEvent) => void;
+  onDelete?: (e:  MouseEvent|React.MouseEvent) => void;
   children?: React.ReactNode;
   shape?: Omit<Shapes, "triangle">;
   dragable?: boolean;
@@ -75,7 +75,7 @@ const Point: React.FC<PointProps> = ({
     onDrag?.({ x: newX, y: newY });
   };
 
-  const handleMouseUp = (e: React.MouseEvent) => {
+  const handleMouseUp = (e:  MouseEvent|React.MouseEvent) => {
     setIsDragging(false);
     console.log("HANDLING MOUSE UP", mouseDownTime, e.button === 2, mouseDownTime > 1000);
     // Check if right mouse button was pressed and duration is more than  500ms
@@ -83,16 +83,18 @@ const Point: React.FC<PointProps> = ({
       // Trigger onDelete method
       console.log("HANDLING DELETE");
       onDelete?.(e);
-      setIsDragging(false);
+      
     }
   };
 
   useEffect(() => {
     if (isDragging) {
       window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
     }
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
       
     };
   }, [isDragging]);
@@ -114,7 +116,7 @@ const Point: React.FC<PointProps> = ({
       }}
       className={className}
       onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
+      // onMouseUp={handleMouseUp}
       onContextMenu={handleContextMenu}
     >
       {children}

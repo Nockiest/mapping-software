@@ -27,13 +27,14 @@ const FrontlineLayerSettings = () => {
 
   useEffect(() => {
     const activeFrontline = frontLineSettings.value.activeFrontline;
+    // console.log(activeFrontline?.points.length,'max point value', frontLineSettings.value.activeFrontline)
     setMaxEndPointNumValue(activeFrontline?.points.length || 0);
   } );
 
   useEffect(() => {
     // Update local state when settings change
     setEditedPointNum(frontLineSettings.value.insertionPointIndex);
-  }, [frontLineSettings.value.insertionPointIndex]);
+  },  );
 
   const handleEndFrontLineIndexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log('CHANGING VALUE');

@@ -89,7 +89,7 @@ const FrontlineLayer = () => {
 
   return (
     <>
-      {frontlineCanvasRef && (
+      {/* {frontlineCanvasRef && ( */}
         <ReusableLayer
           canvasRef={frontlineCanvasRef}
           style={{
@@ -106,7 +106,7 @@ const FrontlineLayer = () => {
             />
           ))}
         </ReusableLayer>
-      )}
+      {/* )} */}
     </>
   );
 };

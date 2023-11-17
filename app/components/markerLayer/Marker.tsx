@@ -127,10 +127,10 @@ const Marker: React.FC<MarkerProps> = ({
           {mergedSettings.bottomText}
         </p>
       )}
-      <p className="text-black">{id}</p>
-      <p className="text-black">
-        {Math.round(currentPosition.x)} {Math.round(currentPosition.y)}
-      </p>
+      {/* <p className="text-black">{id}</p> */}
+      {/* <p className="text-black"> */}
+        {/* {Math.round(currentPosition.x)} {Math.round(currentPosition.y)} */}
+      {/* </p> */}
     </Point>
   );
 
