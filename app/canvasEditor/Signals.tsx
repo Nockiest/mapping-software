@@ -1,5 +1,52 @@
 import { Signal, signal } from "@preact/signals";
-import { FrontLineSettings, MarkerArraySignal, Settings } from "@/public/types/OtherTypes";
+import { DrawAction, DrawingState, ErasePayload, FrontLineSettings, MarkerArraySignal, Settings } from "@/public/types/OtherTypes";
+import { DrawPayload } from "../components/drawing/LineDrawer";
+
+
+const drawLayerStateHandler = (action:DrawAction) => {
+  console.log("SWITCHING TO ", action.type,  );
+
+  switch (action.type) {
+    case "DRAW":
+      const drawPayload = action.payload as DrawPayload;
+      console.log(drawPayload);
+      drawPayload.drawFunction(
+        drawPayload.drawArgs?.ctx,
+        drawPayload.drawArgs.x,
+        drawPayload.drawArgs.y,
+        drawPayload.drawArgs.radius,
+        drawPayload.drawArgs.color
+      );
+      return DrawingState.Drawing;
+
+    case "ERASE":
+      const erasePayload = action.payload as ErasePayload;
+      erasePayload.eraseFunction(erasePayload.eraseArgs);
+      return DrawingState.Erasing;
+
+    case "MOUSE_UP":
+    case "MOUSE_LEAVE":
+      return DrawingState.Idle;
+
+    case "ENTER_BUCKET_MODE":
+      return DrawingState.BucketFill === drawSettings.value.state
+        ? DrawingState.Idle
+        : DrawingState.BucketFill;
+
+    default:
+      console.error("INVALID ACTION: ");
+      return drawSettings.value.state;
+  }
+};
+
+export const drawSettings = signal({
+  state: DrawingState.Idle,
+  setState: (newState:DrawAction) => {
+    const result = drawLayerStateHandler(newState)
+    drawSettings.value.state = result
+  }
+})
+
 export const settings: Settings = signal({
   radius: 5,
   color: `#000000`,

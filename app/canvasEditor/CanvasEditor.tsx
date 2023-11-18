@@ -17,7 +17,7 @@ import DrawingLayer from "./layers/DrawingLayer";
 import BackgroundImageLayer from "./layers/BackgroundImageLayer";
 import Marker from "../components/markerLayer/Marker";
  
-const DrawingCanvas: React.FC = () => {
+const CanvasEditor: React.FC = () => {
   const { canvasRef, frontlineCanvasRef, markerCanvasRef, backgroundCanvasRef } = useCanvas();
   const [layers, setLayers] = useState([
     { canvasRef: canvasRef, zIndex: 20 },
@@ -43,17 +43,13 @@ const DrawingCanvas: React.FC = () => {
 
   return (
     <div className={`relative h-600 w-${settings.value.canvasSize} flex items-center justify-center `}>
-      {/* {settings.value.activeLayer !== 'compiled' ? ( */}
-        {/* <> */}
-          <DrawingLayer />
-          <UnitMarkerLayer />
-          <FronlineLayer />
-          <BackgroundImageLayer />
-        {/* </> */}
-      {/* ) : ( */}
-        <LayerSplicer layers={filteredLayers} />
-      {/* )} */}
+        <DrawingLayer />
+        <UnitMarkerLayer />
+        <FronlineLayer />
+        <BackgroundImageLayer />
+        {/* lawer splicer currnetly handles layers internally without the need of outside props */}
+        <LayerSplicer layers={filteredLayers} />  
     </div>
   );
 };
-export default DrawingCanvas
+export default CanvasEditor

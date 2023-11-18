@@ -26,7 +26,7 @@ const LayerSplicer: React.FC<LayerSplicerProps> = ({ layers }) => {
       console.error("Canvas or context is null");
       return;
     }
-    console.log('splicing lawers')
+    // console.log('splicing lawers')
   
     // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -37,9 +37,9 @@ const LayerSplicer: React.FC<LayerSplicerProps> = ({ layers }) => {
     // Draw each layer onto the canvas
     canvasArr.forEach((canvas, index) => {
       const canvasLayer = canvas.current;
-      console.log(canvasLayer)
+      // console.log(canvasLayer)
       if (canvasLayer) {
-        console.log(`Drawing layer ${index} with zIndex: ${10}`);
+        // console.log(`Drawing layer ${index} with zIndex: ${10}`);
         ctx.drawImage(canvasLayer, 0, 0);
       } else {
         console.warn(`Layer ${index} is missing canvasRef`);

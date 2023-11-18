@@ -1,5 +1,5 @@
 import { useRef, useContext } from "react";
-import { settings } from "../Signals";
+import { settings, drawSettings } from "../Signals";
 import LineTypeSettings from "@/app/components/settings/LineTypeSettings";
 import { Color, Settings } from "@/public/types/OtherTypes";
 import { LineEdge } from "@/public/types/GeometryTypes";
@@ -18,8 +18,12 @@ import {
 } from "@mui/material"; // Import Material-UI components
 import { theme } from "../theme/theme";
 import ColorPicker from "./settingsComponents/ColorPicker";
+import {   signal } from "@preact/signals";
+
+// export let activatedSignal = signal(false)
 
 const DrawingLayerSettings = () => {
+  const { state, setState} = drawSettings.value
   const imageInputRef = useRef<HTMLInputElement>(null);
   // const { dispatchState } = useCanvas();
 
@@ -48,11 +52,13 @@ const DrawingLayerSettings = () => {
   };
 
   // Handle bucket fill
-  // const handleBucketFill = () => {
-  //   if (dispatchState) {
-  //     dispatchState({ type: 'ENTER_BUCKET_MODE' });
-  //   }
-  // };
+  const handleBucketFill = () => {
+     setState({ type: 'ENTER_BUCKET_MODE' })
+    // activatedSignal.value = !activatedSignal.value
+    // if (dispatchState) {
+    //   dispatchState({ type: 'ENTER_BUCKET_MODE' });
+    // }
+  };
 
   const handleSaveToFavorites = () => {
     const currentColor = settings.value.color;
@@ -94,9 +100,9 @@ const DrawingLayerSettings = () => {
 
           <br />
 
-          {/* <Button variant="contained" onClick={handleBucketFill}>
+          <Button variant="contained" onClick={handleBucketFill}>
             Bucket Fill
-          </Button> */}
+          </Button>
         </Box>
       </Grid>
 

@@ -8,7 +8,7 @@ import React, {
   useEffect,
 } from "react";
 import CanvasToImage from "../components/utility/CanvasToImg";
-import DrawingCanvas from "./CanvasEditor";
+import CanvasEditor from "./CanvasEditor";
 import CanvasSettings from "./settings/CanvasSettings";
 import DebugInfo from "../components/utility/Debugger";
 import Timeline from "./Timeline";
@@ -101,7 +101,7 @@ const Page: React.FC = () => {
         }}
       />
       <CanvasSettings />
-      <DrawingCanvas />
+      <CanvasEditor />
       <Timeline />
     </>
   );
