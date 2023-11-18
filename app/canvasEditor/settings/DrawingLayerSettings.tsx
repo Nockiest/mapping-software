@@ -25,8 +25,7 @@ import {   signal } from "@preact/signals";
 const DrawingLayerSettings = () => {
   const { state, setState} = drawSettings.value
   const imageInputRef = useRef<HTMLInputElement>(null);
-  // const { dispatchState } = useCanvas();
-
+ 
   const changeSettings = <K extends keyof Settings["value"]>(
     property: K,
     newValue: Settings["value"][K]
@@ -54,10 +53,7 @@ const DrawingLayerSettings = () => {
   // Handle bucket fill
   const handleBucketFill = () => {
      setState({ type: 'ENTER_BUCKET_MODE' })
-    // activatedSignal.value = !activatedSignal.value
-    // if (dispatchState) {
-    //   dispatchState({ type: 'ENTER_BUCKET_MODE' });
-    // }
+  
   };
 
   const handleSaveToFavorites = () => {

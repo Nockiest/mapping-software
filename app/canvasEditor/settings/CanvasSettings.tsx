@@ -1,5 +1,5 @@
  import { useContext } from "react";
-import MarkerEditorSettings from "./MarkerEditorSettings";
+import MarkerEditorSettings from "./MarkerSettings/MarkerEditorSettings";
 import LineTypeSettings from "@/app/components/settings/LineTypeSettings";
 import ActiveLayerSettings from "@/app/components/settings/ActiveLayerSettings";
 import { hexToRgb } from "@/app/components/utility/utils";

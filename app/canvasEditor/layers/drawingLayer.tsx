@@ -25,67 +25,22 @@ import {
   ErasePayload,
 } from "@/public/types/OtherTypes";
 import { getCtxFromRef } from "@/app/components/utility/otherUtils";
-// import { activatedSignal } from "../settings/DrawingLayerSettings";
-// const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
-//   // console.log("SWITCHING TO ", action.type,  action?.payload);
-//   switch (action.type) {
-//     case "DRAW":
-//       const drawPayload = action.payload as DrawPayload;
-//       console.log(drawPayload);
-//       drawPayload.drawFunction(
-//         drawPayload.drawArgs?.ctx,
-//         drawPayload.drawArgs.x,
-//         drawPayload.drawArgs.y,
-//         drawPayload.drawArgs.radius,
-//         drawPayload.drawArgs.color
-//       );
-//       return DrawingState.Drawing;
-
-//     case "ERASE":
-//       const erasePayload = action.payload as ErasePayload;
-//       erasePayload.eraseFunction(erasePayload.eraseArgs);
-//       return DrawingState.Erasing;
-
-//     case "MOUSE_UP":
-//     case "MOUSE_LEAVE":
-//       return DrawingState.Idle;
-
-//     case "ENTER_BUCKET_MODE":
-//       return DrawingState.BucketFill === state
-//         ? DrawingState.Idle
-//         : DrawingState.BucketFill;
-
-//     default:
-//       console.error("INVALID ACTION: ");
-//       return state;
-//   }
-// };
-  
 
 const DrawingLayer: React.FC = () => {
   const { canvasRef } = useCanvas();
   const mousePosition = useContext(MousePositionContext);
   const [lastMousePos, setLastMousePos] = useState<Vector2 | null>(null);
-  // const [canvasState, dispatchState] = useReducer<
-  //   Reducer<DrawingState, DrawAction>
-  // >(reducer, DrawingState.Idle);
-  const { color, radius } = settings.value;
-  const {state, setState} = drawSettings.value
-  const isActive = settings.value.activeLayer === "draw";
 
-  // if (activatedSignal && canvasState !== DrawingState.BucketFill ){
-  //   dispatchState({ type: 'ENTER_BUCKET_MODE' });
-  // } else if (!activatedSignal && canvasState !== DrawingState.Idle ) (
-  //   dispatchState({ type: "MOUSE_LEAVE" }) 
-  // )
+  const { color, radius } = settings.value;
+  const { state, setState } = drawSettings.value;
+  const isActive = settings.value.activeLayer === "draw";
 
   const handleMouseLeave = () => {
     if (isActive) {
-        setState({ type: "MOUSE_LEAVE" })
-      // dispatchState({ type: "MOUSE_LEAVE" });
+      setState({ type: "MOUSE_LEAVE" });
     }
   };
- 
+
   // useEffect(() =>{
   //   fillCanvas (canvasRef, 'rgba(211, 211, 211, 0.3)');  // Adjust the color as needed
   // }, [])
@@ -115,8 +70,7 @@ const DrawingLayer: React.FC = () => {
             eraseShape: settings.value.lineType,
           },
         };
-         setState({ type: "ERASE", payload: erasePayload })
-        // dispatchState({ type: "ERASE", payload: erasePayload });
+        setState({ type: "ERASE", payload: erasePayload });
       } else if (e.button === 0) {
         // Left mouse button is pressed, start drawing or filling
         if (state === DrawingState.BucketFill) {
@@ -127,8 +81,8 @@ const DrawingLayer: React.FC = () => {
             drawFunction: drawDot, // Replace with your actual draw function
             drawArgs: { ctx, x, y, radius, color },
           };
-          setState({ type: "DRAW", payload: drawPayload })
-          // dispatchState({ type: "DRAW", payload: drawPayload });
+          setState({ type: "DRAW", payload: drawPayload });
+
           if (ctx) {
             ctx.beginPath();
 
@@ -142,8 +96,10 @@ const DrawingLayer: React.FC = () => {
     const handleMouseMovement = (e: MouseEvent) => {
       const x = e.offsetX;
       const y = e.offsetY;
-      if (!isActive) {return;}
-      // console.log(canvasState === DrawingState.Drawing)
+      if (!isActive) {
+        return;
+      }
+
       if (state === DrawingState.Erasing) {
         eraseLine({
           canvasRef,
@@ -168,13 +124,12 @@ const DrawingLayer: React.FC = () => {
       setLastMousePos({ x, y });
     };
 
-    const handleMouseUp = (e:  MouseEvent) => {
+    const handleMouseUp = (e: MouseEvent) => {
       e.preventDefault();
       if (!isActive) {
         return;
       }
-      setState({ type: "MOUSE_UP" })
-      // dispatchState({ type: "MOUSE_UP" });
+      setState({ type: "MOUSE_UP" });
       if (ctx) {
         ctx.closePath();
       }
@@ -191,14 +146,7 @@ const DrawingLayer: React.FC = () => {
       canvas.removeEventListener("mouseup", handleMouseUp);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [
-    canvasRef,
-    state,
-    mousePosition,
-    lastMousePos,
-    settings,
-     
-  ]);
+  }, [canvasRef, state, mousePosition, lastMousePos, settings]);
   return (
     <>
       {canvasRef && (

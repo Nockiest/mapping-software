@@ -4,12 +4,12 @@ import { EraseArgs } from "@/app/components/drawing/Eraser";
 import { DrawPayload } from "@/app/components/drawing/LineDrawer";
 import { FrontlineData } from "@/app/canvasEditor/layers/FronlineLayer";
 
-export type RGB = `rgb(${number}, ${number}, ${number})`;
-export type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
+export type RGB = [number, number, number  ];
+export type RGBA = [number, number, number, number];
 export type HEX = `#${string}`;
 
 export type Color = HEX;  
-
+export type AnyTypeColor = RGB|RGBA|HEX
 export type PositionedText = {
   topText: string;
   bottomText: string;

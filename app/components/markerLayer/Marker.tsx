@@ -11,7 +11,7 @@ import { useState, useContext, useEffect, useRef } from "react";
 import { markers, settings } from "@/app/canvasEditor/Signals";
 import Image from "next/image";
 import { signal } from "@preact/signals";
-import { newMarkerSettings } from "@/app/canvasEditor/settings/MarkerEditorSettings";
+import { newMarkerSettings } from "@/app/canvasEditor/settings/MarkerSettings/MarkerEditorSettings";
 import Point from "../frontline/Point";
 import { position } from "html2canvas/dist/types/css/property-descriptors/position";
 import { extractImageUrl } from "../utility/utils";
@@ -80,7 +80,12 @@ const Marker: React.FC<MarkerProps> = ({
       );
     }
   };
-
+  
+  useEffect(() => {
+    if (shouldUpdateOnSettingsChange){
+      setCurrentPosition(initialPosition)
+    }
+  }, [initialPosition])
   const markerStyle: React.CSSProperties = {
     width: `${mergedSettings.width}px`,
     color: mergedSettings.textColor,
