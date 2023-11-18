@@ -43,16 +43,16 @@ const DrawingCanvas: React.FC = () => {
 
   return (
     <div className={`relative h-600 w-${settings.value.canvasSize} flex items-center justify-center `}>
-      {settings.value.activeLayer !== 'compiled' ? (
-        <>
+      {/* {settings.value.activeLayer !== 'compiled' ? ( */}
+        {/* <> */}
           <DrawingLayer />
           <UnitMarkerLayer />
           <FronlineLayer />
           <BackgroundImageLayer />
-        </>
-      ) : (
+        {/* </> */}
+      {/* ) : ( */}
         <LayerSplicer layers={filteredLayers} />
-      )}
+      {/* )} */}
     </div>
   );
 };

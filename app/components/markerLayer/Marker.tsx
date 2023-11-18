@@ -112,7 +112,7 @@ const Marker: React.FC<MarkerProps> = ({
   return (
     <Point
       radius={mergedSettings.width}
-      styling={{ ...markerStyle, opacity:0  }}
+      styling={{ ...markerStyle,  }}
       position={currentPosition}
       rightClk={handleDelete}
       onDrag={(position) => handleMouseMove(position)}
