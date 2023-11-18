@@ -14,6 +14,7 @@ import ReusableLayer from "@/app/components/utility/ResuableLayer";
 import { Signal } from "@preact/signals";
 import { getCtxFromRef } from "@/app/components/utility/otherUtils";
 import { uuid } from "uuidv4";
+import { drawMarkersOnCanvas } from "@/app/components/markerLayer/MarkerCanvasPrint";
  
  
 enum MarkerLayerState {
@@ -109,8 +110,8 @@ const UnitMarkerLayer: React.FC = () => {
             position: { x, y },
             isDragging: false,
             topLeftOffset,
-            topText: "",
-            bottomText: "",
+            topText: settings.value.markerSettings.topText,
+            bottomText: settings.value.markerSettings.bottomText,
             customStyling: {...settings.value.markerSettings},
             id:uuid()
           };
@@ -155,106 +156,4 @@ export default UnitMarkerLayer;
 
  
 
-export const drawMarkersOnCanvas = (
-  ctx: CanvasRenderingContext2D,
-  markers: MarkerArraySignal,
-  topLeftOffset: Vector2
-) => {
-  ctx.clearRect(0, 0, settings.value.canvasSize.x, settings.value.canvasSize.y);
-
-  markers.value.forEach((marker, index) => {
-    const imageUrl = extractImageUrl(
-      marker?.customStyling?.imageURL,
-      null
-    );
-
-    const usedWidth = marker.customStyling?.width || MarkerDefaultSettings.width;
-    const usedTextColor =
-      marker.customStyling?.textColor || MarkerDefaultSettings.textColor;
-
-    const markerStyle: React.CSSProperties = {
-      left: `${marker.position.x}px`,
-      top: `${marker.position.y}px`,
-      width: `${usedWidth}px`,
-      color: `${marker.customStyling?.textColor || MarkerDefaultSettings.textColor} `,
-      height: `${usedWidth}px`,
-      fontSize: `${usedWidth}px`,
-      backgroundColor:
-        marker.customStyling?.color || MarkerDefaultSettings.color,
-      zIndex: marker.isDragging ? 10 : 1,
-    };
-
-    const textBackgroundStyle: React.CSSProperties = {
-      position: 'absolute',
-      left: '50%',
-      transform: 'translateX(-50%)',
-      backgroundColor: 'rgba(255, 255, 255, 0.7)',
-      padding: '5px',
-      borderRadius: '5px',
-      userSelect: 'none',
-    };
-
-    const imageStyle: React.CSSProperties = {
-      width: '10px',
-      height: '10px',
-      borderRadius: '50%',
-    };
-
-    ctx.save();
-
-    ctx.beginPath();
-    ctx.arc(
-      marker.position.x,
-      marker.position.y,
-      usedWidth / 2,
-      0,
-      2 * Math.PI
-    );
-
-    // Set the fill color to the marker color
-    ctx.fillStyle =
-      marker.customStyling?.color || MarkerDefaultSettings.color;
-    ctx.fill();
-    ctx.closePath();
-
-    if (imageUrl) {
-      const img = new Image();
-      img.onload = () => {
-        ctx.drawImage(
-          img,
-          marker.position.x - topLeftOffset.x - usedWidth / 2,
-          marker.position.y - topLeftOffset.y - usedWidth / 2,
-          usedWidth,
-          usedWidth
-        );
-      };
-      img.src = imageUrl!;
-    }
-
-    if (marker.topText) {
-      ctx.font = `${usedWidth / 4}px Arial`;
-      ctx.fillStyle = usedTextColor;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(
-        marker.topText,
-        marker.position.x,
-        marker.position.y - usedWidth / 2 - 10
-      );
-    }
-
-    if (marker.bottomText && usedWidth > 20) {
-      ctx.font = `${usedWidth / 4}px Arial`;
-      ctx.fillStyle = usedTextColor;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(
-        marker.bottomText,
-        marker.position.x,
-        marker.position.y + usedWidth / 2 + 10
-      );
-    }
-
-    ctx.restore();
-  });
-};
+ 

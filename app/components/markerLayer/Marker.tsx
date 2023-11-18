@@ -92,10 +92,11 @@ const Marker: React.FC<MarkerProps> = ({
     backgroundSize: "cover",
   };
 
-  const textBackgroundStyle: React.CSSProperties = {
+  const markerTextStyle: React.CSSProperties = {
+    //position: 'absolute',
     textAlign: "center",
-    padding: "5px",
-    borderRadius: "5px",
+    // padding: "5px",
+    // borderRadius: "5px",
     userSelect: "none",
   };
 
@@ -111,7 +112,7 @@ const Marker: React.FC<MarkerProps> = ({
   return (
     <Point
       radius={mergedSettings.width}
-      styling={{ ...markerStyle }}
+      styling={{ ...markerStyle, opacity:0  }}
       position={currentPosition}
       rightClk={handleDelete}
       onDrag={(position) => handleMouseMove(position)}
@@ -119,11 +120,11 @@ const Marker: React.FC<MarkerProps> = ({
       onDelete={handleDelete}
       id={id}
     >
-      <p style={{ ...textBackgroundStyle, top: "-5px" }}>
+      <p style={{ ...markerTextStyle, marginTop:  '2px' }}>
         {mergedSettings.topText}
       </p>
       {mergedSettings.width > 20 && (
-        <p style={{ ...textBackgroundStyle, bottom: "-5px" }}>
+        <p style={{ ...markerTextStyle,   marginTop: usedSettings.width ? `${usedSettings.width / 5}px` : '10px'}}>
           {mergedSettings.bottomText}
         </p>
       )}

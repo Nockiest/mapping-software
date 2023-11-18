@@ -17,28 +17,43 @@ import DrawingLayer from "./layers/DrawingLayer";
 import BackgroundImageLayer from "./layers/BackgroundImageLayer";
 import Marker from "../components/markerLayer/Marker";
  
-const DrawingCanvas: React.FC  = ( ) => {
-  const{ canvasRef, frontlineCanvasRef, markerCanvasRef, backgroundCanvasRef  } = useCanvas( );
-  const layers = [
+const DrawingCanvas: React.FC = () => {
+  const { canvasRef, frontlineCanvasRef, markerCanvasRef, backgroundCanvasRef } = useCanvas();
+  const [layers, setLayers] = useState([
     { canvasRef: canvasRef, zIndex: 20 },
     { canvasRef: backgroundCanvasRef, zIndex: 10 },
     { canvasRef: frontlineCanvasRef, zIndex: 30 },
     { canvasRef: markerCanvasRef, zIndex: 40 },
     // Add more objects as needed
-  ];
-  const filteredLayers = layers.filter((layer) => layer.canvasRef)
+  ]);
+
+  useEffect(() => {
+    // Update layers when canvas references are ready
+    console.log(canvasRef)
+    setLayers([
+      { canvasRef: canvasRef, zIndex: 20 },
+      { canvasRef: backgroundCanvasRef, zIndex: 10 },
+      { canvasRef: frontlineCanvasRef, zIndex: 30 },
+      { canvasRef: markerCanvasRef, zIndex: 40 },
+      // Add more objects as needed
+    ]);
+  }, [canvasRef, frontlineCanvasRef, markerCanvasRef, backgroundCanvasRef]);
+
+  const filteredLayers = layers.filter((layer) => layer.canvasRef);
+
   return (
-    
-    <div className={`relative h-600  w-${settings.value.canvasSize}  flex items-center justify-center `}  > 
-      <DrawingLayer    />
-      <UnitMarkerLayer    />
-      <FronlineLayer  />
-      <BackgroundImageLayer   />
-      <LayerSplicer layers={filteredLayers} />
+    <div className={`relative h-600 w-${settings.value.canvasSize} flex items-center justify-center `}>
+      {settings.value.activeLayer !== 'compiled' ? (
+        <>
+          <DrawingLayer />
+          <UnitMarkerLayer />
+          <FronlineLayer />
+          <BackgroundImageLayer />
+        </>
+      ) : (
+        <LayerSplicer layers={filteredLayers} />
+      )}
     </div>
-  
-  
   );
 };
-
-export default DrawingCanvas;
+export default DrawingCanvas

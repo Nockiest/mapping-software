@@ -49,7 +49,7 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
   };
 
   return (
-    <div className={`canvas-rectangle absolute top-0 ${isActive ? 'z-20 ' : `${settings.value.canvasZindexes[layerName]} opacity-40  `}`}>
+    <div className={`canvas-rectangle absolute top-0 ${isActive ? 'z-30 ' : `${settings.value.canvasZindexes[layerName]} opacity-40  `}`}>
       {canvasRef && (
         <>
           <canvas

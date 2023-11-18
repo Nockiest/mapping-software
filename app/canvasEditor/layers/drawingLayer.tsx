@@ -60,10 +60,7 @@ const reducer: React.Reducer<DrawingState, DrawAction> = (state, action) => {
       return state;
   }
 };
-// type Action = {
-//   type:string;
-//   payload?:DrawAction
-// }
+  
 
 const DrawingLayer: React.FC = () => {
   const { canvasRef } = useCanvas();
@@ -192,7 +189,7 @@ const DrawingLayer: React.FC = () => {
     settings,
     dispatchState,
   ]);
-
+  console.log("Rendering DrawingLayer with Canvas Ref:", canvasRef );
   return (
     <>
       {canvasRef && (
@@ -205,7 +202,7 @@ const DrawingLayer: React.FC = () => {
                 ? "url('/cursor.cur'),auto"
                 : "auto",
           }}
-        >x</ReusableLayer>
+        ></ReusableLayer>
       )}
     </>
   );
