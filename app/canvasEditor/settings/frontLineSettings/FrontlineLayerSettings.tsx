@@ -20,7 +20,9 @@ import {
 import { theme } from '../../theme/theme';
 import ColorPicker from '../settingsComponents/ColorPicker';
 import { Color } from '@/public/types/OtherTypes';
-
+import ButtonColumn from './ButtonColumn';
+import VisualSettingsColumn from './ColorSettingsColumn';
+ 
 const FrontlineLayerSettings = () => {
   const [insertionPointIndex, setEditedPointNum] = useState(frontLineSettings.value.insertionPointIndex);
   const [maxEndPointNumValue, setMaxEndPointNumValue] = useState(0);
@@ -36,45 +38,8 @@ const FrontlineLayerSettings = () => {
     setEditedPointNum(frontLineSettings.value.insertionPointIndex);
   },  );
 
-  const handleEndFrontLineIndexChange = (e: Event, value: number | number[] ) => {
-    console.log('CHANGING VALUE');
-    const activeFrontline = frontLineSettings.value.activeFrontline;
-
-    const newValue = typeof value === 'number' ? value : -1;
-
-    if (!isNaN(newValue)) {
-      // Update the insertionPointIndex in settings and local state
-      frontLineSettings.value.insertionPointIndex = newValue;
-      setEditedPointNum(newValue);
-    } else {
-      // If the value is NaN, set it to -1
-      frontLineSettings.value.insertionPointIndex = -1;
-      setEditedPointNum(-1);
-    }
-
-    if (activeFrontline) {
-      const maxPoints = activeFrontline.points.length;
-    }
-  };
-
-  const handleCurFrontlineColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const hexColor =  e.target.value as Color;
-    frontLineSettings.value.frontLineColor = hexColor;
-    const changedFrontline = frontLineSettings.value.activeFrontline;
-    if (changedFrontline) {
-        changedFrontline.color = hexColor;
-      }
-        
-  };
-
-  const handleThicknessChange = (e: Event, value: number | number[]) => {
-    const newThickness = Array.isArray(value) ? value[0] : value;
-    const activeFrontline = frontLineSettings.value.activeFrontline;
-  
-    if (activeFrontline) {
-      activeFrontline.thickness = newThickness;
-    }
-  };
+ 
+ 
   
 
   const deleteCurrentFrontLine = () => {
@@ -112,7 +77,8 @@ const FrontlineLayerSettings = () => {
 
   return (
     <Grid container spacing={1}>
-    <Grid item xs={3}>
+      <VisualSettingsColumn  setEditedPointNum={setEditedPointNum} maxEndPointNumValue={maxEndPointNumValue} />
+    {/* <Grid item xs={3}>
     <ColorPicker value={frontLineSettings.value.frontLineColor} handleColorChange={handleCurFrontlineColorChange} customText={'front line color'} />
       <FormControl>
         
@@ -152,10 +118,10 @@ const FrontlineLayerSettings = () => {
           }}
         />
       </FormControl>
-      <br />
+      <br /> 
     
        
-    </Grid>
+    </Grid> */}
 
     <Grid item xs={3}>
       <InputLabel style={{ color: 'white' }}>
@@ -197,8 +163,13 @@ const FrontlineLayerSettings = () => {
           )}
         </Select>
     </Grid>
+    <ButtonColumn
+        onNewFrontLine={handleNewFrontLine}
+        onDeleteCurrentFrontLine={deleteCurrentFrontLine}
+        activeFrontline={Boolean(frontLineSettings.value.activeFrontline)}
+      />
     
-    <Grid item xs={6}>
+    {/* <Grid item xs={6}>
       
       <br />
       <Button
@@ -225,7 +196,7 @@ const FrontlineLayerSettings = () => {
       )}
    
    
-    </Grid>
+    </Grid> */}
   </Grid>
   );
 };

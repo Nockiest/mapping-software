@@ -1,13 +1,11 @@
 import { Typography, Box } from "@mui/material";
 import SpeedButton from "../../theme/SpeedButton";
 import { settings } from "../../Signals";
+import SettingsColumn from "../settingsComponents/SettingsColumn";
 
 const MarkerValues: React.FC<{   applyChanges: () => void, validationMessage: string }> = ({  applyChanges, validationMessage }) => {
     return (
-      <Box
-        width="50%" // Adjust the width as needed
-        color="white"
-      >
+      <SettingsColumn>
         <Typography>
           Current Marker Width: {settings.value.markerSettings.width}
         </Typography>
@@ -26,7 +24,7 @@ const MarkerValues: React.FC<{   applyChanges: () => void, validationMessage: st
   
         <SpeedButton onClick={applyChanges}>Apply Changes</SpeedButton>
         <Typography style={{ color: "red" }}>{validationMessage}</Typography>
-      </Box>
+      </SettingsColumn>
     );
   }
 

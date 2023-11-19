@@ -6,7 +6,7 @@ import { hexToRgb } from "@/app/components/utility/utils";
 import { settings } from "../Signals";
 import { Color, Settings } from "@/public/types/OtherTypes";
 import DrawingLayerSettings from "./drawingSettings/DrawingLayerSettings";
-import BackgroundLayerSettings from "./BackgroundLayerSettings";
+import BackgroundLayerSettings from "./backgroundSettings/BackgroundLayerSettings";
 import FrontlineLayerSettings from "./frontLineSettings/FrontlineLayerSettings";
 import { theme } from "../theme/theme";
 import { Grid, Paper, useTheme, Typography } from '@mui/material';

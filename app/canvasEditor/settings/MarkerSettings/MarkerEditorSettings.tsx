@@ -19,6 +19,7 @@ import {
   Input,
   Paper,
   useTheme,
+  Grid,
 } from "@mui/material";
 import FirstColumn from "./FirstCollumn";
 import { useWindowResize } from "@/app/components/utility/hooks/UseWindowResize";
@@ -67,12 +68,12 @@ const updateMarkerSettings:UpdateMarkerSettingsFc =  (
     : "";
 
   return (
-    <Box display="flex">
+    <Grid sx={{display:'flex'}} spacing={1}>
       <FirstColumn updateMarkerSettings={updateMarkerSettings} />
       <SecondColumn   updateMarkerSettings={updateMarkerSettings} />
       <MarkerValues applyChanges={applyChanges} validationMessage={validationMessage} />
       <PreviewMarker windowWidth={windowWidth} />
-    </Box>
+    </Grid>
   );
 };
 

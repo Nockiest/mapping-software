@@ -3,8 +3,9 @@ import { createTheme } from '@mui/material/styles';
 export const theme = createTheme({
   palette: {
     primary: {
-      main: "#4CAF50", // Speed and efficiency green
-      dark: "#388E3C",
+      main: "#7BC777", // Speed and efficiency green
+      dark: "#4E614E",
+      light: '#6BFA64'
     },
     secondary: {
       main: "#FFC107", // Amber for highlights and warnings

@@ -1,16 +1,6 @@
 import React from 'react';
 import { CssBaselineProps, Paper,useTheme} from '@mui/material';
 
-// const useStyles = makeStyles((theme: Theme) => ({
-//   paper: {
-//     maxWidth: '300px',
-//     backgroundColor: theme.palette.background.paper,
-//     padding: theme.spacing(2),
-//     overflowY: 'auto',
-//     maxHeight: '80vh',
-//   },
-// }));
-
  
 type SettingsColumnProps = {
   children: React.ReactNode;
@@ -24,6 +14,7 @@ const SettingsColumn: React.FC<SettingsColumnProps> = ({ children, sx, styles })
   return (
     <Paper sx={{
       maxWidth: styles?.maxWidth || '200px', // Adjusted the property name to camelCase
+      minWidth: '150px',
       backgroundColor: theme.palette.primary.dark,
       padding: theme.spacing(2),
       overflowY: 'auto',

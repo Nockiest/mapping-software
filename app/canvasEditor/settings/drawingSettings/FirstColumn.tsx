@@ -5,6 +5,7 @@ import FavoriteColorLister from '@/app/components/settings/FavoriteColorLister';
 import { Color, Settings } from '@/public/types/OtherTypes';
 import { settings } from '../../Signals';
 import { drawSettings } from '../../Signals';
+import SettingsColumn from '../settingsComponents/SettingsColumn';
 
 interface ColorSettingsColumnProps {
   handleColorChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -18,7 +19,8 @@ const FirstColumn: React.FC<ColorSettingsColumnProps> = ({
   handleColorClick,
 }) => {
   return (
-    <Box>
+   
+    <SettingsColumn>
       <ColorPicker
         value={settings.value.color}
         handleColorChange={handleColorChange}
@@ -36,7 +38,7 @@ const FirstColumn: React.FC<ColorSettingsColumnProps> = ({
       <Button variant="contained" onClick={handleBucketFill}>
         Bucket Fill
       </Button>
-    </Box>
+    </SettingsColumn>
   );
 };
 

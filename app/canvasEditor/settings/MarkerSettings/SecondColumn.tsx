@@ -5,17 +5,12 @@ import SpeedButton from '../../theme/SpeedButton';
 import { UpdateMarkerSettingsCallback, UpdateMarkerSettingsFc, newMarkerSettings } from './MarkerEditorSettings';
 import { theme } from '../../theme/theme';
 import Marker from '@/app/components/markerLayer/Marker';
+import SettingsColumn from '../settingsComponents/SettingsColumn';
  
 // Define the SecondColumn component
 const SecondColumn: React.FC<{   updateMarkerSettings: UpdateMarkerSettingsFc }> = ({   updateMarkerSettings }) => {
   return (
-    <Box
-      width="30%"
-      marginRight="2%"
-      bgcolor={theme.palette.primary.dark}
-      padding="10px"
-      borderRadius="4px"
-    >
+    <SettingsColumn>
       <Typography color="white">Marker TopText:</Typography>
       <TextField
         type="text"
@@ -35,7 +30,7 @@ const SecondColumn: React.FC<{   updateMarkerSettings: UpdateMarkerSettingsFc }>
         </>
       )}
       {/* Additional settings for the second column */}
-    </Box>
+    </SettingsColumn>
   );
 }
 

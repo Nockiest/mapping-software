@@ -77,23 +77,23 @@ const DrawingLayerSettings = () => {
   };
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={1}>
       {/* First Column - Color Settings and Bucket Fill */}
-      <Grid item xs={2}>
+      {/* <Grid item xs={2}> */}
         <FirstColumn
           handleColorChange={handleColorChange}
           handleBucketFill={handleBucketFill}
           handleColorClick={handleColorClick}
         />
-      </Grid>
+      {/* </Grid> */}
 
       {/* Second Column - Other Settings */}
-      <Grid item xs={2}>
+      {/* <Grid item xs={2}> */}
         <OtherSettingsColumn
           handleRadiusChange={handleRadiusChange}
           handleLineTypeChange={handleLineTypeChange}
         />
-      </Grid>
+      {/* </Grid> */}
    
     </Grid>
   );

@@ -6,6 +6,7 @@ import { LineEdge } from '@/public/types/GeometryTypes';
 import { settings } from '../../Signals';
 import { useCanvas } from '../../CanvasContext';
 import { clearCanvas } from '@/app/components/utility/CanvasUtils';
+import SettingsColumn from '../settingsComponents/SettingsColumn';
 
 interface OtherSettingsColumnProps {
   handleRadiusChange: (value: number | number[]) => void;
@@ -19,7 +20,7 @@ const OtherSettingsColumn: React.FC<OtherSettingsColumnProps> = ({
   const { canvasRef } = useCanvas();
 
   return (
-    <Box>
+    <SettingsColumn styles={{maxWidth:'300px'}}>  
       <InputLabel
         htmlFor="radius"
         sx={{
@@ -56,6 +57,7 @@ const OtherSettingsColumn: React.FC<OtherSettingsColumnProps> = ({
           backgroundColor: 'white',
           color: 'black',
           borderRadius: '4px',
+          alignSelf: 'center'
         }}
       >
         <MenuItem value="rounded" style={{ color: 'rgba(0, 0, 0, 0.9)' }}>
@@ -69,7 +71,7 @@ const OtherSettingsColumn: React.FC<OtherSettingsColumnProps> = ({
       <Button variant="contained" onClick={() => clearCanvas(canvasRef)}>
         Clear Canvas
       </Button>
-    </Box>
+    </SettingsColumn>
   );
 };
 
