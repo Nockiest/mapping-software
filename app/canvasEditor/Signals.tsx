@@ -1,6 +1,7 @@
 import { Signal, signal } from "@preact/signals";
 import { DrawAction, DrawingState, ErasePayload, FrontLineSettings, MarkerArraySignal, Settings } from "@/public/types/OtherTypes";
 import { DrawPayload } from "../components/drawing/LineDrawer";
+import { Vector2 } from "@/public/types/GeometryTypes";
 
 
 const drawLayerStateHandler = (action:DrawAction) => {
@@ -38,6 +39,8 @@ const drawLayerStateHandler = (action:DrawAction) => {
       return drawSettings.value.state;
   }
 };
+
+export const editorTopLeftPosition: Signal<Vector2> = signal({x:0,y:0})
 
 export const drawSettings = signal({
   state: DrawingState.Idle,

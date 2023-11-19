@@ -13,7 +13,7 @@ import { extractImageUrl } from "../utility/utils";
 export const drawMarkersOnCanvas = (
     ctx: CanvasRenderingContext2D,
     markers: MarkerArraySignal,
-    topLeftOffset: Vector2
+    // topLeftOffset: Vector2
   ) => {
     // Clear the entire canvas before drawing new markers
     ctx.clearRect(0, 0, settings.value.canvasSize.x, settings.value.canvasSize.y);

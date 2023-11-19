@@ -102,7 +102,6 @@ const FrontlineLayer = () => {
               key={frontlineData.idNum}
               idNum={frontlineData.idNum}
               topLeftPoint={topLeft}
-              // thickness={frontlineData.thickness}
             />
           ))}
         </ReusableLayer>

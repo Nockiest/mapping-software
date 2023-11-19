@@ -12,7 +12,7 @@ import { Vector2 } from "@/public/types/GeometryTypes";
 import { CanvasContext, CanvasContextType, useCanvas } from "../CanvasContext";
 import bucketFill from "@/app/components/drawing/BucketFill";
 import { MousePositionContext } from "../MouseContext";
-import { settings, drawSettings } from "../Signals";
+import { settings, drawSettings, editorTopLeftPosition } from "../Signals";
 import drawLineWithShape, {
   DrawPayload,
 } from "../../components/drawing/LineDrawer";
@@ -149,19 +149,42 @@ const DrawingLayer: React.FC = () => {
       canvas.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, [canvasRef, state, mousePosition, lastMousePos, settings]);
+
+  const updateEditorTopLeftPosition = () => {
+    
+    console.log('setting topleft', canvasRef.current !== null)
+    if (canvasRef.current) {
+      const canvas = canvasRef.current;
+      const rect = canvas.getBoundingClientRect();
+      const newTopLeftPosition: Vector2 = { x: rect.left, y: rect.top };
+      editorTopLeftPosition.value = newTopLeftPosition ;
+    }
+  };
+
+  useEffect(() => {
+    // Attach event listener on component mount
+    window.addEventListener('resize', updateEditorTopLeftPosition);
+    updateEditorTopLeftPosition()
+    // Detach event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', updateEditorTopLeftPosition);
+    };
+  }, []);
+
   return (
     <>
       {canvasRef && (
         <ReusableLayer
           canvasRef={canvasRef}
           layerName="draw"
+          
           style={{
             cursor:
               state === DrawingState.BucketFill
                 ? "url('/cursor.cur'),auto"
                 : "auto",
           }}
-        ></ReusableLayer>
+        />
       )}
     </>
   );

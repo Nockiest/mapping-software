@@ -19,7 +19,7 @@ export type MarkerType = PositionedText & {
   color: Color;
   position: Vector2;
   isDragging: boolean;
-  topLeftOffset: Vector2;
+  // topLeftOffset: Vector2;
   customStyling?: MarkerSettings;
   id: string;
 };
@@ -41,8 +41,8 @@ export type MarkerSettings =  PositionedText & {
 export type FollowMouseFunction = (
   position:Vector2,
   withscroll: boolean,
-  topLeftOffset: Vector2,
   maxPosition: Vector2,
+  topLeftOffset?: Vector2,
   
 ) => Vector2;
 

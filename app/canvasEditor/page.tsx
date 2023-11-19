@@ -19,7 +19,7 @@ import {
   useCanvas,
   useGlobalValue,
 } from "./CanvasContext"; //CanvasSettingsContext
-import { markers, settings } from "./Signals";
+import { editorTopLeftPosition, markers, settings } from "./Signals";
 import LayerSplicer from "../components/utility/LayerSplicer";
 import { Button, Typography, Paper } from '@mui/material';
 import { Vector2 } from "@/public/types/GeometryTypes";
@@ -94,6 +94,7 @@ const Page: React.FC = () => {
           layer: settings.value.activeLayer,
           mousePosition: mousePosition,
           mousDownTime: elapsedTime,
+          TopLeftOffset: editorTopLeftPosition,
           // numMarkers:markers.value.length
           // markerImage: settings.value.markerSettings.imageURL
           // activeFrontLine: frontLineSettings.value.activeFrontline?.idNum,

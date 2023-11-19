@@ -3,6 +3,7 @@ import { MousePositionContext } from "@/app/canvasEditor/MouseContext";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import {
   Color,
+  FollowMouseFunction,
   MarkerSettings,
   MarkerType,
   PositionedText,
@@ -16,18 +17,13 @@ import Point from "../frontline/Point";
 import { position } from "html2canvas/dist/types/css/property-descriptors/position";
 import { extractImageUrl } from "../utility/utils";
 type MarkerProps = {
-  topLeftOffset: Vector2;
   initialPosition: Vector2;
   shouldUpdateOnSettingsChange?: boolean;
   customStyling?: MarkerSettings;
   id: string;
-  dragHandler?: (
-    position: Vector2,
-    isDragging: boolean,
-    currentPosition: Vector2,
-    dragStartPosition: Vector2
-  ) => Vector2;
+  dragHandler?: FollowMouseFunction;
 } & Partial<PositionedText>;
+
 export const MarkerDefaultSettings: Omit<
   MarkerSettings,
   "popularMarkerColors"
@@ -43,7 +39,6 @@ export const MarkerDefaultSettings: Omit<
 const Marker: React.FC<MarkerProps> = ({
   topText,
   bottomText,
-  topLeftOffset,
   initialPosition,
   shouldUpdateOnSettingsChange = false,
   dragHandler,
@@ -70,7 +65,7 @@ const Marker: React.FC<MarkerProps> = ({
       const updatedPosition = dragHandler(
         position,
         false,
-        topLeftOffset,
+        // topLeftOffset,
         settings.value.canvasSize
       );
       setCurrentPosition(updatedPosition);

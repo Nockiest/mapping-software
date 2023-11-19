@@ -68,9 +68,9 @@ const updateMarkerSettings:UpdateMarkerSettingsFc =  (
     : "";
 
   return (
-    <Grid sx={{display:'flex'}} spacing={1}>
+    <Grid sx={{display:'flex'}} spacing={2}>
       <FirstColumn updateMarkerSettings={updateMarkerSettings} />
-      <SecondColumn   updateMarkerSettings={updateMarkerSettings} />
+      <SecondColumn updateMarkerSettings={updateMarkerSettings} />
       <MarkerValues applyChanges={applyChanges} validationMessage={validationMessage} />
       <PreviewMarker windowWidth={windowWidth} />
     </Grid>

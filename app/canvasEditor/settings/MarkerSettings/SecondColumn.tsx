@@ -29,69 +29,11 @@ const SecondColumn: React.FC<{   updateMarkerSettings: UpdateMarkerSettingsFc }>
           />
         </>
       )}
-      {/* Additional settings for the second column */}
+    
     </SettingsColumn>
   );
 }
 
-// Define the ThirdColumn component
-// const ThirdColumn: React.FC = () => {
-//   // Include any logic or components specific to the third column if needed
-//   return (
-//     // Your third column JSX goes here
-//     <div>
-       
-//     </div>
-//   );
-// }
-
-// Define the MarkerValues component
-// const MarkerValues: React.FC<{ settings: any, applyChanges: () => void, validationMessage: string }> = ({ settings, applyChanges, validationMessage }) => {
-//   return (
-//     <Box
-//       width="50%" // Adjust the width as needed
-//       color="white"
-//     >
-//       <Typography>
-//         Current Marker Width: {settings.value.markerSettings.width}
-//       </Typography>
-//       <Typography>
-//         Current Marker Color: {settings.value.markerSettings.color}
-//       </Typography>
-//       <Typography>
-//         Current Marker TopText: {settings.value.markerSettings.topText}
-//       </Typography>
-//       {settings.value.markerSettings.width >= 20 && (
-//         <Typography>
-//           Current Marker BottomText:{" "}
-//           {settings.value.markerSettings.bottomText}
-//         </Typography>
-//       )}
-
-//       <SpeedButton onClick={applyChanges}>Apply Changes</SpeedButton>
-//       <Typography style={{ color: "red" }}>{validationMessage}</Typography>
-//     </Box>
-//   );
-// }
-
-// // Define the MarkerDisplay component
-// const MarkerDisplay: React.FC<{ windowWidth: number }> = ({ windowWidth }) => {
-//   return (
-//     <Box
-//       marginLeft="20px" // Adjust the margin as needed
-//       width="50%" // Adjust the width as needed
-//       display="flex"
-//       flexDirection="column" // Stack elements vertically
-//       alignItems="flex-start" // Align items to the start of the cross axis
-//     >
-//       <Marker
-//         topLeftOffset={{ x: 500, y: 100 }}
-//         initialPosition={{ x: windowWidth * 0.9, y: 75 }}
-//         shouldUpdateOnSettingsChange={true}
-//         id={"x"}
-//       />
-//     </Box>
-//   );
-// }
+ 
 
 export default SecondColumn
