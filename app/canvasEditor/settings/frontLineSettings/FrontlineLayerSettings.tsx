@@ -78,52 +78,11 @@ const FrontlineLayerSettings = () => {
   return (
     <Grid container spacing={1}>
       <VisualSettingsColumn  setEditedPointNum={setEditedPointNum} maxEndPointNumValue={maxEndPointNumValue} />
-    {/* <Grid item xs={3}>
-    <ColorPicker value={frontLineSettings.value.frontLineColor} handleColorChange={handleCurFrontlineColorChange} customText={'front line color'} />
-      <FormControl>
-        
-        <InputLabel style={{ color: 'white' }}>
-          Set insertion index{' '}
-          {frontLineSettings.value.insertionPointIndex}
-        </InputLabel>
-        <Slider
-          min={-1}
-          defaultValue={-1}
-          max={maxEndPointNumValue - 1}
-          onChange={  handleEndFrontLineIndexChange  }
-          valueLabelDisplay="auto"
-          marks
-          sx = {{
-            width: '100px'
-          }}
-        />
-      </FormControl>
-      <br />
-      <br />
-      <FormControl>
-        <InputLabel style={{ color: 'white' }}>
-          Set line thickness:
-        </InputLabel>
-        <Slider
-          min={0.1}
-          max={10}
-          step={0.1}
-          value={
-            frontLineSettings.value.activeFrontline?.thickness || 0
-          }
-          onChange={handleThicknessChange }
-          valueLabelDisplay="auto"
-          sx = {{
-            width: '100px'
-          }}
-        />
-      </FormControl>
-      <br /> 
     
-       
-    </Grid> */}
 
     <Grid item xs={3}>
+      {frontLineSettings.value.frontLines.length > 0 && 
+      <>
       <InputLabel style={{ color: 'white' }}>
             Choose Active Layer:
       </InputLabel>
@@ -150,7 +109,6 @@ const FrontlineLayerSettings = () => {
                     display: 'inline-block',
                     width: '15px',
                     height: '15px',
-                    marginLeft: '2em',
                     backgroundColor: frontline.color,
                     border: '1px solid #000',
                   }}
@@ -162,41 +120,14 @@ const FrontlineLayerSettings = () => {
             )
           )}
         </Select>
+        </>
+        }
     </Grid>
     <ButtonColumn
         onNewFrontLine={handleNewFrontLine}
         onDeleteCurrentFrontLine={deleteCurrentFrontLine}
         activeFrontline={Boolean(frontLineSettings.value.activeFrontline)}
       />
-    
-    {/* <Grid item xs={6}>
-      
-      <br />
-      <Button
-        onClick={handleNewFrontLine}
-        sx={{
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.main,
-        }}
-      >
-        New FrontLine
-      </Button>
-      <br  />
-      <br  />
-      {frontLineSettings.value.activeFrontline && (
-        <Button
-          onClick={deleteCurrentFrontLine}
-          sx={{
-            color: theme.palette.text.primary,
-            backgroundColor: theme.palette.secondary.main,
-          }}
-        >
-          Delete Current FrontLine
-        </Button>
-      )}
-   
-   
-    </Grid> */}
   </Grid>
   );
 };

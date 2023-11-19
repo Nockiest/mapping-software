@@ -26,7 +26,7 @@ const ButtonColumn: React.FC<ButtonColumnProps> = ({
       >
         New FrontLine
       </Button>
-      <br />
+      
       <br />
       {activeFrontline && (
         <Button
