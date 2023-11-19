@@ -3,29 +3,33 @@ import { PointData } from "@/app/canvasEditor/layers/FronlineLayer";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { Color } from "@/public/types/OtherTypes";
 
-export const drawDot: (
-    ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number,
-    radius: number,
-    color: string
-  ) => void = (ctx, x, y, radius, color) => {
-    if (!ctx){
-      console.trace()
-      throw new Error('ctx not defined')
-      return
-    }
-    // console.trace(ctx, ctx.rect)
-    // Draw based on lineType
-    if (settings.value.lineType === "rounded") {
-       
-      ctx.arc(x, y, radius / 2, 0, 2 * Math.PI);
-    } else if (settings.value.lineType === "squared") {
-      ctx.rect(x - radius / 2, y - radius / 2, radius, radius);
-    }
-    ctx.fillStyle = color;
-    ctx.fill();
-  };
+export const drawDot = (
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  radius: number,
+  color: string
+): void => {
+  if (!ctx) {
+    console.trace();
+    throw new Error('ctx not defined');
+  }
+
+  // Round the coordinates to ensure they are on whole number pixels
+  const roundedX = Math.round(x);
+  const roundedY = Math.round(y);
+
+  // Draw based on lineType
+  ctx.beginPath();
+  // if (settings.value.lineType === 'rounded') {
+    
+  //   // ctx.arc(roundedX, roundedY, Math.round(radius / 2), 0, 2 * Math.PI);
+  // } else if (settings.value.lineType === 'squared') {
+    ctx.rect(Math.round(roundedX - radius / 2), Math.round(roundedY - radius / 2), radius, radius);
+  // }
+  ctx.fillStyle = color;
+  ctx.fill();
+};
 
 export function calculateRelativePosition(position:Vector2, divTopLeft:Vector2) {
     const relativeX = position.x - divTopLeft.x;
@@ -83,3 +87,5 @@ export const movePosByOffset = (position: Vector2, offset: number | Vector2): Ve
     return { x: position.x + offset.x, y: position.y + offset.y };
   }
 };
+
+ 

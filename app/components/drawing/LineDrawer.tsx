@@ -1,6 +1,7 @@
 import { Color,  } from "@/public/types/OtherTypes";
 import { Vector2, LineEdge } from "@/public/types/GeometryTypes";
 import { hexToRGBA } from "@/app/components/utility/utils";
+import { settings } from "@/app/canvasEditor/Signals";
   
 
 export type DrawPayload = {
@@ -14,14 +15,23 @@ export type DrawPayload = {
   };
 }
 
-export default function drawLineWithShape(
-  ctx: CanvasRenderingContext2D,
-  lineStart: Vector2,
-  lineEnd: Vector2,
-  color: Color,
-  size: number,
-  lineShape: LineEdge
-): void {
+type DrawLineWithShapeParams = {
+  ctx: CanvasRenderingContext2D;
+  lineStart: Vector2;
+  lineEnd: Vector2;
+  color: Color;
+  size: number;
+  lineShape?: LineEdge;
+};
+
+const drawLineWithShape = ({
+  ctx,
+  lineStart,
+  lineEnd,
+  color,
+  size,
+  lineShape = settings.value.lineType,
+}: DrawLineWithShapeParams): void => {
   if (!ctx) {
     throw new Error('Canvas 2D context not supported');
   }
@@ -52,7 +62,6 @@ export default function drawLineWithShape(
       throw new Error('Invalid line shape specified');
     }
   }
-}
+};
 
-  
- 
+export default drawLineWithShape;

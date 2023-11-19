@@ -60,13 +60,14 @@ const DrawingLayer: React.FC = () => {
       const y = e.offsetY;
       e.preventDefault();
       if (e.button === 2) {
+        console.log('erasing')
         const erasePayload: ErasePayload = {
           eraseFunction: eraseLine,
           eraseArgs: {
             canvasRef,
             start: lastMousePos || { x, y },
             end: { x, y },
-            radius,
+            radius:radius/2,
             eraseShape: settings.value.lineType,
           },
         };
@@ -101,6 +102,7 @@ const DrawingLayer: React.FC = () => {
       }
 
       if (state === DrawingState.Erasing) {
+        // console.log('eraisng')
         eraseLine({
           canvasRef,
           start: lastMousePos || { x: 0, y: 0 },
@@ -112,12 +114,12 @@ const DrawingLayer: React.FC = () => {
         // Left mouse button is pressed, draw
         if (ctx && lastMousePos) {
           drawLineWithShape(
-            ctx,
-            lastMousePos,
-            { x, y },
-            color,
-            radius,
-            settings.value.lineType
+           {  ctx,
+            lineStart: lastMousePos,
+            lineEnd:{ x, y },
+            size:radius, 
+            color }
+            // settings.value.lineType
           );
         }
       }
