@@ -2,7 +2,7 @@
 import React, { useRef } from 'react';
 import { TextField, Box, Typography } from '@mui/material';
 import SpeedButton from '../../theme/SpeedButton';
-import { UpdateMarkerSettingsCallback, UpdateMarkerSettingsFc, newMarkerSettings } from './MarkerEditorSettings';
+import {  UpdateMarkerSettingsFc, newMarkerSettings} from './MarkerEditorSettings'
 import { theme } from '../../theme/theme';
 import Marker from '@/app/components/markerLayer/Marker';
 import SettingsColumn from '../settingsComponents/SettingsColumn';

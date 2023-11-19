@@ -76,7 +76,7 @@ const FrontlineLayerSettings = () => {
   };
 
   return (
-    <Grid container spacing={1}>
+    <Grid container spacing={1} sx={{display:'flex'}}>
       <VisualSettingsColumn  setEditedPointNum={setEditedPointNum} maxEndPointNumValue={maxEndPointNumValue} />
     
 
