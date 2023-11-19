@@ -19,11 +19,12 @@ import {
 import { theme } from "../theme/theme";
 import ColorPicker from "./settingsComponents/ColorPicker";
 import {   signal } from "@preact/signals";
+import { clearCanvas } from "@/app/components/utility/CanvasUtils";
 
-// export let activatedSignal = signal(false)
-
+ 
 const DrawingLayerSettings = () => {
   const { state, setState} = drawSettings.value
+  const { canvasRef } = useCanvas()
   const imageInputRef = useRef<HTMLInputElement>(null);
  
   const changeSettings = <K extends keyof Settings["value"]>(
@@ -150,7 +151,13 @@ const DrawingLayerSettings = () => {
             <MenuItem value="squared" style={{ color: "rgba(0, 0, 0, 0.9)" }}>
               Squared
             </MenuItem>
+
+
           </Select>
+
+          <Button variant="contained" onClick={() => clearCanvas(canvasRef)}>
+            Clear Canvas
+          </Button>
         </Box>
       </Grid>
     </Grid>
