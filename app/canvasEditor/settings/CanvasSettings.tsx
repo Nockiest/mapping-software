@@ -1,13 +1,13 @@
  import { useContext } from "react";
-import MarkerEditorSettings from "./MarkerSettings/MarkerEditorSettings";
+import MarkerEditorSettings from "./markerSettings/MarkerEditorSettings";
 import LineTypeSettings from "@/app/components/settings/LineTypeSettings";
 import ActiveLayerSettings from "@/app/components/settings/ActiveLayerSettings";
 import { hexToRgb } from "@/app/components/utility/utils";
 import { settings } from "../Signals";
 import { Color, Settings } from "@/public/types/OtherTypes";
-import DrawingLayerSettings from "./DrawingLayerSettings";
+import DrawingLayerSettings from "./drawingSettings/DrawingLayerSettings";
 import BackgroundLayerSettings from "./BackgroundLayerSettings";
-import FrontlineLayerSettings from "./FrontlineLayerSettings";
+import FrontlineLayerSettings from "./frontLineSettings/FrontlineLayerSettings";
 import { theme } from "../theme/theme";
 import { Grid, Paper, useTheme, Typography } from '@mui/material';
 

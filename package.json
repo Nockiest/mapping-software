@@ -23,7 +23,8 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@mui/material": "^5.14.17",
+    "@mui/material": "^5.14.18",
+    "@mui/system": "^5.14.18",
     "@preact/signals": "^1.2.1",
     "html2canvas": "^1.4.1",
     "next": "14.0.0",

@@ -2,7 +2,7 @@ import { settings } from "@/app/canvasEditor/Signals";
 import { PointData } from "@/app/canvasEditor/layers/FronlineLayer";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { Color } from "@/public/types/OtherTypes";
-import { MutableRefObject } from "react";
+import { MutableRefObject, RefObject } from "react";
 
 export const drawDot = (
   ctx: CanvasRenderingContext2D,
@@ -90,7 +90,7 @@ export const movePosByOffset = (position: Vector2, offset: number | Vector2): Ve
 };
 
  
-type ClearCanvasFn = (canvasRef: RefObject<HTMLCanvasElement | null>) => void;
+type ClearCanvasFn = (canvasRef: RefObject<HTMLCanvasElement | null |undefined>) => void;
 
 export const clearCanvas: ClearCanvasFn = (canvasRef) => {
   const canvas = canvasRef.current;

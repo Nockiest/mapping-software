@@ -1,11 +1,11 @@
  
  import React, { useState, useEffect, ChangeEvent } from 'react';
-import { useCanvas } from '../CanvasContext';
-import { frontLineSettings, settings } from '../Signals';
+import { useCanvas } from '../../CanvasContext';
+import { frontLineSettings, settings } from '../../Signals';
 import { computed } from '@preact/signals';
 import { findFrontLineObj } from '@/app/components/utility/otherUtils';
 import { v4 as uuidv4 } from 'uuid';
-import { FrontlineData } from '../layers/FronlineLayer';
+import { FrontlineData } from '../../layers/FronlineLayer';
 import {
   Slider,
   Input,
@@ -17,8 +17,8 @@ import {
   Box,
   Grid
 } from '@mui/material'; // Import MUI components
-import { theme } from '../theme/theme';
-import ColorPicker from './settingsComponents/ColorPicker';
+import { theme } from '../../theme/theme';
+import ColorPicker from '../settingsComponents/ColorPicker';
 import { Color } from '@/public/types/OtherTypes';
 
 const FrontlineLayerSettings = () => {

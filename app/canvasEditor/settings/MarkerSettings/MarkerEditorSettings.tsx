@@ -22,7 +22,7 @@ import {
 } from "@mui/material";
 import FirstColumn from "./FirstCollumn";
 import { useWindowResize } from "@/app/components/utility/hooks/UseWindowResize";
-import   SecondColumn   from "./SecondColumn";
+import SecondColumn from "./SecondColumn";
 import MarkerValues from "./MarkerValuesColumn";
 import PreviewMarker from "./PreviewMarker";
 
