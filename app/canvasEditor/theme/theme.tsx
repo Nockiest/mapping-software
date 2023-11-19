@@ -19,7 +19,7 @@ export const theme = createTheme({
       primary: "#ffffff", // White text color
     },
   },
-  spacing: 5,
+  spacing: 2,
   typography: {
     h1: {
       fontWeight: 'bold',
@@ -33,7 +33,7 @@ export const theme = createTheme({
     MuiSlider: {
       styleOverrides: {
         root: {
-          minWidth: '200px', // Set the minimum width to 300px
+          // width: '200px', // Set the minimum width to 300px
         },
         thumb: {
           color: "#FFFFFF", // White color for the thumb

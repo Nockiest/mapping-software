@@ -127,6 +127,9 @@ const FrontlineLayerSettings = () => {
           onChange={  handleEndFrontLineIndexChange  }
           valueLabelDisplay="auto"
           marks
+          sx = {{
+            width: '100px'
+          }}
         />
       </FormControl>
       <br />
@@ -144,6 +147,9 @@ const FrontlineLayerSettings = () => {
           }
           onChange={handleThicknessChange }
           valueLabelDisplay="auto"
+          sx = {{
+            width: '100px'
+          }}
         />
       </FormControl>
       <br />

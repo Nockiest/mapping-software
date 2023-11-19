@@ -3,6 +3,7 @@ import { UpdateMarkerSettingsCallback, UpdateMarkerSettingsFc, newMarkerSettings
 import { theme } from '../../theme/theme';
 import { Box, Input, Slider, Typography } from '@mui/material';
 import SpeedButton from '../../theme/SpeedButton';
+import { settings } from '../../Signals';
  
 type FirstColumnProps = {
     updateMarkerSettings:  UpdateMarkerSettingsFc
@@ -33,13 +34,13 @@ const FirstColumn: React.FC<FirstColumnProps>= ({updateMarkerSettings  }) => {
         const widthValue = Array.isArray(value) ? value[0] : value;
         updateMarkerSettings(Math.max(1, widthValue), "width");
       }}
-      sx={{
-        color: theme.palette.secondary.main, // Set the color of the Slider
-      }}
+      // sx={{
+      //   color: theme.palette.secondary.main, // Set the color of the Slider
+      // }}
     />
 
     <Typography color="white">
-      Marker Color: {newMarkerSettings.value.color}
+    {settings.value.markerSettings.imageURL}  Marker Color: {newMarkerSettings.value.color}
     </Typography>
     <input
       type="color"
@@ -63,9 +64,9 @@ const FirstColumn: React.FC<FirstColumnProps>= ({updateMarkerSettings  }) => {
       }}
       color="primary" // Set the color of the input
     /> 
-
+  
     {/* <input type="file" ref={fileInputRef} onChange={(e) => updateMarkerSettings(URL.createObjectURL(e.target.files?.[0]), 'imageURL')} /> */}
-    <SpeedButton
+   {settings.value.markerSettings.imageURL && <SpeedButton
       onClick={() =>
         updateMarkerSettings(
           null,
@@ -75,7 +76,7 @@ const FirstColumn: React.FC<FirstColumnProps>= ({updateMarkerSettings  }) => {
       }
     >
       Reset Image
-    </SpeedButton>
+    </SpeedButton>}
   </Box>
   )
 }
