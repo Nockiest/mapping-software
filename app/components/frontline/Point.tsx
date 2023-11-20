@@ -5,6 +5,7 @@ import { followMouseComponent } from "@/app/components/utility/utils";
 import { useEffect, useState, ReactNode, useContext } from "react";
 import { editorTopLeftPosition, settings } from "@/app/canvasEditor/Signals";
 import { Signal } from "@preact/signals";
+import { movePosByOffset } from "../utility/CanvasUtils";
 // import { MousePositionContext } from "@/app/canvasEditor/MouseContext";
 type PointProps = {
   position: Vector2;
@@ -73,7 +74,8 @@ const Point: React.FC<PointProps> = ({
     }
     // const newX = e.clientX - topLeft.x + window.scrollX;
     // const newY = e.clientY - topLeft.y + window.scrollY;
-    const newPosition = followMouseComponent({x: e.clientX, y: e.clientY},true,settings.value.canvasSize, topLeft )
+    const newTopLeftPosition = followMouseComponent({x: e.clientX, y: e.clientY},true,settings.value.canvasSize, topLeft )
+    const newPosition = movePosByOffset(newTopLeftPosition, -radius/2)
     console.log(newPosition, mousePosition)
     onDrag?.(newPosition);
   };
