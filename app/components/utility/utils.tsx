@@ -1,6 +1,7 @@
 import { FollowMouseFunction } from "@/public/types/OtherTypes";
 import { Vector2 } from "../../../public/types/GeometryTypes";
 import { editorTopLeftPosition } from "@/app/canvasEditor/Signals";
+import { FrontlineData } from "@/app/canvasEditor/layers/FronlineLayer";
 
 function zoomIn(
   scale: number,
@@ -101,11 +102,11 @@ export const followMouseComponent: FollowMouseFunction = (
     ),
   };
   // console.log(e.clientY, topLeftOffset.y, window.scrollY, updatedPosition);
-  console.log('args',   position,
-  {x:window.scrollX, y: window.scrollY},
-  maxPosition,
-  topLeftOffset )
-  console.log(updatedPosition, "updated position");
+  // console.log('args',   position,
+  // {x:window.scrollX, y: window.scrollY},
+  // maxPosition,
+  // topLeftOffset )
+  // console.log(updatedPosition, "updated position");
   return updatedPosition;
 };
 
@@ -122,3 +123,19 @@ export function extractImageUrl(
     ? URL.createObjectURL(fallbackURL)
     : null;
 }
+
+export  const findEndpointIndex = (frontLineInfo: FrontlineData | undefined): number => {
+  if (!frontLineInfo) {
+    return -1; // If there is no FrontlineData, return -1 indicating not found
+  }
+
+  const endpointId = frontLineInfo.endPointId;
+
+  if (!endpointId) {
+    return -1; // If endpointId is not set, return -1 indicating not found
+  }
+
+  const endpointIndex = frontLineInfo.points.findIndex((point) => point.id === endpointId);
+
+  return endpointIndex;
+};

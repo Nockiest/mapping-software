@@ -15,7 +15,6 @@ export type FrontlineProps = {
   topLeftPoint: Vector2
 }
 const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
- 
   const frontLineActive = frontLineSettings.value.activeFrontline?.idNum? frontLineSettings.value.activeFrontline.idNum === idNum: false;
   const frontLineInfo = findFrontLineObj(idNum)  
   const { frontlineCanvasRef } = useCanvas();
@@ -43,14 +42,17 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
     if (!frontLineInfo) return;
   
     const newPoints = [...frontLineInfo.points];
-    const insertionIndex = frontLineSettings.value.insertionPointIndex;
+    const insertionPointIndex = frontLineSettings.value.insertionPointIndex;
   
     // Determine the index at which to insert the new point
     const insertIndex =
-      insertionIndex !== null && insertionIndex !== -1
-        ? Math.min(Math.max(0, insertionIndex), newPoints.length)
+    insertionPointIndex !== null && insertionPointIndex !== -1
+        ? Math.min(Math.max(0, insertionPointIndex), newPoints.length)
         : newPoints.length;
-  
+    console.log( insertionPointIndex, insertIndex , frontLineInfo.points.length)
+    if ( insertionPointIndex === frontLineInfo.points.length){
+      console.log('end point index should move')
+    }
     // Insert the new point at the specified index
     newPoints.splice(insertIndex, 0, {
       position: position,
@@ -65,7 +67,6 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
 
   const updatePointPositions = (id: string, clickPos: Vector2) => {
     if (!frontLineInfo) return;
-
     // Find the index of the point with the specified id
     const pointIndex = frontLineInfo.points.findIndex(
       (point) => point.id === id
@@ -109,9 +110,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
     }
   };
   
- 
-  
-  const updateEndPointIndex = (id: string) => {
+  const setEndPointIndex = (id: string) => {
     console.log("UPDATING END POINT INDEX")
     if (!frontLineInfo){return}
     const clickedPointIndex = frontLineInfo.points.findIndex(
@@ -121,26 +120,6 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
        } }  );
     frontLineInfo.endPointId =id
   }
-
-  const findNewEndPointIndex = (e: React.MouseEvent, clickedPos: Vector2) => {
-    e.preventDefault();
-  
-    if (!frontLineInfo) {
-      return;
-    }
-  
-    const clickedPoint = frontLineInfo?.points.find(
-      (point) =>
-        point.position.x === clickedPos.x &&
-        point.position.y === clickedPos.y
-    );
-  
-    if (clickedPoint) {
-      // If a point is found, set it as the endpoint
-      frontLineInfo.endPointId = clickedPoint.id;
-    }
-  };
-  
 
   const handleDeletePoint = (id: string) => {
     console.log("DELETING A POINT");
@@ -164,7 +143,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
       }
     }
   };
-
+  
   return (
     <div className="absolute top-0">
        
@@ -181,7 +160,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
           }
           rightClk={
             frontLineActive
-              ? (e) => updateEndPointIndex(point.id)
+              ? (e) => setEndPointIndex(point.id)
               : null
           }
           // leftClk={(e) => updateEndPointIndex(point.id)}

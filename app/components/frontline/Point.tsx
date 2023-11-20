@@ -76,7 +76,7 @@ const Point: React.FC<PointProps> = ({
     // const newY = e.clientY - topLeft.y + window.scrollY;
     const newTopLeftPosition = followMouseComponent({x: e.clientX, y: e.clientY},true,settings.value.canvasSize, topLeft )
     const newPosition = movePosByOffset(newTopLeftPosition, -radius/2)
-    console.log(newPosition, mousePosition)
+    // console.log(newPosition, mousePosition)
     onDrag?.(newPosition);
   };
 
