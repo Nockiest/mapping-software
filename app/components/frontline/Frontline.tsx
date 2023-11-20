@@ -51,7 +51,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
         id: uuidv4(),
         radius:controlPointRadius
       });
-      frontLineInfo.endPointIndex += 1
+      // frontLineInfo.endPointIndex += 1
     } else {
       // Append the new point
       newPoints.push({
@@ -84,55 +84,65 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
   };
 
   const handleMouseDown = (e: MouseEvent) => {
-    console.log("CLICK ", frontLineActive, frontLineInfo )
     e.preventDefault();
-    if (!frontLineActive||!frontLineInfo) return;
-
-    if (e.button === 0) {
-      const rect = frontlineCanvasRef.current?.getBoundingClientRect();
-      const canvasRelativeX = e.clientX - (rect?.left || 0);
-      const canvasRelativeY = e.clientY - (rect?.top || 0);
-
-      const clickedPointIndex = frontLineInfo?.points.findIndex((point) => {
-        const isClicked =
-          Math.abs(point.position.x - canvasRelativeX) < controlPointRadius &&
-          Math.abs(point.position.y - canvasRelativeY) < controlPointRadius;
-        return isClicked;
-      });
-      console.log(clickedPointIndex)
-      if (clickedPointIndex !== -1) {
-       
-        frontLineInfo.endPointIndex = clickedPointIndex
-        return;
-      } else {
-        addPoint({ x: canvasRelativeX, y: canvasRelativeY });
-      }
+  
+    if (!frontLineActive || !frontLineInfo || e.button !== 0) {
+      return;
+    }
+  
+    const rect = frontlineCanvasRef.current?.getBoundingClientRect();
+    const canvasRelativeX = e.clientX - (rect?.left || 0);
+    const canvasRelativeY = e.clientY - (rect?.top || 0);
+  
+    // Find the clicked point
+    const clickedPoint = frontLineInfo?.points.find((point) => {
+      const isClicked =
+        Math.abs(point.position.x - canvasRelativeX) < controlPointRadius &&
+        Math.abs(point.position.y - canvasRelativeY) < controlPointRadius;
+      return isClicked;
+    });
+  
+    if (clickedPoint) {
+      // If a point is clicked, set it as the endpoint
+      frontLineInfo.endPointId = clickedPoint.id;
+    } else {
+      // If no point is clicked, add a new point
+      addPoint({ x: canvasRelativeX, y: canvasRelativeY });
     }
   };
-
+  
+ 
+  
   const updateEndPointIndex = (id: string) => {
     console.log("UPDATING END POINT INDEX")
     if (!frontLineInfo){return}
     const clickedPointIndex = frontLineInfo.points.findIndex(
-      (point) =>
-        point.id===id
-    );
-    frontLineInfo.endPointIndex = clickedPointIndex
+      (point) =>{
+       if( point.id===id ){
+        return point.id
+       } }  );
+    frontLineInfo.endPointId =id
   }
 
-  const findNewEndPointIndex = (e: React.MouseEvent, clickedPoint: Vector2) => {
+  const findNewEndPointIndex = (e: React.MouseEvent, clickedPos: Vector2) => {
     e.preventDefault();
+  
     if (!frontLineInfo) {
       return;
     }
-    const clickedPointIndex = frontLineInfo?.points.findIndex(
+  
+    const clickedPoint = frontLineInfo?.points.find(
       (point) =>
-        point.position.x === clickedPoint.x &&
-        point.position.y === clickedPoint.y
+        point.position.x === clickedPos.x &&
+        point.position.y === clickedPos.y
     );
-    frontLineInfo.endPointIndex = clickedPointIndex || -1;
-    // setEndPointIndex(clickedPointIndex);
+  
+    if (clickedPoint) {
+      // If a point is found, set it as the endpoint
+      frontLineInfo.endPointId = clickedPoint.id;
+    }
   };
+  
 
   const handleDeletePoint = (id: string) => {
     console.log("DELETING A POINT");
@@ -179,7 +189,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
           // leftClk={(e) => updateEndPointIndex(point.id)}
           onDelete={(e:  MouseEvent|React.MouseEvent) => handleDeletePoint(point.id)}
           styling={{
-            background: index === frontLineInfo.endPointIndex ? "white" : "red",
+            background: point.id === frontLineInfo.endPointId ? "red" : "white",
             border: "2px solid black",
             pointerEvents: frontLineActive ? "auto" : "none",
             zIndex: "30",

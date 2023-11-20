@@ -23,7 +23,7 @@ export type FrontlineData = {
   idNum: string;
   topLeftPoint: Vector2;
   points: Array<PointData>;
-  endPointIndex: number;
+  endPointId: string;
   thickness: number;
   color: Color;
 };
@@ -46,28 +46,36 @@ const FrontlineLayer = () => {
   const renderFrontLines = () => {
     const frontLines = frontLineSettings.value.frontLines;
     const { ctx, canvas } = getCtxFromRef(frontlineCanvasRef);
+    
     if (!ctx) {
       return;
     }
-    ctx.clearRect(
-      0,
-      0,
-      settings.value.canvasSize.x!,
-      settings.value.canvasSize.y!
-    );
-    for (const line in frontLines) {
-      if (frontLines[line].points.length < 2) {
+  
+    ctx.clearRect(0, 0, settings.value.canvasSize.x!, settings.value.canvasSize.y!);
+  
+    for (const line of frontLines) {
+      if (line.points.length < 2) {
         return;
       }
-      drawLineAlongPoints(
-        frontLines[line].points,
-        frontLines[line].endPointIndex,
-        ctx,
-        frontLines[line].color,
-        frontLines[line].thickness
-      );
+  
+      // Find the index of the endpoint in the array of frontline points
+      const endPointIndex = line.points.findIndex(point => point.id === line.endPointId);
+      const endPointIndexArg = endPointIndex < 0? line.points.length -1: endPointIndex
+   
+      // Ensure that the endpoint is found before proceeding
+      // if (endPointIndex !== -1) {
+        // console.log(endPointIndex)
+        drawLineAlongPoints(
+          line.points,
+          endPointIndexArg, // Use the found endpoint index here
+          ctx,
+          line.color,
+          line.thickness
+        );
+      // }
     }
   };
+  
 
   useEffect(() => {
     renderFrontLines();

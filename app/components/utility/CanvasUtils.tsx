@@ -62,7 +62,7 @@ export function calculateRelativePosition(position:Vector2, divTopLeft:Vector2) 
     for (let i = 1; i < adjustedPoints.length; i++) {
       ctx.lineTo(adjustedPoints[i].x, adjustedPoints[i].y);
     }
-  
+    // console.log(endPointIndex)
     if (endPointIndex !== null) {
       // Draw a line from the last point to the endpoint
       if (adjustedPoints[endPointIndex]) {
