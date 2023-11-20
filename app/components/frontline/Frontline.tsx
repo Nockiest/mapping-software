@@ -43,26 +43,24 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
     if (!frontLineInfo) return;
   
     const newPoints = [...frontLineInfo.points];
+    const insertionIndex = frontLineSettings.value.insertionPointIndex;
   
-    if (frontLineSettings.value.insertionPointIndex !== null && frontLineSettings.value.insertionPointIndex !== -1) {
-      // Insert the new point at the specified index
-      newPoints.splice(frontLineSettings.value.insertionPointIndex, 0, {
-        position: position,
-        id: uuidv4(),
-        radius:controlPointRadius
-      });
-      // frontLineInfo.endPointIndex += 1
-    } else {
-      // Append the new point
-      newPoints.push({
-        position: position,
-        id: uuidv4(),
-        radius:controlPointRadius
-      });
-    }
+    // Determine the index at which to insert the new point
+    const insertIndex =
+      insertionIndex !== null && insertionIndex !== -1
+        ? Math.min(Math.max(0, insertionIndex), newPoints.length)
+        : newPoints.length;
+  
+    // Insert the new point at the specified index
+    newPoints.splice(insertIndex, 0, {
+      position: position,
+      id: uuidv4(),
+      radius: controlPointRadius,
+    });
   
     frontLineInfo.points = newPoints;
   };
+  
   
 
   const updatePointPositions = (id: string, clickPos: Vector2) => {
@@ -205,51 +203,4 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
 
 export default Frontline;
 
-// useEffect(() => {
-//   const canvas = frontlineCanvasRef.current;
-//   const ctx = canvas?.getContext("2d");
-//   if (!ctx || !frontLineActive || !mousePosition) {
-//     return;
-//   }
-//   ctx.clearRect(0, 0, canvas?.width!, canvas?.height!);
-//   // Draw lines
-//   if (points.length >= 2) {
-//     ctx.beginPath();
-//     ctx.moveTo(points[0].x, points[0].y);
-//     for (let i = 1; i < points.length; i++) {
-//       ctx.lineTo(points[i].x, points[i].y);
-//     }
-
-//     if (endPointIndex !== null) {
-//       // Draw a line from the last point to the endpoint
-//       if (points[endPointIndex]) {
-//         ctx.lineTo(points[endPointIndex].x, points[endPointIndex].y);
-//       } else {
-//         console.error("Endpoint index is null or invalid");
-//       }
-//     }
-//     ctx.strokeStyle = color;
-//     ctx.lineWidth = 2;
-//     ctx.stroke();
-//     ctx.closePath();
-//   }
-// }, [
-//   mousePosition,
-//   settings.value.activeLayer,
-//   frontlineCanvasRef,
-//   points,
-//   endPointIndex,
-// ]);
-
-// const clickedPointIndex = points.findIndex((point) => {
-//     const isClicked =
-//       Math.abs(point.x - canvasRelativeX) < pointRadius && Math.abs(point.y - canvasRelativeY) < pointRadius;
-//     if (isClicked) {
-//       console.log("Clicked Point Position:", point);
-//     }
-//     return isClicked;
-//   });
-
-// setPoints( prevPoints => {
-//     [...prevPoints, cllickPos]
-// })
+ 

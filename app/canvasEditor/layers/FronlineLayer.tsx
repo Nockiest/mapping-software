@@ -46,40 +46,45 @@ const FrontlineLayer = () => {
   const renderFrontLines = () => {
     const frontLines = frontLineSettings.value.frontLines;
     const { ctx, canvas } = getCtxFromRef(frontlineCanvasRef);
-    
+
     if (!ctx) {
       return;
     }
-  
-    ctx.clearRect(0, 0, settings.value.canvasSize.x!, settings.value.canvasSize.y!);
-  
+
+    ctx.clearRect(
+      0,
+      0,
+      settings.value.canvasSize.x!,
+      settings.value.canvasSize.y!
+    );
+
     for (const line of frontLines) {
       if (line.points.length < 2) {
         return;
       }
-  
+
       // Find the index of the endpoint in the array of frontline points
-      const endPointIndex = line.points.findIndex(point => point.id === line.endPointId);
-      const endPointIndexArg = endPointIndex < 0? line.points.length -1: endPointIndex
-   
-      // Ensure that the endpoint is found before proceeding
-      // if (endPointIndex !== -1) {
-        // console.log(endPointIndex)
-        drawLineAlongPoints(
-          line.points,
-          endPointIndexArg, // Use the found endpoint index here
-          ctx,
-          line.color,
-          line.thickness
-        );
-      // }
+      const endPointIndex = line.points.findIndex(
+        (point) => point.id === line.endPointId
+      );
+      const endPointIndexArg =
+        endPointIndex < 0 ? line.points.length - 1 : endPointIndex;
+
+      drawLineAlongPoints(
+        line.points,
+        endPointIndexArg, // Use the found endpoint index here
+        ctx,
+        line.color,
+        line.thickness
+      );
     }
   };
-  
 
   useEffect(() => {
+    
     renderFrontLines();
-  }, [frontlineCanvasRef, mousePosition]);
+  }, [frontlineCanvasRef, mousePosition, JSON.stringify(frontLineSettings.value)]);
+  
 
   useEffect(() => {
     const canvas = frontlineCanvasRef.current;
