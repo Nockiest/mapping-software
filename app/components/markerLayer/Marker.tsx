@@ -16,6 +16,7 @@ import { newMarkerSettings } from "@/app/canvasEditor/settings/markerSettings/Ma
 import Point from "../frontline/Point";
 import { position } from "html2canvas/dist/types/css/property-descriptors/position";
 import { extractImageUrl } from "../utility/utils";
+import { movePosByOffset } from "../utility/CanvasUtils";
 type MarkerProps = {
   initialPosition: Vector2;
   shouldUpdateOnSettingsChange?: boolean;
@@ -59,19 +60,13 @@ const Marker: React.FC<MarkerProps> = ({
 
   const mergedSettings = { ...MarkerDefaultSettings, ...usedSettings };
 
-  const handleMouseMove = (position: Vector2) => {
+  const handleMouseMove = (newPosition: Vector2) => {
     if (dragHandler) {
-      // Call dragHandler with the updated position
-      const updatedPosition = dragHandler(
-        position,
-        false,
-        // topLeftOffset,
-        settings.value.canvasSize
-      );
-      setCurrentPosition(updatedPosition);
+      const adjustedPos = movePosByOffset(newPosition,mergedSettings.width/2 )
+      setCurrentPosition(adjustedPos);
       // Update the position of the marker in markers.value
       markers.value = markers.value.map((marker) =>
-        marker.id === id ? { ...marker, position: updatedPosition } : marker
+        marker.id === id ? { ...marker, position: adjustedPos } : marker
       );
     }
   };
@@ -95,8 +90,6 @@ const Marker: React.FC<MarkerProps> = ({
   const markerTextStyle: React.CSSProperties = {
     //position: 'absolute',
     textAlign: "center",
-    // padding: "5px",
-    // borderRadius: "5px",
     userSelect: "none",
   };
 
