@@ -9,9 +9,14 @@ import {
 import eraseLine from "@/app/components/drawing/Eraser";
 import CanvasToImage from "@/app/components/utility/CanvasToImg";
 import { Vector2 } from "@/public/types/GeometryTypes";
-import { CanvasContext, CanvasContextType, useCanvas } from "../CanvasContext";
+import {
+  CanvasContext,
+  CanvasContextType,
+  useCanvas,
+  useGlobalValue,
+} from "../CanvasContext";
 import bucketFill from "@/app/components/drawing/BucketFill";
-import { MousePositionContext } from "../MouseContext";
+// import { MousePositionContext } from "../MouseContext";
 import { settings, drawSettings, editorTopLeftPosition } from "../Signals";
 import drawLineWithShape, {
   DrawPayload,
@@ -28,7 +33,8 @@ import { getCtxFromRef } from "@/app/components/utility/otherUtils";
 
 const DrawingLayer: React.FC = () => {
   const { canvasRef } = useCanvas();
-  const mousePosition = useContext(MousePositionContext);
+  const { GlobalData } = useGlobalValue();
+  const { mousePosition } = GlobalData;
   const [lastMousePos, setLastMousePos] = useState<Vector2 | null>(null);
 
   const { color, radius } = settings.value;
@@ -60,14 +66,14 @@ const DrawingLayer: React.FC = () => {
       const y = e.offsetY;
       e.preventDefault();
       if (e.button === 2) {
-        console.log('erasing')
+        console.log("erasing");
         const erasePayload: ErasePayload = {
           eraseFunction: eraseLine,
           eraseArgs: {
             canvasRef,
             start: lastMousePos || { x, y },
             end: { x, y },
-            radius:radius/2,
+            radius: radius / 2,
             eraseShape: settings.value.lineType,
           },
         };
@@ -114,11 +120,13 @@ const DrawingLayer: React.FC = () => {
         // Left mouse button is pressed, draw
         if (ctx && lastMousePos) {
           drawLineWithShape(
-           {  ctx,
-            lineStart: lastMousePos,
-            lineEnd:{ x, y },
-            size:radius, 
-            color }
+            {
+              ctx,
+              lineStart: lastMousePos,
+              lineEnd: { x, y },
+              size: radius,
+              color,
+            }
             // settings.value.lineType
           );
         }
@@ -151,23 +159,22 @@ const DrawingLayer: React.FC = () => {
   }, [canvasRef, state, mousePosition, lastMousePos, settings]);
 
   const updateEditorTopLeftPosition = () => {
-    
-    console.log('setting topleft', canvasRef.current !== null)
+    console.log("setting topleft", canvasRef.current !== null);
     if (canvasRef.current) {
       const canvas = canvasRef.current;
       const rect = canvas.getBoundingClientRect();
       const newTopLeftPosition: Vector2 = { x: rect.left, y: rect.top };
-      editorTopLeftPosition.value = newTopLeftPosition ;
+      editorTopLeftPosition.value = newTopLeftPosition;
     }
   };
 
   useEffect(() => {
     // Attach event listener on component mount
-    window.addEventListener('resize', updateEditorTopLeftPosition);
-    updateEditorTopLeftPosition()
+    window.addEventListener("resize", updateEditorTopLeftPosition);
+    updateEditorTopLeftPosition();
     // Detach event listener on component unmount
     return () => {
-      window.removeEventListener('resize', updateEditorTopLeftPosition);
+      window.removeEventListener("resize", updateEditorTopLeftPosition);
     };
   }, []);
 
@@ -177,7 +184,6 @@ const DrawingLayer: React.FC = () => {
         <ReusableLayer
           canvasRef={canvasRef}
           layerName="draw"
-          
           style={{
             cursor:
               state === DrawingState.BucketFill

@@ -25,14 +25,14 @@ import { Button, Typography, Paper } from '@mui/material';
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { theme } from "./theme/theme";
 import { ThemeProvider, createTheme} from "@mui/material"
-import { MousePositionContext, MousePositionProvider } from "./MouseContext";
+// import { MousePositionContext, MousePositionProvider } from "./MouseContext";
  
 
 const Page: React.FC = () => {
   const {   canvasRef, frontlineCanvasRef, markerCanvasRef,backgroundCanvasRef } =
     useCanvas();
  
-  const mousePosition = useContext(MousePositionContext);
+  // const mousePosition = useContext(MousePositionContext);
   const { GlobalData, updateGlobalData } = useGlobalValue();
   const [mouseDownTimeStamp, setMouseDownTimeStamp] = useState<number | null>(
     null
@@ -92,7 +92,7 @@ const Page: React.FC = () => {
           // canvasState: canvasState,
           color: settings.value.color,
           layer: settings.value.activeLayer,
-          mousePosition: mousePosition,
+          mousePosition: GlobalData.mousePosition,
           mousDownTime: elapsedTime,
           TopLeftOffset: editorTopLeftPosition,
           // numMarkers:markers.value.length
@@ -111,12 +111,12 @@ const Page: React.FC = () => {
 const App: React.FC = () => {
   return (
     <CanvasProvider>
-      <MousePositionProvider>
+      {/* <MousePositionProvider> */}
         <ThemeProvider theme = {theme}>
             <Page />
         </ThemeProvider>
         
-      </MousePositionProvider>
+      {/* </MousePositionProvider> */}
     </CanvasProvider>
   );
 };

@@ -2,11 +2,14 @@ import { useGlobalValue } from "@/app/canvasEditor/CanvasContext";
 import { Vector2, Shapes } from "@/public/types/GeometryTypes";
 import { LayerNames } from "@/public/types/OtherTypes";
 import { followMouseComponent } from "@/app/components/utility/utils";
-import { useEffect, useState, ReactNode } from "react";
+import { useEffect, useState, ReactNode, useContext } from "react";
+import { editorTopLeftPosition, settings } from "@/app/canvasEditor/Signals";
+import { Signal } from "@preact/signals";
+// import { MousePositionContext } from "@/app/canvasEditor/MouseContext";
 type PointProps = {
   position: Vector2;
   id: string;
-  topLeft?: Vector2;
+  topLeft?: Vector2  ;
   radius?: number;
   leftClk?: (() => void) | null;
   rightClk?: ((e: React.MouseEvent) => void) | null;
@@ -23,7 +26,7 @@ type PointProps = {
 const Point: React.FC<PointProps> = ({
   position,
   id,
-  topLeft = { x: 0, y: 0 },
+  topLeft = editorTopLeftPosition.value,
   radius = 15,
   leftClk,
   rightClk,
@@ -36,11 +39,10 @@ const Point: React.FC<PointProps> = ({
   dragable = true,
   acceptInput = true,
   className,
-  // backgroundImage
 }) => {
   const [isDragging, setIsDragging] = useState(false);
-  const { GlobalData } = useGlobalValue();
-  const { mouseDownTime } = GlobalData;
+  const {GlobalData} = useGlobalValue()
+  const {mousePosition, mouseDownTime} = GlobalData
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -65,14 +67,15 @@ const Point: React.FC<PointProps> = ({
   };
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (!acceptInput || !isDragging || !dragable) {
+    if (!acceptInput || !isDragging || !dragable|| !mousePosition) {
       console.log("NOT ACCEPTING INPUT", !acceptInput, !isDragging, !dragable);
       return;
     }
-    const newX = e.clientX - topLeft.x + window.scrollX;
-    const newY = e.clientY - topLeft.y + window.scrollY;
-
-    onDrag?.({ x: newX, y: newY });
+    // const newX = e.clientX - topLeft.x + window.scrollX;
+    // const newY = e.clientY - topLeft.y + window.scrollY;
+    const newPosition = followMouseComponent({x: e.clientX, y: e.clientY},true,settings.value.canvasSize, topLeft )
+    console.log(newPosition, mousePosition)
+    onDrag?.(newPosition);
   };
 
   const handleMouseUp = (e:  MouseEvent|React.MouseEvent) => {

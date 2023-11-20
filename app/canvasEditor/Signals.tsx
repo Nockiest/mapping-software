@@ -1,5 +1,5 @@
 import { Signal, signal } from "@preact/signals";
-import { DrawAction, DrawingState, ErasePayload, FrontLineSettings, MarkerArraySignal, Settings } from "@/public/types/OtherTypes";
+import { DrawAction, DrawingState, ErasePayload, FrontLineSettings, MarkerArraySignal, MarkerSettings, Settings } from "@/public/types/OtherTypes";
 import { DrawPayload } from "../components/drawing/LineDrawer";
 import { Vector2 } from "@/public/types/GeometryTypes";
 
@@ -56,18 +56,28 @@ export const settings: Settings = signal({
   lineType: "squared",
   activeLayer: "draw",
   canvasSize: { x: 800, y: 600 },
-  markerSettings: {
-    width: 40,
-    color: `#000000`,
-    textColor: `#ffffff`,
-    topText: "X",
-    bottomText: "Y",
-    imageURL: null,
-    popularMarkerColors: [],
-  },
+  // markerSettings: {
+  //   width: 40,
+  //   color: `#000000`,
+  //   textColor: `#ffffff`,
+  //   topText: "X",
+  //   bottomText: "Y",
+  //   imageURL: null,
+  //   popularMarkerColors: [],
+  // },
   popularColors: [],
   canvasZindexes: { marker: 10, draw: 10, background: 0, frontLine: 10, compiled:0 },
 });
+
+export const markerSettings:MarkerSettings = {
+  width: 40,
+  color: `#000000`,
+  textColor: `#ffffff`,
+  topText: "X",
+  bottomText: "Y",
+  imageURL: null,
+  popularMarkerColors: [],
+} 
 
 export const frontLineSettings:  FrontLineSettings  = signal({
   insertionPointIndex: -1,

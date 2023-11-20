@@ -1,4 +1,4 @@
-import { MousePositionContext } from "@/app/canvasEditor/MouseContext";
+// import { MousePositionContext } from "@/app/canvasEditor/MouseContext";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import Point from "./Point";
@@ -164,7 +164,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
           key={point.id}
           position={point.position}
           id={point.id}
-          topLeft={{ x: topLeftPoint.x, y: topLeftPoint.y }}
+          // topLeft={{ x: topLeftPoint.x, y: topLeftPoint.y }}
           onDrag={(newPosition) => updatePointPositions(point.id, newPosition)}
           radius={controlPointRadius}
           mouseWheelClk={

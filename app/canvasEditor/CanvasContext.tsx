@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useRef, useReducer,ReactNode ,Reducer , Dispatch } from "react";
+import { createContext, useContext, useState, useRef, useReducer,ReactNode ,Reducer , Dispatch, useEffect } from "react";
 import {DrawAction,DrawingState, ErasePayload, Settings } from "@/public/types/OtherTypes";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { EraseArgs } from "../components/drawing/Eraser";
@@ -32,6 +32,7 @@ export interface CanvasSettingsType {
 }
 type GlobalDataType = {
   mouseDownTime:number
+  mousePosition: Vector2 | null
 }
  
 export const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
@@ -46,7 +47,7 @@ export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const compiledCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [frontLines, setFrontlines] = useState<FrontlineData[]>([])
   const backgroundCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [globalData, setGlobalData] = useState<GlobalDataType>({ mouseDownTime: 0 });
+  const [globalData, setGlobalData] = useState<GlobalDataType>({ mouseDownTime: 0, mousePosition: null  });
 
   const canvasContextValue: CanvasContextType = {
     canvasRef,
@@ -73,6 +74,22 @@ export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     GlobalData: globalData,
     updateGlobalData,
   };
+
+  
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      updateGlobalData('mousePosition' , {x:e.clientX, y:e.clientY});
+      // updateMousePosition(e.clientX, e.clientY);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []); // Empty dependency array ensures the effect runs once on mount
+
 
   return (
     <CanvasContext.Provider value={canvasContextValue}>

@@ -1,5 +1,5 @@
 import { useContext, useState, useRef, useEffect, ReactNode } from "react";
-import { MousePositionContext } from "../MouseContext";
+// import { MousePositionContext } from "../MouseContext";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { frontLineSettings, settings } from "../Signals";
 import { useCanvas, useGlobalValue } from "../CanvasContext";
@@ -9,9 +9,10 @@ import fillCanvas from "@/app/components/utility/fillCanvas";
 import { Color } from "@/public/types/OtherTypes";
 import Frontline from "@/app/components/frontline/Frontline";
 
-import { v4 as uuidv4 } from "uuid";
+ 
 import { drawLineAlongPoints } from "@/app/components/utility/CanvasUtils";
 import {   getCtxFromRef } from "@/app/components/utility/otherUtils";
+import onMountFrontLineData from "../settings/frontLineSettings/OnMountFrontLineData";
 
 export type PointData= {
   position: Vector2 
@@ -29,28 +30,18 @@ export type FrontlineData = {
 };
  
 const FrontlineLayer = () => {
-  const mousePosition = useContext(MousePositionContext);
+  const {GlobalData} = useGlobalValue()
+  const {mousePosition} = GlobalData   
   const { frontlineCanvasRef } = useCanvas();
-  const frontLines = frontLineSettings.value.frontLines;
-  // DOUFÁM ŽE SE TO BUDE UPDATOVAT
+  const frontLines = frontLineSettings.value.frontLines; 
   const activeFrontline = frontLineSettings.value.activeFrontline;
   const [topLeft, setTopLeft] = useState<Vector2>({ x: 0, y: 0 });
   const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
   const isActive = settings.value.activeLayer === "frontLine";
 
   useEffect(() => {
-    // Assuming you want to instantiate one Frontline initially
-    
-    const initialFrontlineData: FrontlineData = {
-      idNum: uuidv4(),
-      points: [],
-      topLeftPoint: {x:0,y:0},
-      endPointIndex:0,
-      thickness: 4,
-      color:  frontLineSettings.value.frontLineColor
-    };
-    frontLineSettings.value.frontLines = [initialFrontlineData];
-    frontLineSettings.value.activeFrontline=initialFrontlineData 
+    frontLineSettings.value.frontLines = [{...onMountFrontLineData}];
+    frontLineSettings.value.activeFrontline=onMountFrontLineData 
   }, [ ]);
 
   const renderFrontLines = () => {
@@ -89,7 +80,7 @@ const FrontlineLayer = () => {
 
   return (
     <>
-      {/* {frontlineCanvasRef && ( */}
+ 
         <ReusableLayer
           canvasRef={frontlineCanvasRef}
           style={{
@@ -105,7 +96,7 @@ const FrontlineLayer = () => {
             />
           ))}
         </ReusableLayer>
-      {/* )} */}
+
     </>
   );
 };

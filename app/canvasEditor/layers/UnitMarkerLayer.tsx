@@ -3,7 +3,7 @@ import { useState, useEffect, useContext, useReducer } from "react";
 import Marker, {
   MarkerDefaultSettings,
 } from "@/app/components/markerLayer/Marker"; // Adjust the import path as needed
-import { CanvasContext, useCanvas } from "../CanvasContext";
+import { CanvasContext, useCanvas, useGlobalValue } from "../CanvasContext";
 // import { Color } from '@/public/types/OtherTypes';
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { settings } from "../Signals";
@@ -15,7 +15,7 @@ import {
 } from "@/public/types/OtherTypes";
 // import LineComponent from '@/app/components/frontline/FrontLine2D';
 import { markers } from "../Signals";
-import { MousePositionContext } from "../MouseContext";
+// import { MousePositionContext } from "../MouseContext";
 import {
   extractImageUrl,
   followMouseComponent,
@@ -68,7 +68,8 @@ const UnitMarkerLayer: React.FC = () => {
     markerLayerStateMachine,
     MarkerLayerState.Idle
   );
-  const mousePosition = useContext(MousePositionContext);
+  const {GlobalData} = useGlobalValue()
+  const {mousePosition} = GlobalData
   const isActive = settings.value.activeLayer === "marker";
 
   useEffect(() => {

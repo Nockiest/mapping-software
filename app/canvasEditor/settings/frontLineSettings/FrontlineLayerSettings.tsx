@@ -22,7 +22,7 @@ import ColorPicker from '../settingsComponents/ColorPicker';
 import { Color } from '@/public/types/OtherTypes';
 import ButtonColumn from './ButtonColumn';
 import VisualSettingsColumn from './ColorSettingsColumn';
- 
+import onMountFrontLineData from './OnMountFrontLineData';
 const FrontlineLayerSettings = () => {
   const [insertionPointIndex, setEditedPointNum] = useState(frontLineSettings.value.insertionPointIndex);
   const [maxEndPointNumValue, setMaxEndPointNumValue] = useState(0);
@@ -53,22 +53,12 @@ const FrontlineLayerSettings = () => {
   };
 
   const handleNewFrontLine = () => {
-    const newFrontlineData: FrontlineData = {
-      idNum: uuidv4(),
-      points: [],
-      topLeftPoint: { x: 0, y: 0 },
-      thickness: 4,
-      endPointIndex: 0,
-      color: frontLineSettings.value.frontLineColor,
-    };
-
     // Add the new frontline to the frontLines array
-    frontLineSettings.value.frontLines.push(newFrontlineData);
+    frontLineSettings.value.frontLines.push({...onMountFrontLineData});
 
-    // Set the new frontline as active
-    frontLineSettings.value.activeFrontline = newFrontlineData;
-  };
-
+    // // Set the new frontline as active
+    frontLineSettings.value.activeFrontline = onMountFrontLineData
+  }
   const handleLayerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedLayerId = e.target.value;
     const newFrontline = findFrontLineObj(selectedLayerId);

@@ -42,25 +42,7 @@ const CanvasEditor: React.FC = () => {
 
   const filteredLayers = layers.filter((layer) => layer.canvasRef);
 
-  // const updateEditorTopLeftPosition = () => {
-  //   const editorDiv = document.getElementById('draw');
-  //   console.log('setting topleft')
-  //   if (editorDiv) {
-  //     const rect = editorDiv.getBoundingClientRect();
-  //     const newTopLeftPosition: Vector2 = { x: rect.left, y: rect.top };
-  //     editorTopLeftPosition.value = newTopLeftPosition ;
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   // Attach event listener on component mount
-  //   window.addEventListener('resize', updateEditorTopLeftPosition);
-
-  //   // Detach event listener on component unmount
-  //   return () => {
-  //     window.removeEventListener('resize', updateEditorTopLeftPosition);
-  //   };
-  // }, []);
+  
 
   return (
     <div id="your-editor-div-id" className={`relative h-600 w-${settings.value.canvasSize} flex items-center justify-center`}>

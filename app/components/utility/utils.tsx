@@ -101,6 +101,10 @@ export const followMouseComponent: FollowMouseFunction = (
     ),
   };
   // console.log(e.clientY, topLeftOffset.y, window.scrollY, updatedPosition);
+  console.log('args',   position,
+  {x:window.scrollX, y: window.scrollY},
+  maxPosition,
+  topLeftOffset )
   console.log(updatedPosition, "updated position");
   return updatedPosition;
 };
