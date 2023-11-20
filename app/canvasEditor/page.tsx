@@ -96,7 +96,7 @@ const Page: React.FC = () => {
           mousDownTime: elapsedTime,
           TopLeftOffset: editorTopLeftPosition,
           // numMarkers:markers.value.length
-          // markerImage: settings.value.markerSettings.imageURL
+          // markerImage: markerSettings.value.imageURL
           // activeFrontLine: frontLineSettings.value.activeFrontline?.idNum,
           // GlobalData: GlobalData.mouseDownTime,
         }}

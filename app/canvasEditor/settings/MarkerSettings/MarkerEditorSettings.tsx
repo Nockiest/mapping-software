@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect, useRef } from "react";
 import { CanvasSettingsType } from "../../CanvasContext"; // CanvasSettingsContext,
 import { hexToRgb } from "@/app/components/utility/utils";
-import { settings } from "../../Signals";
+import { settings, markerSettings } from "../../Signals";
 import FavoriteColorLister from "@/app/components/settings/FavoriteColorLister";
 import { Color, Settings } from "@/public/types/OtherTypes";
 import { signal } from "@preact/signals";
@@ -33,7 +33,7 @@ export type UpdateMarkerSettingsFc = (
   property: string,
   callback?: UpdateMarkerSettingsCallback | null,
  ) => void 
-export const newMarkerSettings = signal({ ...settings.value.markerSettings });
+export const newMarkerSettings = signal({ ...markerSettings.value });
 
 interface MarkerEditorSettingsProps {
   changeSettings: ChangeSettingsFunctionType
@@ -59,7 +59,8 @@ const updateMarkerSettings:UpdateMarkerSettingsFc =  (
 };
 
   const applyChanges = () => {
-    changeSettings("markerSettings", newMarkerSettings.value);
+    markerSettings.value = newMarkerSettings.value
+    // changeSettings("markerSettings", newMarkerSettings.value);
     setIsDirty(false);
   };
 

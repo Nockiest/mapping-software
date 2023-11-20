@@ -1,24 +1,24 @@
 import { Typography, Box } from "@mui/material";
 import SpeedButton from "../../theme/SpeedButton";
-import { settings } from "../../Signals";
+import { settings, markerSettings } from "../../Signals";
 import SettingsColumn from "../settingsComponents/SettingsColumn";
 
 const MarkerValues: React.FC<{   applyChanges: () => void, validationMessage: string }> = ({  applyChanges, validationMessage }) => {
     return (
       <SettingsColumn>
         <Typography>
-          Current Marker Width: {settings.value.markerSettings.width}
+          Current Marker Width: {markerSettings.value.width}
         </Typography>
         <Typography>
-          Current Marker Color: {settings.value.markerSettings.color}
+          Current Marker Color: {markerSettings.value.color}
         </Typography>
         <Typography>
-          Current Marker TopText: {settings.value.markerSettings.topText}
+          Current Marker TopText: {markerSettings.value.topText}
         </Typography>
-        {settings.value.markerSettings.width >= 20 && (
+        {markerSettings.value.width >= 20 && (
           <Typography>
             Current Marker BottomText:{" "}
-            {settings.value.markerSettings.bottomText}
+            {markerSettings.value.bottomText}
           </Typography>
         )}
   

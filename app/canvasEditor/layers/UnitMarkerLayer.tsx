@@ -6,7 +6,7 @@ import Marker, {
 import { CanvasContext, useCanvas, useGlobalValue } from "../CanvasContext";
 // import { Color } from '@/public/types/OtherTypes';
 import { Vector2 } from "@/public/types/GeometryTypes";
-import { settings } from "../Signals";
+import { markerSettings, settings } from "../Signals";
 import {
   Color,
   MarkerArraySignal,
@@ -99,13 +99,13 @@ const UnitMarkerLayer: React.FC = () => {
           dispatchState({ type: "DRAG", markerIndex: clickedMarkerIndex });
         } else {
           const newMarker: MarkerType = {
-            color: settings.value.markerSettings.color,
+            color:  markerSettings.value.color,
             position: { x, y },
             isDragging: false,
 
-            topText: settings.value.markerSettings.topText,
-            bottomText: settings.value.markerSettings.bottomText,
-            customStyling: { ...settings.value.markerSettings },
+            topText: markerSettings.value.topText,
+            bottomText: markerSettings.value.bottomText,
+            customStyling: { ...markerSettings.value },
             id: uuid(),
           };
           markers.value.push(newMarker);
@@ -139,7 +139,7 @@ const UnitMarkerLayer: React.FC = () => {
             initialPosition={marker.position}
             id={marker.id}
             dragHandler={followMouseComponent}
-            customStyling={settings.value.markerSettings}
+            customStyling={markerSettings.value}
           />
         ))}
       </ReusableLayer>

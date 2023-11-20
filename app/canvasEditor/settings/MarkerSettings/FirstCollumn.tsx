@@ -7,7 +7,7 @@ import {
 import { theme } from "../../theme/theme";
 import { Box, Input, Slider, Typography } from "@mui/material";
 import SpeedButton from "../../theme/SpeedButton";
-import { settings } from "../../Signals";
+import { markerSettings, settings } from "../../Signals";
 import SettingsColumn from "../settingsComponents/SettingsColumn";
 
 type FirstColumnProps = {
@@ -65,7 +65,7 @@ const FirstColumn: React.FC<FirstColumnProps> = ({ updateMarkerSettings }) => {
       />
 
       {/* <input type="file" ref={fileInputRef} onChange={(e) => updateMarkerSettings(URL.createObjectURL(e.target.files?.[0]), 'imageURL')} /> */}
-      {settings.value.markerSettings.imageURL && (
+      {markerSettings.value.imageURL && (
         <SpeedButton
           onClick={() =>
             updateMarkerSettings(

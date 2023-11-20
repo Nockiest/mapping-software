@@ -69,7 +69,7 @@ export const settings: Settings = signal({
   canvasZindexes: { marker: 10, draw: 10, background: 0, frontLine: 10, compiled:0 },
 });
 
-export const markerSettings:MarkerSettings = {
+export const markerSettings: Signal<MarkerSettings> = signal({
   width: 40,
   color: `#000000`,
   textColor: `#ffffff`,
@@ -77,7 +77,7 @@ export const markerSettings:MarkerSettings = {
   bottomText: "Y",
   imageURL: null,
   popularMarkerColors: [],
-} 
+} )
 
 export const frontLineSettings:  FrontLineSettings  = signal({
   insertionPointIndex: -1,
