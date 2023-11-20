@@ -6,9 +6,10 @@ import { frontLineSettings, settings } from "@/app/canvasEditor/Signals";
 import { useCanvas } from "@/app/canvasEditor/CanvasContext";
 import { computed } from "@preact/signals";
 import { Color } from "@/public/types/OtherTypes";
-import { FrontlineData } from "@/app/canvasEditor/layers/FronlineLayer";
+import { FrontlineData, PointData } from "@/app/canvasEditor/layers/FronlineLayer";
 import { findFrontLineObj } from "../utility/otherUtils";
 import { v4 as uuidv4 } from "uuid";
+import { findEndpointIndex } from "../utility/utils";
 
 export type FrontlineProps = {
   idNum: string;
@@ -41,27 +42,41 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
   const addPoint = (position: Vector2) => {
     if (!frontLineInfo) return;
   
-    const newPoints = [...frontLineInfo.points];
+    const oldPoints = [...frontLineInfo.points];
     const insertionPointIndex = frontLineSettings.value.insertionPointIndex;
-  
-    // Determine the index at which to insert the new point
-    const insertIndex =
-    insertionPointIndex !== null && insertionPointIndex !== -1
-        ? Math.min(Math.max(0, insertionPointIndex), newPoints.length)
-        : newPoints.length;
-    console.log( insertionPointIndex, insertIndex , frontLineInfo.points.length)
-    if ( insertionPointIndex === frontLineInfo.points.length){
-      console.log('end point index should move')
-    }
-    // Insert the new point at the specified index
-    newPoints.splice(insertIndex, 0, {
+    const newPoint: PointData = {
       position: position,
       id: uuidv4(),
       radius: controlPointRadius,
-    });
+    };
+
+    const endPointIndex = findEndpointIndex(frontLineInfo);
+    console.log(endPointIndex, oldPoints.length - 1, oldPoints);
+
+    if (endPointIndex === oldPoints.length - 1 && endPointIndex >= 0) {
+      console.log('updating end point index');
+      setEndPointIndex(newPoint.id);
+    }
   
-    frontLineInfo.points = newPoints;
+    if (oldPoints.length === 0) {
+      // If oldPoints is empty, push the new point
+      oldPoints.push(newPoint);
+    } else {
+      // Determine the index at which to insert the new point
+      const insertIndex =
+        insertionPointIndex !== null && insertionPointIndex !== -1
+          ? Math.min(Math.max(0, insertionPointIndex), oldPoints.length)
+          : oldPoints.length;
+  
+      // Insert the new point at the specified index
+      oldPoints.splice(insertIndex, 0, newPoint);
+  
+      
+    }
+  
+    frontLineInfo.points = oldPoints;
   };
+  
   
   
 
