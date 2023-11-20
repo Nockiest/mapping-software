@@ -88,17 +88,18 @@ const Page: React.FC = () => {
     <  >
       <DebugInfo
         data={{
-          radius: settings.value.radius,
+          // radius: settings.value.radius,
           // canvasState: canvasState,
-          color: settings.value.color,
-          layer: settings.value.activeLayer,
+          // color: settings.value.color,
+          // layer: settings.value.activeLayer,
           mousePosition: GlobalData.mousePosition,
+          relativePosition: GlobalData.editorRelativePosition,
           mousDownTime: elapsedTime,
           TopLeftOffset: editorTopLeftPosition,
-          // numMarkers:markers.value.length
+         
           // markerImage: markerSettings.value.imageURL
           // activeFrontLine: frontLineSettings.value.activeFrontline?.idNum,
-          // GlobalData: GlobalData.mouseDownTime,
+         
         }}
       />
       <CanvasSettings />

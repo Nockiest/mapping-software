@@ -1,53 +1,85 @@
-import { createContext, useContext, useState, useRef, useReducer,ReactNode ,Reducer , Dispatch, useEffect } from "react";
-import {DrawAction,DrawingState, ErasePayload, Settings } from "@/public/types/OtherTypes";
+import {
+  createContext,
+  useContext,
+  useState,
+  useRef,
+  useReducer,
+  ReactNode,
+  Reducer,
+  Dispatch,
+  useEffect,
+} from "react";
+import {
+  DrawAction,
+  DrawingState,
+  ErasePayload,
+  Settings,
+} from "@/public/types/OtherTypes";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { EraseArgs } from "../components/drawing/Eraser";
 import { DrawPayload } from "../components/drawing/LineDrawer";
 import { FrontlineData } from "./layers/FronlineLayer";
+import { movePosByOffset } from "../components/utility/CanvasUtils";
+import { editorTopLeftPosition } from "./Signals";
 
 export interface CanvasContextType {
   canvasRef: React.RefObject<HTMLCanvasElement | undefined>;
   markerCanvasRef: React.RefObject<HTMLCanvasElement | null>;
   frontlineCanvasRef: React.RefObject<HTMLCanvasElement | null>;
-  backgroundCanvasRef:  React.RefObject<HTMLCanvasElement | null>;
-  compiledCanvasRef:React.RefObject<HTMLCanvasElement | null>;
-  frontLines: FrontlineData[], 
-  setFrontlines:  React.Dispatch<React.SetStateAction<FrontlineData[]>>
+  backgroundCanvasRef: React.RefObject<HTMLCanvasElement | null>;
+  compiledCanvasRef: React.RefObject<HTMLCanvasElement | null>;
+  frontLines: FrontlineData[];
+  setFrontlines: React.Dispatch<React.SetStateAction<FrontlineData[]>>;
 }
 
 export interface BackgroundContextType {
   backgroundCanvasRef: React.RefObject<HTMLCanvasElement | null>;
 }
 
-type UpdateGlobalDataType = (paramName: keyof GlobalDataType, paramValue: any) => void;
+type UpdateGlobalDataType = (
+  paramName: keyof GlobalDataType,
+  paramValue: any
+) => void;
 
 export type GlobalDataContextType = {
   GlobalData: GlobalDataType;
   updateGlobalData: UpdateGlobalDataType;
-}
+};
 
 export interface CanvasSettingsType {
   settings: Settings;
   setSettings: React.Dispatch<React.SetStateAction<Settings>>;
 }
 type GlobalDataType = {
-  mouseDownTime:number
-  mousePosition: Vector2 | null
-}
- 
-export const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
-export const BackgroundContext = createContext<BackgroundContextType | undefined>(undefined);
-export const GlobalDataContext = createContext<GlobalDataContextType| undefined >(undefined); 
+  mouseDownTime: number;
+  mousePosition: Vector2 | null;
+  editorRelativePosition: Vector2 | null;
+};
 
+export const CanvasContext = createContext<CanvasContextType | undefined>(
+  undefined
+);
+export const BackgroundContext = createContext<
+  BackgroundContextType | undefined
+>(undefined);
+export const GlobalDataContext = createContext<
+  GlobalDataContextType | undefined
+>(undefined);
 
-export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const CanvasProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const markerCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const frontlineCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const compiledCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [frontLines, setFrontlines] = useState<FrontlineData[]>([])
+  const [frontLines, setFrontlines] = useState<FrontlineData[]>([]);
   const backgroundCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [globalData, setGlobalData] = useState<GlobalDataType>({ mouseDownTime: 0, mousePosition: null  });
+  const [globalData, setGlobalData] = useState<GlobalDataType>({
+    mouseDownTime: 0,
+    mousePosition: null,
+    editorRelativePosition: null,
+  });
 
   const canvasContextValue: CanvasContextType = {
     canvasRef,
@@ -55,15 +87,15 @@ export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     frontlineCanvasRef,
     backgroundCanvasRef,
     compiledCanvasRef,
-    frontLines, 
-    setFrontlines
+    frontLines,
+    setFrontlines,
   };
 
   const backgroundContextValue: BackgroundContextType = {
     backgroundCanvasRef,
   };
 
-  const updateGlobalData:UpdateGlobalDataType = (paramName , paramValue ) => {
+  const updateGlobalData: UpdateGlobalDataType = (paramName, paramValue) => {
     setGlobalData((prevData) => ({
       ...prevData,
       [paramName]: paramValue,
@@ -75,12 +107,18 @@ export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     updateGlobalData,
   };
 
-  
-
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      updateGlobalData('mousePosition' , {x:e.clientX, y:e.clientY});
-      // updateMousePosition(e.clientX, e.clientY);
+      const mousePos = { x: e.clientX, y: e.clientY };
+      updateGlobalData("mousePosition", mousePos);
+
+      if (editorTopLeftPosition.value) {
+        const editorRelativePos = movePosByOffset(mousePos, {
+          x: -editorTopLeftPosition.value.x,
+          y: -editorTopLeftPosition.value.y,
+        });
+        updateGlobalData("editorRelativePosition", editorRelativePos);
+      }
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -88,8 +126,7 @@ export const CanvasProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, []); // Empty dependency array ensures the effect runs once on mount
-
+  }, [editorTopLeftPosition]); // Now it depends on editorTopLeftPosition
 
   return (
     <CanvasContext.Provider value={canvasContextValue}>
@@ -130,6 +167,3 @@ export const useGlobalValue = () => {
 
   return context;
 };
-
- 
- 

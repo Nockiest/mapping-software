@@ -56,15 +56,6 @@ export const settings: Settings = signal({
   lineType: "squared",
   activeLayer: "draw",
   canvasSize: { x: 800, y: 600 },
-  // markerSettings: {
-  //   width: 40,
-  //   color: `#000000`,
-  //   textColor: `#ffffff`,
-  //   topText: "X",
-  //   bottomText: "Y",
-  //   imageURL: null,
-  //   popularMarkerColors: [],
-  // },
   popularColors: [],
   canvasZindexes: { marker: 10, draw: 10, background: 0, frontLine: 10, compiled:0 },
 });

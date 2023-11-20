@@ -51,6 +51,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
         id: uuidv4(),
         radius:controlPointRadius
       });
+      frontLineInfo.endPointIndex += 1
     } else {
       // Append the new point
       newPoints.push({
