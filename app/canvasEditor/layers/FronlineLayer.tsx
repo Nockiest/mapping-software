@@ -24,7 +24,7 @@ export type FrontlineData = {
   idNum: string;
   topLeftPoint: Vector2;
   points: Array<PointData>;
-  endPointId: string;
+  endPoint : PointData|null;
   thickness: number;
   color: Color;
 };

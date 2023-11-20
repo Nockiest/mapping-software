@@ -21,10 +21,10 @@ import { theme } from '../../theme/theme';
 import ColorPicker from '../settingsComponents/ColorPicker';
 import { Color } from '@/public/types/OtherTypes';
 import ButtonColumn from './ButtonColumn';
-import VisualSettingsColumn from './ColorSettingsColumn';
+import VisualSettingsColumn from './VisualSettingsColumn';
 import onMountFrontLineData from './OnMountFrontLineData';
 const FrontlineLayerSettings = () => {
-  const [insertionPointIndex, setEditedPointNum] = useState(frontLineSettings.value.insertionPointIndex);
+  const [insertionPointIndex, setInsertionPointIndex] = useState(frontLineSettings.value.insertionPointIndex);
   const [maxEndPointNumValue, setMaxEndPointNumValue] = useState(0);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const FrontlineLayerSettings = () => {
 
   useEffect(() => {
     // Update local state when settings change
-    setEditedPointNum(frontLineSettings.value.insertionPointIndex);
+    setInsertionPointIndex(frontLineSettings.value.insertionPointIndex);
   },  );
 
  
@@ -67,7 +67,7 @@ const FrontlineLayerSettings = () => {
 
   return (
     <Grid container spacing={1} sx={{display:'flex'}}>
-      <VisualSettingsColumn  setEditedPointNum={setEditedPointNum} maxEndPointNumValue={maxEndPointNumValue} />
+      <VisualSettingsColumn  setInsertionPointIndex={setInsertionPointIndex} maxEndPointNumValue={maxEndPointNumValue} />
     
 
     <Grid item xs={3}>

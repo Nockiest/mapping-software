@@ -129,13 +129,13 @@ export  const findEndpointIndex = (frontLineInfo: FrontlineData | undefined): nu
     return -1; // If there is no FrontlineData, return -1 indicating not found
   }
 
-  const endpointId = frontLineInfo.endPointId;
+  const endpoint  = frontLineInfo.endPoint;
 
-  if (!endpointId) {
+  if (!endpoint ) {
     return -1; // If endpointId is not set, return -1 indicating not found
   }
 
-  const endpointIndex = frontLineInfo.points.findIndex((point) => point.id === endpointId);
+  const endpointIndex = frontLineInfo.points.findIndex((point) => point === endpoint );
 
   return endpointIndex;
 };

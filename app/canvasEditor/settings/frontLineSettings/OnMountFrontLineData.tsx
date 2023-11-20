@@ -6,7 +6,7 @@ const onMountFrontLineData: FrontlineData = {
   idNum: uuidv4(),
   points: [],
   topLeftPoint: { x: 0, y: 0 },
-  endPointIndex: -1,
+  endPoint : null,
   thickness: 4,
   color: frontLineSettings.value.frontLineColor,
 };

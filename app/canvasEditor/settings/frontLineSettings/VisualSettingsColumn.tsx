@@ -7,48 +7,46 @@ import SettingsColumn from "../settingsComponents/SettingsColumn";
 
 type VisualSettingsColumnProps = {
   maxEndPointNumValue: number;
-  setEditedPointNum: React.Dispatch<React.SetStateAction<number>>;
+  setInsertionPointIndex: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const VisualSettingsColumn: React.FC<VisualSettingsColumnProps> = ({
   maxEndPointNumValue,
-  setEditedPointNum,
+  setInsertionPointIndex,
 }) => {
   const activeFrontLine = frontLineSettings.value.activeFrontline;
+
   const handleThicknessChange = (e: Event, value: number | number[]) => {
     const newThickness = Array.isArray(value) ? value[0] : value;
-    // const activeFrontline = frontLineSettings.value.activeFrontline;
-    console.log('handling thickness change')
+
     if (activeFrontLine) {
       activeFrontLine.thickness = newThickness;
     }
   };
+
   const handleCurFrontlineColorChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const hexColor = e.target.value as Color;
     frontLineSettings.value.frontLineColor = hexColor;
     const changedFrontline = frontLineSettings.value.activeFrontline;
+
     if (changedFrontline) {
       changedFrontline.color = hexColor;
     }
   };
-  const handleEndFrontLineIndexChange = (
-    e: Event,
-    value: number | number[]
-  ) => {
+
+  const handleEndFrontLineIndexChange = (e: Event, value: number | number[]) => {
     const activeFrontline = frontLineSettings.value.activeFrontline;
 
     const newValue = typeof value === "number" ? value : -1;
 
     if (!isNaN(newValue)) {
-      // Update the insertionPointIndex in settings and local state
       frontLineSettings.value.insertionPointIndex = newValue;
-      setEditedPointNum(newValue);
+      setInsertionPointIndex(newValue);
     } else {
-      // If the value is NaN, set it to -1
       frontLineSettings.value.insertionPointIndex = -1;
-      setEditedPointNum(-1);
+      setInsertionPointIndex(-1);
     }
 
     if (activeFrontline) {
@@ -56,8 +54,24 @@ const VisualSettingsColumn: React.FC<VisualSettingsColumnProps> = ({
     }
   };
 
+  const handleEndpointIdChange = (e: Event, value: number | number[]) => {
+    const activeFrontline = frontLineSettings.value.activeFrontline;
+
+    const newEndpointId = typeof value === "number" ? value : -1;
+
+    if (!isNaN(newEndpointId) && activeFrontline) {
+      const maxPoints = activeFrontline.points.length;
+
+      if (newEndpointId >= -1 && newEndpointId < maxPoints) {
+        // Find the corresponding PointData object using the endpoint ID
+        const newEndpoint = newEndpointId === -1 ? null : activeFrontline.points[newEndpointId];
+        activeFrontline.endPoint = newEndpoint;
+      }
+    }
+  };
+
   return (
-    <SettingsColumn > 
+    <SettingsColumn>
       <ColorPicker
         value={frontLineSettings.value.frontLineColor}
         handleColorChange={handleCurFrontlineColorChange}
@@ -72,6 +86,22 @@ const VisualSettingsColumn: React.FC<VisualSettingsColumnProps> = ({
           defaultValue={-1}
           max={maxEndPointNumValue - 1}
           onChange={handleEndFrontLineIndexChange}
+          valueLabelDisplay="auto"
+          marks
+          sx={{
+            width: "180px",
+          }}
+        />
+      </FormControl>
+      <FormControl>
+        <InputLabel style={{ color: "white" }}>
+          Set endpoint ID {activeFrontLine?.endPoint?.id || 'None'}
+        </InputLabel>
+        <Slider
+          min={-1}
+          value={activeFrontLine?.endPoint ? activeFrontLine?.points.indexOf(activeFrontLine?.endPoint) : -1}
+          max={maxEndPointNumValue - 1}
+          onChange={handleEndpointIdChange}
           valueLabelDisplay="auto"
           marks
           sx={{
