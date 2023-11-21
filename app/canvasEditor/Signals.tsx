@@ -1,6 +1,6 @@
 import { Signal, signal } from "@preact/signals";
 import { DrawAction, DrawingState, ErasePayload, FrontLineSettings, MarkerArraySignal, MarkerSettings, Settings } from "@/public/types/OtherTypes";
-import { DrawPayload } from "../components/drawing/LineDrawer";
+import drawLineWithShape, { DrawPayload } from "../components/drawing/LineDrawer";
 import { Vector2 } from "@/public/types/GeometryTypes";
 
 
@@ -10,14 +10,22 @@ const drawLayerStateHandler = (action:DrawAction) => {
   switch (action.type) {
     case "DRAW":
       const drawPayload = action.payload as DrawPayload;
-      console.log(drawPayload);
-      drawPayload.drawFunction(
-        drawPayload.drawArgs?.ctx,
-        drawPayload.drawArgs.x,
-        drawPayload.drawArgs.y,
-        drawPayload.drawArgs.radius,
-        drawPayload.drawArgs.color
-      );
+     const {                ctx,
+        lineStart ,  
+        lineEnd ,
+        size,
+        color,
+        lineShape 
+} = drawPayload.drawArgs
+      drawLineWithShape(
+      {  ctx,
+        lineStart ,  
+        lineEnd ,
+        size,
+        color,
+        lineShape ,}
+      )
+  
       return DrawingState.Drawing;
 
     case "ERASE":

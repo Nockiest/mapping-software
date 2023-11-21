@@ -26,6 +26,7 @@ import { useWindowResize } from "@/app/components/utility/hooks/UseWindowResize"
 import SecondColumn from "./SecondColumn";
 import MarkerValues from "./MarkerValuesColumn";
 import PreviewMarker from "./PreviewMarker";
+import SettingsColumn from "../settingsComponents/SettingsColumn";
 
 export type UpdateMarkerSettingsCallback = (value: any) => void;
 export type UpdateMarkerSettingsFc = (
@@ -73,7 +74,12 @@ const updateMarkerSettings:UpdateMarkerSettingsFc =  (
       <FirstColumn updateMarkerSettings={updateMarkerSettings} />
       <SecondColumn updateMarkerSettings={updateMarkerSettings} />
       <MarkerValues applyChanges={applyChanges} validationMessage={validationMessage} />
-      <PreviewMarker windowWidth={windowWidth} />
+      
+      <SettingsColumn>
+      <Typography>Left Click To Add A Point</Typography>
+      <Typography>Right DBL Click to Remove a Point</Typography>
+    </SettingsColumn>
+    <PreviewMarker windowWidth={windowWidth} />
     </Grid>
   );
 };

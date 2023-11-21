@@ -4,24 +4,19 @@ import { hexToRGBA } from "@/app/components/utility/utils";
 import { settings } from "@/app/canvasEditor/Signals";
   
 
-export type DrawPayload = {
-  drawFunction: (ctx: CanvasRenderingContext2D, x: number, y: number, radius: number, color: string) => void;
-  drawArgs: {
-    ctx: CanvasRenderingContext2D;
-    x: number;
-    y: number;
-    radius: number;
-    color: Color;
-  };
-}
-
-type DrawLineWithShapeParams = {
+ 
+export type DrawLineWithShapeParams = {
   ctx: CanvasRenderingContext2D;
   lineStart: Vector2;
   lineEnd: Vector2;
   color: Color;
   size: number;
   lineShape?: LineEdge;
+};
+
+export type DrawPayload = {
+  drawFunction: (params: DrawLineWithShapeParams) => void;
+  drawArgs: DrawLineWithShapeParams;
 };
 
 const drawLineWithShape = ({

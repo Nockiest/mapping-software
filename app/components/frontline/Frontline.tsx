@@ -183,7 +183,6 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
           //     ? (e) => setEndPoint(point.id)
           //     : null
           // }
-          // leftClk={(e) => updateEndPointIndex(point.id)}
           onDelete={(e:  MouseEvent|React.MouseEvent) => handleDeletePoint(point.id)}
           styling={{
             background: point  === frontLineInfo.endPoint  ? "red" : "white",

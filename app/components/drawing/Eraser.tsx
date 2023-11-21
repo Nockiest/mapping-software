@@ -11,8 +11,9 @@ export type EraseArgs = {
 }
 
 const eraseLine = ({ canvasRef, start, end, radius, eraseShape }: EraseArgs) => {
-  const {ctx,canvas} =  getCtxFromRef(canvasRef)
-  if (!ctx||!canvas) return;
+  const { ctx, canvas } = getCtxFromRef(canvasRef);
+  if (!ctx || !canvas) return;
+  radius = Math.ceil(radius / 2) //- Math.ceil(radius / 2 / 10);
 
   // Get the current global composite operation
   const originalCompositeOperation = ctx.globalCompositeOperation;
@@ -20,47 +21,44 @@ const eraseLine = ({ canvasRef, start, end, radius, eraseShape }: EraseArgs) => 
   // Set the global composite operation to 'destination-out' for erasing
   ctx.globalCompositeOperation = 'destination-out';
 
-  // Get the image data from the canvas
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const data = imageData.data;
-
   // Calculate the distance and angle between start and end points
   const distance = Math.sqrt((end.x - start.x) ** 2 + (end.y - start.y) ** 2);
   const angle = Math.atan2(end.y - start.y, end.x - start.x);
 
-  // Loop through the pixels along the line with specified radius
-  for (let i = 0; i <= distance; i++) {
-    const x = Math.round(start.x + Math.cos(angle) * i);
-    const y = Math.round(start.y + Math.sin(angle) * i);
+  // Calculate the starting and ending coordinates for the square region
+  const startX = Math.round(start.x - radius);
+  const startY = Math.round(start.y - radius);
+  const endX = Math.round(end.x + radius);
+  const endY = Math.round(end.y + radius);
 
-    // Loop through the pixels in the specified radius
-    for (let j = -radius; j <= radius; j++) {
-      for (let k = -radius; k <= radius; k++) {
-        const pixelX = x + j;
-        const pixelY = y + k;
+  // Get the image data from the canvas
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;
 
-        // Check if the current pixel is within the canvas bounds
-        if (pixelX >= 0 && pixelX < imageData.width && pixelY >= 0 && pixelY < imageData.height) {
-          // Calculate the index of the current pixel in the image data array
-          const index = (pixelY * imageData.width + pixelX) * 4;
+  // Iterate over the square region
+  for (let x = startX; x <= endX; x++) {
+    for (let y = startY; y <= endY; y++) {
+      // Check if the current pixel is within the canvas bounds
+      if (x >= 0 && x < imageData.width && y >= 0 && y < imageData.height) {
+        // Calculate the index of the current pixel in the image data array
+        const index = (y * imageData.width + x) * 4;
 
-          // Set the color of the current pixel based on the erase shape
-          if (eraseShape === 'rounded') {
-            // Check if the current pixel is within the circular region
-            if (Math.sqrt(j ** 2 + k ** 2) <= radius) {
-              // Set the color of the current pixel to a blank color (transparent black)
-              data[index] = 0;      // Red channel
-              data[index + 1] = 0;  // Green channel
-              data[index + 2] = 0;  // Blue channel
-              data[index + 3] = 0;  // Alpha channel (transparency)
-            }
-          } else if (eraseShape === 'squared') {
+        // Set the color of the current pixel based on the erase shape
+        if (eraseShape === 'rounded') {
+          // Check if the current pixel is within the circular region
+          if (Math.sqrt((x - start.x) ** 2 + (y - start.y) ** 2) <= radius) {
             // Set the color of the current pixel to a blank color (transparent black)
             data[index] = 0;      // Red channel
             data[index + 1] = 0;  // Green channel
             data[index + 2] = 0;  // Blue channel
             data[index + 3] = 0;  // Alpha channel (transparency)
           }
+        } else if (eraseShape === 'squared') {
+          // Set the color of the current pixel to a blank color (transparent black)
+          data[index] = 0;      // Red channel
+          data[index + 1] = 0;  // Green channel
+          data[index + 2] = 0;  // Blue channel
+          data[index + 3] = 0;  // Alpha channel (transparency)
         }
       }
     }
@@ -74,4 +72,3 @@ const eraseLine = ({ canvasRef, start, end, radius, eraseShape }: EraseArgs) => 
 };
 
 export default eraseLine;
- 

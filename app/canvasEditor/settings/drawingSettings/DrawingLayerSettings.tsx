@@ -15,6 +15,7 @@ import {
   MenuItem,
   Grid,
   SelectChangeEvent,
+  Typography,
 } from "@mui/material"; // Import Material-UI components
 import { theme } from "../../theme/theme";
 import ColorPicker from "../settingsComponents/ColorPicker";
@@ -22,6 +23,7 @@ import { signal } from "@preact/signals";
 import { clearCanvas } from "@/app/components/utility/CanvasUtils";
 import FirstColumn from "./FirstColumn";
 import OtherSettingsColumn from "./SecondColumn";
+import SettingsColumn from "../settingsComponents/SettingsColumn";
 
 const DrawingLayerSettings = () => {
   const { state, setState } = drawSettings.value;
@@ -94,6 +96,10 @@ const DrawingLayerSettings = () => {
           handleLineTypeChange={handleLineTypeChange}
         />
       {/* </Grid> */}
+      <SettingsColumn>
+      <Typography>Left Click To Draw</Typography>
+      <Typography>Right To Erase</Typography>
+    </SettingsColumn>
    
     </Grid>
   );

@@ -32,7 +32,6 @@ const Page: React.FC = () => {
   const {   canvasRef, frontlineCanvasRef, markerCanvasRef,backgroundCanvasRef } =
     useCanvas();
  
-  // const mousePosition = useContext(MousePositionContext);
   const { GlobalData, updateGlobalData } = useGlobalValue();
   const [mouseDownTimeStamp, setMouseDownTimeStamp] = useState<number | null>(
     null
@@ -86,7 +85,7 @@ const Page: React.FC = () => {
 
   return (
     <  >
-      <DebugInfo
+      {/* <DebugInfo
         data={{
           // radius: settings.value.radius,
           // canvasState: canvasState,
@@ -101,7 +100,7 @@ const Page: React.FC = () => {
           // activeFrontLine: frontLineSettings.value.activeFrontline?.idNum,
          
         }}
-      />
+      /> */}
       <CanvasSettings />
       <CanvasEditor />
       <Timeline />

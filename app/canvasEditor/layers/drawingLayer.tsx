@@ -73,7 +73,7 @@ const DrawingLayer: React.FC = () => {
             canvasRef,
             start: lastMousePos || { x, y },
             end: { x, y },
-            radius: radius / 2,
+            radius ,
             eraseShape: settings.value.lineType,
           },
         };
@@ -85,8 +85,19 @@ const DrawingLayer: React.FC = () => {
           bucketFill(ctx, x, y, color);
         } else {
           const drawPayload: DrawPayload = {
-            drawFunction: drawDot, // Replace with your actual draw function
-            drawArgs: { ctx, x, y, radius, color },
+            drawFunction: drawLineWithShape ,
+            drawArgs: {
+                ctx,
+                lineStart: lastMousePos||{x:0,y:0},
+                lineEnd: lastMousePos||{x:0,y:0},
+                size: radius,
+                color,
+                lineShape: settings.value.lineType
+              }
+              // settings.value.lineType
+              
+            // drawFunction: drawDot, // Replace with your actual draw function
+            // drawArgs: { ctx, x, y, radius, color },
           };
           setState({ type: "DRAW", payload: drawPayload });
 
@@ -113,7 +124,7 @@ const DrawingLayer: React.FC = () => {
           canvasRef,
           start: lastMousePos || { x: 0, y: 0 },
           end: { x, y },
-          radius,
+          radius  ,
           eraseShape: settings.value.lineType,
         });
       } else if (state === DrawingState.Drawing) {

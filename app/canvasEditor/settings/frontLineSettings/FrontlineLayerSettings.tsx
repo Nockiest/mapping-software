@@ -15,7 +15,8 @@ import {
   Select,
   MenuItem,
   Box,
-  Grid
+  Grid,
+  Typography
 } from '@mui/material'; // Import MUI components
 import { theme } from '../../theme/theme';
 import ColorPicker from '../settingsComponents/ColorPicker';
@@ -23,6 +24,7 @@ import { Color } from '@/public/types/OtherTypes';
 import ButtonColumn from './ButtonColumn';
 import VisualSettingsColumn from './VisualSettingsColumn';
 import onMountFrontLineData from './OnMountFrontLineData';
+import SettingsColumn from '../settingsComponents/SettingsColumn';
 const FrontlineLayerSettings = () => {
   const [insertionPointIndex, setInsertionPointIndex] = useState(frontLineSettings.value.insertionPointIndex);
   const [maxEndPointNumValue, setMaxEndPointNumValue] = useState(0);
@@ -118,6 +120,10 @@ const FrontlineLayerSettings = () => {
         onDeleteCurrentFrontLine={deleteCurrentFrontLine}
         activeFrontline={Boolean(frontLineSettings.value.activeFrontline)}
       />
+    <SettingsColumn>
+      <Typography>Right Click To Add Points</Typography>
+      <Typography>Right Hold Click To Remove Point</Typography>
+    </SettingsColumn>
   </Grid>
   );
 };
