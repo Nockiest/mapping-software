@@ -23,6 +23,7 @@ type MarkerProps = {
   customStyling?: MarkerSettings;
   id: string;
   dragHandler?: FollowMouseFunction;
+  topLeftOffset?: Vector2;
 } & Partial<PositionedText>;
 
 export const MarkerDefaultSettings: Omit<
@@ -38,6 +39,7 @@ export const MarkerDefaultSettings: Omit<
 };
 
 const Marker: React.FC<MarkerProps> = ({
+  
   topText,
   bottomText,
   initialPosition,
@@ -45,6 +47,7 @@ const Marker: React.FC<MarkerProps> = ({
   dragHandler,
   customStyling,
   id,
+  topLeftOffset
 }) => {
   const [currentPosition, setCurrentPosition] =
     useState<Vector2>(initialPosition);
