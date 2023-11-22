@@ -65,7 +65,7 @@ export const settings: Settings = signal({
   activeLayer: "draw",
   canvasSize: { x: 800, y: 600 },
   popularColors: [],
-  canvasZindexes: { marker: 10, draw: 10, background: 0, frontLine: 10, compiled:0 },
+  canvasZindexes: { marker: 10, draw: 10, background: 0, frontLine: 10, compiled:1 },
 });
 
 export const markerSettings: Signal<MarkerSettings> = signal({
