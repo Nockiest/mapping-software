@@ -1,12 +1,21 @@
-
-import React, { useEffect, useRef } from 'react';
-import ReusableLayer from './ResuableLayer';
-import { settings, timeline } from '@/app/canvasEditor/Signals';
-import { useCanvas } from '@/app/canvasEditor/CanvasContext';
+import React, { useEffect, useRef, useState } from "react";
+import ReusableLayer from "./ResuableLayer";
+import { settings, timeline } from "@/app/canvasEditor/Signals";
+import { useCanvas } from "@/app/canvasEditor/CanvasContext";
 
 interface CanvasLayer {
-  canvasRef: React.RefObject<HTMLCanvasElement|null |undefined>;
-  zIndex?: number ;
+  canvasRef: React.RefObject<HTMLCanvasElement | null | undefined>;
+  zIndex?: number;
+}
+
+interface LayerSplicerProps {
+  layers: Array<CanvasLayer>;
+}
+
+
+interface CanvasLayer {
+  canvasRef: React.RefObject<HTMLCanvasElement | null | undefined>;
+  zIndex?: number;
 }
 
 interface LayerSplicerProps {
@@ -14,49 +23,85 @@ interface LayerSplicerProps {
 }
 
 const LayerSplicer: React.FC<LayerSplicerProps> = ({ layers }) => {
-  // const canvasRef = useRef<HTMLCanvasElement | null>(null);
- const { canvasRef, frontlineCanvasRef, markerCanvasRef, backgroundCanvasRef, compiledCanvasRef  } = useCanvas()
- const canvasArr = [canvasRef, frontlineCanvasRef, markerCanvasRef, backgroundCanvasRef]
+  const {
+    canvasRef,
+    frontlineCanvasRef,
+    markerCanvasRef,
+    backgroundCanvasRef,
+    compiledCanvasRef,
+  } = useCanvas();
+  const canvasArr = [
+    canvasRef,
+    frontlineCanvasRef,
+    markerCanvasRef,
+    backgroundCanvasRef,
+  ];
 
- useEffect(() => {
-  const canvas = compiledCanvasRef.current;
-  const ctx = canvas?.getContext('2d');
+  const [isCanvasCompiled, setIsCanvasCompiled] = useState(false);
 
-  if (!canvas || !ctx) {
-    console.error("Canvas or context is null");
-    return;
-  }
+  useEffect(() => {
+    const canvas = compiledCanvasRef.current;
+    const ctx = canvas?.getContext("2d");
 
-  // Clear the canvas
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (!canvas || !ctx) {
+      console.error("Canvas or context is null");
+      return;
+    }
 
-  // Sort layers based on zIndex
- // Sort layers based on zIndex
-const sortedLayers = layers.slice().sort((a, b) =>  (a.zIndex || 0)  - (b.zIndex || 0)  );
+    // Clear the canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-// Draw each layer onto the canvas
-sortedLayers.forEach((layer, index) => {
-  const canvasLayer = layer.canvasRef.current;
+    // Sort layers based on zIndex
+    const sortedLayers = layers
+      .slice()
+      .sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
 
-  if (canvasLayer) {
-    console.log(`Drawing layer ${index} (${canvasLayer.dataset.name}) with zIndex: ${layer.zIndex || 0}`);
-    ctx.drawImage(canvasLayer, 0, 0);
-  } else {
-    console.warn(`Layer ${index} is missing canvasRef`);
-  }
-});
+    // Draw each layer onto the canvas
+    sortedLayers.forEach((layer, index) => {
+      const canvasLayer = layer.canvasRef.current;
 
-}, [settings.value.activeLayer]);
+      if (canvasLayer) {
+        ctx.drawImage(canvasLayer, 0, 0);
+        console.log('compiling layers')
+      } else {
+        console.warn(`Layer ${index} is missing canvasRef`);
+      }
+    });
+
+    setIsCanvasCompiled(true);
+  }, [settings.value.activeLayer]);
 
   const compileCanvas = () => {
-    timeline.value =[...timeline.value, compiledCanvasRef]
-    alert('compiling canvas')
-  }
+    if (isCanvasCompiled) {
+      const canvas = compiledCanvasRef.current;
 
-  return  <div className='relative h-600 w-full flex justify-center'>
-  <ReusableLayer canvasRef={compiledCanvasRef} layerName= 'compiled'  />
-  <button onClick={compileCanvas} className='z-10 h-20 absolute bottom-0 right-0'>Save Image</button>
-  </div>
+      if (!canvas) {
+        console.error("Compiled canvas is null");
+        return;
+      }
+
+      const dataURL = canvas.toDataURL("image/png");
+
+      // Assuming timeline.value is an array of image data URLs
+      timeline.value = [...timeline.value, dataURL];
+
+      alert("Compiling canvas as image");
+    } else {
+      alert("Canvas is not yet compiled");
+    }
+  };
+
+  return (
+    <div className="relative h-600 w-full flex justify-center">
+      <ReusableLayer canvasRef={compiledCanvasRef} layerName="compiled" positioning={'absolute top-0'} />
+     {settings.value.activeLayer==='compiled'&& <button
+        onClick={compileCanvas}
+        className="z-10 h-20 absolute bottom-0 right-0"
+      >
+        Save Image
+      </button>}
+    </div>
+  );
 };
 
 export default LayerSplicer;

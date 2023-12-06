@@ -47,20 +47,20 @@ const FrontlineLayer = () => {
   const renderFrontLines = () => {
     const frontLines = frontLineSettings.value.frontLines;
     const { ctx, canvas } = getCtxFromRef(frontlineCanvasRef);
-  
+
     if (!ctx) {
       return;
     }
-  
+
     ctx.clearRect(0, 0, settings.value.canvasSize.x!, settings.value.canvasSize.y!);
-  
+
     for (const line of frontLines) {
       if (line.points.length < 2) {
         return;
       }
-  
+
       const endPointIndex = findEndpointIndex(line);
-  
+
       drawLineAlongPoints(
         line.points,
         endPointIndex !== -1 ? endPointIndex : line.points.length - 1,
@@ -70,13 +70,13 @@ const FrontlineLayer = () => {
       );
     }
   };
-  
+
 
   useEffect(() => {
-    
+
     renderFrontLines();
   }, [frontlineCanvasRef, mousePosition, JSON.stringify(frontLineSettings.value)]);
-  
+
 
   useEffect(() => {
     const canvas = frontlineCanvasRef.current;
@@ -95,9 +95,8 @@ const FrontlineLayer = () => {
     <>
       <ReusableLayer
         canvasRef={frontlineCanvasRef}
-        style={{
-          opacity: isActive ? "1" : "0.4",
-        }}
+        positioning={'absolute top-0'}
+
         layerName="frontLine"
       >
         {frontLines.map((frontlineData) => (
@@ -113,3 +112,6 @@ const FrontlineLayer = () => {
 };
 
 export default FrontlineLayer;
+ // style={{
+        //   opacity: isActive ? "1" : "0.4",
+        // }}

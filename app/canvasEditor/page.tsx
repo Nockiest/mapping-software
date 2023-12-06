@@ -10,7 +10,7 @@ import React, {
 import CanvasToImage from "../components/utility/CanvasToImg";
 import CanvasEditor from "./CanvasEditor";
 import CanvasSettings from "./settings/CanvasSettings";
-import DebugInfo from "../components/utility/Debugger";
+import DebugInfo from "../components/settings/Debugger";
 import Timeline from "./Timeline";
 import {
   CanvasContext,
@@ -103,7 +103,7 @@ const Page: React.FC = () => {
       /> */}
       <CanvasSettings />
       <CanvasEditor />
-       
+
       <Timeline />
     </>
   );

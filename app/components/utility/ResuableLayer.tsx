@@ -1,5 +1,6 @@
 import { settings } from '@/app/canvasEditor/Signals';
 import { LayerNames, Settings } from '@/public/types/OtherTypes';
+import { CSSProperties } from '@mui/material/styles/createMixins';
 import {ReactNode, useEffect} from 'react';
 
 type ReusableLayerProps = {
@@ -14,6 +15,7 @@ type ReusableLayerProps = {
 
   };
   children?: ReactNode;
+  positioning: string
 }
 
 const ReusableLayer: React.FC<ReusableLayerProps> = ({
@@ -25,6 +27,7 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
   onMouseUp,
   style,
   children, // Add the children prop
+  positioning
 }) => {
   const canvas = canvasRef.current;
   const isActive = layerName === 'none'? true: layerName === settings.value.activeLayer;
@@ -49,8 +52,8 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
   };
 
   return (
-    <div id={layerName} className={` ${isActive} canvas-rectangle absolute top-0 ${isActive ? 'z-30 ' : `${settings.value.canvasZindexes[layerName]} opacity-40  `}`}>
-       <p className='text-black'>{isActive} </p>
+    <div id={layerName} className={`  ${positioning}   canvas-rectangle   ${isActive ? 'z-30 ' : `${settings.value.canvasZindexes[layerName]} opacity-40  `}`}>
+      {/* <h1>{positioning} </h1> */}
       {canvasRef && (
         <>
 

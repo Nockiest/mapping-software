@@ -95,7 +95,7 @@ const DrawingLayer: React.FC = () => {
                 lineShape: settings.value.lineType
               }
               // settings.value.lineType
-              
+
             // drawFunction: drawDot, // Replace with your actual draw function
             // drawArgs: { ctx, x, y, radius, color },
           };
@@ -190,11 +190,11 @@ const DrawingLayer: React.FC = () => {
   }, []);
 
   return (
-    <>
-      {canvasRef && (
+
         <ReusableLayer
           canvasRef={canvasRef}
           layerName="draw"
+          positioning={"absolute top-0"}
           style={{
             cursor:
               state === DrawingState.BucketFill
@@ -202,8 +202,7 @@ const DrawingLayer: React.FC = () => {
                 : "auto",
           }}
         />
-      )}
-    </>
+
   );
 };
 

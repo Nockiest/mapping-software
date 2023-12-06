@@ -129,8 +129,8 @@ const UnitMarkerLayer: React.FC = () => {
   ]);
 
   return (
-    <>
-      <ReusableLayer layerName="marker" canvasRef={markerCanvasRef}>
+   
+      <ReusableLayer layerName="marker" canvasRef={markerCanvasRef}  positioning={'absolute top-0'}>
         {markers.value.map((marker) => (
           <Marker
             key={marker.id}
@@ -143,7 +143,7 @@ const UnitMarkerLayer: React.FC = () => {
           />
         ))}
       </ReusableLayer>
-    </>
+
   );
 };
 

@@ -1,16 +1,14 @@
- 
-import React, { useState, useContext, useEffect } from 'react';
-import {   useCanvas } from '../CanvasContext';
-import { settings } from '../Signals';
-import { backgroundImage } from '../Signals';
-import ReusableLayer from '@/app/components/utility/ResuableLayer';
-import fillCanvas from '@/app/components/utility/fillCanvas';
-const BackgroundImageLayer: React.FC  = ( ) => {
-  const { backgroundCanvasRef   } = useCanvas();
- 
+import React, { useState, useContext, useEffect } from "react";
+import { useCanvas } from "../CanvasContext";
+import { settings } from "../Signals";
+import { backgroundImage } from "../Signals";
+import ReusableLayer from "@/app/components/utility/ResuableLayer";
+import fillCanvas from "@/app/components/utility/fillCanvas";
+const BackgroundImageLayer: React.FC = () => {
+  const { backgroundCanvasRef } = useCanvas();
+
   useEffect(() => {
-    handleFileChange( );
-    
+    handleFileChange();
   }, [backgroundImage.value]);
 
   // useEffect(() => {
@@ -27,7 +25,7 @@ const BackgroundImageLayer: React.FC  = ( ) => {
     });
   };
 
-  const handleFileChange = async ( ) => {
+  const handleFileChange = async () => {
     if (!backgroundImage.value) {
       clearCanvas();
       return;
@@ -38,13 +36,13 @@ const BackgroundImageLayer: React.FC  = ( ) => {
       drawImageOnCanvas(imageUrl);
       // onImageLoad(imageUrl);
     } else {
-      console.error('Invalid file type');
+      console.error("Invalid file type");
     }
   };
 
   const drawImageOnCanvas = (imageUrl: string) => {
     const canvas = backgroundCanvasRef.current;
-    const ctx = canvas?.getContext('2d');
+    const ctx = canvas?.getContext("2d");
 
     if (canvas && ctx) {
       const img = new Image();
@@ -57,26 +55,23 @@ const BackgroundImageLayer: React.FC  = ( ) => {
 
   const clearCanvas = () => {
     const canvas = backgroundCanvasRef.current;
-    const ctx = canvas?.getContext('2d');
+    const ctx = canvas?.getContext("2d");
     if (canvas && ctx) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
   };
 
   return (
-    < >
-      {(  backgroundCanvasRef) && (
-
-          <ReusableLayer
+    <>
+      {backgroundCanvasRef && (
+        <ReusableLayer
           canvasRef={backgroundCanvasRef}
-          layerName="background" 
-          />
-         
+          layerName="background"
+          positioning={"absolute top-0"}
+        />
       )}
     </>
   );
 };
 
 export default BackgroundImageLayer;
-
- 

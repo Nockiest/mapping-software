@@ -4,29 +4,30 @@ import { settings } from "./Signals";
 import ReusableLayer from "../components/utility/ResuableLayer";
 import { timeline } from "./Signals";
 import { v4 as uuidv4 } from "uuid";
-const Timeline = () => {
+const Timeline: React.FC = () => {
 
 
   return (
-    <div className="w-full border flex   flex-row-reverse p-0  gap-x-0   border-solid border-gray-500   bg-gray-200">
-        {timeline.value.map((canvasRef, index) => (
-          <div
-            className="relative p-0"
-            style={{ width: settings.value.canvasSize.x }}
-          >
-
-            <ReusableLayer
-              key={uuidv4()}
-              layerName='none'
-              canvasRef={canvasRef}
-            >{timeline.value.length}</ReusableLayer>
+    <div className="  flex h-auto overflow-x-hidden overflow-y-hidden flex-row-reverse     bg-gray-200">
+      <div className="flex-shrink-0">
+        {timeline.value.map((imageDataURL, index) => (
+          <div key={index}   style={{  width:settings.value.canvasSize.x / 2,   height:settings.value.canvasSize.y / 2 }}>
+            <img
+              src={imageDataURL}
+              width={settings.value.canvasSize.x / 2}  // Render two times smaller
+              height={settings.value.canvasSize.y / 2}  // Render two times smaller
+              alt={`Image ${index}`}
+            />
           </div>
         ))}
+      </div>
     </div>
   );
 };
 
 export default Timeline;
+
+
 
 //   <canvas
 //     key={index}

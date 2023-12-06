@@ -90,4 +90,4 @@ export enum DrawingState {
 }
 
 export type CanvasRef = React.RefObject<HTMLCanvasElement>;
-export type TimelineType = Array< React.RefObject<HTMLCanvasElement | null>>
+export type TimelineType = Array<string>;
