@@ -8,6 +8,7 @@ const BackgroundImageLayer: React.FC = () => {
   const { backgroundCanvasRef } = useCanvas();
 
   useEffect(() => {
+
     handleFileChange();
   }, [backgroundImage.value]);
 

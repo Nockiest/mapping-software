@@ -11,7 +11,7 @@ const Timeline: React.FC = () => {
     <div className=" w-full  overflow-x-auto     bg-gray-200"  >
       <div className="  flex h-auto overflow-y-hidden flex-row-reverse gap-1 py-1"  style={{  width:settings.value.canvasSize.x / 2* timeline.value.length}}>
         {timeline.value.map((imageDataURL, index) => (
-          <div className="relative border-2" key={index}   style={{ border: 'black 1px solid', width:settings.value.canvasSize.x / 2,   height:settings.value.canvasSize.y / 2 }}>
+          <div className="relative border-2" key={index}   style={{ border: 'black 1px solid', width: '300px'  , height:'300px'}}>
             <img
               src={imageDataURL}
               width={settings.value.canvasSize.x / 2}  // Render two times smaller

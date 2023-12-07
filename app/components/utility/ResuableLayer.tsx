@@ -1,7 +1,7 @@
-import { settings } from '@/app/canvasEditor/Signals';
+import { backgroundImage, settings } from '@/app/canvasEditor/Signals';
 import { LayerNames, Settings } from '@/public/types/OtherTypes';
 import { CSSProperties } from '@mui/material/styles/createMixins';
-import {ReactNode, useEffect} from 'react';
+import {ReactNode, useEffect, useState} from 'react';
 
 type ReusableLayerProps = {
   canvasRef:  React.RefObject<HTMLCanvasElement | null|undefined>;
@@ -18,6 +18,8 @@ type ReusableLayerProps = {
   positioning: string
 }
 
+
+
 const ReusableLayer: React.FC<ReusableLayerProps> = ({
   onMouseWheel,
   canvasRef,
@@ -26,11 +28,12 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
   onRightClick,
   onMouseUp,
   style,
-  children, // Add the children prop
+  children,
   positioning
 }) => {
+  const [savedCanvasData, setSavedCanvasData] = useState<string | null>(null);
   const canvas = canvasRef.current;
-  const isActive = layerName === 'none'? true: layerName === settings.value.activeLayer;
+  const isActive = layerName === 'none' ? true : layerName === settings.value.activeLayer;
 
   const handleMouseClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -42,6 +45,9 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
     if (e.button === 0 && onLeftClick) {
       // Left click
       onLeftClick(e);
+
+      // Save canvas data on click
+      saveCanvasData();
     } else if (e.button === 1 && onMouseWheel) {
       // Middle mouse button or mouse wheel click
       onMouseWheel(e);
@@ -51,12 +57,56 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
     }
   };
 
+  const saveCanvasData = () => {
+    const canvas = canvasRef.current;
+    console.log('saving data')
+
+    if (canvas) {
+      const dataURL = canvas.toDataURL("image/png");
+      setSavedCanvasData(dataURL);
+    }
+  };
+
+  useEffect(() => {
+    // Update canvas data when canvas size changes
+    requestAnimationFrame(() => {
+
+        saveCanvasData();
+
+
+    });
+
+    window.addEventListener('click', saveCanvasData);
+
+
+    return () => {
+      window.removeEventListener('click', saveCanvasData);
+
+    }
+  }, [backgroundImage.value ]);
+
+
+  useEffect(() => {
+    // Draw the saved canvas data onto the new canvas when canvas size changes
+    const canvas = canvasRef.current;
+
+    if (canvas && savedCanvasData) {
+      const ctx = canvas.getContext('2d');
+
+      if (ctx) {
+        const img = new Image();
+        img.onload = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        };
+        img.src = savedCanvasData;
+      }
+    }
+  }, [settings.value.canvasSize]);
   return (
-    <div id={layerName} className={`  ${positioning}   canvas-rectangle   ${isActive ? 'z-30 ' : `${settings.value.canvasZindexes[layerName]} opacity-40  `}`}>
-      {/* <h1>{positioning} </h1> */}
+    <div id={layerName} className={` ${positioning} canvas-rectangle ${isActive ? 'z-30 ' : `${settings.value.canvasZindexes[layerName]} opacity-40 `}`}>
       {canvasRef && (
         <>
-
           <canvas
             onClick={handleMouseClick}
             onContextMenu={isActive ? handleMouseClick : (e) => { e.preventDefault(); }}
@@ -72,8 +122,18 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
           {children}
         </>
       )}
-    </div>
 
+      {/* Render the saved canvas data */}
+      {savedCanvasData && (
+        <img
+          src={savedCanvasData}
+          width={settings.value.canvasSize.x}
+          height={settings.value.canvasSize.y}
+          alt={`Saved Canvas`}
+          style={{ display: 'none' }}
+        />
+      )}
+    </div>
   );
 };
 

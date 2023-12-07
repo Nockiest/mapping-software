@@ -61,7 +61,7 @@ const CanvasEditor: React.FC = () => {
       <UnitMarkerLayer />
       <FronlineLayer />
       <BackgroundImageLayer />
-      {/* Layer splicer currently handles layers internally without the need for outside props */}
+ 
       {settings.value.activeLayer === "compiled" && (
         <LayerSplicer layers={filteredLayers} />
       )}
