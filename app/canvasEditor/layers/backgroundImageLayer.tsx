@@ -12,9 +12,7 @@ const BackgroundImageLayer: React.FC = () => {
     handleFileChange();
   }, [backgroundImage.value]);
 
-  // useEffect(() => {
-  //   fillCanvas(backgroundCanvasRef, "rgba(0,255,0,0.2)")
-  // }, [])
+
 
   const loadImage = (file: File) => {
     return new Promise<string>((resolve) => {
@@ -35,7 +33,6 @@ const BackgroundImageLayer: React.FC = () => {
     if (backgroundImage.value instanceof File) {
       const imageUrl = await loadImage(backgroundImage.value);
       drawImageOnCanvas(imageUrl);
-      // onImageLoad(imageUrl);
     } else {
       console.error("Invalid file type");
     }

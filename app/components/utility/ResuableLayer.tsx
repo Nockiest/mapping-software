@@ -1,24 +1,24 @@
-import { backgroundImage, settings } from '@/app/canvasEditor/Signals';
-import { LayerNames, Settings } from '@/public/types/OtherTypes';
-import { CSSProperties } from '@mui/material/styles/createMixins';
-import {ReactNode, useEffect, useState} from 'react';
+import { useCanvas } from "@/app/canvasEditor/CanvasContext";
+import { backgroundImage, settings } from "@/app/canvasEditor/Signals";
+import { LayerNames, Settings } from "@/public/types/OtherTypes";
+import { CSSProperties } from "@mui/material/styles/createMixins";
+import { ReactNode, useEffect, useState } from "react";
+import { getCtxFromRef } from "./otherUtils";
+
 
 type ReusableLayerProps = {
-  canvasRef:  React.RefObject<HTMLCanvasElement | null|undefined>;
-  layerName: LayerNames  ;
-  onLeftClick?: (e:React.MouseEvent) => void;
-  onRightClick?: (e:React.MouseEvent) => void;
-  onMouseUp?: ( ) => void;
-  onMouseWheel?: (e:React.MouseEvent) => void;
+  canvasRef: React.RefObject<HTMLCanvasElement | null | undefined>;
+  layerName: LayerNames;
+  onLeftClick?: (e: React.MouseEvent) => void;
+  onRightClick?: (e: React.MouseEvent) => void;
+  onMouseUp?: () => void;
+  onMouseWheel?: (e: React.MouseEvent) => void;
   style?: {
     [key: string]: string; // Allow any CSS property
-
   };
   children?: ReactNode;
-  positioning: string
-}
-
-
+  positioning: string;
+};
 
 const ReusableLayer: React.FC<ReusableLayerProps> = ({
   onMouseWheel,
@@ -29,11 +29,13 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
   onMouseUp,
   style,
   children,
-  positioning
+  positioning,
 }) => {
-  const [savedCanvasData, setSavedCanvasData] = useState<string | null>(null);
+  const [savedCanvasData, setSavedCanvasData] = useState<ImageData | null>(null);
   const canvas = canvasRef.current;
-  const isActive = layerName === 'none' ? true : layerName === settings.value.activeLayer;
+  const isActive =
+    layerName === "none" ? true : layerName === settings.value.activeLayer;
+  const backgroundCanvasRef = useCanvas()
 
   const handleMouseClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -58,63 +60,66 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
   };
 
   const saveCanvasData = () => {
-    const canvas = canvasRef.current;
-    console.log('saving data')
+    // const canvas = canvasRef.current;
+    const {ctx, canvas} = getCtxFromRef(canvasRef)
+    console.log("saving data");
 
-    if (canvas) {
-      const dataURL = canvas.toDataURL("image/png");
-      setSavedCanvasData(dataURL);
+    if (canvas && ctx) {
+      // const dataURL = canvas.toDataURL("image/png");
+      const data = ctx.getImageData(0,0,settings.value.canvasSize.x, settings.value.canvasSize.y)
+      setSavedCanvasData(data);
     }
   };
 
   useEffect(() => {
     // Update canvas data when canvas size changes
     requestAnimationFrame(() => {
-
-        saveCanvasData();
-
-
+      saveCanvasData();
     });
 
-    window.addEventListener('click', saveCanvasData);
-
+    window.addEventListener("click", saveCanvasData);
 
     return () => {
-      window.removeEventListener('click', saveCanvasData);
-
-    }
-  }, [backgroundImage.value ]);
-
+      window.removeEventListener("click", saveCanvasData);
+    };
+  }, [backgroundImage.value]);
 
   useEffect(() => {
     // Draw the saved canvas data onto the new canvas when canvas size changes
-    const canvas = canvasRef.current;
+    const {ctx, canvas} = getCtxFromRef(canvasRef)
+    if (canvas && ctx&& savedCanvasData) {
+      // const dataURL = canvas.toDataURL("image/png");
 
-    if (canvas && savedCanvasData) {
-      const ctx = canvas.getContext('2d');
-
-      if (ctx) {
-        const img = new Image();
-        img.onload = () => {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        };
-        img.src = savedCanvasData;
-      }
+       ctx.putImageData(savedCanvasData, 0,0  )
     }
-  }, [settings.value.canvasSize]);
+
+  }, [savedCanvasData, settings.value.canvasSize,  ]);
+
   return (
-    <div id={layerName} className={` ${positioning} canvas-rectangle ${isActive ? 'z-30 ' : `${settings.value.canvasZindexes[layerName]} opacity-40 `}`}>
+    <div
+      id={layerName}
+      className={` ${positioning} canvas-rectangle ${
+        isActive
+          ? "z-30 "
+          : `${settings.value.canvasZindexes[layerName]} opacity-40 `
+      }`}
+    >
       {canvasRef && (
         <>
           <canvas
             onClick={handleMouseClick}
-            onContextMenu={isActive ? handleMouseClick : (e) => { e.preventDefault(); }}
+            onContextMenu={
+              isActive
+                ? handleMouseClick
+                : (e) => {
+                    e.preventDefault();
+                  }
+            }
             ref={canvasRef as React.RefObject<HTMLCanvasElement>}
             width={settings.value.canvasSize.x}
             height={settings.value.canvasSize.y}
             style={{
-              pointerEvents: isActive ? 'auto' : 'none',
+              pointerEvents: isActive ? "auto" : "none",
               ...style,
             }}
           />
@@ -122,19 +127,34 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
           {children}
         </>
       )}
+ 
 
-      {/* Render the saved canvas data */}
-      {savedCanvasData && (
-        <img
-          src={savedCanvasData}
-          width={settings.value.canvasSize.x}
-          height={settings.value.canvasSize.y}
-          alt={`Saved Canvas`}
-          style={{ display: 'none' }}
-        />
-      )}
     </div>
   );
 };
 
 export default ReusableLayer;
+
+
+    // if (canvas && savedCanvasData) {
+    //   const tempCanvas = document.createElement("canvas");
+    //   const tempCtx = tempCanvas.getContext("2d");
+
+    //   if (tempCtx) {
+    //     const img = new Image();
+    //     img.onload = () => {
+    //       // Use the original size of the saved canvas data
+    //       tempCanvas.width = img.width;
+    //       tempCanvas.height = img.height;
+
+    //       tempCtx.drawImage(img, 0, 0);
+
+    //       const ctx = canvas.getContext("2d");
+    //       if (ctx) {
+    //         ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //         ctx.drawImage(tempCanvas, 0, 0);
+    //       }
+    //     };
+    //     img.src = savedCanvasData;
+    //   }
+    // }

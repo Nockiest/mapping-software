@@ -103,27 +103,10 @@ export const clearCanvas: ClearCanvasFn = (canvasRef) => {
   }
 };
 
-export  const resizeCanvas = (width: number, height: number, canvasRef: React.RefObject<HTMLCanvasElement|null|undefined >) => {
+ 
+export const saveCanvas = (canvasRef:React.RefObject<HTMLCanvasElement|null|undefined >) => {
   const {ctx, canvas} = getCtxFromRef(canvasRef)
-  if (!canvas||!ctx||!canvasRef) {
-    return;
-  }
-  // create a temporary canvas obj to cache the pixel data //
-  const tempCanvas = document.createElement("canvas");
-  const tempContext = tempCanvas.getContext("2d");
-  if (!tempContext) {
-    console.error("context doenst exist when resizing", tempContext);
-  }
-  // set it to the new width & height and draw the current canvas data into it //
-  tempCanvas.width = width;
-  tempCanvas.height = height;
-
-  tempContext?.fillRect(0, 0, width, height);
-  tempContext?.drawImage(canvas, 0, 0);
-
-  // resize & clear the original canvas and copy back in the cached pixel data //
-  canvas.width = width;
-  canvas.height = height;
-
-  ctx.drawImage(canvas, 0, 0);
-};
+    if (!canvas||!ctx||!canvasRef) {
+      return;
+    }
+}
