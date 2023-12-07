@@ -1,25 +1,34 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useReducer, useContext, CSSProperties } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useReducer,
+  useContext,
+  CSSProperties,
+} from "react";
 import eraseInRadius from "../components/drawing/Eraser";
 import CanvasToImage from "../components/utility/CanvasToImg";
 import drawLineOnCanvas from "@/app/components/drawing/LineDrawer";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import drawImageToBackground from "@/app/components/utility/DrawBackgroundCanvasImg";
-// import BackgroundImageLayer from "./layers/backgroundImageLayer";
-import {   useCanvas } from "./CanvasContext";
-// import DrawingLayer from "./layers/drawingLayer";
+import { useCanvas } from "./CanvasContext";
 import LayerSplicer from "../components/utility/LayerSplicer";
 import UnitMarkerLayer from "./layers/UnitMarkerLayer";
 import FronlineLayer from "./layers/FronlineLayer";
 import { editorTopLeftPosition, markers, settings } from "./Signals";
-import DrawingLayer from "./layers/DrawingLayer";
-import BackgroundImageLayer from "./layers/BackgroundImageLayer";
+import DrawingLayer from "./layers/drawingLayer";
+import BackgroundImageLayer from "./layers/backgroundImageLayer";
 import Marker from "../components/markerLayer/Marker";
- 
- 
+
 const CanvasEditor: React.FC = () => {
-  const { canvasRef, frontlineCanvasRef, markerCanvasRef, backgroundCanvasRef } = useCanvas();
+  const {
+    canvasRef,
+    frontlineCanvasRef,
+    markerCanvasRef,
+    backgroundCanvasRef,
+  } = useCanvas();
 
   const [layers, setLayers] = useState([
     { canvasRef: canvasRef, zIndex: 20 },
@@ -42,20 +51,22 @@ const CanvasEditor: React.FC = () => {
 
   const filteredLayers = layers.filter((layer) => layer.canvasRef);
 
-  
-
   return (
-    <div id="your-editor-div-id" className={`relative h-600 w-${settings.value.canvasSize} flex items-center justify-center`}>
+    <div
+      id="your-editor-div-id"
+      className={`relative h-600 w-${settings.value.canvasSize} flex items-center justify-center`}
+    >
       {/*TOP LEFT OFFSET DEPENDENT ON POSITION OF DRAWING LAYEYER*/}
       <DrawingLayer />
       <UnitMarkerLayer />
       <FronlineLayer />
       <BackgroundImageLayer />
       {/* Layer splicer currently handles layers internally without the need for outside props */}
-      <LayerSplicer layers={filteredLayers} />
+      {settings.value.activeLayer === "compiled" && (
+        <LayerSplicer layers={filteredLayers} />
+      )}
     </div>
   );
 };
 
- 
-export default CanvasEditor
+export default CanvasEditor;
