@@ -4,12 +4,13 @@ import { settings } from "./Signals";
 import ReusableLayer from "../components/utility/ResuableLayer";
 import { timeline } from "./Signals";
 import { v4 as uuidv4 } from "uuid";
+import IndexLabel from "../components/utility/IndexLabel";
 const Timeline: React.FC = () => {
 
 
   return (
     <div className=" w-full  overflow-x-auto     bg-gray-200"  >
-      <div className="  flex h-auto overflow-y-hidden flex-row-reverse gap-1 py-1"  style={{  width:settings.value.canvasSize.x / 2* timeline.value.length}}>
+      <div className="  flex h-auto overflow-y-hidden flex-row-reverse gap-1 py-1"  style={{  width:settings.value.canvasSize.x / 2 * timeline.value.length -settings.value.canvasSize.x  }}>
         {timeline.value.map((imageDataURL, index) => (
           <div className="relative border-2" key={index}   style={{ border: 'black 1px solid', width: '300px'  , height:'300px'}}>
             <img
@@ -18,7 +19,8 @@ const Timeline: React.FC = () => {
               height={settings.value.canvasSize.y / 2}  // Render two times smaller
               alt={`Image ${index}`}
             />
-            <p className="absolute top-0 left-0 text-lg red text-black">{index+1}</p>
+            <IndexLabel label={(index+1).toString( )} customClasses="absolute top-0 left-0 text-lg" />
+
           </div>
         ))}
       </div>
