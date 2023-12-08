@@ -7,20 +7,23 @@ import { settings } from '../../Signals';
 import { useCanvas } from '../../CanvasContext';
 import { clearCanvas } from '@/app/components/utility/CanvasUtils';
 import SettingsColumn from '../settingsComponents/SettingsColumn';
+import { Color } from '@/public/types/OtherTypes';
 
 interface OtherSettingsColumnProps {
   handleRadiusChange: (value: number | number[]) => void;
   handleLineTypeChange: (e: SelectChangeEvent<'rounded' | 'squared'>) => void;
+  handleBucketFill: () => void;
 }
 
 const OtherSettingsColumn: React.FC<OtherSettingsColumnProps> = ({
   handleRadiusChange,
   handleLineTypeChange,
+  handleBucketFill,
 }) => {
   const { canvasRef } = useCanvas();
 
   return (
-    <SettingsColumn styles={{maxWidth:'300px'}}>  
+    <SettingsColumn styles={{ maxWidth: '300px' }}>
       <InputLabel
         htmlFor="radius"
         sx={{
@@ -30,46 +33,27 @@ const OtherSettingsColumn: React.FC<OtherSettingsColumnProps> = ({
       >
         Radius: {settings.value.radius}
       </InputLabel>
+      <div  className='px-4 py-2' >
       <Slider
         id="radius"
+        // Added padding around the slider
         value={settings.value.radius}
         onChange={(e, value) => handleRadiusChange(value)}
         min={1}
         max={100}
       />
 
-      <br />
+      </div>
 
-      {/* Dropdown for line type */}
-      <InputLabel
-        htmlFor="line-type"
-        sx={{ color: theme.palette.text.primary }}
-      >
-        Line Type:
-      </InputLabel>
-      <Select
-        id="line-type"
-        value={settings.value.lineType}
-        onChange={(e: SelectChangeEvent<'rounded' | 'squared'>) =>
-          handleLineTypeChange(e)
-        }
-        sx={{
-          backgroundColor: 'white',
-          color: 'black',
-          borderRadius: '4px',
-          alignSelf: 'center'
-        }}
-      >
-        <MenuItem value="rounded" style={{ color: 'rgba(0, 0, 0, 0.9)' }}>
-          Rounded
-        </MenuItem>
-        <MenuItem value="squared" style={{ color: 'rgba(0, 0, 0, 0.9)' }}>
-          Squared
-        </MenuItem>
-      </Select>
+
+     
+      <br />
 
       <Button variant="contained" onClick={() => clearCanvas(canvasRef)}>
         Clear Canvas
+      </Button>
+      <Button variant="contained" onClick={handleBucketFill}>
+        Bucket Fill
       </Button>
     </SettingsColumn>
   );

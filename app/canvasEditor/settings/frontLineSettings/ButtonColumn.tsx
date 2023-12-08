@@ -15,30 +15,33 @@ const ButtonColumn: React.FC<ButtonColumnProps> = ({
   activeFrontline,
 }) => {
   return (
-    <SettingsColumn>
+    <SettingsColumn >
+      <div  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <br />
       <Button
         onClick={onNewFrontLine}
         sx={{
           color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.main,
+          backgroundColor: theme.palette.primary.light,
         }}
       >
         New FrontLine
       </Button>
-      
-      <br />
+
+
       {activeFrontline && (
         <Button
           onClick={onDeleteCurrentFrontLine}
           sx={{
             color: theme.palette.text.primary,
-            backgroundColor: theme.palette.secondary.main,
+            backgroundColor: theme.palette.primary.light,
           }}
         >
           Delete Current FrontLine
         </Button>
       )}
+      </div>
+
     </SettingsColumn>
   );
 };

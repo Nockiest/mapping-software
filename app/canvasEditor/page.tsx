@@ -58,8 +58,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     // Add event listeners when the component mounts
     document.addEventListener("mousedown", handleMouseDown);
-    document.addEventListener("mouseup", handleMouseUp, true);
-
+    document.addEventListener("mouseup", handleMouseUp, true)
     // Remove event listeners when the component unmounts
     return () => {
       document.removeEventListener("mousedown", handleMouseDown);

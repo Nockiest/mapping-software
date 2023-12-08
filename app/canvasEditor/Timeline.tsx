@@ -9,7 +9,6 @@ import JSZip from "jszip";
 import { saveAs } from "file-saver";
 const Timeline: React.FC = () => {
   const handleDownloadImages = () => {
-    // Create a zip file
     const zip = new JSZip();
 
     // Add each image to the zip file
@@ -25,22 +24,31 @@ const Timeline: React.FC = () => {
   };
 
   const handleDeleteImage = (index: number, e: React.MouseEvent) => {
-    e.stopPropagation(); // Stop the click event from propagating to the parent div
+    e.stopPropagation();
     console.log("click");
+
+    // Create a copy of the timeline array
     const updatedImages = [...timeline.value];
+
+    // Modify the copy
     updatedImages.splice(index, 1);
+
+    // Update the timeline array with the modified copy
     timeline.value = updatedImages;
+
     console.log("splicing");
   };
 
+  const timelineImageSize = 400
+
   return (
-    <div   className="relative w-full overflow-x-auto bg-gray-200">
+    <div className="relative w-full overflow-x-auto bg-gray-200">
       <div
         className="flex h-auto overflow-y-hidden flex-row-reverse gap-1 py-1"
         style={{
           width:
-            (settings.value.canvasSize.x / 2) * timeline.value.length -
-            settings.value.canvasSize.x,
+            (timelineImageSize) * timeline.value.length - 0
+
         }}
       >
         {timeline.value.map((imageDataURL, index) => (
@@ -49,27 +57,27 @@ const Timeline: React.FC = () => {
             key={uuidv4()}
             style={{
               border: "black 1px solid",
-              width: "300px",
-              height: "300px",
+              width:  (timelineImageSize),
+              height:  (timelineImageSize),
             }}
           >
             <button
               onClick={(e) => handleDeleteImage(index, e)}
-              className="z-10 top-0 right-0 p-2 bg-red-500 text-white rounded-md cursor-pointer"
+              className="z-50 top-0 right-0 p-2 bg-red-500 text-white rounded-md cursor-pointer"
             >
               Delete
             </button>
+
             <img
               src={imageDataURL}
-              width={settings.value.canvasSize.x / 2} // Render two times smaller
-              height={settings.value.canvasSize.y / 2} // Render two times smaller
+              width={timelineImageSize}
+              height={timelineImageSize}
               alt={`Image ${index}`}
             />
             <IndexLabel
               label={(index + 1).toString()}
               customClasses="absolute top-0 left-0 text-lg"
             />
-
           </div>
         ))}
       </div>
@@ -81,12 +89,14 @@ const Timeline: React.FC = () => {
           Download Images
         </button>
       )}
-       <button
-              onClick={() => {console.log('hello')}}
-              className="z-10   top-0 right-0 p-2 bg-red-500 text-white rounded-md cursor-pointer"
-            >
-              Delete
-            </button>
+      {/* <button
+        onClick={
+          (e) => handleDeleteImage(0, e )
+         }
+        className="z-10   top-0 right-0 p-2 bg-red-500 text-white rounded-md cursor-pointer"
+      >
+        Delete
+      </button> */}
     </div>
   );
 };

@@ -1,4 +1,4 @@
- 
+
  import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useCanvas } from '../../CanvasContext';
 import { frontLineSettings, settings } from '../../Signals';
@@ -40,9 +40,9 @@ const FrontlineLayerSettings = () => {
     setInsertionPointIndex(frontLineSettings.value.insertionPointIndex);
   },  );
 
- 
- 
-  
+
+
+
 
   const deleteCurrentFrontLine = () => {
     const activeFrontline = frontLineSettings.value.activeFrontline;
@@ -70,10 +70,20 @@ const FrontlineLayerSettings = () => {
   return (
     <Grid container spacing={1} sx={{display:'flex'}}>
       <VisualSettingsColumn  setInsertionPointIndex={setInsertionPointIndex} maxEndPointNumValue={maxEndPointNumValue} />
-    
 
+
+
+    <ButtonColumn
+        onNewFrontLine={handleNewFrontLine}
+        onDeleteCurrentFrontLine={deleteCurrentFrontLine}
+        activeFrontline={Boolean(frontLineSettings.value.activeFrontline)}
+      />
+    <SettingsColumn>
+      <Typography>Right Click To Add Points</Typography>
+      <Typography>Right Hold Click To Remove Point</Typography>
+    </SettingsColumn>
     <Grid item xs={3}>
-      {frontLineSettings.value.frontLines.length > 0 && 
+      {frontLineSettings.value.frontLines.length > 0 &&
       <>
       <InputLabel style={{ color: 'white' }}>
             Choose Active Layer:
@@ -115,19 +125,8 @@ const FrontlineLayerSettings = () => {
         </>
         }
     </Grid>
-    <ButtonColumn
-        onNewFrontLine={handleNewFrontLine}
-        onDeleteCurrentFrontLine={deleteCurrentFrontLine}
-        activeFrontline={Boolean(frontLineSettings.value.activeFrontline)}
-      />
-    <SettingsColumn>
-      <Typography>Right Click To Add Points</Typography>
-      <Typography>Right Hold Click To Remove Point</Typography>
-    </SettingsColumn>
   </Grid>
   );
 };
 
 export default FrontlineLayerSettings;
- 
- 

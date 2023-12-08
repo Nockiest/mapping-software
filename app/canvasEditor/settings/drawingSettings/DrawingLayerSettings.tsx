@@ -86,6 +86,7 @@ const DrawingLayerSettings = () => {
           handleColorChange={handleColorChange}
           handleBucketFill={handleBucketFill}
           handleColorClick={handleColorClick}
+          handleLineTypeChange={handleLineTypeChange}
         />
       {/* </Grid> */}
 
@@ -94,13 +95,14 @@ const DrawingLayerSettings = () => {
         <OtherSettingsColumn
           handleRadiusChange={handleRadiusChange}
           handleLineTypeChange={handleLineTypeChange}
+          handleBucketFill={handleBucketFill}
         />
       {/* </Grid> */}
       <SettingsColumn>
       <Typography>Left Click To Draw</Typography>
       <Typography>Right To Erase</Typography>
     </SettingsColumn>
-   
+
     </Grid>
   );
 };

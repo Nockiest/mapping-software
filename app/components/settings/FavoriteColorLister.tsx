@@ -15,7 +15,7 @@ interface ColorRectangleProps {
       settings.value.color = color
       onClickFc(color)
     };
-  
+
     const handleRightClick = (e: React.MouseEvent) => {
       e.preventDefault();
       // Remove color from popularColors
@@ -29,15 +29,15 @@ interface ColorRectangleProps {
             height: '30px',
             backgroundColor: color,
             cursor: 'pointer',
-            userSelect: 'none',  
+            userSelect: 'none',
           }}
-          readOnly={true}  
+          readOnly={true}
           onClick={handleColorClick}
           onContextMenu={handleRightClick}
         />
       );
     };
-    
+
 type FavoriteColorProps = {
     handleColorClick: ( color:Color) => void;
     colorList: Array<Color>
@@ -47,7 +47,7 @@ const FavoriteColorLister: React.FC<FavoriteColorProps> = ({ handleColorClick, c
     return (
       <div style={{ display: 'flex', gap: '5px' }}>
           {  !colorList.includes(newColor) &&
-        <Button className="border-black-1 " sx={{color:theme.palette.text.primary, backgroundColor:theme.palette.secondary.main}} onClick={()=> {colorList.push(newColor)}}>Save Color to Favorites</Button>}  
+        <Button className="border-black-1 text-xs " sx={{color:theme.palette.text.primary, backgroundColor:theme.palette.info.main}} onClick={()=> {colorList.push(newColor)}}>Save Color to Favorites</Button>}
 
         {colorList.map((color, index) => (
           <ColorRectangle key={index} color={color} colorList={colorList} onClickFc= { handleColorClick  } />
@@ -55,7 +55,5 @@ const FavoriteColorLister: React.FC<FavoriteColorProps> = ({ handleColorClick, c
       </div>
     );
   };
-  
-export default FavoriteColorLister
 
- 
+export default FavoriteColorLister

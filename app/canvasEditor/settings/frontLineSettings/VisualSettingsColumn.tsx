@@ -81,47 +81,53 @@ const VisualSettingsColumn: React.FC<VisualSettingsColumnProps> = ({
         <InputLabel style={{ color: "white" }}>
           Set insertion index {frontLineSettings.value.insertionPointIndex}
         </InputLabel>
-        <Slider
-          min={-1}
-          defaultValue={-1}
-          max={maxEndPointNumValue - 1}
-          onChange={handleEndFrontLineIndexChange}
-          valueLabelDisplay="auto"
-          marks
-          sx={{
-            width: "180px",
-          }}
-        />
+        <div className=" px-4"> {/* Added div with class 'slider-container' */}
+          <Slider
+            min={-1}
+            defaultValue={-1}
+            max={maxEndPointNumValue - 1}
+            onChange={handleEndFrontLineIndexChange}
+            valueLabelDisplay="auto"
+            marks
+            sx={{
+              width: "150px",
+            }}
+          />
+        </div>
       </FormControl>
       <FormControl>
         <InputLabel style={{ color: "white" }}>
           Set endpoint ID {activeFrontLine?.endPoint?.id || 'None'}
         </InputLabel>
-        <Slider
-          min={-1}
-          value={activeFrontLine?.endPoint ? activeFrontLine?.points.indexOf(activeFrontLine?.endPoint) : -1}
-          max={maxEndPointNumValue - 1}
-          onChange={handleEndpointIdChange}
-          valueLabelDisplay="auto"
-          marks
-          sx={{
-            width: "180px",
-          }}
-        />
+        <div className=" px-4"> {/* Added div with class 'slider-container' */}
+          <Slider
+            min={-1}
+            value={activeFrontLine?.endPoint ? activeFrontLine?.points.indexOf(activeFrontLine?.endPoint) : -1}
+            max={maxEndPointNumValue - 1}
+            onChange={handleEndpointIdChange}
+            valueLabelDisplay="auto"
+            marks
+            sx={{
+              width: "150px",
+            }}
+          />
+        </div>
       </FormControl>
       <FormControl>
         <InputLabel style={{ color: "white" }}>Set line thickness:</InputLabel>
-        <Slider
-          min={0.1}
-          max={10}
-          step={0.1}
-          value={activeFrontLine?.thickness}
-          onChange={handleThicknessChange}
-          valueLabelDisplay="auto"
-          sx={{
-            width: "180px",
-          }}
-        />
+        <div className=" px-4"> {/* Added div with class 'slider-container' */}
+          <Slider
+            min={0.1}
+            max={10}
+            step={0.1}
+            value={activeFrontLine?.thickness}
+            onChange={handleThicknessChange}
+            valueLabelDisplay="auto"
+            sx={{
+              width: "150px",
+            }}
+          />
+        </div>
       </FormControl>
     </SettingsColumn>
   );
