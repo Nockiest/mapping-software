@@ -8,11 +8,12 @@ import ReusableLayer from "@/app/components/utility/ResuableLayer";
 import fillCanvas from "@/app/components/utility/fillCanvas";
 import { Color } from "@/public/types/OtherTypes";
 import Frontline from "@/app/components/frontline/Frontline";
-
+import {v4 as uuidv4} from 'uuid'
 import { drawLineAlongPoints } from "@/app/components/utility/CanvasUtils";
 import { getCtxFromRef } from "@/app/components/utility/otherUtils";
 import onMountFrontLineData from "../settings/frontLineSettings/OnMountFrontLineData";
 import { findEndpointIndex } from "@/app/components/utility/utils";
+import { addNewFrontLine } from "@/app/components/utility/FrontlineUtils";
 
 export type PointData = {
   position: Vector2;
@@ -40,8 +41,10 @@ const FrontlineLayer = () => {
   const isActive = settings.value.activeLayer === "frontLine";
 
   useEffect(() => {
-    frontLineSettings.value.frontLines = [{ ...onMountFrontLineData }];
-    frontLineSettings.value.activeFrontline = onMountFrontLineData;
+    // addNewFrontLine()
+    const newFrontline = { ...onMountFrontLineData, idNum: uuidv4() }
+    frontLineSettings.value.frontLines = [newFrontline ];
+    frontLineSettings.value.activeFrontline = newFrontline;
   }, []);
 
   const renderFrontLines = () => {

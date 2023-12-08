@@ -16,7 +16,8 @@ import {
   MenuItem,
   Box,
   Grid,
-  Typography
+  Typography,
+  SelectChangeEvent
 } from '@mui/material'; // Import MUI components
 import { theme } from '../../theme/theme';
 import ColorPicker from '../settingsComponents/ColorPicker';
@@ -25,6 +26,7 @@ import ButtonColumn from './ButtonColumn';
 import VisualSettingsColumn from './VisualSettingsColumn';
 import onMountFrontLineData from './OnMountFrontLineData';
 import SettingsColumn from '../settingsComponents/SettingsColumn';
+import { addNewFrontLine } from '@/app/components/utility/FrontlineUtils';
 const FrontlineLayerSettings = () => {
   const [insertionPointIndex, setInsertionPointIndex] = useState(frontLineSettings.value.insertionPointIndex);
   const [maxEndPointNumValue, setMaxEndPointNumValue] = useState(0);
@@ -55,16 +57,17 @@ const FrontlineLayerSettings = () => {
   };
 
   const handleNewFrontLine = () => {
-    // Add the new frontline to the frontLines array
-    frontLineSettings.value.frontLines.push({...onMountFrontLineData});
-
-    // // Set the new frontline as active
-    frontLineSettings.value.activeFrontline = onMountFrontLineData
+    const newFrontline = {...onMountFrontLineData, idNum: uuidv4()}
+    frontLineSettings.value.frontLines.push( newFrontline);
+    frontLineSettings.value.activeFrontline = newFrontline
+    console.log(  frontLineSettings.value.activeFrontline)
   }
-  const handleLayerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedLayerId = e.target.value;
-    const newFrontline = findFrontLineObj(selectedLayerId);
-    frontLineSettings.value.activeFrontline = newFrontline;
+  const handleLayerChange = (e: SelectChangeEvent<string>) => {
+    addNewFrontLine()
+    // const selectedLayerId = e.target.value;
+    // const newFrontline = findFrontLineObj(selectedLayerId);
+    // console.log(selectedLayerId)
+    // frontLineSettings.value.activeFrontline = newFrontline;
   };
 
   return (
@@ -89,7 +92,7 @@ const FrontlineLayerSettings = () => {
             Choose Active Layer:
       </InputLabel>
         <Select
-          onChange={(e) => handleLayerChange}
+          onChange={(e) => handleLayerChange(e)}
           value={
             frontLineSettings.value.activeFrontline?.idNum
           }
