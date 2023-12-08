@@ -62,7 +62,8 @@ export type Settings = Signal<{
   lineType: "squared" | "rounded";
   activeLayer: LayerNames;
   canvasSize: Vector2;
-  // markerSettings: MarkerSettings;
+  maxCanvasSize: Vector2
+
   popularColors: Array<Color>;
   canvasZindexes: {
     [key in LayerNames]: number;

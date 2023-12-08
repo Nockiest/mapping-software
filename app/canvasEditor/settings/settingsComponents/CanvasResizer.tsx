@@ -12,7 +12,7 @@ const CanvasResizer: React.FC<CanvasResizerProps> = ({ changeSettings }) => {
       <Slider
         value={settings.value.canvasSize.y}
         min={1}
-        max={600}
+        max={settings.value.maxCanvasSize.y}
         onChange={(e, value) => {
           const heightValue = Array.isArray(value) ? value[0] : value;
           changeSettings("canvasSize", {
@@ -24,7 +24,7 @@ const CanvasResizer: React.FC<CanvasResizerProps> = ({ changeSettings }) => {
       <Slider
         value={settings.value.canvasSize.x}
         min={1}
-        max={1000}
+        max={settings.value.maxCanvasSize.x}
         onChange={(e, value) => {
           const widthValue = Array.isArray(value) ? value[0] : value;
           changeSettings("canvasSize", {

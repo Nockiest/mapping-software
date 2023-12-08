@@ -64,7 +64,7 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
     const {ctx, canvas} = getCtxFromRef(canvasRef)
     console.log("saving data");
 
-    if (canvas && ctx) {
+    if (canvas && ctx && layerName !== 'background') {
       // const dataURL = canvas.toDataURL("image/png");
       const data = ctx.getImageData(0,0,settings.value.canvasSize.x, settings.value.canvasSize.y)
       setSavedCanvasData(data);
@@ -127,7 +127,7 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
           {children}
         </>
       )}
- 
+
 
     </div>
   );
