@@ -62,7 +62,7 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
   const saveCanvasData = () => {
     // const canvas = canvasRef.current;
     const {ctx, canvas} = getCtxFromRef(canvasRef)
-    console.log("saving data");
+    // console.log("saving data");
 
     if (canvas && ctx && layerName !== 'background') {
       // const dataURL = canvas.toDataURL("image/png");
