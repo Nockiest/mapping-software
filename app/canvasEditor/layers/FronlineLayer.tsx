@@ -1,7 +1,7 @@
 import { useContext, useState, useRef, useEffect, ReactNode } from "react";
 // import { MousePositionContext } from "../MouseContext";
 import { Vector2 } from "@/public/types/GeometryTypes";
-import { frontLineSettings, settings } from "../Signals";
+import { editorTopLeftPosition, frontLineSettings, settings } from "../Signals";
 import { useCanvas, useGlobalValue } from "../CanvasContext";
 import Point from "@/app/components/frontline/Point";
 import ReusableLayer from "@/app/components/utility/ResuableLayer";
@@ -36,7 +36,6 @@ const FrontlineLayer = () => {
   const { frontlineCanvasRef } = useCanvas();
   const frontLines = frontLineSettings.value.frontLines;
   const activeFrontline = frontLineSettings.value.activeFrontline;
-  const [topLeft, setTopLeft] = useState<Vector2>({ x: 0, y: 0 });
   const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
   const isActive = settings.value.activeLayer === "frontLine";
 
@@ -76,19 +75,19 @@ const FrontlineLayer = () => {
 
 
   useEffect(() => {
-
     renderFrontLines();
   }, [frontlineCanvasRef, mousePosition, JSON.stringify(frontLineSettings.value)]);
 
-
   useEffect(() => {
-    const canvas = frontlineCanvasRef.current;
-    const rect = canvas?.getBoundingClientRect();
-    if (rect) {
-      console.log("SETTING TOP LEFT POS", { x: rect.left, y: rect.top });
-      setTopLeft({ x: rect.left, y: rect.top });
+    for(let i in frontLineSettings.value.frontLines) {
+      let frontline = frontLineSettings.value.frontLines[i]
+      for(let y in frontline.points){
+        let frontLinePoint = frontline.points[y]
+        frontLinePoint.position.x = Math.min(settings.value.canvasSize.x-frontLineSettings.value.controlPointRadius ,  frontLinePoint.position.x)
+        frontLinePoint.position.y = Math.min(settings.value.canvasSize.y-frontLineSettings.value.controlPointRadius,  frontLinePoint.position.y)
+      }
     }
-  }, [frontlineCanvasRef, settings.value.activeLayer]);
+  }, [settings.value.canvasSize])
 
   const handleContextMenu = (e: React.MouseEvent<HTMLCanvasElement>) => {
     e.preventDefault();
@@ -106,7 +105,7 @@ const FrontlineLayer = () => {
           <Frontline
             key={frontlineData.idNum}
             idNum={frontlineData.idNum}
-            topLeftPoint={topLeft}
+            topLeftPoint={editorTopLeftPosition.value}
           />
         ))}
       </ReusableLayer>
