@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import MarkerEditorSettings from "./markerSettings/MarkerEditorSettings";
+import MarkerEditorSettings from "./MarkerSettings/MarkerEditorSettings";
 import LineTypeSettings from "@/app/components/settings/LineTypeSettings";
 import ActiveLayerSettings from "@/app/components/settings/ActiveLayerSettings";
 import { hexToRgb } from "@/app/components/utility/utils";
@@ -11,6 +11,7 @@ import FrontlineLayerSettings from "./frontLineSettings/FrontlineLayerSettings";
 import { theme } from "../theme/theme";
 import { Grid, Paper, useTheme, Typography, Slider } from "@mui/material";
 import CanvasResizer from "./settingsComponents/CanvasResizer";
+
 
 export type ChangeSettingsFunctionType = <K extends keyof Settings["value"]>(
   property: K,

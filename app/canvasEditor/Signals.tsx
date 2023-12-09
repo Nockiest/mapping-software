@@ -70,7 +70,7 @@ export const settings: Settings = signal({
 });
 
 export const markerSettings: Signal<MarkerSettings> = signal({
-  width: 40,
+  radius: 40,
   color: `#000000`,
   textColor: `#ffffff`,
   topText: "X",
@@ -78,6 +78,9 @@ export const markerSettings: Signal<MarkerSettings> = signal({
   imageURL: null,
   popularMarkerColors: [],
 } )
+
+export const newMarkerSettings = signal({ ...markerSettings.value });
+
 
 export const frontLineSettings:  FrontLineSettings  = signal({
   insertionPointIndex: -1,

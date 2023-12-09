@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect, useRef } from "react";
 import { CanvasSettingsType } from "../../CanvasContext"; // CanvasSettingsContext,
 import { hexToRgb } from "@/app/components/utility/utils";
-import { settings, markerSettings } from "../../Signals";
+import { settings, markerSettings, newMarkerSettings } from "../../Signals";
 import FavoriteColorLister from "@/app/components/settings/FavoriteColorLister";
 import { Color, Settings } from "@/public/types/OtherTypes";
 import { signal } from "@preact/signals";
@@ -33,8 +33,7 @@ export type UpdateMarkerSettingsFc = (
   value: any,
   property: string,
   callback?: UpdateMarkerSettingsCallback | null,
- ) => void 
-export const newMarkerSettings = signal({ ...markerSettings.value });
+ ) => void
 
 interface MarkerEditorSettingsProps {
   changeSettings: ChangeSettingsFunctionType
@@ -47,7 +46,7 @@ const MarkerEditorSettings: React.FC<MarkerEditorSettingsProps> = ({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { width: windowWidth, height: windowHeight } = useWindowResize();
 
-const updateMarkerSettings:UpdateMarkerSettingsFc =  ( 
+const updateMarkerSettings:UpdateMarkerSettingsFc =  (
   value,
   property,
   callback,
@@ -57,11 +56,12 @@ const updateMarkerSettings:UpdateMarkerSettingsFc =  (
     callback(value);
   }
   setIsDirty(true);
+  console.log(newMarkerSettings.value)
 };
 
   const applyChanges = () => {
     markerSettings.value = newMarkerSettings.value
-    // changeSettings("markerSettings", newMarkerSettings.value);
+
     setIsDirty(false);
   };
 
@@ -74,7 +74,7 @@ const updateMarkerSettings:UpdateMarkerSettingsFc =  (
       <FirstColumn updateMarkerSettings={updateMarkerSettings} />
       <SecondColumn updateMarkerSettings={updateMarkerSettings} />
       <MarkerValues applyChanges={applyChanges} validationMessage={validationMessage} />
-      
+
       <SettingsColumn>
       <Typography>Left Click To Add A Point</Typography>
       <Typography>Right DBL Click to Remove a Point</Typography>
@@ -85,5 +85,3 @@ const updateMarkerSettings:UpdateMarkerSettingsFc =  (
 };
 
 export default MarkerEditorSettings;
-
- 

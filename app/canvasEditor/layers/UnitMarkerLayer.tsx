@@ -4,7 +4,7 @@ import Marker, {
   MarkerDefaultSettings,
 } from "@/app/components/markerLayer/Marker"; // Adjust the import path as needed
 import { CanvasContext, useCanvas, useGlobalValue } from "../CanvasContext";
-// import { Color } from '@/public/types/OtherTypes';
+
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { markerSettings, settings } from "../Signals";
 import {
@@ -13,9 +13,7 @@ import {
   MarkerSettings,
   MarkerType,
 } from "@/public/types/OtherTypes";
-// import LineComponent from '@/app/components/frontline/FrontLine2D';
 import { markers } from "../Signals";
-// import { MousePositionContext } from "../MouseContext";
 import {
   extractImageUrl,
   followMouseComponent,
@@ -129,7 +127,7 @@ const UnitMarkerLayer: React.FC = () => {
   ]);
 
   return (
-   
+
       <ReusableLayer layerName="marker" canvasRef={markerCanvasRef}  positioning={'absolute top-0'}>
         {markers.value.map((marker) => (
           <Marker
@@ -140,6 +138,7 @@ const UnitMarkerLayer: React.FC = () => {
             id={marker.id}
             dragHandler={followMouseComponent}
             customStyling={markerSettings.value}
+            boundToCanvasEditor={true}
           />
         ))}
       </ReusableLayer>

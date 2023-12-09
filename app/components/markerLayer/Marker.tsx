@@ -12,7 +12,7 @@ import { useState, useContext, useEffect, useRef } from "react";
 import { markers, settings } from "@/app/canvasEditor/Signals";
 import Image from "next/image";
 import { signal } from "@preact/signals";
-import { newMarkerSettings } from "@/app/canvasEditor/settings/markerSettings/MarkerEditorSettings";
+import { markerSettings } from "@/app/canvasEditor/Signals";
 import Point from "../frontline/Point";
 import { position } from "html2canvas/dist/types/css/property-descriptors/position";
 import { extractImageUrl } from "../utility/utils";
@@ -24,13 +24,14 @@ type MarkerProps = {
   id: string;
   dragHandler?: FollowMouseFunction;
   topLeftOffset?: Vector2;
+  boundToCanvasEditor?: boolean;
 } & Partial<PositionedText>;
 
 export const MarkerDefaultSettings: Omit<
   MarkerSettings,
   "popularMarkerColors"
 > = {
-  width: 5,
+  radius: 5,
   color: `#000000`,
   textColor: `#000000`,
   topText: "",
@@ -39,7 +40,6 @@ export const MarkerDefaultSettings: Omit<
 };
 
 const Marker: React.FC<MarkerProps> = ({
-  
   topText,
   bottomText,
   initialPosition,
@@ -47,7 +47,8 @@ const Marker: React.FC<MarkerProps> = ({
   dragHandler,
   customStyling,
   id,
-  topLeftOffset
+  topLeftOffset,
+  boundToCanvasEditor = false,
 }) => {
   const [currentPosition, setCurrentPosition] =
     useState<Vector2>(initialPosition);
@@ -56,16 +57,22 @@ const Marker: React.FC<MarkerProps> = ({
     ...customStyling,
   });
   const usedSettings = shouldUpdateOnSettingsChange
-    ? newMarkerSettings.value
+    ? markerSettings.value
     : initialMarkerSettings;
 
-  const imageUrl = extractImageUrl(usedSettings?.imageURL, MarkerDefaultSettings.imageURL);
+  const imageUrl = extractImageUrl(
+    usedSettings?.imageURL,
+    MarkerDefaultSettings.imageURL
+  );
 
   const mergedSettings = { ...MarkerDefaultSettings, ...usedSettings };
 
   const handleMouseMove = (newPosition: Vector2) => {
     if (dragHandler) {
-      const adjustedPos = movePosByOffset(newPosition,mergedSettings.width/2 )
+      const adjustedPos = movePosByOffset(
+        newPosition,
+        mergedSettings.radius / 2
+      );
       setCurrentPosition(adjustedPos);
       // Update the position of the marker in markers.value
       markers.value = markers.value.map((marker) =>
@@ -73,17 +80,17 @@ const Marker: React.FC<MarkerProps> = ({
       );
     }
   };
-  
+
   useEffect(() => {
-    if (shouldUpdateOnSettingsChange){
-      setCurrentPosition(initialPosition)
+    if (shouldUpdateOnSettingsChange) {
+      setCurrentPosition(initialPosition);
     }
-  }, [initialPosition])
+  }, [initialPosition]);
   const markerStyle: React.CSSProperties = {
-    width: `${mergedSettings.width}px`,
+    width: `${mergedSettings.radius}px`,
     color: mergedSettings.textColor,
-    height: `${mergedSettings.width}px`,
-    fontSize: `${mergedSettings.width / 4}px`,
+    height: `${mergedSettings.radius}px`,
+    fontSize: `${mergedSettings.radius / 4}px`,
     backgroundColor: mergedSettings.color,
     backgroundImage: mergedSettings.imageURL ? `url(${imageUrl})` : "none",
     backgroundPosition: "center",
@@ -105,10 +112,27 @@ const Marker: React.FC<MarkerProps> = ({
     }
   };
 
+  useEffect(() => {
+    if (!boundToCanvasEditor) {
+      return;
+    }
+
+    setCurrentPosition({
+      x: Math.min(
+        settings.value.canvasSize.x - mergedSettings.radius / 2,
+        currentPosition.x
+      ),
+      y: Math.min(
+        settings.value.canvasSize.y - mergedSettings.radius / 2,
+        currentPosition.y
+      ),
+    });
+  }, [settings.value.canvasSize]);
+
   return (
     <Point
-      radius={mergedSettings.width}
-      styling={{ ...markerStyle,  }}
+      radius={mergedSettings.radius}
+      styling={{ ...markerStyle }}
       position={currentPosition}
       rightClk={handleDelete}
       onDrag={(position) => handleMouseMove(position)}
@@ -116,26 +140,23 @@ const Marker: React.FC<MarkerProps> = ({
       onDelete={handleDelete}
       id={id}
     >
-      <p style={{ ...markerTextStyle, marginTop:  '2px' }}>
-        {mergedSettings.topText}
+      <p style={{ ...markerTextStyle, marginTop: "2px" }}>
+      {mergedSettings.radius} {/* {mergedSettings.topText} */}
       </p>
-      {mergedSettings.width > 20 && (
-        <p style={{ ...markerTextStyle,   marginTop: usedSettings.width ? `${usedSettings.width / 5}px` : '10px'}}>
+      {mergedSettings.radius > 20 && (
+        <p
+          style={{
+            ...markerTextStyle,
+            marginTop: usedSettings.radius
+              ? `${usedSettings.radius / 5}px`
+              : "10px",
+          }}
+        >
           {mergedSettings.bottomText}
         </p>
       )}
-      {/* <p className="text-black">{id}</p> */}
-      {/* <p className="text-black"> */}
-        {/* {Math.round(currentPosition.x)} {Math.round(currentPosition.y)} */}
-      {/* </p> */}
     </Point>
   );
-
- 
 };
 
 export default Marker;
-// const updatedPosition:Vector2 = {
-//   x: position.x - topLeftOffset.x + mergedSettings.width,
-//   y: position.y - topLeftOffset.y + mergedSettings.width,
-// };

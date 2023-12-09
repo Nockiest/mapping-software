@@ -2,13 +2,15 @@
 import React, { useRef } from 'react';
 import { TextField, Box, Typography } from '@mui/material';
 import SpeedButton from '../../theme/SpeedButton';
-import {  UpdateMarkerSettingsFc, newMarkerSettings} from './MarkerEditorSettings'
+// import {  UpdateMarkerSettingsFc, newMarkerSettings} from './MarkerEditorSettings'
 import { theme } from '../../theme/theme';
 import Marker from '@/app/components/markerLayer/Marker';
 import SettingsColumn from '../settingsComponents/SettingsColumn';
- 
+import { signal } from '@preact/signals';
+import { markerSettings, newMarkerSettings } from '../../Signals';
+
 // Define the SecondColumn component
-const SecondColumn: React.FC<{   updateMarkerSettings: UpdateMarkerSettingsFc }> = ({   updateMarkerSettings }) => {
+const SecondColumn: React.FC<{   updateMarkerSettings: any }> = ({   updateMarkerSettings }) => {
   return (
     <SettingsColumn>
       <Typography color="white">Marker TopText:</Typography>
@@ -17,7 +19,7 @@ const SecondColumn: React.FC<{   updateMarkerSettings: UpdateMarkerSettingsFc }>
         value={newMarkerSettings.value.topText}
         onChange={(e) => updateMarkerSettings(e.target.value, "topText")}
       />
-      {newMarkerSettings.value.width >= 20 && (
+      {newMarkerSettings.value.radius >= 20 && (
         <>
           <Typography color="white">Marker BottomText:</Typography>
           <TextField
@@ -29,11 +31,11 @@ const SecondColumn: React.FC<{   updateMarkerSettings: UpdateMarkerSettingsFc }>
           />
         </>
       )}
-    
+
     </SettingsColumn>
   );
 }
 
- 
+
 
 export default SecondColumn

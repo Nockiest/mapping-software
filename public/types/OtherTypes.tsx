@@ -32,7 +32,7 @@ export type LayerNames =
   | 'none';
 
 export type MarkerSettings =  PositionedText & {
-  width: number
+  radius: number
   color: Color ;
   textColor: Color;
   imageURL: string |File | null;

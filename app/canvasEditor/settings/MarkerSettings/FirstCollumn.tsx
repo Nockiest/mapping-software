@@ -1,17 +1,18 @@
 import React, { useRef } from "react";
-import {
-  UpdateMarkerSettingsCallback,
-  UpdateMarkerSettingsFc,
-  newMarkerSettings,
-} from "./MarkerEditorSettings";
+// import {
+//   // UpdateMarkerSettingsCallback,
+//   UpdateMarkerSettingsFc,
+//   // newMarkerSettings,
+// } from "./MarkerEditorSettings";
 import { theme } from "../../theme/theme";
 import { Box, Input, Slider, Typography } from "@mui/material";
 import SpeedButton from "../../theme/SpeedButton";
-import { markerSettings, settings } from "../../Signals";
+import { markerSettings, newMarkerSettings, settings } from "../../Signals";
 import SettingsColumn from "../settingsComponents/SettingsColumn";
-
+import { signal } from "@preact/signals";
+// const newMarkerSettings = signal({ ...markerSettings.value });
 type FirstColumnProps = {
-  updateMarkerSettings: UpdateMarkerSettingsFc;
+  updateMarkerSettings: any;
 };
 
 const FirstColumn: React.FC<FirstColumnProps> = ({ updateMarkerSettings }) => {
@@ -19,23 +20,21 @@ const FirstColumn: React.FC<FirstColumnProps> = ({ updateMarkerSettings }) => {
   return (
     <SettingsColumn>
       <Typography color="white">
-        Marker Width: {newMarkerSettings.value.width}
+        Marker Width: {newMarkerSettings.value.radius}
       </Typography>
       <Slider
         value={
-          Array.isArray(newMarkerSettings.value.width)
-            ? newMarkerSettings.value.width[0]
-            : newMarkerSettings.value.width
+          Array.isArray(newMarkerSettings.value.radius)
+            ? newMarkerSettings.value.radius[0]
+            : newMarkerSettings.value.radius
         }
         min={10}
         max={60}
         onChange={(e, value) => {
           const widthValue = Array.isArray(value) ? value[0] : value;
-          updateMarkerSettings(Math.max(1, widthValue), "width");
+          updateMarkerSettings(Math.max(1, widthValue), "radius");
         }}
-        // sx={{
-        //   color: theme.palette.secondary.main, // Set the color of the Slider
-        // }}
+
       />
 
       <Typography color="white">
@@ -83,17 +82,3 @@ const FirstColumn: React.FC<FirstColumnProps> = ({ updateMarkerSettings }) => {
 };
 
 export default FirstColumn;
-
-{
-  /* <Box
-    width="30%"
-    marginRight="2%"
-    bgcolor={theme.palette.primary.dark}
-    padding="10px"
-    borderRadius="4px"
-  > */
-}
-
-{
-  /* </Box> */
-}

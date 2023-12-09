@@ -7,7 +7,7 @@ const MarkerValues: React.FC<{   applyChanges: () => void, validationMessage: st
     return (
       <SettingsColumn>
         <Typography>
-          Current Marker Width: {markerSettings.value.width}
+          Current Marker Width: {markerSettings.value.radius}
         </Typography>
         <Typography>
           Current Marker Color: {markerSettings.value.color}
@@ -15,13 +15,13 @@ const MarkerValues: React.FC<{   applyChanges: () => void, validationMessage: st
         <Typography>
           Current Marker TopText: {markerSettings.value.topText}
         </Typography>
-        {markerSettings.value.width >= 20 && (
+        {markerSettings.value.radius >= 20 && (
           <Typography>
             Current Marker BottomText:{" "}
             {markerSettings.value.bottomText}
           </Typography>
         )}
-  
+
         <SpeedButton onClick={applyChanges}>Apply Changes</SpeedButton>
         <Typography style={{ color: "red" }}>{validationMessage}</Typography>
       </SettingsColumn>
