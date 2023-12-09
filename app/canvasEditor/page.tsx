@@ -84,7 +84,7 @@ const Page: React.FC = () => {
 
   return (
     <  >
-      {/* <DebugInfo
+      <DebugInfo
         data={{
           // radius: settings.value.radius,
           // canvasState: canvasState,
@@ -99,7 +99,7 @@ const Page: React.FC = () => {
           // activeFrontLine: frontLineSettings.value.activeFrontline?.idNum,
 
         }}
-      /> */}
+      />
       <CanvasSettings />
       <CanvasEditor />
 

@@ -13,7 +13,7 @@ import { extractImageUrl } from "../utility/utils";
 export const drawMarkersOnCanvas = (
     ctx: CanvasRenderingContext2D,
     markers: MarkerArraySignal,
-    // topLeftOffset: Vector2
+
   ) => {
     // Clear the entire canvas before drawing new markers
     ctx.clearRect(0, 0, settings.value.canvasSize.x, settings.value.canvasSize.y);
@@ -130,7 +130,7 @@ export const drawMarkersOnCanvas = (
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(
-          marker.topText,
+          (Math.round(marker.position.x)).toString(),
           marker.position.x,
           marker.position.y - usedWidth / 4
         );

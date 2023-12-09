@@ -75,9 +75,7 @@ const Marker: React.FC<MarkerProps> = ({
       );
       setCurrentPosition(adjustedPos);
       // Update the position of the marker in markers.value
-      markers.value = markers.value.map((marker) =>
-        marker.id === id ? { ...marker, position: adjustedPos } : marker
-      );
+
     }
   };
 
@@ -126,8 +124,18 @@ const Marker: React.FC<MarkerProps> = ({
         settings.value.canvasSize.y - mergedSettings.radius / 2,
         currentPosition.y
       ),
-    });
+
+    }
+
+
+    );
   }, [settings.value.canvasSize]);
+
+  useEffect(() => {
+    markers.value = markers.value.map((marker) =>
+    marker.id === id ? { ...marker, position: currentPosition } : marker
+  );
+  }, [currentPosition])
 
   return (
     <Point
@@ -141,7 +149,7 @@ const Marker: React.FC<MarkerProps> = ({
       id={id}
     >
       <p style={{ ...markerTextStyle, marginTop: "2px" }}>
-      {mergedSettings.radius} {/* {mergedSettings.topText} */}
+      { Math.round(currentPosition.x) } {/* {mergedSettings.topText} */}
       </p>
       {mergedSettings.radius > 20 && (
         <p
