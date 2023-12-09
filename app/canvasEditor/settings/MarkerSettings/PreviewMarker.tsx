@@ -11,10 +11,11 @@ const PreviewMarker: React.FC<{ windowWidth: number }> = ({ windowWidth }) => {
         alignItems="flex-start" // Align items to the start of the cross axis
       >
         <Marker
-          topLeftOffset={{ x: 500, y: 100 }}
+          // topLeftOffset={{ x: 500, y: 100 }}
           initialPosition={{ x: windowWidth * 0.9, y: 75 }}
           shouldUpdateOnSettingsChange={true}
           id={"x"}
+          position={{x: windowWidth * 0.9,y:75}}
         />
       </Box>
     );

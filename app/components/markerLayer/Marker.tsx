@@ -25,6 +25,7 @@ type MarkerProps = {
   dragHandler?: FollowMouseFunction;
   topLeftOffset?: Vector2;
   boundToCanvasEditor?: boolean;
+  position: Vector2
 } & Partial<PositionedText>;
 
 export const MarkerDefaultSettings: Omit<
@@ -37,7 +38,16 @@ export const MarkerDefaultSettings: Omit<
   topText: "",
   bottomText: "",
   imageURL: null,
+
 };
+
+
+/*
+I dont thing the dragging of this component would work properly, when it wouldnt be part of the
+markrer canvas layer. The problem is that the updatePos function updates the pos of the marker
+inside of the markers.value array which may not contain all the instance of this marker
+
+*/
 
 const Marker: React.FC<MarkerProps> = ({
   topText,
@@ -49,9 +59,9 @@ const Marker: React.FC<MarkerProps> = ({
   id,
   topLeftOffset,
   boundToCanvasEditor = false,
+  position
 }) => {
-  const [currentPosition, setCurrentPosition] =
-    useState<Vector2>(initialPosition);
+
   const [canRemove, setCanRemove] = useState<boolean>(false);
   const [initialMarkerSettings] = useState<Partial<MarkerSettings>>({
     ...customStyling,
@@ -67,21 +77,28 @@ const Marker: React.FC<MarkerProps> = ({
 
   const mergedSettings = { ...MarkerDefaultSettings, ...usedSettings };
 
+
+  const updatePosition = (newPosition: Vector2) => {
+    markers.value = markers.value.map((marker) =>
+    marker.id === id ? { ...marker, position: newPosition } : marker);
+  }
   const handleMouseMove = (newPosition: Vector2) => {
+    console.log(newPosition)
     if (dragHandler) {
       const adjustedPos = movePosByOffset(
         newPosition,
         mergedSettings.radius / 2
       );
-      setCurrentPosition(adjustedPos);
-      // Update the position of the marker in markers.value
+
+      updatePosition(adjustedPos)
 
     }
   };
 
   useEffect(() => {
     if (shouldUpdateOnSettingsChange) {
-      setCurrentPosition(initialPosition);
+      position = initialPosition
+
     }
   }, [initialPosition]);
   const markerStyle: React.CSSProperties = {
@@ -111,45 +128,40 @@ const Marker: React.FC<MarkerProps> = ({
   };
 
   useEffect(() => {
-    if (!boundToCanvasEditor) {
+    if (!boundToCanvasEditor && shouldUpdateOnSettingsChange) {
       return;
     }
 
-    setCurrentPosition({
+    const newPos:Vector2 = {
       x: Math.min(
         settings.value.canvasSize.x - mergedSettings.radius / 2,
-        currentPosition.x
+        position.x
       ),
       y: Math.min(
         settings.value.canvasSize.y - mergedSettings.radius / 2,
-        currentPosition.y
+        position.y
       ),
 
     }
+    updatePosition(newPos)
 
-
-    );
   }, [settings.value.canvasSize]);
 
-  useEffect(() => {
-    markers.value = markers.value.map((marker) =>
-    marker.id === id ? { ...marker, position: currentPosition } : marker
-  );
-  }, [currentPosition])
+
 
   return (
     <Point
       radius={mergedSettings.radius}
       styling={{ ...markerStyle }}
-      position={currentPosition}
+      position={position}
       rightClk={handleDelete}
-      onDrag={(position) => handleMouseMove(position)}
+      onDrag={(pos ) => handleMouseMove(pos)}
       className="marker"
       onDelete={handleDelete}
       id={id}
     >
       <p style={{ ...markerTextStyle, marginTop: "2px" }}>
-      { Math.round(currentPosition.x) } {/* {mergedSettings.topText} */}
+      { Math.round(position.x) } {/* {mergedSettings.topText} */}
       </p>
       {mergedSettings.radius > 20 && (
         <p

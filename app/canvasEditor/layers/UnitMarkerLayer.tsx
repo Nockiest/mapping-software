@@ -139,6 +139,7 @@ const UnitMarkerLayer: React.FC = () => {
             dragHandler={followMouseComponent}
             customStyling={markerSettings.value}
             boundToCanvasEditor={true}
+            position={marker.position}
           />
         ))}
       </ReusableLayer>
