@@ -24,7 +24,7 @@ const Timeline: React.FC = () => {
   };
 
   const handleDeleteImage = (index: number, e: React.MouseEvent) => {
-    e.stopPropagation();
+    // e.stopPropagation();
     console.log("click");
 
     // Create a copy of the timeline array
@@ -63,7 +63,7 @@ const Timeline: React.FC = () => {
           >
             <button
               onClick={(e) => handleDeleteImage(index, e)}
-              className="z-50 top-0 right-0 p-2 bg-red-500 text-white rounded-md cursor-pointer"
+              className="z-50  absolute top-0 right-0 p-2 bg-red-500 text-white rounded-md cursor-pointer"
             >
               Delete
             </button>

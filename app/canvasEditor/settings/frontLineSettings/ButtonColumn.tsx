@@ -2,6 +2,8 @@ import React from 'react';
 import { Button } from '@mui/material';
 import { theme } from '../../theme/theme';
 import SettingsColumn from '../settingsComponents/SettingsColumn';
+import SpeedButton from '../../theme/SpeedButton';
+import SettingsButton from '../../theme/SettingsButton';
 
 type ButtonColumnProps = {
   onNewFrontLine: () => void;
@@ -18,27 +20,25 @@ const ButtonColumn: React.FC<ButtonColumnProps> = ({
     <SettingsColumn >
       <div  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <br />
-      <Button
+      <SettingsButton
         onClick={onNewFrontLine}
         sx={{
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.primary.light,
+
         }}
       >
         New FrontLine
-      </Button>
+      </SettingsButton>
 
 
       {activeFrontline && (
-        <Button
+        <SettingsButton
           onClick={onDeleteCurrentFrontLine}
           sx={{
-            color: theme.palette.text.primary,
-            backgroundColor: theme.palette.primary.light,
+
           }}
         >
-          Delete Current FrontLine
-        </Button>
+          Delete This FrontLine
+        </SettingsButton>
       )}
       </div>
 

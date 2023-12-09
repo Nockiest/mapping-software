@@ -1,7 +1,7 @@
 import React from 'react';
 import { CssBaselineProps, Paper,useTheme} from '@mui/material';
 
- 
+
 type SettingsColumnProps = {
   children: React.ReactNode;
   sx?: React.CSSProperties; // Allow additional styles to be passed through props
@@ -18,7 +18,9 @@ const SettingsColumn: React.FC<SettingsColumnProps> = ({ children, sx, styles })
       backgroundColor: theme.palette.primary.dark,
       padding: theme.spacing(2),
       overflowY: 'auto',
+
       height: '250px',
+      maxHeight: '270px',
       margin: '2px',
       ...sx, // Spread additional styles passed through props
     }}>

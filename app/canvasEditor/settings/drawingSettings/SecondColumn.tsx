@@ -8,6 +8,7 @@ import { useCanvas } from '../../CanvasContext';
 import { clearCanvas } from '@/app/components/utility/CanvasUtils';
 import SettingsColumn from '../settingsComponents/SettingsColumn';
 import { Color } from '@/public/types/OtherTypes';
+import SettingsButton from '../../theme/SettingsButton';
 
 interface OtherSettingsColumnProps {
   handleRadiusChange: (value: number | number[]) => void;
@@ -46,15 +47,15 @@ const OtherSettingsColumn: React.FC<OtherSettingsColumnProps> = ({
       </div>
 
 
-     
+
       <br />
 
-      <Button variant="contained" onClick={() => clearCanvas(canvasRef)}>
+      <SettingsButton  onClick={() => clearCanvas(canvasRef)}>
         Clear Canvas
-      </Button>
-      <Button variant="contained" onClick={handleBucketFill}>
+      </SettingsButton>
+      <SettingsButton   onClick={handleBucketFill}>
         Bucket Fill
-      </Button>
+      </SettingsButton>
     </SettingsColumn>
   );
 };

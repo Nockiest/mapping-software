@@ -3,6 +3,7 @@ import { settings } from '@/app/canvasEditor/Signals'
 import { Color } from '@/public/types/OtherTypes'
 import { Button } from '@mui/material';
 import { theme } from '@/app/canvasEditor/theme/theme';
+import SettingsButton from '@/app/canvasEditor/theme/SettingsButton';
 
 interface ColorRectangleProps {
     color: Color;
@@ -47,7 +48,7 @@ const FavoriteColorLister: React.FC<FavoriteColorProps> = ({ handleColorClick, c
     return (
       <div style={{ display: 'flex', gap: '5px' }}>
           {  !colorList.includes(newColor) &&
-        <Button className="border-black-1 text-xs " sx={{color:theme.palette.text.primary, backgroundColor:theme.palette.info.main}} onClick={()=> {colorList.push(newColor)}}>Save Color to Favorites</Button>}
+        <SettingsButton   sx={{color:theme.palette.text.primary, backgroundColor:theme.palette.info.main}} onClick={()=> {colorList.push(newColor)}}>Save Color to Favorites</SettingsButton>}
 
         {colorList.map((color, index) => (
           <ColorRectangle key={index} color={color} colorList={colorList} onClickFc= { handleColorClick  } />

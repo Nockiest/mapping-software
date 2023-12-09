@@ -20,7 +20,10 @@ const SpeedButton: FC<SpeedButtonProps> = ({ onClick, sx, children }) => {
           backgroundColor: theme.palette.primary.dark, // Darker green on hover
         },
         margin: '8px', // Add margin here
+        fontSize: '14px',
+        padding: '0px 6px',
         ...sx, // Spread additional styles passed through props
+
       }}
       onClick={onClick} // Assign the onClick prop
     >
