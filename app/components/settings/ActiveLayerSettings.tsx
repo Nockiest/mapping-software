@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import {
   FormControl,
   InputLabel,
@@ -18,8 +18,11 @@ const CustomMenuItem = styled(MenuItem)({
 });
 type AllowedLayerNames = "draw" | "marker" | "background" | "frontLine"| 'compiled';
 const ActiveLayerSettings: React.FC = () => {
+  const [forceRerender, setForceRerender] = useState({});
+
   const handleActiveLayerChange = (newLayer: AllowedLayerNames) => {
     settings.value = { ...settings.value, activeLayer: newLayer };
+    setForceRerender({}); // Trigger a re-render
   };
 
   const processKeyDown = (event: KeyboardEvent) => {

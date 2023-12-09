@@ -69,7 +69,7 @@ const LayerSplicer: React.FC<LayerSplicerProps> = ({ layers }) => {
     });
 
     setIsCanvasCompiled(true);
-  }, [settings.value.activeLayer]);
+  }, [settings.value.activeLayer, settings.value.canvasSize]);
 
   const compileCanvas = () => {
     if (isCanvasCompiled) {
