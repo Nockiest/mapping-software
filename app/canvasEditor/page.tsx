@@ -38,14 +38,14 @@ const Page: React.FC = () => {
   );
   const [elapsedTime, setElapsedTime] = useState<number>(0);
 
-  const handleMouseDown = (e:  MouseEvent) => {
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.button === 2) {
       e.preventDefault();
     }
     setMouseDownTimeStamp(Date.now());
   };
 
-  const handleMouseUp = (e:  MouseEvent) => {
+  const handleMouseUp = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
 
     // Using requestAnimationFrame to delay the execution until the next frame
@@ -55,16 +55,16 @@ const Page: React.FC = () => {
     });
   };
 
-  useEffect(() => {
-    // Add event listeners when the component mounts
-    document.addEventListener("mousedown", handleMouseDown);
-    document.addEventListener("mouseup", handleMouseUp, true)
-    // Remove event listeners when the component unmounts
-    return () => {
-      document.removeEventListener("mousedown", handleMouseDown);
-      document.removeEventListener("mouseup", handleMouseUp, true);
-    };
-  }, []);
+  // useEffect(() => {
+  //   // Add event listeners when the component mounts
+  //   document.addEventListener("mousedown", handleMouseDown);
+  //   document.addEventListener("mouseup", handleMouseUp, true)
+  //   // Remove event listeners when the component unmounts
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleMouseDown);
+  //     document.removeEventListener("mouseup", handleMouseUp, true);
+  //   };
+  // }, []);
 
   useEffect(() => {
     // Update elapsed time while the button is pressed
@@ -83,10 +83,9 @@ const Page: React.FC = () => {
   }, [elapsedTime]);
 
   return (
-    <  >
+    <div onMouseDown={(e)=>handleMouseDown(e)} onMouseUp={(e) =>  handleMouseUp(e)}     >
       <DebugInfo
         data={{
-          // radius: settings.value.radius,
           // canvasState: canvasState,
           // color: settings.value.color,
           // layer: settings.value.activeLayer,
@@ -104,7 +103,7 @@ const Page: React.FC = () => {
       <CanvasEditor />
 
       <Timeline />
-    </>
+    </div>
   );
 };
 

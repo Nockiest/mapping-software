@@ -24,41 +24,35 @@ const Timeline: React.FC = () => {
   };
 
   const handleDeleteImage = (index: number, e: React.MouseEvent) => {
-    // e.stopPropagation();
-    console.log("click");
-
-    // Create a copy of the timeline array
     const updatedImages = [...timeline.value];
 
-    // Modify the copy
+
     updatedImages.splice(index, 1);
 
-    // Update the timeline array with the modified copy
+
     timeline.value = updatedImages;
 
-    console.log("splicing");
+
   };
 
-  const timelineImageSize = 400
+  const timelineImageSize = 400;
 
   return (
-    <div className="relative w-full overflow-x-auto bg-gray-200">
+    <div className="relative w-full overflow-x-auto bg-gray-200  ">
       <div
         className="flex h-auto overflow-y-hidden flex-row-reverse gap-1 py-1"
         style={{
-          width:
-            (timelineImageSize) * timeline.value.length - 0
-
+          width: timelineImageSize * timeline.value.length - 0,
         }}
       >
         {timeline.value.map((imageDataURL, index) => (
           <div
             className="relative border-2"
-            key={uuidv4()}
+            key={index}
             style={{
               border: "black 1px solid",
-              width:  (timelineImageSize),
-              height:  (timelineImageSize),
+              width: timelineImageSize,
+              height: timelineImageSize,
             }}
           >
             <button
@@ -89,14 +83,6 @@ const Timeline: React.FC = () => {
           Download Images
         </button>
       )}
-      {/* <button
-        onClick={
-          (e) => handleDeleteImage(0, e )
-         }
-        className="z-10   top-0 right-0 p-2 bg-red-500 text-white rounded-md cursor-pointer"
-      >
-        Delete
-      </button> */}
     </div>
   );
 };
