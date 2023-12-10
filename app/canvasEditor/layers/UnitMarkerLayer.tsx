@@ -126,6 +126,11 @@ const UnitMarkerLayer: React.FC = () => {
     markerLayerState,
   ]);
 
+  const onMarkerMovement= (markerId: string, position: Vector2) => {
+    markers.value = markers.value.map((marker) =>
+    marker.id === markerId ? { ...marker, position: position } : marker);
+  }
+
   return (
 
       <ReusableLayer layerName="marker" canvasRef={markerCanvasRef}  positioning={'absolute top-0'}>
@@ -136,7 +141,7 @@ const UnitMarkerLayer: React.FC = () => {
             bottomText={marker.bottomText}
             initialPosition={marker.position}
             id={marker.id}
-            dragHandler={followMouseComponent}
+            dragHandler={onMarkerMovement}
             customStyling={markerSettings.value}
             boundToCanvasEditor={true}
             position={marker.position}

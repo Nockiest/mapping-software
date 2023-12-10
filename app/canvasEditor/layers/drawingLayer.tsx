@@ -94,10 +94,7 @@ const DrawingLayer: React.FC = () => {
                 color,
                 lineShape: settings.value.lineType
               }
-              // settings.value.lineType
 
-            // drawFunction: drawDot, // Replace with your actual draw function
-            // drawArgs: { ctx, x, y, radius, color },
           };
           setState({ type: "DRAW", payload: drawPayload });
 
@@ -138,7 +135,7 @@ const DrawingLayer: React.FC = () => {
               size: radius,
               color,
             }
-            // settings.value.lineType
+
           );
         }
       }
@@ -187,7 +184,7 @@ const DrawingLayer: React.FC = () => {
     return () => {
       window.removeEventListener("resize", updateEditorTopLeftPosition);
     };
-  }, []);
+  }, [settings.value.canvasSize]);
 
   return (
 

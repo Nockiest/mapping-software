@@ -22,7 +22,7 @@ type MarkerProps = {
   shouldUpdateOnSettingsChange?: boolean;
   customStyling?: MarkerSettings;
   id: string;
-  dragHandler?: FollowMouseFunction;
+  dragHandler?:  Function;
   topLeftOffset?: Vector2;
   boundToCanvasEditor?: boolean;
   position: Vector2
@@ -46,7 +46,6 @@ export const MarkerDefaultSettings: Omit<
 I dont thing the dragging of this component would work properly, when it wouldnt be part of the
 markrer canvas layer. The problem is that the updatePos function updates the pos of the marker
 inside of the markers.value array which may not contain all the instance of this marker
-
 */
 
 const Marker: React.FC<MarkerProps> = ({
@@ -78,10 +77,10 @@ const Marker: React.FC<MarkerProps> = ({
   const mergedSettings = { ...MarkerDefaultSettings, ...usedSettings };
 
 
-  const updatePosition = (newPosition: Vector2) => {
-    markers.value = markers.value.map((marker) =>
-    marker.id === id ? { ...marker, position: newPosition } : marker);
-  }
+  // const updatePosition = (newPosition: Vector2) => {
+  //   markers.value = markers.value.map((marker) =>
+  //   marker.id === id ? { ...marker, position: newPosition } : marker);
+  // }
   const handleMouseMove = (newPosition: Vector2) => {
     console.log(newPosition)
     if (dragHandler) {
@@ -89,8 +88,8 @@ const Marker: React.FC<MarkerProps> = ({
         newPosition,
         mergedSettings.radius / 2
       );
-
-      updatePosition(adjustedPos)
+      dragHandler(id, adjustedPos)
+      // updatePosition(adjustedPos)
 
     }
   };
@@ -128,7 +127,7 @@ const Marker: React.FC<MarkerProps> = ({
   };
 
   useEffect(() => {
-    if (!boundToCanvasEditor && shouldUpdateOnSettingsChange) {
+    if ((!boundToCanvasEditor && shouldUpdateOnSettingsChange) || !dragHandler) {
       return;
     }
 
@@ -143,7 +142,8 @@ const Marker: React.FC<MarkerProps> = ({
       ),
 
     }
-    updatePosition(newPos)
+    dragHandler(id , newPos)
+    // updatePosition(newPos)
 
   }, [settings.value.canvasSize]);
 
