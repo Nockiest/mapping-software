@@ -32,11 +32,14 @@ const Timeline: React.FC = () => {
   const [biggestImage, setBiggestImage] = useState<TimelineFrame | null>(null);
 
   const findBiggestImage = (): TimelineFrame => {
-    const bigImg = timeline.value.reduce((prev, current) => {
-      const prevArea = prev.width * prev.height;
-      const currentArea = current.width * current.height;
-      return prevArea > currentArea ? prev : current;
-    }, { imageURL: "", width: 0, height: 0 });
+    const bigImg = timeline.value.reduce(
+      (prev, current) => {
+        const prevArea = prev.width * prev.height;
+        const currentArea = current.width * current.height;
+        return prevArea > currentArea ? prev : current;
+      },
+      { imageURL: "", width: 0, height: 0 }
+    );
     return bigImg;
   };
 
@@ -59,11 +62,14 @@ const Timeline: React.FC = () => {
         }}
       >
         {timeline.value.map((frame, index) => {
-          const finalWidth = frame === biggestImage? timelineImageSize: timelineImageSize*  (frame.width / biggestImage.width) // biggestImage.width ? frame.width / biggestImage.width : 1;
-          const finalHeight = frame === biggestImage? timelineImageSize: timelineImageSize*  (frame.height / biggestImage.height) //= biggestImage.height ? frame.height / biggestImage.height : 1;
-          // KOLIKR8T JE TENTO IMAGE MENSI TOLIKRAT VZDELIT IMAGESIZE
-          // const finalWidth  = widthScale;
-          // const finalHeight = heightScale;
+          const finalWidth =
+            frame === biggestImage
+              ? timelineImageSize
+              : timelineImageSize * (frame.width / biggestImage.width); // biggestImage.width ? frame.width / biggestImage.width : 1;
+          const finalHeight =
+            frame === biggestImage
+              ? timelineImageSize
+              : timelineImageSize * (frame.height / biggestImage.height); //= biggestImage.height ? frame.height / biggestImage.height : 1;
 
           return (
             <div
@@ -79,10 +85,16 @@ const Timeline: React.FC = () => {
                 onClick={() => handleDeleteImage(index)}
                 className="z-50  absolute top-0 right-0 p-2 bg-red-500 text-white rounded-md cursor-pointer"
               >
-                { frame.width}  {  biggestImage.width} {frame.height / biggestImage.height}
+                Delete frame
               </button>
 
-              <div style={{ width: finalWidth, height: finalHeight, border: "black 1px solid" }}>
+              <div
+                style={{
+                  width: finalWidth,
+                  height: finalHeight,
+                  border: "black 1px solid",
+                }}
+              >
                 <img
                   src={frame.imageURL}
                   width={finalWidth}
@@ -98,11 +110,17 @@ const Timeline: React.FC = () => {
             </div>
           );
         })}
+
       </div>
       {timeline.value.length > 0 && (
         <button
           onClick={handleDownloadImages}
-          className="mt-4 p-2 bg-blue-500 text-white rounded-md cursor-pointer absolute bottom-0 right-0"
+          className="mt-4 p-2 bg-blue-500 z-10 text-white rounded-md cursor-pointer"
+          style={{
+            position: "fixed",
+            bottom: 0,
+            right: 0,
+          }}
         >
           Download Images
         </button>
