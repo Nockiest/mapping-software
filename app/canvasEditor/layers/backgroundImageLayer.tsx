@@ -31,14 +31,14 @@ const BackgroundImageLayer: React.FC = () => {
     }
 
     if (backgroundImage.value instanceof File) {
-      const imageUrl = await loadImage(backgroundImage.value);
-      drawImageOnCanvas(imageUrl);
+      const imageURL = await loadImage(backgroundImage.value);
+      drawImageOnCanvas(imageURL);
     } else {
       console.error("Invalid file type");
     }
   };
 
-  const drawImageOnCanvas = (imageUrl: string) => {
+  const drawImageOnCanvas = (imageURL: string) => {
     const canvas = backgroundCanvasRef.current;
     const ctx = canvas?.getContext("2d");
 
@@ -47,7 +47,7 @@ const BackgroundImageLayer: React.FC = () => {
       img.onload = () => {
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       };
-      img.src = imageUrl;
+      img.src = imageURL;
     }
   };
 

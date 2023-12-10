@@ -2,7 +2,7 @@ import { settings } from "@/app/canvasEditor/Signals";
 import { MarkerDefaultSettings } from "./Marker";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { MarkerArraySignal } from "@/public/types/OtherTypes";
-import { extractImageUrl } from "../utility/utils";
+import { extractImageURL } from "../utility/utils";
 
 /**
  * Draws markers on a canvas based on the provided marker data.
@@ -21,7 +21,7 @@ export const drawMarkersOnCanvas = (
     // Iterate through each marker in the array
     markers.value.forEach((marker, index) => {
       // Extract image URL from marker styling
-      const imageUrl = extractImageUrl(marker?.customStyling?.imageURL, null);
+      const imageURL = extractImageURL(marker?.customStyling?.imageURL, null);
 
       // Determine the width of the marker
       const usedWidth = marker.customStyling?.radius || MarkerDefaultSettings.radius;
@@ -63,7 +63,7 @@ export const drawMarkersOnCanvas = (
 
 
       // If an image URL is provided, draw the image
-      if (imageUrl) {
+      if (imageURL) {
         const img = new Image();
 
         // Handle the image load event
@@ -101,7 +101,7 @@ export const drawMarkersOnCanvas = (
         };
 
         // Set the image source
-        img.src = imageUrl;
+        img.src = imageURL;
     } else {
         // Save the current canvas state
         ctx.save();

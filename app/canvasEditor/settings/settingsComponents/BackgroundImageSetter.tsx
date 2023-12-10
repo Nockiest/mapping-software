@@ -2,10 +2,10 @@ import React from "react";
 import { backgroundImage, settings } from "@/app/canvasEditor/Signals";
 
 const BackgroundImageSetter: React.FC = () => {
-  const setCanvasSize = async (imageUrl: string) => {
+  const setCanvasSize = async (imageURL: string) => {
     const img = new Image();
-    console.log(imageUrl)
-    img.src = imageUrl;
+    console.log(imageURL)
+    img.src = imageURL;
     img.onload = () => {
       // Set canvas size to match the dimensions of the loaded image
       const maxCanvasSize = settings.value.maxCanvasSize;
@@ -44,10 +44,10 @@ const BackgroundImageSetter: React.FC = () => {
     const selectedFile = e.target.files?.[0];
     console.log(selectedFile)
     if (selectedFile) {
-      const imageUrl = await loadImage(selectedFile);
-      console.log(imageUrl)
+      const imageURL = await loadImage(selectedFile);
+      console.log(imageURL)
       // Set canvas size based on the dimensions of the loaded image
-      await setCanvasSize(imageUrl);
+      await setCanvasSize(imageURL);
       console.log('setting image')
       // Update the backgroundImage value
       backgroundImage.value = selectedFile;
@@ -85,7 +85,7 @@ export default BackgroundImageSetter;
 //     });
 //   };
 
-//   const setImageSize = (imageUrl: string) => {
+//   const setImageSize = (imageURL: string) => {
 //     const canvas = backgroundCanvasRef.current;
 //     const ctx = canvas?.getContext("2d");
 
@@ -97,7 +97,7 @@ export default BackgroundImageSetter;
 //         canvas.width = img.width;
 //         canvas.height = img.height;
 //       };
-//       img.src = imageUrl;
+//       img.src = imageURL;
 //     }
 //   };
 
@@ -105,10 +105,10 @@ export default BackgroundImageSetter;
 //     const selectedFile = e.target.files?.[0];
 
 //     if (selectedFile) {
-//       const imageUrl = await loadImage(selectedFile);
+//       const imageURL = await loadImage(selectedFile);
 
 //       // Set canvas size based on the dimensions of the loaded image
-//       await setImageSize(imageUrl);
+//       await setImageSize(imageURL);
 
 //       // Update the backgroundImage value
 //       backgroundImage.value = selectedFile;

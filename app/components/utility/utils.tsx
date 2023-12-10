@@ -110,7 +110,7 @@ export const followMouseComponent: FollowMouseFunction = (
   return updatedPosition;
 };
 
-export function extractImageUrl(
+export function extractImageURL(
   url: string | File | null | undefined,
   fallbackURL: string | File | null
 ): string | null {

@@ -24,18 +24,18 @@ interface LayerSplicerProps {
 
 const LayerSplicer: React.FC<LayerSplicerProps> = ({ layers }) => {
   const {
-    canvasRef,
-    frontlineCanvasRef,
-    markerCanvasRef,
-    backgroundCanvasRef,
+  //   canvasRef,
+  //   frontlineCanvasRef,
+  //   markerCanvasRef,
+  //   backgroundCanvasRef,
     compiledCanvasRef,
   } = useCanvas();
-  const canvasArr = [
-    canvasRef,
-    frontlineCanvasRef,
-    markerCanvasRef,
-    backgroundCanvasRef,
-  ];
+  // const canvasArr = [
+  //   canvasRef,
+  //   frontlineCanvasRef,
+  //   markerCanvasRef,
+  //   backgroundCanvasRef,
+  // ];
 
   const [isCanvasCompiled, setIsCanvasCompiled] = useState(false);
 
@@ -80,10 +80,10 @@ const LayerSplicer: React.FC<LayerSplicerProps> = ({ layers }) => {
         return;
       }
 
-      const dataURL = canvas.toDataURL("image/png");
+      const imageURL = canvas.toDataURL("image/png");
 
       // Assuming timeline.value is an array of image data URLs
-      timeline.value = [...timeline.value, dataURL];
+      timeline.value = [...timeline.value, {imageURL: imageURL, width: settings.value.canvasSize.x, height: settings.value.canvasSize.y}];
 
       alert("Compiling canvas as image");
     } else {

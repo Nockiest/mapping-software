@@ -15,7 +15,7 @@ import {
 } from "@/public/types/OtherTypes";
 import { markers } from "../Signals";
 import {
-  extractImageUrl,
+  extractImageURL,
   followMouseComponent,
 } from "@/app/components/utility/utils";
 import ReusableLayer from "@/app/components/utility/ResuableLayer";

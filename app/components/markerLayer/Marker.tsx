@@ -15,7 +15,7 @@ import { signal } from "@preact/signals";
 import { markerSettings } from "@/app/canvasEditor/Signals";
 import Point from "../frontline/Point";
 import { position } from "html2canvas/dist/types/css/property-descriptors/position";
-import { extractImageUrl } from "../utility/utils";
+import { extractImageURL } from "../utility/utils";
 import { movePosByOffset } from "../utility/CanvasUtils";
 type MarkerProps = {
   initialPosition: Vector2;
@@ -69,7 +69,7 @@ const Marker: React.FC<MarkerProps> = ({
     ? markerSettings.value
     : initialMarkerSettings;
 
-  const imageUrl = extractImageUrl(
+  const imageURL = extractImageURL(
     usedSettings?.imageURL,
     MarkerDefaultSettings.imageURL
   );
@@ -102,7 +102,7 @@ const Marker: React.FC<MarkerProps> = ({
     height: `${mergedSettings.radius}px`,
     fontSize: `${mergedSettings.radius / 4}px`,
     backgroundColor: mergedSettings.color,
-    backgroundImage: mergedSettings.imageURL ? `url(${imageUrl})` : "none",
+    backgroundImage: mergedSettings.imageURL ? `url(${imageURL})` : "none",
     backgroundPosition: "center",
     backgroundSize: "cover",
   };
