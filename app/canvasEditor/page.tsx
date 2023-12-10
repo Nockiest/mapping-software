@@ -10,7 +10,7 @@ import React, {
 import CanvasToImage from "../components/utility/CanvasToImg";
 import CanvasEditor from "./CanvasEditor";
 import CanvasSettings from "./settings/CanvasSettings";
-import DebugInfo from "../components/settings/Debugger";
+import DebugInfo from "../components/global/Debugger";
 import Timeline from "./Timeline";
 import {
   CanvasContext,

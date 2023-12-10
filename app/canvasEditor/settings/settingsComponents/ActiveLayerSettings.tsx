@@ -16,7 +16,9 @@ const CustomMenuItem = styled(MenuItem)({
     backgroundColor: "transparent", // Set the background color to transparent on focus
   },
 });
-type AllowedLayerNames = "draw" | "marker" | "background" | "frontLine"| 'compiled';
+type AllowedLayerNames = Exclude<LayerNames, 'none'>;
+
+
 const ActiveLayerSettings: React.FC = () => {
   const [forceRerender, setForceRerender] = useState({});
 
@@ -25,26 +27,25 @@ const ActiveLayerSettings: React.FC = () => {
     setForceRerender({}); // Trigger a re-render
   };
 
+
   const processKeyDown = (event: KeyboardEvent) => {
     console.log(event.key);
     switch (event.key) {
-      case  "0":
-        // code to be executed if expression === value1
+      case  "1":
         handleActiveLayerChange ("draw")
         break;
-      case  "1":
-        // code to be executed if expression === value2
-        handleActiveLayerChange ("background")
-        break;
       case  "2":
-        handleActiveLayerChange ("frontLine")
-
+        handleActiveLayerChange ("marker")
         break;
       case  "3":
-        handleActiveLayerChange ("marker")
+        handleActiveLayerChange ("background")
 
         break;
       case  "4":
+        handleActiveLayerChange ("frontLine")
+
+        break;
+      case  "5":
         handleActiveLayerChange ("compiled")
         break;
 
@@ -96,7 +97,7 @@ const ActiveLayerSettings: React.FC = () => {
         }}
       >
         {["draw", "marker", "background", "frontLine", "compiled"].map(
-          (option) => (
+          (option, index) => (
             <MenuItem
               key={option}
               value={option}
@@ -106,7 +107,7 @@ const ActiveLayerSettings: React.FC = () => {
                 })`,
               }}
             >
-              {option.charAt(0).toUpperCase() + option.slice(1)}{" "}
+             {index+1}: {option.charAt(0).toUpperCase() + option.slice(1)}
               {/* Capitalize the first letter */}
             </MenuItem>
           )

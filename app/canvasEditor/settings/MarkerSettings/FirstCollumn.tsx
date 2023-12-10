@@ -18,6 +18,16 @@ type FirstColumnProps = {
 
 const FirstColumn: React.FC<FirstColumnProps> = ({ updateMarkerSettings }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputElement = e.target as HTMLInputElement;
+    const files = inputElement.files;
+
+    if (files && files.length > 0) {
+      updateMarkerSettings(URL.createObjectURL(files[0]), "imageURL");
+    }
+  }
+
   return (
     <SettingsColumn>
       <Typography color="white">
@@ -39,12 +49,21 @@ const FirstColumn: React.FC<FirstColumnProps> = ({ updateMarkerSettings }) => {
       />
 
       <Typography color="white">
-        Marker Color: {markerSettings.value.color}
+        Background Color: {markerSettings.value.color}
       </Typography>
       <input
         type="color"
         value={markerSettings.value.color}
         onChange={(e) => updateMarkerSettings(e.target.value, "color")}
+      />
+
+      <Typography color="white">
+        Text Color: {markerSettings.value.color}
+      </Typography>
+      <input
+        type="color"
+        value={markerSettings.value.textColor}
+        onChange={(e) => updateMarkerSettings(e.target.value, "textColor")}
       />
 
       {/* Additional markerSettings for the first column */}
@@ -54,13 +73,14 @@ const FirstColumn: React.FC<FirstColumnProps> = ({ updateMarkerSettings }) => {
           accept: "image/*", // Specify the accepted file types
         }}
         ref={fileInputRef}
-        onChange={(e) => {
-          const inputElement = e.target as HTMLInputElement;
-          const files = inputElement.files;
-          if (files && files.length > 0) {
-            updateMarkerSettings(URL.createObjectURL(files[0]), "imageURL");
-          }
-        }}
+        onChange={handleFileInputChange
+          // (e) => {
+          // const inputElement = e.target as HTMLInputElement;
+          // const files = inputElement.files;
+          // if (files && files.length > 0) {
+          //   updateMarkerSettings(URL.createObjectURL(files[0]), "imageURL");
+          // }}
+         }
         color="primary" // Set the color of the input
       />
 

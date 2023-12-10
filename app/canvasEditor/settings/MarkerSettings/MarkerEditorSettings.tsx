@@ -2,7 +2,7 @@ import { useContext, useState, useEffect, useRef } from "react";
 import { CanvasSettingsType } from "../../CanvasContext"; // CanvasSettingsContext,
 import { hexToRgb } from "@/app/components/utility/utils";
 import { settings, markerSettings,  } from "../../Signals";
-import FavoriteColorLister from "@/app/components/settings/FavoriteColorLister";
+import FavoriteColorLister from "@/app/canvasEditor/settings/settingsComponents/FavoriteColorLister";
 import { Color, Settings } from "@/public/types/OtherTypes";
 import { signal } from "@preact/signals";
 import Marker from "@/app/components/markerLayer/Marker";
@@ -14,7 +14,7 @@ import {
   Typography,
   TextField,
   Button,
-   
+
   InputAdornment,
   Input,
   Paper,
@@ -27,6 +27,7 @@ import SecondColumn from "./SecondColumn";
 import MarkerValues from "./MarkerValuesColumn";
 import PreviewMarker from "./PreviewMarker";
 import SettingsColumn from "../settingsComponents/SettingsColumn";
+import KeyboardShortcutsLister from "../settingsComponents/KeyboardShortcutsLister";
 
 export type UpdateMarkerSettingsCallback = (value: any) => void;
 export type UpdateMarkerSettingsFc = (
@@ -67,6 +68,7 @@ const MarkerEditorSettings: React.FC = () => {
         <Typography>Left Click To Add A Point</Typography>
         <Typography>Right DBL Click to Remove a Point</Typography>
       </SettingsColumn>
+      <KeyboardShortcutsLister />
       <PreviewMarker  />
     </Grid>
   );

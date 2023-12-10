@@ -5,15 +5,22 @@ import { frontLineSettings, settings } from "../../Signals";
 import { Color } from "@/public/types/OtherTypes";
 import SettingsColumn from "../settingsComponents/SettingsColumn";
 import SettingsSlider from "../../theme/SettingsSlider";
+import SettingsButton from "../../theme/SettingsButton";
 
 type VisualSettingsColumnProps = {
   maxEndPointNumValue: number;
   setInsertionPointIndex: React.Dispatch<React.SetStateAction<number>>;
+  onNewFrontLine: () => void;
+  onDeleteCurrentFrontLine: () => void;
+  activeFrontline: boolean;
 };
 
 const VisualSettingsColumn: React.FC<VisualSettingsColumnProps> = ({
   maxEndPointNumValue,
   setInsertionPointIndex,
+  onNewFrontLine,
+  onDeleteCurrentFrontLine,
+  activeFrontline,
 }) => {
   const activeFrontLine = frontLineSettings.value.activeFrontline;
 
@@ -130,6 +137,29 @@ const VisualSettingsColumn: React.FC<VisualSettingsColumnProps> = ({
           />
         {/* </div> */}
       </FormControl>
+      <div  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <br />
+      <SettingsButton
+        onClick={onNewFrontLine}
+        sx={{
+
+        }}
+      >
+        New FrontLine
+      </SettingsButton>
+
+
+      {activeFrontline && (
+        <SettingsButton
+          onClick={onDeleteCurrentFrontLine}
+          sx={{
+
+          }}
+        >
+          Delete This FrontLine
+        </SettingsButton>
+      )}
+      </div>
     </SettingsColumn>
   );
 };

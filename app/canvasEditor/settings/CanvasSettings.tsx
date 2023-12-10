@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import MarkerEditorSettings from "./MarkerSettings/MarkerEditorSettings";
-import LineTypeSettings from "@/app/components/settings/LineTypeSettings";
-import ActiveLayerSettings from "@/app/components/settings/ActiveLayerSettings";
+import LineTypeSettings from "@/app/canvasEditor/settings/settingsComponents/LineTypeSettings";
+import ActiveLayerSettings from "@/app/canvasEditor/settings/settingsComponents/ActiveLayerSettings";
 import { hexToRgb } from "@/app/components/utility/utils";
 import { settings } from "../Signals";
 import { Color, Settings } from "@/public/types/OtherTypes";
@@ -28,7 +28,7 @@ const CanvasSettings = () => {
   };
 
   return (
-    <Grid container spacing={2} sx={{ userSelect: "none" }}>
+    <Grid container spacing={2} sx={{ userSelect: "none", overflowX:'auto', height: '280px'}}>
       {/* First Column - ActiveLayerSettings */}
       <Grid item xs={3} style={{ maxWidth: "200px" }}>
         <Paper
@@ -58,9 +58,11 @@ const CanvasSettings = () => {
             padding: "10px",
             border: "black 1px solid",
             borderRadius: "4px",
-            height: "100%",
+            height: '100%',
             overflow: "auto",
             boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+            overflowX: 'auto',
+            width: '100%'
           }}
         >
           {settings.value.activeLayer === "draw" ? (

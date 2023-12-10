@@ -1,10 +1,10 @@
 import { useRef, useContext } from "react";
 import { settings, drawSettings } from "../../Signals";
-import LineTypeSettings from "@/app/components/settings/LineTypeSettings";
+import LineTypeSettings from "@/app/canvasEditor/settings/settingsComponents/LineTypeSettings";
 import { Color, Settings } from "@/public/types/OtherTypes";
 import { LineEdge } from "@/public/types/GeometryTypes";
 import { CanvasContext, useCanvas } from "../../CanvasContext";
-import FavoriteColorLister from "@/app/components/settings/FavoriteColorLister";
+import FavoriteColorLister from "@/app/canvasEditor/settings/settingsComponents/FavoriteColorLister";
 import {
 
   Box,
@@ -20,6 +20,7 @@ import { clearCanvas } from "@/app/components/utility/CanvasUtils";
 import FirstColumn from "./FirstColumn";
 import OtherSettingsColumn from "./SecondColumn";
 import SettingsColumn from "../settingsComponents/SettingsColumn";
+import KeyboardShortcutsLister from "../settingsComponents/KeyboardShortcutsLister";
 
 const DrawingLayerSettings = () => {
   const { state, setState } = drawSettings.value;
@@ -98,7 +99,7 @@ const DrawingLayerSettings = () => {
       <Typography>Left Click To Draw</Typography>
       <Typography>Right To Erase</Typography>
     </SettingsColumn>
-
+    <KeyboardShortcutsLister />
     </Grid>
   );
 };

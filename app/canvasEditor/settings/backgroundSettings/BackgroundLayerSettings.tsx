@@ -1,8 +1,9 @@
-import BackgroundImageSetter from "@/app/components/settings/BackgroundImageSetter";
+import BackgroundImageSetter from "@/app/canvasEditor/settings/settingsComponents/BackgroundImageSetter";
 import { useRef, useContext } from "react";
 import { backgroundImage } from "../../Signals";
 import { Button } from "@mui/material";
 import SettingsColumn from "../settingsComponents/SettingsColumn";
+import KeyboardShortcutsLister from "../settingsComponents/KeyboardShortcutsLister";
 const BackgroundLayerSettings = () => {
   const handleImageRevert = () => {
     backgroundImage.value = null;
@@ -15,6 +16,7 @@ const BackgroundLayerSettings = () => {
           Revert Background Image
         </Button>
       )}
+            <KeyboardShortcutsLister />
     </SettingsColumn>
   );
 };

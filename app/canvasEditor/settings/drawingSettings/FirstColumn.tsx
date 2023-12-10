@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import ColorPicker from '../settingsComponents/ColorPicker';
-import FavoriteColorLister from '@/app/components/settings/FavoriteColorLister';
+import FavoriteColorLister from '@/app/canvasEditor/settings/settingsComponents/FavoriteColorLister';
 import { Color, Settings } from '@/public/types/OtherTypes';
 import { settings } from '../../Signals';
 import { drawSettings } from '../../Signals';
