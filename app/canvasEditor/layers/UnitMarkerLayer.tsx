@@ -71,9 +71,9 @@ const UnitMarkerLayer: React.FC = () => {
   const isActive = settings.value.activeLayer === "marker";
 
   useEffect(() => {
-    // console.log("NEW CALL")
-    const { ctx } = getCtxFromRef(markerCanvasRef);
-    if (!ctx) {
+
+    const { ctx , canvas } = getCtxFromRef(markerCanvasRef);
+    if (!ctx|| !canvas) {
       return;
     }
     drawMarkersOnCanvas(ctx, markers);
@@ -111,12 +111,12 @@ const UnitMarkerLayer: React.FC = () => {
       }
     };
 
-    const canvas = markerCanvasRef.current;
-    if (canvas && isActive) {
+
+
       canvas.addEventListener("mousedown", handleMouseDown);
-    }
+
     return () => {
-      canvas?.removeEventListener("mousedown", handleMouseDown);
+      canvas.removeEventListener("mousedown", handleMouseDown);
     };
   }, [
     markerCanvasRef,

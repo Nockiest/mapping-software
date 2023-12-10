@@ -77,10 +77,7 @@ const Marker: React.FC<MarkerProps> = ({
   const mergedSettings = { ...MarkerDefaultSettings, ...usedSettings };
 
 
-  // const updatePosition = (newPosition: Vector2) => {
-  //   markers.value = markers.value.map((marker) =>
-  //   marker.id === id ? { ...marker, position: newPosition } : marker);
-  // }
+
   const handleMouseMove = (newPosition: Vector2) => {
     console.log(newPosition)
     if (dragHandler) {
@@ -89,7 +86,6 @@ const Marker: React.FC<MarkerProps> = ({
         mergedSettings.radius / 2
       );
       dragHandler(id, adjustedPos)
-      // updatePosition(adjustedPos)
 
     }
   };
@@ -129,6 +125,10 @@ const Marker: React.FC<MarkerProps> = ({
   useEffect(() => {
     if ((!boundToCanvasEditor && shouldUpdateOnSettingsChange) || !dragHandler) {
       return;
+    }
+
+    if(settings.value.canvasSize.x< mergedSettings.radius || settings.value.canvasSize.y< mergedSettings.radius){
+      handleDelete()
     }
 
     const newPos:Vector2 = {
