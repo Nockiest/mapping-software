@@ -14,7 +14,7 @@ import {
   Typography,
   TextField,
   Button,
-  Slider,
+   
   InputAdornment,
   Input,
   Paper,

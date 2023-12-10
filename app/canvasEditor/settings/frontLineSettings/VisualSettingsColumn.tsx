@@ -4,6 +4,7 @@ import ColorPicker from "../settingsComponents/ColorPicker";
 import { frontLineSettings, settings } from "../../Signals";
 import { Color } from "@/public/types/OtherTypes";
 import SettingsColumn from "../settingsComponents/SettingsColumn";
+import SettingsSlider from "../../theme/SettingsSlider";
 
 type VisualSettingsColumnProps = {
   maxEndPointNumValue: number;
@@ -81,8 +82,8 @@ const VisualSettingsColumn: React.FC<VisualSettingsColumnProps> = ({
         <InputLabel style={{ color: "white" }}>
           Set insertion index {frontLineSettings.value.insertionPointIndex}
         </InputLabel>
-        <div className=" px-4"> {/* Added div with class 'slider-container' */}
-          <Slider
+
+          <SettingsSlider
             min={-1}
             defaultValue={-1}
             max={maxEndPointNumValue - 1}
@@ -93,14 +94,14 @@ const VisualSettingsColumn: React.FC<VisualSettingsColumnProps> = ({
               width: "150px",
             }}
           />
-        </div>
+
       </FormControl>
       <FormControl>
         <InputLabel style={{ color: "white" }}>
           Set endpoint ID {activeFrontLine?.endPoint?.id || 'None'}
         </InputLabel>
-        <div className=" px-4"> {/* Added div with class 'slider-container' */}
-          <Slider
+        {/* <div className=" px-4"> Added div with class 'slider-container' */}
+          <SettingsSlider
             min={-1}
             value={activeFrontLine?.endPoint ? activeFrontLine?.points.indexOf(activeFrontLine?.endPoint) : -1}
             max={maxEndPointNumValue - 1}
@@ -111,12 +112,12 @@ const VisualSettingsColumn: React.FC<VisualSettingsColumnProps> = ({
               width: "150px",
             }}
           />
-        </div>
+        {/* </div> */}
       </FormControl>
       <FormControl>
         <InputLabel style={{ color: "white" }}>Set line thickness:</InputLabel>
-        <div className=" px-4"> {/* Added div with class 'slider-container' */}
-          <Slider
+        {/* <div className=" px-4"> Added div with class 'slider-container' */}
+          <SettingsSlider
             min={0.1}
             max={10}
             step={0.1}
@@ -127,7 +128,7 @@ const VisualSettingsColumn: React.FC<VisualSettingsColumnProps> = ({
               width: "150px",
             }}
           />
-        </div>
+        {/* </div> */}
       </FormControl>
     </SettingsColumn>
   );

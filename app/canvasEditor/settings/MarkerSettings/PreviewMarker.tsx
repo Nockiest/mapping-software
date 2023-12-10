@@ -6,11 +6,11 @@ const PreviewMarker: React.FC = ( ) => {
   const { width: windowWidth, height: windowHeight } = useWindowResize();
   return (
       <Box
-        marginLeft="20px" // Adjust the margin as needed
-        width="50%" // Adjust the width as needed
+        marginLeft="20px"
+        width="50%"
         display="flex"
-        flexDirection="column" // Stack elements vertically
-        alignItems="flex-start" // Align items to the start of the cross axis
+        flexDirection="column"
+        alignItems="flex-start"  
       >
         <Marker
           initialPosition={{ x: windowWidth * 0.9, y: 75 }}

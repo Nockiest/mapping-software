@@ -1,7 +1,8 @@
 import React from "react";
-import { Slider } from "@mui/material";
+ 
 import { settings } from "../../Signals";
 import { ChangeSettingsFunctionType } from "../CanvasSettings";
+import SettingsSlider from "../../theme/SettingsSlider";
 
 interface CanvasResizerProps {
   changeSettings: ChangeSettingsFunctionType;
@@ -10,8 +11,8 @@ interface CanvasResizerProps {
 const CanvasResizer: React.FC<CanvasResizerProps> = ({ changeSettings }) => {
   return (
     <div className="px-4">
-      <div className="flex items-center mb-2  w-full">
-        <Slider
+      <div className="flex items-center   w-full">
+        <SettingsSlider
           value={settings.value.canvasSize.y}
           min={1}
           max={settings.value.maxCanvasSize.y}
@@ -22,12 +23,12 @@ const CanvasResizer: React.FC<CanvasResizerProps> = ({ changeSettings }) => {
               y: heightValue,
             });
           }}
-        />
+         />
         <span className="ml-4 w-full">Y: {settings.value.canvasSize.y}</span>
       </div>
 
       <div className="flex items-center w-full">
-        <Slider
+        <SettingsSlider
           value={settings.value.canvasSize.x}
           min={1}
           max={settings.value.maxCanvasSize.x}

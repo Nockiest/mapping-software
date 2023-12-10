@@ -6,13 +6,9 @@ import { LineEdge } from "@/public/types/GeometryTypes";
 import { CanvasContext, useCanvas } from "../../CanvasContext";
 import FavoriteColorLister from "@/app/components/settings/FavoriteColorLister";
 import {
-  InputLabel,
-  Input,
-  Slider,
-  Button,
+
   Box,
-  Select,
-  MenuItem,
+
   Grid,
   SelectChangeEvent,
   Typography,

@@ -5,11 +5,12 @@ import React, { useRef } from "react";
 //   // markerSettings,
 // } from "./MarkerEditorSettings";
 import { theme } from "../../theme/theme";
-import { Box, Input, Slider, Typography } from "@mui/material";
+import {   Input,   Typography } from "@mui/material";
 import SpeedButton from "../../theme/SpeedButton";
 import { markerSettings,    } from "../../Signals";
 import SettingsColumn from "../settingsComponents/SettingsColumn";
 import { signal } from "@preact/signals";
+import SettingsSlider from "../../theme/SettingsSlider";
 // const markerSettings = signal({ ...markerSettings.value });
 type FirstColumnProps = {
   updateMarkerSettings: any;
@@ -22,7 +23,7 @@ const FirstColumn: React.FC<FirstColumnProps> = ({ updateMarkerSettings }) => {
       <Typography color="white">
         Marker Width: {markerSettings.value.radius}
       </Typography>
-      <Slider
+      <SettingsSlider
         value={
           Array.isArray(markerSettings.value.radius)
             ? markerSettings.value.radius[0]

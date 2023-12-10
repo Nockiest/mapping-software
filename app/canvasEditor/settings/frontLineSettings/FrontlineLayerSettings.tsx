@@ -7,10 +7,7 @@ import { findFrontLineObj } from '@/app/components/utility/otherUtils';
 import { v4 as uuidv4 } from 'uuid';
 import { FrontlineData } from '../../layers/FronlineLayer';
 import {
-  Slider,
   Input,
-  Button,
-  FormControl,
   InputLabel,
   Select,
   MenuItem,

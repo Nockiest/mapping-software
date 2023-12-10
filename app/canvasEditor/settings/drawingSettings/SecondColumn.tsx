@@ -9,6 +9,7 @@ import { clearCanvas } from '@/app/components/utility/CanvasUtils';
 import SettingsColumn from '../settingsComponents/SettingsColumn';
 import { Color } from '@/public/types/OtherTypes';
 import SettingsButton from '../../theme/SettingsButton';
+import SettingsSlider from '../../theme/SettingsSlider';
 
 interface OtherSettingsColumnProps {
   handleRadiusChange: (value: number | number[]) => void;
@@ -35,7 +36,7 @@ const OtherSettingsColumn: React.FC<OtherSettingsColumnProps> = ({
         Radius: {settings.value.radius}
       </InputLabel>
       <div  className='px-4 py-2' >
-      <Slider
+      <SettingsSlider
         id="radius"
         // Added padding around the slider
         value={settings.value.radius}

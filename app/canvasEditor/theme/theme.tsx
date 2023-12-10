@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles';
- 
+
 export const theme = createTheme({
   palette: {
     primary: {
@@ -59,7 +59,7 @@ export const theme = createTheme({
         // marginRight: '8px', // Adjust spacing as needed
       },
     },
-  
+
   MuiButton: {
     styleOverrides: {
       root: {
