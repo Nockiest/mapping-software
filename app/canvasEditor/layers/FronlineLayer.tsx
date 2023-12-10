@@ -50,7 +50,7 @@ const FrontlineLayer = () => {
     const frontLines = frontLineSettings.value.frontLines;
     const { ctx, canvas } = getCtxFromRef(frontlineCanvasRef);
 
-    if (!ctx) {
+    if (!ctx|| canvas ) {
       return;
     }
 

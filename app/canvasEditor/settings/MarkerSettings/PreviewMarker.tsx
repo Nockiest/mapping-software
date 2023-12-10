@@ -1,8 +1,10 @@
 import Marker from "@/app/components/markerLayer/Marker";
+import { useWindowResize } from "@/app/components/utility/hooks/UseWindowResize";
 import { Box } from "@mui/material";
 
-const PreviewMarker: React.FC<{ windowWidth: number }> = ({ windowWidth }) => {
-    return (
+const PreviewMarker: React.FC = ( ) => {
+  const { width: windowWidth, height: windowHeight } = useWindowResize();
+  return (
       <Box
         marginLeft="20px" // Adjust the margin as needed
         width="50%" // Adjust the width as needed

@@ -24,6 +24,7 @@ const CanvasSettings = () => {
   const changeSettings: ChangeSettingsFunctionType = (property, newValue) => {
     // Assuming settings is a mutable signal, otherwise, you might need to use `setSettings` if it's a state
     settings.value = { ...settings.value, [property]: newValue };
+
   };
 
   return (
@@ -65,7 +66,7 @@ const CanvasSettings = () => {
           {settings.value.activeLayer === "draw" ? (
             <DrawingLayerSettings />
           ) : settings.value.activeLayer === "marker" ? (
-            <MarkerEditorSettings changeSettings={changeSettings} />
+            <MarkerEditorSettings  />
           ) : settings.value.activeLayer === "background" ? (
             <BackgroundLayerSettings />
           ) : settings.value.activeLayer === "frontLine" ? (

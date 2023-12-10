@@ -2,15 +2,15 @@ import React, { useRef } from "react";
 // import {
 //   // UpdateMarkerSettingsCallback,
 //   UpdateMarkerSettingsFc,
-//   // newMarkerSettings,
+//   // markerSettings,
 // } from "./MarkerEditorSettings";
 import { theme } from "../../theme/theme";
 import { Box, Input, Slider, Typography } from "@mui/material";
 import SpeedButton from "../../theme/SpeedButton";
-import { markerSettings, newMarkerSettings, settings } from "../../Signals";
+import { markerSettings,    } from "../../Signals";
 import SettingsColumn from "../settingsComponents/SettingsColumn";
 import { signal } from "@preact/signals";
-// const newMarkerSettings = signal({ ...markerSettings.value });
+// const markerSettings = signal({ ...markerSettings.value });
 type FirstColumnProps = {
   updateMarkerSettings: any;
 };
@@ -20,13 +20,13 @@ const FirstColumn: React.FC<FirstColumnProps> = ({ updateMarkerSettings }) => {
   return (
     <SettingsColumn>
       <Typography color="white">
-        Marker Width: {newMarkerSettings.value.radius}
+        Marker Width: {markerSettings.value.radius}
       </Typography>
       <Slider
         value={
-          Array.isArray(newMarkerSettings.value.radius)
-            ? newMarkerSettings.value.radius[0]
-            : newMarkerSettings.value.radius
+          Array.isArray(markerSettings.value.radius)
+            ? markerSettings.value.radius[0]
+            : markerSettings.value.radius
         }
         min={10}
         max={60}
@@ -38,15 +38,15 @@ const FirstColumn: React.FC<FirstColumnProps> = ({ updateMarkerSettings }) => {
       />
 
       <Typography color="white">
-        Marker Color: {newMarkerSettings.value.color}
+        Marker Color: {markerSettings.value.color}
       </Typography>
       <input
         type="color"
-        value={newMarkerSettings.value.color}
+        value={markerSettings.value.color}
         onChange={(e) => updateMarkerSettings(e.target.value, "color")}
       />
 
-      {/* Additional settings for the first column */}
+      {/* Additional markerSettings for the first column */}
       <Input
         type="file"
         inputProps={{

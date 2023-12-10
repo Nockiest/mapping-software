@@ -7,7 +7,7 @@ import { theme } from '../../theme/theme';
 import Marker from '@/app/components/markerLayer/Marker';
 import SettingsColumn from '../settingsComponents/SettingsColumn';
 import { signal } from '@preact/signals';
-import { markerSettings, newMarkerSettings } from '../../Signals';
+import { markerSettings } from '../../Signals';
 
 // Define the SecondColumn component
 const SecondColumn: React.FC<{   updateMarkerSettings: any }> = ({   updateMarkerSettings }) => {
@@ -16,15 +16,15 @@ const SecondColumn: React.FC<{   updateMarkerSettings: any }> = ({   updateMarke
       <Typography color="white">Marker TopText:</Typography>
       <TextField
         type="text"
-        value={newMarkerSettings.value.topText}
+        value={markerSettings.value.topText}
         onChange={(e) => updateMarkerSettings(e.target.value, "topText")}
       />
-      {newMarkerSettings.value.radius >= 20 && (
+      {markerSettings.value.radius >= 20 && (
         <>
           <Typography color="white">Marker BottomText:</Typography>
           <TextField
             type="text"
-            value={newMarkerSettings.value.bottomText}
+            value={markerSettings.value.bottomText}
             onChange={(e) =>
               updateMarkerSettings(e.target.value, "bottomText")
             }

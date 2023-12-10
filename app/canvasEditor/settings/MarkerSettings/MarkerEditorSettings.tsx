@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect, useRef } from "react";
 import { CanvasSettingsType } from "../../CanvasContext"; // CanvasSettingsContext,
 import { hexToRgb } from "@/app/components/utility/utils";
-import { settings, markerSettings, newMarkerSettings } from "../../Signals";
+import { settings, markerSettings,  } from "../../Signals";
 import FavoriteColorLister from "@/app/components/settings/FavoriteColorLister";
 import { Color, Settings } from "@/public/types/OtherTypes";
 import { signal } from "@preact/signals";
@@ -32,54 +32,42 @@ export type UpdateMarkerSettingsCallback = (value: any) => void;
 export type UpdateMarkerSettingsFc = (
   value: any,
   property: string,
-  callback?: UpdateMarkerSettingsCallback | null,
- ) => void
+  callback?: UpdateMarkerSettingsCallback | null
+) => void;
 
 interface MarkerEditorSettingsProps {
-  changeSettings: ChangeSettingsFunctionType
+  // changeSettings: ChangeSettingsFunctionType;
 }
 
-const MarkerEditorSettings: React.FC<MarkerEditorSettingsProps> = ({
-  changeSettings,
-}) => {
-  const [isDirty, setIsDirty] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const { width: windowWidth, height: windowHeight } = useWindowResize();
+const MarkerEditorSettings: React.FC = () => {
+  const [forceRefresh, setForceRefresh] = useState(false);
 
-const updateMarkerSettings:UpdateMarkerSettingsFc =  (
-  value,
-  property,
-  callback,
- ): void => {
-  newMarkerSettings.value = { ...newMarkerSettings.value, [property]: value };
-  if (callback) {
-    callback(value);
-  }
-  setIsDirty(true);
-  console.log(newMarkerSettings.value)
-};
-
-  const applyChanges = () => {
-    markerSettings.value = newMarkerSettings.value
-
-    setIsDirty(false);
+  const updateMarkerSettings: UpdateMarkerSettingsFc = (
+    value,
+    property
+  ): void => {
+    markerSettings.value = { ...markerSettings.value, [property]: value };
+    console.log(markerSettings.value, property, value)
+    setForceRefresh((prev) => !prev); // Toggle the dummy state variable
   };
 
-  const validationMessage = isDirty
-    ? "Changes not applied. Click 'Apply Changes' to save."
-    : "";
-
   return (
-    <Grid sx={{display:'flex'}} spacing={2}>
-      <FirstColumn updateMarkerSettings={updateMarkerSettings} />
-      <SecondColumn updateMarkerSettings={updateMarkerSettings} />
-      <MarkerValues applyChanges={applyChanges} validationMessage={validationMessage} />
+    <Grid sx={{ display: "flex" }} spacing={2}>
+      <FirstColumn
+        updateMarkerSettings={updateMarkerSettings}
+
+      />
+      <SecondColumn
+        updateMarkerSettings={updateMarkerSettings}
+
+      />
+      <MarkerValues   />
 
       <SettingsColumn>
-      <Typography>Left Click To Add A Point</Typography>
-      <Typography>Right DBL Click to Remove a Point</Typography>
-    </SettingsColumn>
-    <PreviewMarker windowWidth={windowWidth} />
+        <Typography>Left Click To Add A Point</Typography>
+        <Typography>Right DBL Click to Remove a Point</Typography>
+      </SettingsColumn>
+      <PreviewMarker  />
     </Grid>
   );
 };

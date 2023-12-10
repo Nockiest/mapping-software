@@ -3,7 +3,7 @@ import SpeedButton from "../../theme/SpeedButton";
 import { settings, markerSettings } from "../../Signals";
 import SettingsColumn from "../settingsComponents/SettingsColumn";
 
-const MarkerValues: React.FC<{   applyChanges: () => void, validationMessage: string }> = ({  applyChanges, validationMessage }) => {
+const MarkerValues: React.FC  = ( ) => {
     return (
       <SettingsColumn>
         <Typography>
@@ -22,8 +22,7 @@ const MarkerValues: React.FC<{   applyChanges: () => void, validationMessage: st
           </Typography>
         )}
 
-        <SpeedButton onClick={applyChanges}>Apply Changes</SpeedButton>
-        <Typography style={{ color: "red" }}>{validationMessage}</Typography>
+
       </SettingsColumn>
     );
   }
