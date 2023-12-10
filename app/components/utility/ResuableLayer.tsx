@@ -102,8 +102,13 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
         isActive
           ? "z-30 "
           : `${settings.value.canvasZindexes[layerName]} opacity-40 `
-      }`}
+      }
+      ${
+        layerName === 'background'&& isActive? 'opacity-90':''
+      }
+      `}
     >
+      <p className="fixed left-0 top-0 z-50 text-black">{( layerName === 'background'&& isActive).toString()}</p>
       {canvasRef && (
         <>
           <canvas

@@ -25,6 +25,7 @@ import { Button, Typography, Paper } from '@mui/material';
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { theme } from "./theme/theme";
 import { ThemeProvider, createTheme} from "@mui/material"
+import DiscordInviteBtn from "../components/global/DiscordInviteBtn";
 // import { MousePositionContext, MousePositionProvider } from "./MouseContext";
 
 
@@ -102,7 +103,7 @@ const Page: React.FC = () => {
       />
       <CanvasSettings />
       <CanvasEditor />
-
+       <DiscordInviteBtn />
       <Timeline />
     </>
   );

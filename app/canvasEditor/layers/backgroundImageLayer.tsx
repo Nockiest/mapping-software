@@ -6,7 +6,7 @@ import ReusableLayer from "@/app/components/utility/ResuableLayer";
 import fillCanvas from "@/app/components/utility/fillCanvas";
 const BackgroundImageLayer: React.FC = () => {
   const { backgroundCanvasRef } = useCanvas();
-
+  const isActive = settings.value.activeLayer === 'background'
   useEffect(() => {
 
     handleFileChange();
@@ -60,7 +60,7 @@ const BackgroundImageLayer: React.FC = () => {
   };
 
   return (
-    <>
+    <  >
       {backgroundCanvasRef && (
         <ReusableLayer
           canvasRef={backgroundCanvasRef}
