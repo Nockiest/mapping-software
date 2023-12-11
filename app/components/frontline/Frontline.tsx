@@ -87,7 +87,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
   };
 
 
-  const updatePointInformation = (key: string, value:number|boolean|string, id:string) => {
+  const updatePointInformation = (key: string, value:number|boolean|string|Vector2, id:string) => {
 
     const pointIndex = frontLineInfo.points.findIndex(
       (point) => point.id === id
@@ -104,20 +104,8 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
 
 
   const updatePointPositions = (id: string, clickPos: Vector2) => {
-    // if (!frontLineInfo) return;
-    // Find the index of the point with the specified id
-    const pointIndex = frontLineInfo.points.findIndex(
-      (point) => point.id === id
-    );
+    updatePointInformation ('position', clickPos  , id )
 
-    if (pointIndex !== -1) {
-      // If the point is found, update its position
-      const newPoints = [...frontLineInfo.points];
-      newPoints[pointIndex] = { ...newPoints[pointIndex], position: clickPos };
-      frontLineInfo.points = newPoints;
-    } else {
-      console.error(`Point with id ${id}  not found.`);
-    }
   };
 
   const handleMouseDown = (e: MouseEvent) => {
@@ -196,7 +184,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
             frontLineActive ? (e) => handleDeletePoint(point.id) : null
           }
           onDelete={(e:  MouseEvent|React.MouseEvent) => handleDeletePoint(point.id)}
-          // rightClk={}
+          rightClk={() => updatePointInformation('bezierType', !point.bezierType, point.id)}
           styling={{
             background: point  === frontLineInfo.endPoint  ? "red" : "white",
             border: "2px solid black",
@@ -214,3 +202,17 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
 };
 
 export default Frontline;
+ // if (!frontLineInfo) return;
+    // Find the index of the point with the specified id
+    // const pointIndex = frontLineInfo.points.findIndex(
+    //   (point) => point.id === id
+    // );
+
+    // if (pointIndex !== -1) {
+    //   // If the point is found, update its position
+    //   const newPoints = [...frontLineInfo.points];
+    //   newPoints[pointIndex] = { ...newPoints[pointIndex], position: clickPos };
+    //   frontLineInfo.points = newPoints;
+    // } else {
+    //   console.error(`Point with id ${id}  not found.`);
+    // }

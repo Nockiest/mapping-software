@@ -4,6 +4,8 @@ import { Vector2 } from "@/public/types/GeometryTypes";
 import { Color } from "@/public/types/OtherTypes";
 import { MutableRefObject, RefObject } from "react";
 import { getCtxFromRef } from "./otherUtils";
+import drawLineWithShape, { DrawLineWithShapeParams } from "../drawing/LineDrawer";// Adjust the import path
+import drawQuadraticCurve, { DrawQuadraticBezierWithShapeParams } from "../drawing/CurvedLineDrawer";
 
 export const drawDot = (
   ctx: CanvasRenderingContext2D,
@@ -39,46 +41,103 @@ export function calculateRelativePosition(position:Vector2, divTopLeft:Vector2) 
     return { x: relativeX, y: relativeY };
   }
 
+
   export const drawLineAlongPoints = (
     points: Array<FrontLinePointData>,
     endPointIndex: number | null,
     ctx: CanvasRenderingContext2D,
     color: Color,
     width: number,
-    pointsCentered: boolean = false
+    pointsCentered: boolean = false,
+    // lineShape: 'squared' | 'rounded' = 'squared'
   ) => {
     if (points.length < 2) {
       console.warn("Cannot draw a line with less than 2 points.");
       return;
     }
 
-    ctx.beginPath();
     const adjustedPoints = pointsCentered
       ? points.map((point) => point.position)
       : points.map((point) => movePosByOffset(point.position, point.radius));
 
-    const startPos = adjustedPoints[0];
-    ctx.moveTo(startPos.x, startPos.y);
-
     for (let i = 1; i < adjustedPoints.length; i++) {
-      ctx.lineTo(adjustedPoints[i].x, adjustedPoints[i].y);
-    }
-    // console.log(endPointIndex)
-    if (endPointIndex !== null) {
-      // Draw a line from the last point to the endpoint
-      if (adjustedPoints[endPointIndex]) {
-        ctx.lineTo(
-          adjustedPoints[endPointIndex].x,
-          adjustedPoints[endPointIndex].y
-        );
+      const lineStart = adjustedPoints[i - 1];
+      const lineEnd = adjustedPoints[i];
+      const nextPoint =  adjustedPoints[i + 1] as Vector2
+      // Check if the current point or the next point has bezierType set to true
+      const isBezierType = lineEnd.bezierType || (i === adjustedPoints.length - 1 && endPointIndex !== null && points[endPointIndex].bezierType);
+
+      if (isBezierType && nextPoint) {
+
+        console.log(i)
+        drawQuadraticBezierCurve({
+          ctx,
+          lineStart,
+          controlPoint: lineEnd,
+          lineEnd: nextPoint  ,
+          color,
+          size:width,
+        });
+        i+1
+      } else {
+        // Draw straight line with shape
+        drawStraightLine({
+          ctx,
+          lineStart,
+          lineEnd,
+          color,
+          size: width,
+          lineShape: 'squared',
+        });
       }
     }
-
-    ctx.strokeStyle = color;
-    ctx.lineWidth = width;
-    ctx.stroke();
-    ctx.closePath();
   };
+
+
+const drawQuadraticBezierCurve = ({
+  ctx,
+  lineStart,
+  controlPoint,
+  lineEnd,
+  color,
+  size,
+  lineShape= 'squared'
+}: DrawQuadraticBezierWithShapeParams): void => {
+  if (!ctx) {
+    throw new Error('Canvas 2D context not supported');
+  }
+
+  ctx.beginPath();
+  ctx.moveTo(lineStart.x, lineStart.y);
+  ctx.quadraticCurveTo(controlPoint.x, controlPoint.y, lineEnd.x, lineEnd.y);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = size;
+  ctx.stroke();
+  ctx.closePath();
+};
+export const drawStraightLine = ({ctx,
+  lineStart,
+  lineEnd,
+  color,
+  size,
+  lineShape = settings.value.lineType,
+}: DrawLineWithShapeParams) => {
+  if (!ctx) {
+    throw new Error('Canvas 2D context not supported');
+  }
+
+  ctx.beginPath();
+  ctx.moveTo(lineStart.x, lineStart.y);
+  ctx.lineTo(lineEnd.x, lineEnd.y);
+
+  ctx.strokeStyle = color;
+  ctx.lineWidth = size;
+
+  ctx.stroke();
+  ctx.closePath();
+};
+
+
 
 export const movePosByOffset = (position: Vector2, offset: number | Vector2): Vector2 => {
   if (typeof offset === 'number') {
