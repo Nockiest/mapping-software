@@ -18,7 +18,7 @@ export type PositionedText = {
 
 export type MarkerType = PositionedText & {
   color: Color;
-  position: Vector2;
+  centerPosition: Vector2;
   isDragging: boolean;
 
   customStyling?: MarkerSettings;

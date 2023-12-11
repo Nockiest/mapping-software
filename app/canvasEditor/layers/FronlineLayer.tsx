@@ -16,7 +16,7 @@ import { findEndpointIndex } from "@/app/components/utility/utils";
 import { addNewFrontLine } from "@/app/components/utility/FrontlineUtils";
 
 export type PointData = {
-  position: Vector2;
+  centerPosition: Vector2;
   radius: number;
   id: string;
 };
@@ -72,7 +72,8 @@ const FrontlineLayer = () => {
         endPointIndex !== -1 ? endPointIndex : line.points.length - 1,
         ctx,
         line.color,
-        line.thickness
+        line.thickness,
+        true
       );
     }
   };
@@ -87,8 +88,8 @@ const FrontlineLayer = () => {
       let frontline = frontLineSettings.value.frontLines[i]
       for(let y in frontline.points){
         let frontLinePoint = frontline.points[y]
-        frontLinePoint.position.x = Math.min(settings.value.canvasSize.x-frontLineSettings.value.controlPointRadius ,  frontLinePoint.position.x)
-        frontLinePoint.position.y = Math.min(settings.value.canvasSize.y-frontLineSettings.value.controlPointRadius,  frontLinePoint.position.y)
+        frontLinePoint.centerPosition.x = Math.min(settings.value.canvasSize.x-frontLineSettings.value.controlPointRadius ,  frontLinePoint.centerPosition.x)
+        frontLinePoint.centerPosition.y = Math.min(settings.value.canvasSize.y-frontLineSettings.value.controlPointRadius,  frontLinePoint.centerPosition.y)
       }
     }
   }, [settings.value.canvasSize])

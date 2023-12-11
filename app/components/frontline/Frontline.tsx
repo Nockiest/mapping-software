@@ -49,7 +49,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
     const oldPoints = [...frontLineInfo.points];
     const insertionPointIndex = frontLineSettings.value.insertionPointIndex;
     const newPoint: FrontLinePointData = {
-      position: position,
+      centerPosition: position,
       id: uuidv4(),
       radius: controlPointRadius,
       bezierType: false
@@ -104,7 +104,8 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
 
 
   const updatePointPositions = (id: string, clickPos: Vector2) => {
-    updatePointInformation ('position', clickPos  , id )
+    console.log('updating positon', clickPos)
+    updatePointInformation ('centerPosition', {x:clickPos.x -5, y:clickPos.y-5}  , id )
   };
 
   const changeBezierPoints = (id: string) => {
@@ -147,8 +148,8 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
     // Find the clicked point
     const clickedPoint = frontLineInfo?.points.find((point) => {
       const isClicked =
-        Math.abs(point.position.x - canvasRelativeX) < controlPointRadius &&
-        Math.abs(point.position.y - canvasRelativeY) < controlPointRadius;
+        Math.abs(point.centerPosition.x - canvasRelativeX) < controlPointRadius &&
+        Math.abs(point.centerPosition.y - canvasRelativeY) < controlPointRadius;
       return isClicked;
     });
 
@@ -201,7 +202,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
       {frontLineInfo?.points.map((point, index) => (
         <Point
           key={point.id}
-          pointTopLeftPosition={point.position}
+          centerPosition={point.centerPosition}
           id={point.id}
           onDrag={(newPosition) => updatePointPositions(point.id, newPosition)}
           radius={controlPointRadius}
@@ -215,7 +216,6 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
             border: "2px solid black",
             pointerEvents: frontLineActive ? "auto" : "none",
             zIndex: "30",
-            // backgroundColor: point.bezierType? 'green' : 'blue'
           }}
           acceptInput={frontLineActive}
         >

@@ -70,18 +70,18 @@ export const drawLineAlongPoints = (
 
   const adjustedPoints = points.map((point, index) => {
     const adjustedPosition = pointsCentered
-      ? point.position
-      : movePosByOffset(point.position, point.radius);
+      ? point.centerPosition
+      : movePosByOffset(point.centerPosition, point.radius);
     const adjustedPoint = {
       ...point,
-      position: adjustedPosition,
+      centerPosition: adjustedPosition,
     };
     return adjustedPoint;
   });
 
   for (let i = 1; i < adjustedPoints.length; i++) {
-    const lineStart = adjustedPoints[i - 1].position;
-    const lineEnd = adjustedPoints[i].position;
+    const lineStart = adjustedPoints[i - 1].centerPosition;
+    const lineEnd = adjustedPoints[i].centerPosition;
     //|| (i === adjustedPoints.length - 1 && endPointIndex !== null && adjustedPoints[endPointIndex].bezierType
     if (adjustedPoints[i].bezierType && adjustedPoints[i + 1]) {
       // Draw quadratic Bézier curve instead of a straight line
@@ -89,7 +89,7 @@ export const drawLineAlongPoints = (
         ctx,
         lineStart,
         controlPoints: [lineEnd],
-        lineEnd: adjustedPoints[i + 1]?.position,
+        lineEnd: adjustedPoints[i + 1]?.centerPosition,
         color,
         size: width,
       });

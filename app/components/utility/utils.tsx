@@ -84,6 +84,7 @@ export const followMouseComponent: FollowMouseFunction = (
   maxPosition,
   topLeftOffset = editorTopLeftPosition.value
 ) => {
+
   // Calculate updated position without subtracting topLeftOffset.y and window.scrollY
   const updatedPosition: Vector2 = {
     x: Math.min(
@@ -101,7 +102,7 @@ export const followMouseComponent: FollowMouseFunction = (
       maxPosition.y
     ),
   };
-  // console.log(e.clientY, topLeftOffset.y, window.scrollY, updatedPosition);
+  
   // console.log('args',   position,
   // {x:window.scrollX, y: window.scrollY},
   // maxPosition,

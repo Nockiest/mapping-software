@@ -89,8 +89,8 @@ const UnitMarkerLayer: React.FC = () => {
       if (e.button === 2) {
         const clickedMarkerIndex = markers.value.findIndex(
           (marker) =>
-            Math.abs(marker.position.x - x) < 10 &&
-            Math.abs(marker.position.y - y) < 10
+            Math.abs(marker.centerPosition.x - x) < 10 &&
+            Math.abs(marker.centerPosition.y - y) < 10
         );
 
         if (clickedMarkerIndex !== -1) {
@@ -98,7 +98,7 @@ const UnitMarkerLayer: React.FC = () => {
         } else {
           const newMarker: MarkerType = {
             color:  markerSettings.value.color,
-            position: { x, y },
+            centerPosition: { x, y },
             isDragging: false,
 
             topText: markerSettings.value.topText,
@@ -126,9 +126,9 @@ const UnitMarkerLayer: React.FC = () => {
     markerLayerState,
   ]);
 
-  const onMarkerMovement= (markerId: string, position: Vector2) => {
+  const onMarkerMovement= (markerId: string, newCenterPosition: Vector2) => {
     markers.value = markers.value.map((marker) =>
-    marker.id === markerId ? { ...marker, position: position } : marker);
+    marker.id === markerId ? { ...marker, centerPosition: newCenterPosition } : marker);
   }
 
   return (
@@ -137,14 +137,14 @@ const UnitMarkerLayer: React.FC = () => {
         {markers.value.map((marker) => (
           <Marker
             key={marker.id}
-            topText={marker.topText}
-            bottomText={marker.bottomText}
-            initialPosition={marker.position}
+            // topText={marker.topText}
+            // bottomText={marker.bottomText}
+            initialPosition={marker.centerPosition}
             id={marker.id}
             dragHandler={onMarkerMovement}
             customStyling={markerSettings.value}
             boundToCanvasEditor={true}
-            position={marker.position}
+            centerPosition={marker.centerPosition}
           />
         ))}
       </ReusableLayer>

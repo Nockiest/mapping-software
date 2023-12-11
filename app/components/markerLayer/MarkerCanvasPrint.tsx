@@ -32,8 +32,8 @@ export const drawMarkersOnCanvas = (
 
       // Styling for the marker element
       const markerStyle: React.CSSProperties = {
-        left: `${marker.position.x}px`,
-        top: `${marker.position.y}px`,
+        left: `${marker.centerPosition.x}px`,
+        top: `${marker.centerPosition.y}px`,
         width: `${usedWidth}px`,
         color: `${marker.customStyling?.textColor || MarkerDefaultSettings.textColor} `,
         height: `${usedWidth}px`,
@@ -74,8 +74,8 @@ export const drawMarkersOnCanvas = (
             // Create a circular clipping path
             ctx.beginPath();
             ctx.arc(
-                marker.position.x,
-                marker.position.y,
+                marker.centerPosition.x,
+                marker.centerPosition.y,
                 usedWidth / 2,
                 0,
                 2 * Math.PI
@@ -85,8 +85,8 @@ export const drawMarkersOnCanvas = (
             // Draw the clipped image
             ctx.drawImage(
                 img,
-                marker.position.x - usedWidth / 2,
-                marker.position.y - usedWidth / 2,
+                marker. centerPosition.x - usedWidth / 2,
+                marker. centerPosition.y - usedWidth / 2,
                 usedWidth,
                 usedWidth
             );
@@ -109,8 +109,8 @@ export const drawMarkersOnCanvas = (
         // Draw a filled circle for the marker
         ctx.beginPath();
         ctx.arc(
-            marker.position.x,
-            marker.position.y,
+            marker.centerPosition.x,
+            marker.centerPosition.y,
             usedWidth / 2,
             0,
             2 * Math.PI
@@ -130,9 +130,9 @@ export const drawMarkersOnCanvas = (
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(
-          (Math.round(marker.position.x)).toString(),
-          marker.position.x,
-          marker.position.y - usedWidth / 4
+          (Math.round(marker.centerPosition.x)).toString(),
+          marker.centerPosition.x,
+          marker.centerPosition.y - usedWidth / 4
         );
       }
 
@@ -144,8 +144,8 @@ export const drawMarkersOnCanvas = (
         ctx.textBaseline = 'middle';
         ctx.fillText(
           marker.bottomText,
-          marker.position.x,
-          marker.position.y + usedWidth / 4
+          marker.centerPosition.x,
+          marker.centerPosition.y + usedWidth / 4
         );
       }
 

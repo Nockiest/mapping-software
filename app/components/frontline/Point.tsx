@@ -8,7 +8,7 @@ import { Signal } from "@preact/signals";
 import { movePosByOffset } from "../utility/CanvasUtils";
 // import { MousePositionContext } from "@/app/canvasEditor/MouseContext";
 type PointProps = {
-  pointTopLeftPosition: Vector2;
+  centerPosition: Vector2;
   id: string;
   topLeft?: Vector2;
   radius?: number;
@@ -25,7 +25,7 @@ type PointProps = {
   className?: string;
 };
 const Point: React.FC<PointProps> = ({
-  pointTopLeftPosition,
+  centerPosition,
   id,
   topLeft = editorTopLeftPosition.value,
   radius = 15,
@@ -75,15 +75,15 @@ const Point: React.FC<PointProps> = ({
 
     // Check if the left (bit position 0) or right (bit position 1) mouse button is pressed
     if ((e.buttons & 1) !== 0   ) {
-      const newTopLeftPosition = followMouseComponent(
+      const newCenterPosition= followMouseComponent(
         { x: e.clientX, y: e.clientY },
         true,
         settings.value.canvasSize,
         topLeft
       );
-      const newPosition = movePosByOffset(newTopLeftPosition, -radius);
+      // const newPosition = movePosByOffset(newTopLeftPosition, -radius);
         // console.log('handling on drag', newPosition, isDragging)
-        onDrag?.(newPosition);
+        onDrag?.(newCenterPosition);
 
 
     }
@@ -125,8 +125,8 @@ const Point: React.FC<PointProps> = ({
     <div
       style={{
         position: "absolute",
-        left: `${pointTopLeftPosition.x}px`,
-        top: `${pointTopLeftPosition.y}px`,
+        left: `${centerPosition.x  }px`,
+        top: `${centerPosition.y   }px`,
         width: `${radius * 2}px`,
         height: `${radius * 2}px`,
         borderRadius: "50%",
@@ -142,7 +142,7 @@ const Point: React.FC<PointProps> = ({
       onContextMenu={handleContextMenu}
     >
       {children}
-      <p className="text-black z-50">{isDragging.toString()}</p>
+      <p className="text-black z-50">{Math.round(centerPosition.x ) } {Math.round(centerPosition.y )}</p>
     </div>
   );
 };

@@ -25,7 +25,7 @@ type MarkerProps = {
   dragHandler?:  Function;
   topLeftOffset?: Vector2;
   boundToCanvasEditor?: boolean;
-  position: Vector2
+  centerPosition: Vector2
 } & Partial<PositionedText>;
 
 export const MarkerDefaultSettings: Omit<
@@ -49,16 +49,13 @@ inside of the markers.value array which may not contain all the instance of this
 */
 
 const Marker: React.FC<MarkerProps> = ({
-  topText,
-  bottomText,
   initialPosition,
   shouldUpdateOnSettingsChange = false,
   dragHandler,
   customStyling,
   id,
-  topLeftOffset,
   boundToCanvasEditor = false,
-  position
+  centerPosition
 }) => {
 
   const [canRemove, setCanRemove] = useState<boolean>(false);
@@ -81,7 +78,7 @@ const Marker: React.FC<MarkerProps> = ({
   const handleMouseMove = (newPosition: Vector2) => {
     console.log(newPosition)
     if (dragHandler) {
-    
+
       dragHandler(id, newPosition)
 
     }
@@ -89,7 +86,7 @@ const Marker: React.FC<MarkerProps> = ({
 
   useEffect(() => {
     if (shouldUpdateOnSettingsChange) {
-      position = initialPosition
+      centerPosition = initialPosition
 
     }
   }, [initialPosition]);
@@ -105,7 +102,7 @@ const Marker: React.FC<MarkerProps> = ({
   };
 
   const markerTextStyle: React.CSSProperties = {
-    //position: 'absolute',
+
     textAlign: "center",
     userSelect: "none",
   };
@@ -131,11 +128,11 @@ const Marker: React.FC<MarkerProps> = ({
     const newPos:Vector2 = {
       x: Math.min(
         settings.value.canvasSize.x - mergedSettings.radius / 2,
-        position.x
+        centerPosition.x
       ),
       y: Math.min(
         settings.value.canvasSize.y - mergedSettings.radius / 2,
-        position.y
+        centerPosition.y
       ),
 
     }
@@ -145,27 +142,27 @@ const Marker: React.FC<MarkerProps> = ({
   }, [settings.value.canvasSize]);
 
 
-
+if (!centerPosition){return}
   return (
     <Point
       radius={mergedSettings.radius}
       styling={{ ...markerStyle }}
-      pointTopLeftPosition={position}
+      centerPosition={centerPosition}
       rightClk={handleDelete}
       onDrag={(pos ) => handleMouseMove(pos)}
       className="marker"
       onDelete={handleDelete}
       id={id}
     >
-      <p style={{ ...markerTextStyle, marginTop: "2px" }}>
-       {mergedSettings.topText}
+      <p style={{ ...markerTextStyle, marginTop: "2px", background:'black', }}>
+       { Math.round(centerPosition?.x)}    { Math.round(centerPosition?.y)}
       </p>
       {mergedSettings.radius > 20 && (
         <p
           style={{
             ...markerTextStyle,
-            marginTop: usedSettings.radius
-              ? `${usedSettings.radius / 5}px`
+            marginTop: mergedSettings.radius
+              ? `${mergedSettings.radius / 5}px`
               : "10px",
           }}
         >
