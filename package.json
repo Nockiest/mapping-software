@@ -33,6 +33,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
+    "sharethis-reactjs": "^1.6.0",
     "uuidv4": "^6.2.13"
   },
   "devDependencies": {

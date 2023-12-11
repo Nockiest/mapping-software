@@ -27,7 +27,7 @@ import { theme } from "./theme/theme";
 import { ThemeProvider, createTheme} from "@mui/material"
 import DiscordInviteBtn from "../components/global/DiscordInviteBtn";
 // import { MousePositionContext, MousePositionProvider } from "./MouseContext";
-
+import {InlineFollowButtons} from 'sharethis-reactjs';
 
 const Page: React.FC = () => {
   const {   canvasRef, frontlineCanvasRef, markerCanvasRef,backgroundCanvasRef } =
@@ -103,7 +103,34 @@ const Page: React.FC = () => {
       />
       <CanvasSettings />
       <CanvasEditor />
-       <DiscordInviteBtn />
+      {/* <InlineFollowButtons
+        //   config={{
+        //     action: 'Follow us:', // call to action (STRING)
+        //     action_enable: true,  // show/hide call to action (true, false)
+        //     action_pos: 'bottom', // position of call to action (left, top, right)
+        //     alignment: 'center',  // alignment of buttons (left, center, right)
+        //     color: 'white',       // set the color of buttons (social, white)
+        //     enabled: true,        // show/hide buttons (true, false)
+        //     networks: [           // which networks to include (see FOLLOW NETWORKS)
+        //       'twitter',
+        //       'facebook',
+        //       'instagram',
+        //       'youtube'
+        //     ],
+        //     padding: 8,           // padding within buttons (INTEGER)
+        //     profiles: {
+        //       // discord:  'https://discord.com/api/oauth2/authorize?client_id=1183464624717312134&permissions=2165312&scope=bot',       // social profile links for buttons
+        //       twitter: 'sharethis',
+        //       facebook: 'sharethis',
+        //       instagram: 'sharethis',
+        //       youtube: '/channel/UCbM93niCmdc2RD9RZbLMP6A?view_as=subscriber'
+        //     },
+        //     radius: 9,            // the corner radius on each button (INTEGER)
+        //     size: 32,             // the size of each button (INTEGER)
+        //     spacing: 8            // the spacing between buttons (INTEGER)
+        //   }}
+          />*/}
+         <DiscordInviteBtn />
       <Timeline />
     </>
   );
