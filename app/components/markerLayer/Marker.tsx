@@ -81,11 +81,8 @@ const Marker: React.FC<MarkerProps> = ({
   const handleMouseMove = (newPosition: Vector2) => {
     console.log(newPosition)
     if (dragHandler) {
-      const adjustedPos = movePosByOffset(
-        newPosition,
-        mergedSettings.radius / 2
-      );
-      dragHandler(id, adjustedPos)
+    
+      dragHandler(id, newPosition)
 
     }
   };
@@ -161,7 +158,7 @@ const Marker: React.FC<MarkerProps> = ({
       id={id}
     >
       <p style={{ ...markerTextStyle, marginTop: "2px" }}>
-      { Math.round(position.x) } {/* {mergedSettings.topText} */}
+       {mergedSettings.topText}
       </p>
       {mergedSettings.radius > 20 && (
         <p

@@ -6,7 +6,6 @@ import { ReactNode, useEffect, useState } from "react";
 import { getCtxFromRef } from "../utility/otherUtils";
 import { getCanasData } from "../utility/CanvasUtils";
 
-
 type ReusableLayerProps = {
   canvasRef: React.RefObject<HTMLCanvasElement | null | undefined>;
   layerName: LayerNames;
@@ -32,11 +31,13 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
   children,
   positioning,
 }) => {
-  const [savedCanvasData, setSavedCanvasData] = useState<ImageData | null>(null);
+  const [savedCanvasData, setSavedCanvasData] = useState<ImageData | null>(
+    null
+  );
   const canvas = canvasRef.current;
   const isActive =
     layerName === "none" ? true : layerName === settings.value.activeLayer;
-  const backgroundCanvasRef = useCanvas()
+  const backgroundCanvasRef = useCanvas();
 
   const handleMouseClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -61,8 +62,8 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
   };
 
   const saveCanvasData = () => {
-    const data = getCanasData(canvasRef,layerName)
-    if (data && layerName !== 'background') {
+    const data = getCanasData(canvasRef, layerName);
+    if (data && layerName !== "background") {
       setSavedCanvasData(data);
     }
   };
@@ -82,14 +83,11 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
 
   useEffect(() => {
     // Draw the saved canvas data onto the new canvas when canvas size changes
-    const {ctx, canvas} = getCtxFromRef(canvasRef)
-    if (canvas && ctx&& savedCanvasData) {
-      // const dataURL = canvas.toDataURL("image/png");
-
-       ctx.putImageData(savedCanvasData, 0,0  )
+    const { ctx } = getCtxFromRef(canvasRef);
+    if (  ctx && savedCanvasData) {
+      ctx.putImageData(savedCanvasData, 0, 0);
     }
-
-  }, [savedCanvasData, settings.value.canvasSize,  ]);
+  }, [savedCanvasData, settings.value.canvasSize]);
 
   return (
     <div
@@ -99,12 +97,9 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
           ? "z-30 "
           : `${settings.value.canvasZindexes[layerName]} opacity-40 `
       }
-      ${
-        layerName === 'background'&& isActive? 'opacity-90':''
-      }
+      ${layerName === "background" && isActive ? "opacity-90" : ""}
       `}
     >
-
       {canvasRef && (
         <>
           <canvas
@@ -128,34 +123,31 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
           {children}
         </>
       )}
-
-
     </div>
   );
 };
 
 export default ReusableLayer;
 
+// if (canvas && savedCanvasData) {
+//   const tempCanvas = document.createElement("canvas");
+//   const tempCtx = tempCanvas.getContext("2d");
 
-    // if (canvas && savedCanvasData) {
-    //   const tempCanvas = document.createElement("canvas");
-    //   const tempCtx = tempCanvas.getContext("2d");
+//   if (tempCtx) {
+//     const img = new Image();
+//     img.onload = () => {
+//       // Use the original size of the saved canvas data
+//       tempCanvas.width = img.width;
+//       tempCanvas.height = img.height;
 
-    //   if (tempCtx) {
-    //     const img = new Image();
-    //     img.onload = () => {
-    //       // Use the original size of the saved canvas data
-    //       tempCanvas.width = img.width;
-    //       tempCanvas.height = img.height;
+//       tempCtx.drawImage(img, 0, 0);
 
-    //       tempCtx.drawImage(img, 0, 0);
-
-    //       const ctx = canvas.getContext("2d");
-    //       if (ctx) {
-    //         ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //         ctx.drawImage(tempCanvas, 0, 0);
-    //       }
-    //     };
-    //     img.src = savedCanvasData;
-    //   }
-    // }
+//       const ctx = canvas.getContext("2d");
+//       if (ctx) {
+//         ctx.clearRect(0, 0, canvas.width, canvas.height);
+//         ctx.drawImage(tempCanvas, 0, 0);
+//       }
+//     };
+//     img.src = savedCanvasData;
+//   }
+// }

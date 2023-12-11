@@ -70,23 +70,32 @@ const Point: React.FC<PointProps> = ({
 
   const handleMouseMove = (e: MouseEvent) => {
     if (!acceptInput || !isDragging || !dragable || !mousePosition) {
-      console.log("NOT ACCEPTING INPUT", !acceptInput, !isDragging, !dragable);
       return;
     }
 
-    const newTopLeftPosition = followMouseComponent(
-      { x: e.clientX, y: e.clientY },
-      true,
-      settings.value.canvasSize,
-      topLeft
-    );
-    const newPosition = movePosByOffset(newTopLeftPosition,  -radius  );
+    // Check if the left (bit position 0) or right (bit position 1) mouse button is pressed
+    if ((e.buttons & 1) !== 0   ) {
+      const newTopLeftPosition = followMouseComponent(
+        { x: e.clientX, y: e.clientY },
+        true,
+        settings.value.canvasSize,
+        topLeft
+      );
+      const newPosition = movePosByOffset(newTopLeftPosition, -radius);
+        // console.log('handling on drag', newPosition, isDragging)
+        onDrag?.(newPosition);
 
-    onDrag?.(newPosition);
+
+    }
   };
 
-  const handleMouseUp = (e: MouseEvent | React.MouseEvent) => {
+
+
+  const handleMouseUp = (e: React.MouseEvent|MouseEvent  ) => {
     setIsDragging(false);
+    if (isDragging){
+      console.log('reverting is drawing')
+    }
     console.log(
       "HANDLING MOUSE UP",
       mouseDownTime,
@@ -102,13 +111,13 @@ const Point: React.FC<PointProps> = ({
   };
 
   useEffect(() => {
-    if (isDragging) {
+
       window.addEventListener("mousemove", handleMouseMove);
-      // window.addEventListener("mouseup", handleMouseUp);
-    }
+      window.addEventListener("mouseup", handleMouseUp);
+
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      // window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
   }, [isDragging]);
 
@@ -133,6 +142,7 @@ const Point: React.FC<PointProps> = ({
       onContextMenu={handleContextMenu}
     >
       {children}
+      <p className="text-black z-50">{isDragging.toString()}</p>
     </div>
   );
 };
