@@ -105,8 +105,33 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
 
   const updatePointPositions = (id: string, clickPos: Vector2) => {
     updatePointInformation ('position', clickPos  , id )
-
   };
+
+  const changeBezierPoints = (id: string) => {
+    const pointIndex = frontLineInfo.points.findIndex((point) => point.id === id);
+
+    if (pointIndex !== -1) {
+      // If the point is found, update its bezierType
+      const newPoints = [...frontLineInfo.points];
+
+      // Toggle the bezierType for the current point
+      newPoints[pointIndex] = { ...newPoints[pointIndex], bezierType: !newPoints[pointIndex].bezierType };
+
+      // Set bezierType to false for the point before and after
+      if (pointIndex > 0) {
+        newPoints[pointIndex - 1] = { ...newPoints[pointIndex - 1], bezierType: false };
+      }
+
+      if (pointIndex < newPoints.length - 1) {
+        newPoints[pointIndex + 1] = { ...newPoints[pointIndex + 1], bezierType: false };
+      }
+
+      frontLineInfo.points = newPoints;
+    } else {
+      console.error(`Point with id ${id} not found.`);
+    }
+  };
+
 
   const handleMouseDown = (e: MouseEvent) => {
     e.preventDefault();
@@ -184,13 +209,13 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
             frontLineActive ? (e) => handleDeletePoint(point.id) : null
           }
           onDelete={(e:  MouseEvent|React.MouseEvent) => handleDeletePoint(point.id)}
-          rightClk={() => updatePointInformation('bezierType', !point.bezierType, point.id)}
+          rightClk={() => changeBezierPoints(point.id)}
           styling={{
-            background: point  === frontLineInfo.endPoint  ? "red" : "white",
+            backgroundColor: point  === frontLineInfo.endPoint  ? "red" : point.bezierType? 'green' : "white",
             border: "2px solid black",
             pointerEvents: frontLineActive ? "auto" : "none",
             zIndex: "30",
-            backgroundColor: point.bezierType? 'green' : 'blue'
+            // backgroundColor: point.bezierType? 'green' : 'blue'
           }}
           acceptInput={frontLineActive}
         >

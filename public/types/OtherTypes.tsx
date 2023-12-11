@@ -1,7 +1,7 @@
 import { Signal } from "@preact/signals";
 import { Vector2 } from "./GeometryTypes";
 import { EraseArgs } from "@/app/components/drawing/Eraser";
-import { DrawPayload } from "@/app/components/drawing/LineDrawer";
+import { DrawLineWithShapeParams, DrawPayload } from "@/app/components/drawing/LineDrawer";
 import { FrontlineData } from "@/app/canvasEditor/layers/FronlineLayer";
 
 export type RGB = [number, number, number  ];
@@ -97,3 +97,7 @@ export type TimelineFrame = {
   width: number
 }
 export type TimelineType = Array<TimelineFrame>;
+
+export type DrawQuadraticBezierWithShapeParams = DrawLineWithShapeParams & {
+  controlPoints: Array<Vector2>
+}

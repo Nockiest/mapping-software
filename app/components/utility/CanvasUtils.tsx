@@ -1,11 +1,11 @@
 import { settings } from "@/app/canvasEditor/Signals";
 import { FrontLinePointData } from "@/app/canvasEditor/layers/FronlineLayer";
 import { Vector2 } from "@/public/types/GeometryTypes";
-import { Color } from "@/public/types/OtherTypes";
+import { Color, DrawQuadraticBezierWithShapeParams } from "@/public/types/OtherTypes";
 import { MutableRefObject, RefObject } from "react";
 import { getCtxFromRef } from "./otherUtils";
 import drawLineWithShape, { DrawLineWithShapeParams } from "../drawing/LineDrawer";// Adjust the import path
-import drawQuadraticCurve, { DrawQuadraticBezierWithShapeParams } from "../drawing/CurvedLineDrawer";
+import {drawQuadraticCurve}  from "../drawing/CurvedLineDrawer";
 
 export const drawDot = (
   ctx: CanvasRenderingContext2D,
@@ -18,7 +18,7 @@ export const drawDot = (
     console.trace();
     throw new Error('ctx not defined');
   }
-  // console.log('drawing a dot')
+
   // Round the coordinates to ensure they are on whole number pixels
   const roundedX = Math.round(x);
   const roundedY = Math.round(y);
@@ -49,7 +49,6 @@ export function calculateRelativePosition(position:Vector2, divTopLeft:Vector2) 
     color: Color,
     width: number,
     pointsCentered: boolean = false,
-    // lineShape: 'squared' | 'rounded' = 'squared'
   ) => {
     if (points.length < 2) {
       console.warn("Cannot draw a line with less than 2 points.");
@@ -71,12 +70,12 @@ export function calculateRelativePosition(position:Vector2, divTopLeft:Vector2) 
       const lineEnd = adjustedPoints[i].position;
 //|| (i === adjustedPoints.length - 1 && endPointIndex !== null && adjustedPoints[endPointIndex].bezierType
       if (adjustedPoints[i  ].bezierType     &&  adjustedPoints[i+1])   {
-        console.log('bezier',  adjustedPoints[i+1], i)
+
         // Draw quadratic Bézier curve instead of a straight line
         drawQuadraticBezierCurve({
           ctx,
           lineStart,
-          controlPoint: lineEnd,
+          controlPoints: [lineEnd],
           lineEnd:  adjustedPoints[i+1]?.position,
           color,
           size:width,
@@ -101,19 +100,19 @@ export function calculateRelativePosition(position:Vector2, divTopLeft:Vector2) 
 const drawQuadraticBezierCurve = ({
   ctx,
   lineStart,
-  controlPoint,
+  controlPoints,
   lineEnd,
   color,
   size,
   lineShape= 'squared'
 }: DrawQuadraticBezierWithShapeParams): void => {
-  if (!ctx) {
-    throw new Error('Canvas 2D context not supported');
+  if (!ctx || controlPoints.length === 0) {
+    throw new Error(`Canvas 2D context not supported or controlpoints not provided ${   controlPoints.length}`  );
   }
 
   ctx.beginPath();
   ctx.moveTo(lineStart.x, lineStart.y);
-  ctx.quadraticCurveTo(controlPoint.x, controlPoint.y, lineEnd.x, lineEnd.y);
+  ctx.quadraticCurveTo(controlPoints[0].x, controlPoints[0].y, lineEnd.x, lineEnd.y);
   ctx.strokeStyle = color;
   ctx.lineWidth = size;
   ctx.stroke();
