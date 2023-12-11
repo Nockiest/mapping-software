@@ -18,7 +18,7 @@ import {
   extractImageURL,
   followMouseComponent,
 } from "@/app/components/utility/utils";
-import ReusableLayer from "@/app/components/utility/ResuableLayer";
+import ReusableLayer from "@/app/components/global/ResuableLayer";
 import { Signal } from "@preact/signals";
 import { getCtxFromRef } from "@/app/components/utility/otherUtils";
 import { uuid } from "uuidv4";

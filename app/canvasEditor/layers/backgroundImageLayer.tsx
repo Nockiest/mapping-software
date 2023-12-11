@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { useCanvas } from "../CanvasContext";
 import { settings } from "../Signals";
 import { backgroundImage } from "../Signals";
-import ReusableLayer from "@/app/components/utility/ResuableLayer";
+import ReusableLayer from "@/app/components/global/ResuableLayer";
 import fillCanvas from "@/app/components/utility/fillCanvas";
 const BackgroundImageLayer: React.FC = () => {
   const { backgroundCanvasRef } = useCanvas();

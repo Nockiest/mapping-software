@@ -4,7 +4,7 @@ import { Vector2 } from "@/public/types/GeometryTypes";
 import { editorTopLeftPosition, frontLineSettings, settings } from "../Signals";
 import { useCanvas, useGlobalValue } from "../CanvasContext";
 import Point from "@/app/components/frontline/Point";
-import ReusableLayer from "@/app/components/utility/ResuableLayer";
+import ReusableLayer from "@/app/components/global/ResuableLayer";
 import fillCanvas from "@/app/components/utility/fillCanvas";
 import { Color } from "@/public/types/OtherTypes";
 import Frontline from "@/app/components/frontline/Frontline";
@@ -36,7 +36,6 @@ const FrontlineLayer = () => {
   const { frontlineCanvasRef } = useCanvas();
   const frontLines = frontLineSettings.value.frontLines;
   const activeFrontline = frontLineSettings.value.activeFrontline;
-  const [endPointIndex, setEndPointIndex] = useState<number | null>(0);
   const isActive = settings.value.activeLayer === "frontLine";
 
   useEffect(() => {
@@ -50,17 +49,18 @@ const FrontlineLayer = () => {
     const frontLines = frontLineSettings.value.frontLines;
     const { ctx, canvas } = getCtxFromRef(frontlineCanvasRef);
 
-    if (!ctx|| canvas ) {
+    if (!ctx|| !canvas ) {
       return;
     }
 
     ctx.clearRect(0, 0, settings.value.canvasSize.x!, settings.value.canvasSize.y!);
 
     for (const line of frontLines) {
+
       if (line.points.length < 2) {
         return;
       }
-
+      
       const endPointIndex = findEndpointIndex(line);
 
       drawLineAlongPoints(

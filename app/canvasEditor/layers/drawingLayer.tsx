@@ -21,7 +21,7 @@ import { settings, drawSettings, editorTopLeftPosition } from "../Signals";
 import drawLineWithShape, {
   DrawPayload,
 } from "../../components/drawing/LineDrawer";
-import ReusableLayer from "@/app/components/utility/ResuableLayer";
+import ReusableLayer from "@/app/components/global/ResuableLayer";
 import fillCanvas from "@/app/components/utility/fillCanvas";
 import { drawDot } from "@/app/components/utility/CanvasUtils";
 import {

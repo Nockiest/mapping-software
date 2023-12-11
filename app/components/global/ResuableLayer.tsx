@@ -3,7 +3,7 @@ import { backgroundImage, settings } from "@/app/canvasEditor/Signals";
 import { LayerNames, Settings } from "@/public/types/OtherTypes";
 import { CSSProperties } from "@mui/material/styles/createMixins";
 import { ReactNode, useEffect, useState } from "react";
-import { getCtxFromRef } from "./otherUtils";
+import { getCtxFromRef } from "../utility/otherUtils";
 
 
 type ReusableLayerProps = {
@@ -108,7 +108,7 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
       }
       `}
     >
-      <p className="fixed left-0 top-0 z-50 text-black">{( layerName === 'background'&& isActive).toString()}</p>
+
       {canvasRef && (
         <>
           <canvas

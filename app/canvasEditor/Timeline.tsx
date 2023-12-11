@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useCanvas } from "./CanvasContext";
 import { settings } from "./Signals";
-import ReusableLayer from "../components/utility/ResuableLayer";
+import ReusableLayer from "../components/global/ResuableLayer";
 import { timeline } from "./Signals";
 import { v4 as uuidv4 } from "uuid";
 import IndexLabel from "../components/utility/IndexLabel";

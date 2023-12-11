@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import ReusableLayer from "./ResuableLayer";
+import ReusableLayer from "../global/ResuableLayer";
 import { settings, timeline } from "@/app/canvasEditor/Signals";
 import { useCanvas } from "@/app/canvasEditor/CanvasContext";
 
