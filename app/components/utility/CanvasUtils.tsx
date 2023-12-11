@@ -56,29 +56,32 @@ export function calculateRelativePosition(position:Vector2, divTopLeft:Vector2) 
       return;
     }
 
-    const adjustedPoints = pointsCentered
-      ? points.map((point) => point.position)
-      : points.map((point) => movePosByOffset(point.position, point.radius));
+    const adjustedPoints = points.map((point, index) => {
+      const adjustedPosition = pointsCentered ? point.position : movePosByOffset(point.position, point.radius);
+      const adjustedPoint = {
+        ...point,
+        position:  adjustedPosition,
+      };
+      return adjustedPoint;
+    });
+
 
     for (let i = 1; i < adjustedPoints.length; i++) {
-      const lineStart = adjustedPoints[i - 1];
-      const lineEnd = adjustedPoints[i];
-      const nextPoint =  adjustedPoints[i + 1] as Vector2
-      // Check if the current point or the next point has bezierType set to true
-      const isBezierType = lineEnd.bezierType || (i === adjustedPoints.length - 1 && endPointIndex !== null && points[endPointIndex].bezierType);
-
-      if (isBezierType && nextPoint) {
-
-        console.log(i)
+      const lineStart = adjustedPoints[i - 1].position;
+      const lineEnd = adjustedPoints[i].position;
+//|| (i === adjustedPoints.length - 1 && endPointIndex !== null && adjustedPoints[endPointIndex].bezierType
+      if (adjustedPoints[i  ].bezierType     &&  adjustedPoints[i+1])   {
+        console.log('bezier',  adjustedPoints[i+1], i)
+        // Draw quadratic Bézier curve instead of a straight line
         drawQuadraticBezierCurve({
           ctx,
           lineStart,
           controlPoint: lineEnd,
-          lineEnd: nextPoint  ,
+          lineEnd:  adjustedPoints[i+1]?.position,
           color,
           size:width,
         });
-        i+1
+        i++
       } else {
         // Draw straight line with shape
         drawStraightLine({
@@ -92,6 +95,7 @@ export function calculateRelativePosition(position:Vector2, divTopLeft:Vector2) 
       }
     }
   };
+
 
 
 const drawQuadraticBezierCurve = ({
