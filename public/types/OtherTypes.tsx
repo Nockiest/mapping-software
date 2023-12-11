@@ -15,11 +15,12 @@ export type PositionedText = {
   bottomText: string;
 }
 
+
 export type MarkerType = PositionedText & {
   color: Color;
   position: Vector2;
   isDragging: boolean;
-  // topLeftOffset: Vector2;
+
   customStyling?: MarkerSettings;
   id: string;
 };
@@ -63,7 +64,6 @@ export type Settings = Signal<{
   activeLayer: LayerNames;
   canvasSize: Vector2;
   maxCanvasSize: Vector2
-
   popularColors: Array<Color>;
   canvasZindexes: {
     [key in LayerNames]: number;

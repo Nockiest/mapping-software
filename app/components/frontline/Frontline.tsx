@@ -6,18 +6,22 @@ import { frontLineSettings, settings } from "@/app/canvasEditor/Signals";
 import { useCanvas } from "@/app/canvasEditor/CanvasContext";
 import { computed } from "@preact/signals";
 import { Color } from "@/public/types/OtherTypes";
-import { FrontlineData, PointData } from "@/app/canvasEditor/layers/FronlineLayer";
+import { FrontLinePointData, FrontlineData  } from "@/app/canvasEditor/layers/FronlineLayer";
 import { findFrontLineObj } from "../utility/otherUtils";
 import { v4 as uuidv4 } from "uuid";
 import { findEndpointIndex } from "../utility/utils";
 
 export type FrontlineProps = {
   idNum: string;
-  topLeftPoint: Vector2
+
 }
-const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
+const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
   const frontLineActive = frontLineSettings.value.activeFrontline?.idNum? frontLineSettings.value.activeFrontline.idNum === idNum: false;
-  const frontLineInfo = findFrontLineObj(idNum)  
+  const frontLineInfo = findFrontLineObj(idNum)
+  if (!frontLineInfo){
+    console.warn(' cant find frontline info', idNum)
+    return
+  }
   const { frontlineCanvasRef } = useCanvas();
   const controlPointRadius = frontLineSettings.value.controlPointRadius
 
@@ -32,7 +36,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
   }, [frontlineCanvasRef, frontLineActive]);
 
   useEffect(() => {
-    if (!frontLineInfo){return}
+    // if (!frontLineInfo){return}
     frontLineSettings.value.activeFrontline  = frontLineInfo;
     return () => {
       frontLineSettings.value.activeFrontline  = null;
@@ -41,23 +45,24 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
 
   const addPoint = (position: Vector2) => {
     if (!frontLineInfo) return;
-  
+
     const oldPoints = [...frontLineInfo.points];
     const insertionPointIndex = frontLineSettings.value.insertionPointIndex;
-    const newPoint: PointData = {
+    const newPoint: FrontLinePointData = {
       position: position,
       id: uuidv4(),
       radius: controlPointRadius,
+      bezierType: false
     };
-  
+
     const endPointIndex = findEndpointIndex(frontLineInfo);
     console.log(endPointIndex, oldPoints.length - 1, oldPoints);
-  
+
     if (endPointIndex === oldPoints.length - 1 && endPointIndex >= 0) {
       console.log('updating end point index');
       setEndPoint(newPoint.id);
     }
-  
+
     if (oldPoints.length === 0) {
       // If oldPoints is empty, push the new point and set it as the endpoint
       oldPoints.push(newPoint);
@@ -68,25 +73,38 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
         insertionPointIndex !== null && insertionPointIndex !== -1
           ? Math.min(Math.max(0, insertionPointIndex), oldPoints.length)
           : oldPoints.length;
-  
+
       // Insert the new point at the specified index
       oldPoints.splice(insertIndex, 0, newPoint);
-  
+
       // If the new point is added at the end, update the endpoint
       if (insertIndex === oldPoints.length - 1) {
         frontLineInfo.endPoint = newPoint;
       }
     }
-  
+
     frontLineInfo.points = oldPoints;
   };
-  
-  
-  
-  
+
+
+  const updatePointInformation = (key: string, value:number|boolean|string, id:string) => {
+
+    const pointIndex = frontLineInfo.points.findIndex(
+      (point) => point.id === id
+    );
+    if (pointIndex !== -1) {
+      // If the point is found, update its position
+      const newPoints = [...frontLineInfo.points];
+      newPoints[pointIndex] = { ...newPoints[pointIndex], [key]: value  };
+      frontLineInfo.points = newPoints;
+    } else {
+      console.error(`Point with id ${id}  not found.`);
+    }
+  }
+
 
   const updatePointPositions = (id: string, clickPos: Vector2) => {
-    if (!frontLineInfo) return;
+    // if (!frontLineInfo) return;
     // Find the index of the point with the specified id
     const pointIndex = frontLineInfo.points.findIndex(
       (point) => point.id === id
@@ -104,15 +122,15 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
 
   const handleMouseDown = (e: MouseEvent) => {
     e.preventDefault();
-  
+
     if (!frontLineActive || !frontLineInfo || e.button !== 0) {
       return;
     }
-  
+
     const rect = frontlineCanvasRef.current?.getBoundingClientRect();
     const canvasRelativeX = e.clientX - (rect?.left || 0);
     const canvasRelativeY = e.clientY - (rect?.top || 0);
-  
+
     // Find the clicked point
     const clickedPoint = frontLineInfo?.points.find((point) => {
       const isClicked =
@@ -120,7 +138,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
         Math.abs(point.position.y - canvasRelativeY) < controlPointRadius;
       return isClicked;
     });
-  
+
     if (clickedPoint) {
       // If a point is clicked, set it as the endpoint
       frontLineInfo.endPoint  = clickedPoint ;
@@ -129,13 +147,13 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
       addPoint({ x: canvasRelativeX, y: canvasRelativeY });
     }
   };
-  
+
   const setEndPoint  = (id: string) => {
     console.log("UPDATING END POINT INDEX")
     if (!frontLineInfo) return;
-  
+
     const clickedPoint = frontLineInfo.points.find((point) => point.id === id);
-  
+
     if (clickedPoint) {
       frontLineInfo.endPoint = clickedPoint;
     }
@@ -145,7 +163,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
     console.log("DELETING A POINT");
 
     if (frontLineInfo) {
-     
+
       const pointIndex = frontLineInfo.points.findIndex(
         (point) => point.id === id
       );
@@ -163,36 +181,32 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
       }
     }
   };
-  
+
   return (
     <div className="absolute top-0">
-       
+
       {frontLineInfo?.points.map((point, index) => (
         <Point
           key={point.id}
-          position={point.position}
+          pointTopLeftPosition={point.position}
           id={point.id}
-          // topLeft={{ x: topLeftPoint.x, y: topLeftPoint.y }}
           onDrag={(newPosition) => updatePointPositions(point.id, newPosition)}
           radius={controlPointRadius}
           mouseWheelClk={
             frontLineActive ? (e) => handleDeletePoint(point.id) : null
           }
-          // rightClk={
-          //   frontLineActive
-          //     ? (e) => setEndPoint(point.id)
-          //     : null
-          // }
           onDelete={(e:  MouseEvent|React.MouseEvent) => handleDeletePoint(point.id)}
+          // rightClk={}
           styling={{
             background: point  === frontLineInfo.endPoint  ? "red" : "white",
             border: "2px solid black",
             pointerEvents: frontLineActive ? "auto" : "none",
             zIndex: "30",
+            backgroundColor: point.bezierType? 'green' : 'blue'
           }}
           acceptInput={frontLineActive}
         >
-          <p className="text-black mt-2"> {index} </p> 
+          <p className="text-black mt-2"> {index} </p>
         </Point>
       ))}
     </div>
@@ -200,5 +214,3 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum, topLeftPoint }) => {
 };
 
 export default Frontline;
-
- 

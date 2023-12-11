@@ -1,5 +1,5 @@
 import { settings } from "@/app/canvasEditor/Signals";
-import { PointData } from "@/app/canvasEditor/layers/FronlineLayer";
+import { FrontLinePointData } from "@/app/canvasEditor/layers/FronlineLayer";
 import { Vector2 } from "@/public/types/GeometryTypes";
 import { Color } from "@/public/types/OtherTypes";
 import { MutableRefObject, RefObject } from "react";
@@ -40,7 +40,7 @@ export function calculateRelativePosition(position:Vector2, divTopLeft:Vector2) 
   }
 
   export const drawLineAlongPoints = (
-    points: Array<PointData>,
+    points: Array<FrontLinePointData>,
     endPointIndex: number | null,
     ctx: CanvasRenderingContext2D,
     color: Color,
@@ -103,7 +103,7 @@ export const clearCanvas: ClearCanvasFn = (canvasRef) => {
   }
 };
 
- 
+
 export const saveCanvas = (canvasRef:React.RefObject<HTMLCanvasElement|null|undefined >) => {
   const {ctx, canvas} = getCtxFromRef(canvasRef)
     if (!canvas||!ctx||!canvasRef) {

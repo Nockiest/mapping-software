@@ -21,11 +21,15 @@ export type PointData = {
   id: string;
 };
 
+export type FrontLinePointData = PointData & {
+  bezierType: boolean
+}
+
 export type FrontlineData = {
   idNum: string;
   topLeftPoint: Vector2;
-  points: Array<PointData>;
-  endPoint : PointData|null;
+  points: Array<FrontLinePointData>;
+  endPoint : FrontLinePointData|null;
   thickness: number;
   color: Color;
 };
@@ -60,7 +64,7 @@ const FrontlineLayer = () => {
       if (line.points.length < 2) {
         return;
       }
-      
+
       const endPointIndex = findEndpointIndex(line);
 
       drawLineAlongPoints(
@@ -98,14 +102,13 @@ const FrontlineLayer = () => {
       <ReusableLayer
         canvasRef={frontlineCanvasRef}
         positioning={'absolute top-0'}
-
         layerName="frontLine"
       >
         {frontLines.map((frontlineData) => (
           <Frontline
             key={frontlineData.idNum}
             idNum={frontlineData.idNum}
-            topLeftPoint={editorTopLeftPosition.value}
+
           />
         ))}
       </ReusableLayer>

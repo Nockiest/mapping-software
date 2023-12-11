@@ -79,9 +79,6 @@ export const markerSettings: Signal<MarkerSettings> = signal({
   popularMarkerColors: [],
 } )
 
-// export const newMarkerSettings = signal({ ...markerSettings.value });
-
-
 export const frontLineSettings:  FrontLineSettings  = signal({
   insertionPointIndex: -1,
   frontLineColor: "#0000ff",
