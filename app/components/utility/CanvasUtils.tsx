@@ -16,19 +16,19 @@ export const drawDot = (
     console.trace();
     throw new Error('ctx not defined');
   }
-
+  // console.log('drawing a dot')
   // Round the coordinates to ensure they are on whole number pixels
   const roundedX = Math.round(x);
   const roundedY = Math.round(y);
 
   // Draw based on lineType
   ctx.beginPath();
-  // if (settings.value.lineType === 'rounded') {
+  if (settings.value.lineType === 'rounded') {
 
-  //   // ctx.arc(roundedX, roundedY, Math.round(radius / 2), 0, 2 * Math.PI);
-  // } else if (settings.value.lineType === 'squared') {
+    ctx.arc(roundedX, roundedY, Math.round(radius / 2), 0, 2 * Math.PI);
+  } else if (settings.value.lineType === 'squared') {
     ctx.rect(Math.round(roundedX - radius / 2), Math.round(roundedY - radius / 2), radius, radius);
-  // }
+  }
   ctx.fillStyle = color;
   ctx.fill();
 };

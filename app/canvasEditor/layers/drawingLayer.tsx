@@ -84,6 +84,8 @@ const DrawingLayer: React.FC = () => {
           console.log("FILLING WITH BUCKET");
           bucketFill(ctx, x, y, color);
         } else {
+          console.log('helloe')
+          drawDot(ctx, x,y,settings.value.radius, settings.value.color)
           const drawPayload: DrawPayload = {
             drawFunction: drawLineWithShape ,
             drawArgs: {
