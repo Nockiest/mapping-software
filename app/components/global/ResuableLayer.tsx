@@ -4,6 +4,7 @@ import { LayerNames, Settings } from "@/public/types/OtherTypes";
 import { CSSProperties } from "@mui/material/styles/createMixins";
 import { ReactNode, useEffect, useState } from "react";
 import { getCtxFromRef } from "../utility/otherUtils";
+import { getCanasData } from "../utility/CanvasUtils";
 
 
 type ReusableLayerProps = {
@@ -60,13 +61,8 @@ const ReusableLayer: React.FC<ReusableLayerProps> = ({
   };
 
   const saveCanvasData = () => {
-    // const canvas = canvasRef.current;
-    const {ctx, canvas} = getCtxFromRef(canvasRef)
-    // console.log("saving data");
-
-    if (canvas && ctx && layerName !== 'background') {
-      // const dataURL = canvas.toDataURL("image/png");
-      const data = ctx.getImageData(0,0,settings.value.canvasSize.x, settings.value.canvasSize.y)
+    const data = getCanasData(canvasRef,layerName)
+    if (data && layerName !== 'background') {
       setSavedCanvasData(data);
     }
   };

@@ -206,7 +206,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
           onDrag={(newPosition) => updatePointPositions(point.id, newPosition)}
           radius={controlPointRadius}
           mouseWheelClk={
-            frontLineActive ? (e) => handleDeletePoint(point.id) : null
+            frontLineActive ? () => handleDeletePoint(point.id) : null
           }
           onDelete={(e:  MouseEvent|React.MouseEvent) => handleDeletePoint(point.id)}
           rightClk={() => changeBezierPoints(point.id)}

@@ -2,16 +2,16 @@ import { Color,  } from "@/public/types/OtherTypes";
 import { Vector2, LineEdge } from "@/public/types/GeometryTypes";
 import { hexToRGBA } from "@/app/components/utility/utils";
 import { settings } from "@/app/canvasEditor/Signals";
-  
 
- 
+
+
 export type DrawLineWithShapeParams = {
   ctx: CanvasRenderingContext2D;
   lineStart: Vector2;
   lineEnd: Vector2;
   color: Color;
   size: number;
-  lineShape?: LineEdge;
+  lineShape?: LineEdge |'dashed';
 };
 
 export type DrawPayload = {
