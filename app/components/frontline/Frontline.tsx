@@ -18,12 +18,13 @@ export type FrontlineProps = {
 const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
   const frontLineActive = frontLineSettings.value.activeFrontline?.idNum? frontLineSettings.value.activeFrontline.idNum === idNum: false;
   const frontLineInfo = findFrontLineObj(idNum)
+  const { frontlineCanvasRef } = useCanvas();
+  const controlPointRadius = frontLineSettings.value.controlPointRadius
   if (!frontLineInfo){
     console.warn(' cant find frontline info', idNum)
     return
   }
-  const { frontlineCanvasRef } = useCanvas();
-  const controlPointRadius = frontLineSettings.value.controlPointRadius
+
 
   useEffect(() => {
     const canvas = frontlineCanvasRef.current;
