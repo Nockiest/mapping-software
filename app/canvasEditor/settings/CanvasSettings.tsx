@@ -11,6 +11,7 @@ import FrontlineLayerSettings from "./frontLineSettings/FrontlineLayerSettings";
 import { theme } from "../theme/theme";
 import { Grid, Paper, useTheme, Typography, Slider } from "@mui/material";
 import CanvasResizer from "./settingsComponents/CanvasResizer";
+import DiscordInviteBtn from "@/app/components/global/DiscordInviteBtn";
 
 
 export type ChangeSettingsFunctionType = <K extends keyof Settings["value"]>(
@@ -28,7 +29,7 @@ const CanvasSettings = () => {
   };
 
   return (
-    <Grid container spacing={2} sx={{ userSelect: "none", overflowX:'auto', height: '280px'}}>
+    <Grid container spacing={2} sx={{ position:'relative',userSelect: "none", overflowX:'auto', height: '280px'}}>
       {/* First Column - ActiveLayerSettings */}
       <Grid item xs={3} style={{ maxWidth: "200px" }}>
         <Paper
@@ -62,7 +63,8 @@ const CanvasSettings = () => {
             overflow: "auto",
             boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
             overflowX: 'auto',
-            width: '100%'
+            width: '100%',
+            position: 'relative'
           }}
         >
           {settings.value.activeLayer === "draw" ? (
@@ -76,8 +78,14 @@ const CanvasSettings = () => {
           ) : (
             <></>
           )}
+           <div className="absolute top-1 right-1 z-10">
+            <DiscordInviteBtn />
+            </div>
         </Paper>
+
       </Grid>
+
+
     </Grid>
   );
 };

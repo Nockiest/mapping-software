@@ -82,10 +82,9 @@ const Marker: React.FC<MarkerProps> = ({
       centerPosition = initialPosition;
     }
   }, [initialPosition]);
+
   const markerStyle: React.CSSProperties = {
-    width: `${mergedSettings.radius * 2}px`,
     color: mergedSettings.textColor,
-    height: `${mergedSettings.radius * 2}px`,
     fontSize: `${mergedSettings.radius / 4}px`,
     backgroundColor: mergedSettings.color,
     backgroundImage: mergedSettings.imageURL ? `url(${imageURL})` : "none",
@@ -140,27 +139,32 @@ const Marker: React.FC<MarkerProps> = ({
   }
   return (
     <Point
-      radius={mergedSettings.radius / 2}
+
       styling={{ ...markerStyle }}
-      centerPosition={centerPosition}
+      radius={mergedSettings.radius  }
+      centerPosition={{x:centerPosition.x+mergedSettings.radius,y:centerPosition.y+mergedSettings.radius}}
       rightClk={handleDelete}
       onDrag={(pos) => handleMouseMove(pos)}
       className="marker"
       id={id}
     >
-      <p style={{ ...markerTextStyle, marginTop: "2px", background: "black" }}>
-        {Math.round(centerPosition?.x)} {Math.round(centerPosition?.y)}
+      {/*  style={{ ...markerTextStyle, marginTop: "2px", background: "black" }} */}
+      <p   style={{ ...markerTextStyle, }}>
+      {mergedSettings.topText}
       </p>
       {mergedSettings.radius > 20 && (
         <p
           style={{
             ...markerTextStyle,
             marginTop: mergedSettings.radius
-              ? `${mergedSettings.radius / 5}px`
+              ? `${mergedSettings.radius *1.25}px`
               : "10px",
+            // position:'absolute',
+            // bottom: '0px',
+            // right: '50%'
           }}
         >
-          {mergedSettings.bottomText}
+         {mergedSettings.bottomText}
         </p>
       )}
     </Point>

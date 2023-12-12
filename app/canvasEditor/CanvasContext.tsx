@@ -83,8 +83,6 @@ export const CanvasProvider: React.FC<{ children: ReactNode }> = ({
     mousePosition: null,
     editorRelativePosition: null,
   });
-  // const [timeLine, setTimeline] = useState<TimelineType>([])
-
   const canvasContextValue: CanvasContextType = {
     canvasRef,
     markerCanvasRef,
@@ -93,8 +91,6 @@ export const CanvasProvider: React.FC<{ children: ReactNode }> = ({
     compiledCanvasRef,
     frontLines,
     setFrontlines,
-    // timeLine,
-    // setTimeline
   };
 
   const backgroundContextValue: BackgroundContextType = {

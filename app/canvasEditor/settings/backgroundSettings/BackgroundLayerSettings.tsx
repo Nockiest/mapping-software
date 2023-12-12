@@ -9,15 +9,19 @@ const BackgroundLayerSettings = () => {
     backgroundImage.value = null;
   };
   return (
-    <SettingsColumn>
+    <div className="flex">
+        <SettingsColumn>
       <BackgroundImageSetter />
       {backgroundImage && (
         <Button variant="contained" color="primary" onClick={handleImageRevert}>
           Revert Background Image
         </Button>
       )}
-            <KeyboardShortcutsLister />
+
     </SettingsColumn>
+    <KeyboardShortcutsLister />
+    </div>
+
   );
 };
 

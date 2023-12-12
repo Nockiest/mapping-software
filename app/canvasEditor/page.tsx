@@ -57,10 +57,8 @@ const Page: React.FC = () => {
   };
 
   useEffect(() => {
-    // Add event listeners when the component mounts
     document.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mouseup", handleMouseUp, true)
-    // Remove event listeners when the component unmounts
     return () => {
       document.removeEventListener("mousedown", handleMouseDown);
       document.removeEventListener("mouseup", handleMouseUp, true);
@@ -85,7 +83,7 @@ const Page: React.FC = () => {
 
   return (
     <  >
-      <DebugInfo
+      {/* <DebugInfo
         data={{
           // radius: settings.value.radius,
           // canvasState: canvasState,
@@ -100,7 +98,7 @@ const Page: React.FC = () => {
           // activeFrontLine: frontLineSettings.value.activeFrontline?.idNum,
 
         }}
-      />
+      /> */}
       <CanvasSettings />
       <CanvasEditor />
       {/* <InlineFollowButtons
@@ -130,7 +128,7 @@ const Page: React.FC = () => {
         //     spacing: 8            // the spacing between buttons (INTEGER)
         //   }}
           />*/}
-         <DiscordInviteBtn />
+
       <Timeline />
     </>
   );

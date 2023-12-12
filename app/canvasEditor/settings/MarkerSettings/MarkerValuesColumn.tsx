@@ -6,18 +6,21 @@ import SettingsColumn from "../settingsComponents/SettingsColumn";
 const MarkerValues: React.FC  = ( ) => {
     return (
       <SettingsColumn>
-        <Typography>
-          Current Marker Width: {markerSettings.value.radius}
+        <Typography typography={'h6'}>
+      Current Marker
         </Typography>
         <Typography>
-          Current Marker Color: {markerSettings.value.color}
+        Width: {markerSettings.value.radius}
         </Typography>
         <Typography>
-          Current Marker TopText: {markerSettings.value.topText}
+      Color: {markerSettings.value.color}
+        </Typography>
+        <Typography>
+           TopText: {markerSettings.value.topText}
         </Typography>
         {markerSettings.value.radius >= 20 && (
           <Typography>
-            Current Marker BottomText:{" "}
+            BottomText:{" "}
             {markerSettings.value.bottomText}
           </Typography>
         )}

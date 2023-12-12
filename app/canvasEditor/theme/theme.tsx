@@ -38,6 +38,8 @@ export const theme = createTheme({
         },
         thumb: {
           color: "#FFFFFF", // White color for the thumb
+          width: '12px', // Adjust the width of the thumb
+          height: '12px', // Adjust the height of the thumb
         },
         track: {
           color: "#FFFFFF", // White color for the track
@@ -45,7 +47,9 @@ export const theme = createTheme({
         rail: {
           color: "#FFFFFF", // White color for the rail
         }
-      }
+      },
+
+
     },
   MuiInput: {
       styleOverrides: {

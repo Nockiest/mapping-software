@@ -149,8 +149,8 @@ const Point: React.FC<PointProps> = ({
       onContextMenu={handleContextMenu}
     >
       {children}
-      <p className="text-white z-50">{Math.round(centerPosition.x ) } {Math.round(centerPosition.y )}</p>
-      <p className="text-black z-50">{Math.round(centerPosition.x - radius ) } {Math.round(centerPosition.y - radius )}</p>
+      {/* <p className="text-white z-50">{Math.round(centerPosition.x ) } {Math.round(centerPosition.y )}</p>
+      <p className="text-black z-50">{Math.round(centerPosition.x - radius ) } {Math.round(centerPosition.y - radius )}</p> */}
     </div>
   );
 };

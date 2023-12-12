@@ -56,16 +56,20 @@ const BackgroundImageSetter: React.FC = () => {
 
   return (
     <>
-      <br />
+    <label htmlFor="file-upload" className="custom-file-upload">
+        Custom Upload
+    </label>
+
       <input
         type="file"
+        id="file-upload"
         // ref={backgroundImage.value}
         onChange={(e) => {
           handleFileChange(e)
 
         }}
       />
-      <br />
+
     </>
   );
 };
