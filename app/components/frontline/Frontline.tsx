@@ -20,10 +20,10 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
   const frontLineInfo = findFrontLineObj(idNum)
   const { frontlineCanvasRef } = useCanvas();
   const controlPointRadius = frontLineSettings.value.controlPointRadius
-  if (!frontLineInfo){
-    console.warn(' cant find frontline info', idNum)
-    return
-  }
+  // if (!frontLineInfo){
+  //   console.warn(' cant find frontline info', idNum)
+  //   return
+  // }
 
 
   useEffect(() => {
@@ -89,7 +89,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
 
 
   const updatePointInformation = (key: string, value:number|boolean|string|Vector2, id:string) => {
-
+    if(!frontLineInfo){return}
     const pointIndex = frontLineInfo.points.findIndex(
       (point) => point.id === id
     );
@@ -110,6 +110,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
   };
 
   const changeBezierPoints = (id: string) => {
+    if(!frontLineInfo){return}
     const pointIndex = frontLineInfo.points.findIndex((point) => point.id === id);
 
     if (pointIndex !== -1) {
