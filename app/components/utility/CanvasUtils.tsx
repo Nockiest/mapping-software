@@ -1,9 +1,10 @@
 import { settings } from "@/app/canvasEditor/Signals";
-import { FrontLinePointData } from "@/app/canvasEditor/layers/FronlineLayer";
+
 import { Vector2 } from "@/public/types/GeometryTypes";
 import {
   Color,
   DrawQuadraticBezierWithShapeParams,
+  FrontLinePointData,
   LayerNames,
 } from "@/public/types/OtherTypes";
 import { MutableRefObject, RefObject } from "react";
@@ -68,32 +69,36 @@ export const drawLineAlongPoints = (
     return;
   }
 
-  const adjustedPoints = points.map((point, index) => {
-    const adjustedPosition = pointsCentered
+  // Clone the points array to avoid modifying the original array
+  const adjustedPoints = pointsCentered? [...points] :points.map((point) => ({
+    ...point,
+    centerPosition: pointsCentered
       ? point.centerPosition
-      : movePosByOffset(point.centerPosition, point.radius);
-    const adjustedPoint = {
-      ...point,
-      centerPosition: adjustedPosition,
-    };
-    return adjustedPoint;
-  });
+      : movePosByOffset(point.centerPosition, point.radius),
+  })) ;
+
+  // If endPointIndex is not null and it's a valid index, copy the point and add it as the last point
+  if (endPointIndex !== null && endPointIndex < adjustedPoints.length) {
+    const endPointCopy = { ...adjustedPoints[endPointIndex] };
+    adjustedPoints.push(endPointCopy);
+  }
+
 
   for (let i = 1; i < adjustedPoints.length; i++) {
     const lineStart = adjustedPoints[i - 1].centerPosition;
     const lineEnd = adjustedPoints[i].centerPosition;
-    //|| (i === adjustedPoints.length - 1 && endPointIndex !== null && adjustedPoints[endPointIndex].bezierType
+
     if (adjustedPoints[i].bezierType && adjustedPoints[i + 1]) {
       // Draw quadratic Bézier curve instead of a straight line
       drawQuadraticBezierCurveWithDashedControlLines({
         ctx,
         lineStart,
         controlPoints: [lineEnd],
-        lineEnd: adjustedPoints[i + 1]?.centerPosition,
+        lineEnd: adjustedPoints[i + 1].centerPosition,
         color,
         size: width,
       });
-      i++;
+      i++; // skip to next point
     } else {
       // Draw straight line with shape
       drawStraightLine({
@@ -107,6 +112,7 @@ export const drawLineAlongPoints = (
     }
   }
 };
+
 const drawQuadraticBezierCurveWithDashedControlLines = ({
   ctx,
   lineStart,

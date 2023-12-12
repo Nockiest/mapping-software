@@ -24,7 +24,7 @@ export const drawMarkersOnCanvas = (
       const imageURL = extractImageURL(marker?.customStyling?.imageURL, null);
 
       // Determine the width of the marker
-      const usedWidth = marker.customStyling?.radius || MarkerDefaultSettings.radius;
+      const usedWidth = (marker.customStyling?.radius  || MarkerDefaultSettings.radius)*2;
 
       // Determine the text color of the marker
       const usedTextColor =
@@ -32,8 +32,6 @@ export const drawMarkersOnCanvas = (
 
       // Styling for the marker element
       const markerStyle: React.CSSProperties = {
-        left: `${marker.centerPosition.x}px`,
-        top: `${marker.centerPosition.y}px`,
         width: `${usedWidth}px`,
         color: `${marker.customStyling?.textColor || MarkerDefaultSettings.textColor} `,
         height: `${usedWidth}px`,

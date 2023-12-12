@@ -22,10 +22,10 @@ type MarkerProps = {
   shouldUpdateOnSettingsChange?: boolean;
   customStyling?: MarkerSettings;
   id: string;
-  dragHandler?:  Function;
+  dragHandler?: Function;
   topLeftOffset?: Vector2;
   boundToCanvasEditor?: boolean;
-  centerPosition: Vector2
+  centerPosition: Vector2;
 } & Partial<PositionedText>;
 
 export const MarkerDefaultSettings: Omit<
@@ -38,9 +38,7 @@ export const MarkerDefaultSettings: Omit<
   topText: "",
   bottomText: "",
   imageURL: null,
-
 };
-
 
 /*
 I dont thing the dragging of this component would work properly, when it wouldnt be part of the
@@ -55,9 +53,8 @@ const Marker: React.FC<MarkerProps> = ({
   customStyling,
   id,
   boundToCanvasEditor = false,
-  centerPosition
+  centerPosition,
 }) => {
-
   const [canRemove, setCanRemove] = useState<boolean>(false);
   const [initialMarkerSettings] = useState<Partial<MarkerSettings>>({
     ...customStyling,
@@ -73,27 +70,22 @@ const Marker: React.FC<MarkerProps> = ({
 
   const mergedSettings = { ...MarkerDefaultSettings, ...usedSettings };
 
-
-
   const handleMouseMove = (newPosition: Vector2) => {
-    console.log(newPosition)
+    console.log(newPosition);
     if (dragHandler) {
-
-      dragHandler(id, newPosition)
-
+      dragHandler(id, newPosition);
     }
   };
 
   useEffect(() => {
     if (shouldUpdateOnSettingsChange) {
-      centerPosition = initialPosition
-
+      centerPosition = initialPosition;
     }
   }, [initialPosition]);
   const markerStyle: React.CSSProperties = {
-    width: `${mergedSettings.radius}px`,
+    width: `${mergedSettings.radius * 2}px`,
     color: mergedSettings.textColor,
-    height: `${mergedSettings.radius}px`,
+    height: `${mergedSettings.radius * 2}px`,
     fontSize: `${mergedSettings.radius / 4}px`,
     backgroundColor: mergedSettings.color,
     backgroundImage: mergedSettings.imageURL ? `url(${imageURL})` : "none",
@@ -102,7 +94,6 @@ const Marker: React.FC<MarkerProps> = ({
   };
 
   const markerTextStyle: React.CSSProperties = {
-
     textAlign: "center",
     userSelect: "none",
   };
@@ -117,15 +108,21 @@ const Marker: React.FC<MarkerProps> = ({
   };
 
   useEffect(() => {
-    if ((!boundToCanvasEditor && shouldUpdateOnSettingsChange) || !dragHandler) {
+    if (
+      (!boundToCanvasEditor && shouldUpdateOnSettingsChange) ||
+      !dragHandler
+    ) {
       return;
     }
 
-    if(settings.value.canvasSize.x< mergedSettings.radius || settings.value.canvasSize.y< mergedSettings.radius){
-      handleDelete()
+    if (
+      settings.value.canvasSize.x < mergedSettings.radius ||
+      settings.value.canvasSize.y < mergedSettings.radius
+    ) {
+      handleDelete();
     }
 
-    const newPos:Vector2 = {
+    const newPos: Vector2 = {
       x: Math.min(
         settings.value.canvasSize.x - mergedSettings.radius / 2,
         centerPosition.x
@@ -134,28 +131,25 @@ const Marker: React.FC<MarkerProps> = ({
         settings.value.canvasSize.y - mergedSettings.radius / 2,
         centerPosition.y
       ),
-
-    }
-    dragHandler(id , newPos)
-    // updatePosition(newPos)
-
+    };
+    dragHandler(id, newPos);
   }, [settings.value.canvasSize]);
 
-
-if (!centerPosition){return}
+  if (!centerPosition) {
+    return;
+  }
   return (
     <Point
-      radius={mergedSettings.radius}
+      radius={mergedSettings.radius / 2}
       styling={{ ...markerStyle }}
       centerPosition={centerPosition}
       rightClk={handleDelete}
-      onDrag={(pos ) => handleMouseMove(pos)}
+      onDrag={(pos) => handleMouseMove(pos)}
       className="marker"
-      onDelete={handleDelete}
       id={id}
     >
-      <p style={{ ...markerTextStyle, marginTop: "2px", background:'black', }}>
-       { Math.round(centerPosition?.x)}    { Math.round(centerPosition?.y)}
+      <p style={{ ...markerTextStyle, marginTop: "2px", background: "black" }}>
+        {Math.round(centerPosition?.x)} {Math.round(centerPosition?.y)}
       </p>
       {mergedSettings.radius > 20 && (
         <p

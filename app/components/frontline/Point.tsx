@@ -17,7 +17,8 @@ type PointProps = {
   mouseWheelClk?: ((e: React.MouseEvent) => void) | null;
   styling?: React.CSSProperties;
   onDrag?: (position: Vector2) => void;
-  onDelete?: (e: MouseEvent | React.MouseEvent) => void;
+  onLeftBtnPress?: (e: MouseEvent | React.MouseEvent) => void;
+  onRightBtnPress?: (e: MouseEvent | React.MouseEvent) => void;
   children?: React.ReactNode;
   shape?: Omit<Shapes, "triangle">;
   dragable?: boolean;
@@ -34,7 +35,8 @@ const Point: React.FC<PointProps> = ({
   mouseWheelClk,
   styling = {},
   onDrag,
-  onDelete,
+  onLeftBtnPress,
+  onRightBtnPress,
   children,
   shape,
   dragable = true,
@@ -103,10 +105,15 @@ const Point: React.FC<PointProps> = ({
       mouseDownTime > 1000
     );
     // Check if right mouse button was pressed and duration is more than  500ms
-    if (mouseDownTime && e.button === 2 && mouseDownTime > 500) {
+    if (mouseDownTime &&   mouseDownTime > 500) {
       // Trigger onDelete method
       console.log("HANDLING DELETE");
-      onDelete?.(e);
+      if (e.button === 1) {
+        onLeftBtnPress?.(e)
+      } else if ( e.button === 2 ) {
+        onRightBtnPress?.(e);
+      }
+
     }
   };
 
@@ -125,8 +132,8 @@ const Point: React.FC<PointProps> = ({
     <div
       style={{
         position: "absolute",
-        left: `${centerPosition.x  }px`,
-        top: `${centerPosition.y   }px`,
+        left: `${centerPosition.x - radius  }px`,
+        top: `${centerPosition.y - radius  }px`,
         width: `${radius * 2}px`,
         height: `${radius * 2}px`,
         borderRadius: "50%",
@@ -142,7 +149,8 @@ const Point: React.FC<PointProps> = ({
       onContextMenu={handleContextMenu}
     >
       {children}
-      <p className="text-black z-50">{Math.round(centerPosition.x ) } {Math.round(centerPosition.y )}</p>
+      <p className="text-white z-50">{Math.round(centerPosition.x ) } {Math.round(centerPosition.y )}</p>
+      <p className="text-black z-50">{Math.round(centerPosition.x - radius ) } {Math.round(centerPosition.y - radius )}</p>
     </div>
   );
 };

@@ -75,7 +75,7 @@ const FrontlineLayerSettings = () => {
         onDeleteCurrentFrontLine={deleteCurrentFrontLine}
         activeFrontline={Boolean(frontLineSettings.value.activeFrontline)}
       />
- 
+
       <Grid item xs={3}>
         {frontLineSettings.value.frontLines.length > 0 && (
           <>
@@ -118,7 +118,8 @@ const FrontlineLayerSettings = () => {
       </Grid>
       <SettingsColumn>
         <Typography>Right Click To Add Points</Typography>
-        <Typography>Right Hold Click To Remove Point</Typography>
+        <Typography>Right Click existing points to create curves</Typography>
+        <Typography>Left drag Click existing points to move points</Typography>
       </SettingsColumn>
       <KeyboardShortcutsLister />
     </Grid>

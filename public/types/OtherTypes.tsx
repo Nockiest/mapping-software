@@ -14,6 +14,14 @@ export type PositionedText = {
   topText: string;
   bottomText: string;
 }
+export type PointData = {
+  centerPosition: Vector2;
+  radius: number;
+  id: string;
+};
+export type FrontLinePointData = PointData& {
+  bezierType: boolean
+}
 
 
 export type MarkerType = PositionedText & {

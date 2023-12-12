@@ -6,7 +6,7 @@ import { useCanvas, useGlobalValue } from "../CanvasContext";
 import Point from "@/app/components/frontline/Point";
 import ReusableLayer from "@/app/components/global/ResuableLayer";
 import fillCanvas from "@/app/components/utility/fillCanvas";
-import { Color } from "@/public/types/OtherTypes";
+import { Color, FrontLinePointData, PointData } from "@/public/types/OtherTypes";
 import Frontline from "@/app/components/frontline/Frontline";
 import {v4 as uuidv4} from 'uuid'
 import { drawLineAlongPoints } from "@/app/components/utility/CanvasUtils";
@@ -15,15 +15,7 @@ import onMountFrontLineData from "../settings/frontLineSettings/OnMountFrontLine
 import { findEndpointIndex } from "@/app/components/utility/utils";
 import { addNewFrontLine } from "@/app/components/utility/FrontlineUtils";
 
-export type PointData = {
-  centerPosition: Vector2;
-  radius: number;
-  id: string;
-};
 
-export type FrontLinePointData = PointData & {
-  bezierType: boolean
-}
 
 export type FrontlineData = {
   idNum: string;

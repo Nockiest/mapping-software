@@ -1,12 +1,12 @@
 // import { MousePositionContext } from "@/app/canvasEditor/MouseContext";
 import { Vector2 } from "@/public/types/GeometryTypes";
-import React, { ReactNode, useContext, useEffect, useState } from "react";
+import React, {  useEffect  } from "react";
 import Point from "./Point";
 import { frontLineSettings, settings } from "@/app/canvasEditor/Signals";
 import { useCanvas } from "@/app/canvasEditor/CanvasContext";
 import { computed } from "@preact/signals";
-import { Color } from "@/public/types/OtherTypes";
-import { FrontLinePointData, FrontlineData  } from "@/app/canvasEditor/layers/FronlineLayer";
+import { Color, FrontLinePointData } from "@/public/types/OtherTypes";
+import {   FrontlineData  } from "@/app/canvasEditor/layers/FronlineLayer";
 import { findFrontLineObj } from "../utility/otherUtils";
 import { v4 as uuidv4 } from "uuid";
 import { findEndpointIndex } from "../utility/utils";
@@ -36,7 +36,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
   }, [frontlineCanvasRef, frontLineActive]);
 
   useEffect(() => {
-    // if (!frontLineInfo){return}
+
     frontLineSettings.value.activeFrontline  = frontLineInfo;
     return () => {
       frontLineSettings.value.activeFrontline  = null;
@@ -105,7 +105,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
 
   const updatePointPositions = (id: string, clickPos: Vector2) => {
     console.log('updating positon', clickPos)
-    updatePointInformation ('centerPosition', {x:clickPos.x -5, y:clickPos.y-5}  , id )
+    updatePointInformation ('centerPosition', {x:clickPos.x  , y:clickPos.y }  , id )
   };
 
   const changeBezierPoints = (id: string) => {
@@ -153,10 +153,7 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
       return isClicked;
     });
 
-    if (clickedPoint) {
-      // If a point is clicked, set it as the endpoint
-      frontLineInfo.endPoint  = clickedPoint ;
-    } else {
+    if (!clickedPoint) {
       // If no point is clicked, add a new point
       addPoint({ x: canvasRelativeX, y: canvasRelativeY });
     }
@@ -175,7 +172,6 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
 
   const handleDeletePoint = (id: string) => {
     console.log("DELETING A POINT");
-
     if (frontLineInfo) {
 
       const pointIndex = frontLineInfo.points.findIndex(
@@ -209,7 +205,6 @@ const Frontline: React.FC<FrontlineProps> = ({ idNum  }) => {
           mouseWheelClk={
             frontLineActive ? () => handleDeletePoint(point.id) : null
           }
-          onDelete={(e:  MouseEvent|React.MouseEvent) => handleDeletePoint(point.id)}
           rightClk={() => changeBezierPoints(point.id)}
           styling={{
             backgroundColor: point  === frontLineInfo.endPoint  ? "red" : point.bezierType? 'green' : "white",

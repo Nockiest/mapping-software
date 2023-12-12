@@ -92,7 +92,7 @@ const UnitMarkerLayer: React.FC = () => {
             Math.abs(marker.centerPosition.x - x) < 10 &&
             Math.abs(marker.centerPosition.y - y) < 10
         );
-
+        // tohle mus9m prepsat
         if (clickedMarkerIndex !== -1) {
           dispatchState({ type: "DRAG", markerIndex: clickedMarkerIndex });
         } else {
@@ -100,7 +100,6 @@ const UnitMarkerLayer: React.FC = () => {
             color:  markerSettings.value.color,
             centerPosition: { x, y },
             isDragging: false,
-
             topText: markerSettings.value.topText,
             bottomText: markerSettings.value.bottomText,
             customStyling: { ...markerSettings.value },
@@ -110,8 +109,6 @@ const UnitMarkerLayer: React.FC = () => {
         }
       }
     };
-
-
 
       canvas.addEventListener("mousedown", handleMouseDown);
 
@@ -127,6 +124,7 @@ const UnitMarkerLayer: React.FC = () => {
   ]);
 
   const onMarkerMovement= (markerId: string, newCenterPosition: Vector2) => {
+    console.log('newcenter', newCenterPosition)
     markers.value = markers.value.map((marker) =>
     marker.id === markerId ? { ...marker, centerPosition: newCenterPosition } : marker);
   }
@@ -137,8 +135,6 @@ const UnitMarkerLayer: React.FC = () => {
         {markers.value.map((marker) => (
           <Marker
             key={marker.id}
-            // topText={marker.topText}
-            // bottomText={marker.bottomText}
             initialPosition={marker.centerPosition}
             id={marker.id}
             dragHandler={onMarkerMovement}
