@@ -3,7 +3,11 @@ You can view the project at this link https://mapping-software.vercel.app/
 It is a simple web browser software to create Eastory-like map animations.
 
 # What I learned?
-How to use typescript in my projects and how to develop in a complex enviroment.
+How to use typescript in my projects and how to develop in a complex enviroment. Additionaly, I gained experience in React and styling.
+
+![Logo](https://i.postimg.cc/Qd6L3L09/europe.png)
+
+
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
